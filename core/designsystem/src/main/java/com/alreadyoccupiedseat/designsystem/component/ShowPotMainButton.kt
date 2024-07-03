@@ -17,8 +17,14 @@ import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
 fun ShowPotMainButton(
     modifier: Modifier = Modifier,
     text: String,
-    enabled : Boolean = true,
-    onClicked: () -> Unit
+    enabled: Boolean = true,
+    colors: ButtonColors = ButtonColors(
+        containerColor = ShowpotColor.MainRed,
+        contentColor = Color.Black,
+        disabledContainerColor = ShowpotColor.Gray600,
+        disabledContentColor = ShowpotColor.Gray400,
+    ),
+    onClicked: () -> Unit,
 ) {
     Button(
         enabled = enabled,
@@ -26,15 +32,13 @@ fun ShowPotMainButton(
             .fillMaxWidth()
             .height(55.dp)
             .background(ShowpotColor.MainRed),
-        colors = ButtonColors(
-            containerColor = ShowpotColor.MainRed,
-            contentColor = Color.Black,
-            disabledContainerColor = Color(0xFF202026),
-            disabledContentColor = ShowpotColor.Gray400,
-        ),
+        colors = colors,
         shape = RectangleShape,
         onClick = onClicked,
     ) {
-        ShowPotKoreanText_H2(text = text, color = if (enabled) Color.Black else ShowpotColor.Gray400)
+        ShowPotKoreanText_H2(
+            text = text,
+            color = if (enabled) Color.Black else ShowpotColor.Gray400
+        )
     }
 }
