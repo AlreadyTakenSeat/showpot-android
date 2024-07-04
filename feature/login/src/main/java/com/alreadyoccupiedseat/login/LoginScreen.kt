@@ -29,8 +29,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
-import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
-import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButtonWithIcon
+import com.alreadyoccupiedseat.designsystem.component.ShowPotButtonWithIcon
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
 
 @Composable
@@ -107,11 +106,11 @@ fun LoginContent(
 
                 Spacer(modifier = Modifier.height(147.dp))
 
-                ShowPotMainButtonWithIcon(
+                ShowPotButtonWithIcon(
                     modifier =
                     Modifier
-                        .padding(horizontal = 20.dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp),
                     text = stringResource(R.string.button_login_with_kakao),
                     icon = painterResource(R.drawable.ic_kakao),
                     colors = ButtonColors(
@@ -120,12 +119,12 @@ fun LoginContent(
                         disabledContainerColor = ShowpotColor.Gray600,
                         disabledContentColor = ShowpotColor.Gray400,
                     ),
-                    onClicked = {
+                    onClick = {
                         /* 카카오 로그인 */
-                    },
+                    }
                 )
 
-                ShowPotMainButtonWithIcon(
+                ShowPotButtonWithIcon(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(
@@ -140,7 +139,7 @@ fun LoginContent(
                         disabledContainerColor = ShowpotColor.Gray600,
                         disabledContentColor = ShowpotColor.Gray400,
                     ),
-                    onClicked = {
+                    onClick = {
                         /* 구글 로그인 */
                     }
                 )
