@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="login_screen_message">잊지않고 내한공연 즐기러가요</string>
-    <string name="button_login_with_kakao">카카오 시작하기</string>
+    <string name="button_login_with_kakao">카카오로 시작하기</string>
     <string name="button_login_with_google">Google로 시작하기 </string>
 </resources>
