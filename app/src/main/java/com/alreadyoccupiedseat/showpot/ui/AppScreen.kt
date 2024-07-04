@@ -12,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import com.alreadyoccupiedseat.core.extention.EMPTY
 import com.alreadyoccupiedseat.designsystem.component.ShowPotBottomNavigation
 import com.alreadyoccupiedseat.home.HomeScreen
+import com.alreadyoccupiedseat.mypage.MyPageScreen
 import com.alreadyoccupiedseat.notification.NotificationScreen
 import com.alreadyoccupiedseat.showpot.Screen
 import com.alreadyoccupiedseat.showpot.Screen.Companion.bottomNavigationItems
@@ -61,7 +62,7 @@ fun AppScreenContent() {
             }
 
             composable(Screen.MyPage.route) {
-                // Todo: Implement MyPage
+                MyPageScreen(navController)
             }
 
         }
