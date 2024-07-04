@@ -18,27 +18,30 @@ fun ShowPotMainButton(
     modifier: Modifier = Modifier,
     text: String,
     enabled: Boolean = true,
-    colors: ButtonColors = ButtonColors(
-        containerColor = ShowpotColor.MainRed,
-        contentColor = Color.Black,
-        disabledContainerColor = ShowpotColor.Gray600,
-        disabledContentColor = ShowpotColor.Gray400,
-    ),
     onClicked: () -> Unit,
 ) {
-    Button(
+
+    ShowPotButton(
+        onClick = {
+            onClicked()
+        },
         enabled = enabled,
         modifier = modifier
             .fillMaxWidth()
             .height(55.dp)
             .background(ShowpotColor.MainRed),
-        colors = colors,
-        shape = RectangleShape,
-        onClick = onClicked,
-    ) {
-        ShowPotKoreanText_H2(
-            text = text,
-            color = if (enabled) Color.Black else ShowpotColor.Gray400
-        )
-    }
+        colors = ButtonColors(
+            containerColor = ShowpotColor.MainRed,
+            contentColor = Color.Black,
+            disabledContainerColor = ShowpotColor.Gray600,
+            disabledContentColor = ShowpotColor.Gray400,
+        ),
+        content = {
+            ShowPotKoreanText_H2(
+                text = text,
+                color = if (enabled) Color.Black else ShowpotColor.Gray400
+            )
+        }
+    )
+
 }
