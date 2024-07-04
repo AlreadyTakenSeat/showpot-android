@@ -16,6 +16,7 @@ class AndroidHiltConventionPlugin : Plugin<Project> {
             dependencies {
                 "implementation"(libs.findLibrary("hilt-android").get())
                 "ksp"(libs.findLibrary("hilt-android-compiler").get())
+                "implementation"(libs.findLibrary("hilt-navigation-compose").get())
             }
 
         }

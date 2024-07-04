@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.showpot.application)
     alias(libs.plugins.showpot.firebase)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.showpot.hilt)
 }
 
 android {
