@@ -29,6 +29,9 @@ object ShowpotColor {
     val Interpark = Color(0xFF8E43E6)
     val Melon = Color(0xFF0FAE2F)
     val Wemakeprice = Color(0xFFE7312E)
+
+    // Login Color
+    val Kakao = Color(0xFFFEE500)
 }
 
 
