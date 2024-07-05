@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.showpot.application)
     alias(libs.plugins.showpot.firebase)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.showpot.hilt)
 }
 
 android {
@@ -40,6 +41,7 @@ android {
 dependencies {
 
     implementation(project(":feature:home"))
+    implementation(project(":feature:onboarding"))
     implementation(project(":feature:login"))
 
 }

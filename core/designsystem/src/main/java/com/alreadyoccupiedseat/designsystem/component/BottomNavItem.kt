@@ -64,7 +64,7 @@ fun BottomNavItem(
 
                     ShowPotKoreanText_B1_SemiBold(
                         text = screen.title,
-                        Color.White
+                        color = Color.White
                     )
                 }
             }
