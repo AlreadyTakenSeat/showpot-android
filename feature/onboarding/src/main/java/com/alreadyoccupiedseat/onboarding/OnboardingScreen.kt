@@ -103,7 +103,7 @@ fun OnboardingContent(
                     ) {
 
                         Image(
-                            modifier = Modifier.padding(85.dp)
+                            modifier = Modifier.padding(top = 85.dp)
                                 .size(341.dp, 345.dp),
                             painter = painterResource(
                                 id =
