@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.alreadyoccupiedseat.core.extention.conditional
 import com.alreadyoccupiedseat.designsystem.R
@@ -62,7 +63,7 @@ fun ShotPotSearchBar(
 
             if (inputText.isEmpty()) {
                 ShowPotKoreanText_B1_SemiBold(
-                    text = "관심 있는 공연과 가수를 검색해보세요",
+                    text = stringResource(R.string.search_hint),
                     color = ShowpotColor.Gray400
                 )
             }
@@ -74,13 +75,13 @@ fun ShotPotSearchBar(
                     onCancelClicked()
                 },
                 painter = painterResource(id = R.drawable.ic_cancel_36),
-                contentDescription = "cancel icon",
+                contentDescription = stringResource(R.string.cancel_icon_description),
                 tint = Color.White,
             )
         } else {
             Icon(
                 painter = painterResource(id = R.drawable.ic_magnifier_36),
-                contentDescription = "magnifier icon",
+                contentDescription = stringResource(R.string.magnifier_icon_description),
                 tint = Color.White,
             )
         }
