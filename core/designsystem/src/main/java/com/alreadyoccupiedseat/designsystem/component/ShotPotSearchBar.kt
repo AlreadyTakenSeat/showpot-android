@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.alreadyoccupiedseat.core.extention.EMPTY
 import com.alreadyoccupiedseat.core.extention.conditional
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowPotTypography
@@ -26,6 +27,7 @@ import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B1_Sem
 @Composable
 fun ShotPotSearchBar(
     modifier: Modifier = Modifier,
+    hint: String = String.EMPTY,
     inputText: String,
     enabled: Boolean = true,
     onClickedWhenDisEnabled: () -> Unit = {},
@@ -61,9 +63,10 @@ fun ShotPotSearchBar(
         ) { innerTextField ->
             innerTextField()
 
+            // hint section
             if (inputText.isEmpty()) {
                 ShowPotKoreanText_B1_SemiBold(
-                    text = stringResource(R.string.search_hint),
+                    text = hint,
                     color = ShowpotColor.Gray400
                 )
             }
