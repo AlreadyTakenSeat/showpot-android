@@ -2,9 +2,7 @@ package com.alreadyoccupiedseat.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,10 +14,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -34,6 +28,7 @@ import androidx.navigation.compose.rememberNavController
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotButtonWithIcon
+import com.alreadyoccupiedseat.designsystem.component.ShowPotTopBar
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
 
 @Composable
@@ -59,20 +54,18 @@ fun LoginContent(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {},
+            ShowPotTopBar(
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
+                            modifier = Modifier.padding(1.dp),
                             painter = painterResource(R.drawable.ic_arrow_36_left),
                             contentDescription = "Back"
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = ShowpotColor.Gray700,
-                    navigationIconContentColor = ShowpotColor.White,
-                )
+                backgroundColor = ShowpotColor.Gray700,
+                contentColor = ShowpotColor.White
             )
         },
         content = {
@@ -172,30 +165,3 @@ fun LoginContent(
 
 }
 
-@Composable
-fun CustomTopAppBar(
-    navigationIcon: @Composable (() -> Unit),
-    backgroundColor: Color = Color.Transparent,
-    contentColor: Color = contentColorFor(backgroundColor),
-) {
-    Surface(
-        color = backgroundColor,
-        contentColor = contentColor,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Box(
-            Modifier
-                .fillMaxWidth()
-        ) {
-            Row(
-                Modifier
-                    .padding(0.dp)
-                    .height(44.dp)
-                    .align(Alignment.CenterStart),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                navigationIcon()
-            }
-        }
-    }
-}
