@@ -1,6 +1,5 @@
 package com.alreadyoccupiedseat.onboarding
 
-import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,7 +29,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.lerp
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -49,10 +47,11 @@ fun OnboardingScreen(
     val viewModel = hiltViewModel<OnboardingViewModel>()
     val event = viewModel.event.collectAsState()
 
-    val context = LocalContext.current
     when (event.value) {
         OnboardingScreenEvent.Idle -> {
-
+            OnboardingContent(
+                viewModel = viewModel,
+            )
         }
 
         OnboardingScreenEvent.OnboardingCompleted -> {
@@ -60,9 +59,6 @@ fun OnboardingScreen(
         }
     }
 
-    OnboardingContent(
-        viewModel = viewModel,
-    )
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -107,7 +103,7 @@ fun OnboardingContent(
                     ) {
 
                         Image(
-                            modifier = Modifier.padding(85.dp)
+                            modifier = Modifier.padding(top = 85.dp)
                                 .size(341.dp, 345.dp),
                             painter = painterResource(
                                 id =
