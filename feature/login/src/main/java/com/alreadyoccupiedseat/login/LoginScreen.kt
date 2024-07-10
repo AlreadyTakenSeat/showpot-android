@@ -14,8 +14,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -30,6 +28,7 @@ import androidx.navigation.compose.rememberNavController
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotButtonWithIcon
+import com.alreadyoccupiedseat.designsystem.component.ShowPotTopBar
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
 
 @Composable
@@ -55,20 +54,18 @@ fun LoginContent(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {},
+            ShowPotTopBar(
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
+                            modifier = Modifier.padding(1.dp),
                             painter = painterResource(R.drawable.ic_arrow_36_left),
                             contentDescription = "Back"
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = ShowpotColor.Gray700,
-                    navigationIconContentColor = ShowpotColor.White,
-                )
+                backgroundColor = ShowpotColor.Gray700,
+                contentColor = ShowpotColor.White
             )
         },
         content = {
@@ -79,11 +76,11 @@ fun LoginContent(
                     .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
+                Spacer(modifier = Modifier.size(49.dp))
                 Image(
                     modifier = Modifier
-                        .padding(top = 28.dp)
-                        .size(width = 135.57875.dp, height = 54.dp),
+                        .padding(top = 49.dp)
+                        .size(width = 135.58.dp, height = 54.dp),
                     painter = painterResource(R.drawable.img_logo),
                     contentDescription = "Logo"
                 )
@@ -95,22 +92,22 @@ fun LoginContent(
                     color = ShowpotColor.White
                 )
 
-                Spacer(modifier = Modifier.size(42.dp))
+                Spacer(modifier = Modifier.size(72.dp))
 
                 Image(
-                    modifier = Modifier.size(width = 173.70285.dp, height = 149.57744.dp),
+                    modifier = Modifier.size(width = 178.35.dp, height = 155.dp),
                     painter = painterResource(R.drawable.img_login_logo),
                     contentScale = ContentScale.Crop,
                     contentDescription = "Login Logo",
                 )
 
-                Spacer(modifier = Modifier.height(147.dp))
+                Spacer(modifier = Modifier.height(166.dp))
 
                 ShowPotButtonWithIcon(
                     modifier =
                     Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 20.dp),
+                        .padding(horizontal = 16.dp),
                     text = stringResource(R.string.button_login_with_kakao),
                     icon = painterResource(R.drawable.ic_kakao),
                     colors = ButtonColors(
@@ -124,12 +121,13 @@ fun LoginContent(
                     }
                 )
 
+                Spacer(modifier = Modifier.height(12.dp))
+
                 ShowPotButtonWithIcon(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(
-                            vertical = 8.dp,
-                            horizontal = 20.dp,
+                            horizontal = 16.dp,
                         ),
                     text = stringResource(R.string.button_login_with_google),
                     icon = painterResource(R.drawable.ic_google),
@@ -166,3 +164,4 @@ fun LoginContent(
     }
 
 }
+
