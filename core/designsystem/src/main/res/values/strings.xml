@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search_hint">관심 있는 공연과 가수를 검색해보세요</string>
+    <string name="cancel_icon_description">cancel icon</string>
+    <string name="magnifier_icon_description">magnifier icon</string>
+</resources>
