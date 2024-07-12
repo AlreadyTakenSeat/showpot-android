@@ -82,6 +82,9 @@ fun IconPreview() {
         ) { (colorName, color) ->
             IconItem(iconName = colorName, iconRes = color)
         }
+        item {
+            IconItem(iconName = "ic_magnifier_48", iconRes = R.drawable.ic_circle_delete_40)
+        }
     }
 }
 
