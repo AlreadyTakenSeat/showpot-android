@@ -127,18 +127,18 @@ fun ComponentsPreview() {
             )
         }
         val genreList = listOf(
-            R.drawable.img_genre_rock to R.drawable.img_genre_select_rock,
-            R.drawable.img_genre_band to R.drawable.img_genre_select_band,
-            R.drawable.img_genre_edm to R.drawable.img_genre_select_edm,
-            R.drawable.img_genre_classic to R.drawable.img_genre_select_classic,
-            R.drawable.img_genre_hiphop to R.drawable.img_genre_select_hiphop,
-            R.drawable.img_genre_house to R.drawable.img_genre_select_house,
-            R.drawable.img_genre_opera to R.drawable.img_genre_select_opera,
-            R.drawable.img_genre_pop to R.drawable.img_genre_select_pop,
-            R.drawable.img_genre_rnb to R.drawable.img_genre_select_rnb,
-            R.drawable.img_genre_musical to R.drawable.img_genre_select_musical,
-            R.drawable.img_genre_metal to R.drawable.img_genre_select_metal,
-            R.drawable.img_genre_band_jpop to R.drawable.img_genre_select_band_jpop,
+            R.drawable.img_genre_rock to R.drawable.img_genre_selected_rock,
+            R.drawable.img_genre_band to R.drawable.img_genre_selected_band,
+            R.drawable.img_genre_edm to R.drawable.img_genre_selected_edm,
+            R.drawable.img_genre_classic to R.drawable.img_genre_selected_classic,
+            R.drawable.img_genre_hiphop to R.drawable.img_genre_selected_hiphop,
+            R.drawable.img_genre_house to R.drawable.img_genre_selected_house,
+            R.drawable.img_genre_opera to R.drawable.img_genre_selected_opera,
+            R.drawable.img_genre_pop to R.drawable.img_genre_selected_pop,
+            R.drawable.img_genre_rnb to R.drawable.img_genre_selected_rnb,
+            R.drawable.img_genre_musical to R.drawable.img_genre_selected_musical,
+            R.drawable.img_genre_metal to R.drawable.img_genre_selected_metal,
+            R.drawable.img_genre_band_jpop to R.drawable.img_genre_selected_band_jpop,
         )
         item {
             ShowPotKoreanText_H1(text = "장르")
