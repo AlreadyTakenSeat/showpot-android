@@ -1,5 +1,6 @@
 package com.alreadyoccupiedseat.designsystem.preview
 
+import android.util.Log
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +18,7 @@ import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotButtonWithIcon
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
+import com.alreadyoccupiedseat.designsystem.component.ShowPotMenu
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H0
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 
@@ -118,6 +120,24 @@ fun ComponentsPreview() {
                 onClick = {
                     /* 구글 로그인 */
                 }
+            )
+        }
+        item {
+            ShowPotMenu(text = "장르 구독하기")
+        }
+        item {
+            ShowPotMenu(
+                text = "장르 구독하기",
+                endIcon = painterResource(id = R.drawable.ic_arrow_36_right)
+            ) {
+                Log.d("menu", " onClick")
+            }
+        }
+        item {
+            ShowPotMenu(
+                text = "장르 구독하기",
+                startIcon = painterResource(id = R.drawable.ic_alarm_24_default),
+                endIcon = painterResource(id = R.drawable.ic_arrow_36_right)
             )
         }
     }
