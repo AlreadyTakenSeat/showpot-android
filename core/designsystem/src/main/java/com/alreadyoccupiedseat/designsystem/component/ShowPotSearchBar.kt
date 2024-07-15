@@ -25,14 +25,14 @@ import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B1_SemiBold
 
 @Composable
-fun ShotPotSearchBar(
+fun ShowPotSearchBar(
     modifier: Modifier = Modifier,
     hint: String = String.EMPTY,
-    inputText: String,
+    inputText: String = String.EMPTY,
     enabled: Boolean = true,
     onClickedWhenDisEnabled: () -> Unit = {},
     onCancelClicked: () -> Unit = {},
-    onTextChanged: (String) -> Unit
+    onTextChanged: (String) -> Unit = {}
 ) {
 
     Row(
