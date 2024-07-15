@@ -32,7 +32,7 @@ import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.alreadyoccupiedseat.core.extention.calculateCurrentOffsetForPage
+import com.alreadyoccupiedseat.core.extension.calculateCurrentOffsetForPage
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H0

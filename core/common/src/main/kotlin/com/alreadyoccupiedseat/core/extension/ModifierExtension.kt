@@ -1,4 +1,4 @@
-package com.alreadyoccupiedseat.core.extention
+package com.alreadyoccupiedseat.core.extension
 
 import androidx.compose.ui.Modifier
 

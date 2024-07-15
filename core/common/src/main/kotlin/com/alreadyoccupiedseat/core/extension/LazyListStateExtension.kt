@@ -1,4 +1,4 @@
-package com.alreadyoccupiedseat.core.extention
+package com.alreadyoccupiedseat.core.extension
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable

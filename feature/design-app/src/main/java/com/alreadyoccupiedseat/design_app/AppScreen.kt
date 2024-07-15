@@ -10,7 +10,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.alreadyoccupiedseat.core.extention.EMPTY
+import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.design_app.Screen.Companion.bottomNavigationItems
 import com.alreadyoccupiedseat.design_app.screens.TypoScreen
 import com.alreadyoccupiedseat.design_app.screens.IconScreen
