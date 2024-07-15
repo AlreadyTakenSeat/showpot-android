@@ -47,6 +47,7 @@ dependencies {
     implementation(project(":feature:login"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:common"))
+    implementation(project(":core:notification"))
 
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -69,5 +70,6 @@ dependencies {
     implementation(libs.material)
 
     implementation(libs.coil.kt.compose)
+
 
 }
