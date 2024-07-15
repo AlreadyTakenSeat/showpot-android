@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.alreadyoccupiedseat.core.extension.isScrollingUp
@@ -115,7 +116,7 @@ fun HomeScreenContent() {
                 Image(
                     modifier = Modifier.padding(horizontal = 17.dp, vertical = 13.dp),
                     painter = painterResource(id = R.drawable.img_logo),
-                    contentDescription = "showpot logo"
+                    contentDescription = stringResource(com.alreadyoccupiedseat.home.R.string.showpot_logo_content_description)
                 )
 
                 ShowPotSearchBar(
@@ -123,7 +124,7 @@ fun HomeScreenContent() {
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
                         .padding(bottom = 14.dp),
-                    hint = "관심있는 공연과 가수를 검색해보세요.",
+                    hint = stringResource(com.alreadyoccupiedseat.home.R.string.search_shows_and_artists_hint),
                     enabled = false,
                     onClickedWhenDisEnabled = {
                         // Todo: navigate to the search page
