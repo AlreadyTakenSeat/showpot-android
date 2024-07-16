@@ -1,4 +1,4 @@
-package com.alreadyoccupiedseat.core.extention
+package com.alreadyoccupiedseat.core.extension
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.PagerState
