@@ -9,6 +9,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ButtonColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -16,6 +20,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
+import com.alreadyoccupiedseat.designsystem.component.ShowPotArtist
+import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistAlarm
+import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistDelete
+import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistSubscription
 import com.alreadyoccupiedseat.designsystem.component.ShowPotButtonWithIcon
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMenu
@@ -134,10 +142,55 @@ fun ComponentsPreview() {
             }
         }
         item {
+            Spacer(modifier = Modifier.height(16.dp))
             ShowPotMenu(
                 text = "장르 구독하기",
                 startIcon = painterResource(id = R.drawable.ic_alarm_24_default),
                 endIcon = painterResource(id = R.drawable.ic_arrow_36_right)
+            )
+        }
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+            ShowPotArtist(
+                icon = painterResource(id = R.drawable.img_artist_default),
+                text = "High Flying Birds"
+            )
+        }
+        item {
+            var isSelected by remember { mutableStateOf(false) }
+            Spacer(modifier = Modifier.height(16.dp))
+            ShowPotArtistAlarm(
+                text = "High Flying Birds",
+                isSelected = isSelected,
+                onClick = {
+                    isSelected = !isSelected
+                },
+                onIconClick = {
+                    isSelected = !isSelected
+                }
+            )
+        }
+        item {
+            var isSelected by remember { mutableStateOf(false) }
+            Spacer(modifier = Modifier.height(16.dp))
+            ShowPotArtistSubscription(
+                text = "High Flying Birds",
+                isSelected = isSelected,
+                onClick = {
+                    isSelected = !isSelected
+                },
+                onIconClick = {
+                    isSelected = !isSelected
+                }
+            )
+        }
+        item {
+            var isSelected by remember { mutableStateOf(false) }
+            Spacer(modifier = Modifier.height(16.dp))
+            ShowPotArtistDelete(
+                onIconClick = {
+                    isSelected = !isSelected
+                }
             )
         }
     }
