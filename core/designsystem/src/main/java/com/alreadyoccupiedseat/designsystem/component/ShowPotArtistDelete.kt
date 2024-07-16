@@ -23,7 +23,7 @@ fun ShowPotArtistDelete(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .clickable {
-₩                        onIconClick()
+                       onIconClick()
                     }
             )
         }
