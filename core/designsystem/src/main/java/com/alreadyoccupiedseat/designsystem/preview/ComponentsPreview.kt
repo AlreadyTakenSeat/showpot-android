@@ -194,6 +194,7 @@ fun ComponentsPreview() {
                     isSelected = !isSelected
                 }
             )
+        }
         val genreList = listOf(
             R.drawable.img_genre_rock to R.drawable.img_genre_selected_rock,
             R.drawable.img_genre_band to R.drawable.img_genre_selected_band,

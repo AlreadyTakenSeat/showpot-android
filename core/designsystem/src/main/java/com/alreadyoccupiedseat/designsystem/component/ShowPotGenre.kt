@@ -8,7 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
-import com.alreadyoccupiedseat.core.extention.conditional
+import com.alreadyoccupiedseat.core.extension.conditional
 import com.alreadyoccupiedseat.designsystem.R
 
 @Composable
