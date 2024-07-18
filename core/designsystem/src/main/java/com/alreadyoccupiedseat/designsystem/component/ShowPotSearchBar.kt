@@ -17,22 +17,22 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.alreadyoccupiedseat.core.extention.EMPTY
-import com.alreadyoccupiedseat.core.extention.conditional
+import com.alreadyoccupiedseat.core.extension.EMPTY
+import com.alreadyoccupiedseat.core.extension.conditional
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowPotTypography
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B1_SemiBold
 
 @Composable
-fun ShotPotSearchBar(
+fun ShowPotSearchBar(
     modifier: Modifier = Modifier,
     hint: String = String.EMPTY,
-    inputText: String,
+    inputText: String = String.EMPTY,
     enabled: Boolean = true,
     onClickedWhenDisEnabled: () -> Unit = {},
     onCancelClicked: () -> Unit = {},
-    onTextChanged: (String) -> Unit
+    onTextChanged: (String) -> Unit = {}
 ) {
 
     Row(

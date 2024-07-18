@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,6 +26,7 @@ import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistAlarm
 import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistDelete
 import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistSubscription
 import com.alreadyoccupiedseat.designsystem.component.ShowPotButtonWithIcon
+import com.alreadyoccupiedseat.designsystem.component.ShowPotGenre
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMenu
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H0
@@ -192,6 +194,56 @@ fun ComponentsPreview() {
                     isSelected = !isSelected
                 }
             )
+        val genreList = listOf(
+            R.drawable.img_genre_rock to R.drawable.img_genre_selected_rock,
+            R.drawable.img_genre_band to R.drawable.img_genre_selected_band,
+            R.drawable.img_genre_edm to R.drawable.img_genre_selected_edm,
+            R.drawable.img_genre_classic to R.drawable.img_genre_selected_classic,
+            R.drawable.img_genre_hiphop to R.drawable.img_genre_selected_hiphop,
+            R.drawable.img_genre_house to R.drawable.img_genre_selected_house,
+            R.drawable.img_genre_opera to R.drawable.img_genre_selected_opera,
+            R.drawable.img_genre_pop to R.drawable.img_genre_selected_pop,
+            R.drawable.img_genre_rnb to R.drawable.img_genre_selected_rnb,
+            R.drawable.img_genre_musical to R.drawable.img_genre_selected_musical,
+            R.drawable.img_genre_metal to R.drawable.img_genre_selected_metal,
+            R.drawable.img_genre_band_jpop to R.drawable.img_genre_selected_band_jpop,
+        )
+        item {
+            ShowPotKoreanText_H1(text = "장르")
+            genreList.forEachIndexed { _, (resId, selectedResId) ->
+                ShowPotGenre(icon = painterResource(id = resId),)
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+        }
+        item {
+            ShowPotKoreanText_H1(text = "Select 장르")
+            genreList.forEachIndexed { _, (resId, selectedResId) ->
+                var isSelected by rememberSaveable { mutableStateOf(false) }
+                ShowPotGenre(
+                    enabled = true,
+                    icon = painterResource(id = resId),
+                    selectedIcon = painterResource(id = selectedResId),
+                    isSelected = isSelected,
+                    onSelectClicked = {
+                        isSelected = !isSelected
+                        Log.d("ShowPotBaseGenreView", "onSelectClick")
+                    }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+        }
+        item {
+            ShowPotKoreanText_H1(text = "Delete 장르")
+            genreList.forEachIndexed { _, (resId, selectedResId) ->
+                ShowPotGenre(
+                    icon = painterResource(id = resId),
+                    isDeletable = true,
+                    onDeleteClicked = {
+                        Log.d("ShowPotBaseGenreView", "onDeleteClicked")
+                    }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+            }
         }
     }
 }
