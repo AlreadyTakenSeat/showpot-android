@@ -39,7 +39,7 @@ fun ShowPotSearchBar(
         modifier = modifier
             .fillMaxWidth()
             .height(52.dp)
-            .background(color = ShowpotColor.Gray600)
+            .background(color = ShowpotColor.Gray500)
             .conditional(enabled.not()) {
                 clickable {
                     onClickedWhenDisEnabled()
