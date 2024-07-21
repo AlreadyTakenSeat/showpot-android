@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,9 +31,10 @@ fun ShowPotSearchBar(
     hint: String = String.EMPTY,
     inputText: String = String.EMPTY,
     enabled: Boolean = true,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     onClickedWhenDisEnabled: () -> Unit = {},
     onCancelClicked: () -> Unit = {},
-    onTextChanged: (String) -> Unit = {}
+    onTextChanged: (String) -> Unit = {},
 ) {
 
     Row(
@@ -60,6 +62,7 @@ fun ShowPotSearchBar(
             textStyle = ShowPotTypography.Korean.B1_semiBold.copy(color = Color.White),
             cursorBrush = SolidColor(Color.White),
             singleLine = true,
+            keyboardActions = keyboardActions,
         ) { innerTextField ->
             innerTextField()
 
