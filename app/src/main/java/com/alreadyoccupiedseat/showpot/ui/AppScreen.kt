@@ -1,5 +1,8 @@
 package com.alreadyoccupiedseat.showpot.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -33,16 +36,26 @@ fun AppScreenContent() {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentDestination = navBackStackEntry?.destination
 
-            ShowPotBottomNavigation(
-                bottomNavigationItems = bottomNavigationItems,
-                currentDestination?.route ?: String.EMPTY
+            AnimatedVisibility(
+                visible = currentDestination?.route in bottomNavigationItems.map { it.route },
+                enter = slideInVertically(initialOffsetY = {
+                    it
+                }),
+                exit = slideOutVertically(targetOffsetY = {
+                    it
+                })
             ) {
-                navController.navigate(it.route) {
-                    popUpTo(navController.graph.findStartDestination().id) {
-                        saveState = true
+                ShowPotBottomNavigation(
+                    bottomNavigationItems = bottomNavigationItems,
+                    currentDestination?.route ?: String.EMPTY
+                ) {
+                    navController.navigate(it.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
                     }
-                    launchSingleTop = true
-                    restoreState = true
                 }
             }
 
