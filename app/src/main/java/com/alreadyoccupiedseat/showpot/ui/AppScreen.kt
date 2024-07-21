@@ -14,6 +14,7 @@ import com.alreadyoccupiedseat.designsystem.component.ShowPotBottomNavigation
 import com.alreadyoccupiedseat.home.HomeScreen
 import com.alreadyoccupiedseat.mypage.MyPageScreen
 import com.alreadyoccupiedseat.notification.NotificationScreen
+import com.alreadyoccupiedseat.search.SearchScreen
 import com.alreadyoccupiedseat.showpot.Screen
 import com.alreadyoccupiedseat.showpot.Screen.Companion.bottomNavigationItems
 
@@ -54,7 +55,9 @@ fun AppScreenContent() {
         ) {
 
             composable(Screen.Home.route) {
-                HomeScreen(navController)
+                HomeScreen(navController) {
+                    navController.navigate(Screen.Search.route)
+                }
             }
 
             composable(Screen.Notification.route) {
@@ -65,6 +68,9 @@ fun AppScreenContent() {
                 MyPageScreen(navController)
             }
 
+            composable(Screen.Search.route) {
+                SearchScreen(navController)
+            }
         }
     }
 }
