@@ -1,6 +1,7 @@
 package com.alreadyoccupiedseat.search
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,7 +23,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
+import com.alreadyoccupiedseat.designsystem.component.SearchHistoryChip
 import com.alreadyoccupiedseat.designsystem.component.ShowPotSearchBar
+import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B1_Regular
+import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
 import kotlinx.coroutines.launch
 
 @Composable
@@ -44,6 +48,15 @@ fun SearchScreen(
         onSearchIsDone = {
             viewModel.updateSearchHistories()
             viewModel.initInputText()
+        },
+        onChipClicked = {
+                        // TODO: Search
+        },
+        onDeleteAllClicked = {
+            viewModel.deleteAllSearchHistory()
+        },
+        onDeleteHistoryClicked = {
+            viewModel.deleteSearchHistory(it)
         }
     )
 }
@@ -51,9 +64,12 @@ fun SearchScreen(
 @Composable
 fun SearchScreenContent(
     state: SearchScreenState,
-    onBackButtonClicked : () -> Unit = {},
+    onBackButtonClicked: () -> Unit = {},
     onTextChanged: (String) -> Unit = {},
     onSearchIsDone: () -> Unit = {},
+    onChipClicked: (String) -> Unit = {},
+    onDeleteAllClicked: () -> Unit = {},
+    onDeleteHistoryClicked: (String) -> Unit = {},
 ) {
 
     val focusManager = LocalFocusManager.current
@@ -99,7 +115,24 @@ fun SearchScreenContent(
                 )
             }
         }
-    ) { paddingValues ->  
+    ) { paddingValues ->
 
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(top = 12.dp)
+        ) {
+
+            if (state.isSearchedScreen.not()) {
+                RecentSearchHistorySection(
+                    searchHistories = state.searchHistory,
+                    onDeleteAllClicked = onDeleteAllClicked,
+                    onChipClicked = onChipClicked,
+                    onDeleteHistoryClicked = onDeleteHistoryClicked)
+            } else {
+                // TODO: SearchedScreen
+            }
+        }
     }
 }
