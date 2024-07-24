@@ -18,7 +18,9 @@ class SearchHistoryDataStore @Inject constructor(@ApplicationContext private val
 
     suspend fun updateSearchedKeyword(newKeyword: String): List<String> {
         val previous = getSearchedKeywordKey()?.toConvertedList() ?: emptyList()
-        val newHistories = (previous + newKeyword).toConvertedString()
+        val newHistories = (previous + newKeyword)
+            .distinct()
+            .toConvertedString()
         updateSearchedKeywordKey(newHistories)
         return newHistories.toConvertedList()
     }
