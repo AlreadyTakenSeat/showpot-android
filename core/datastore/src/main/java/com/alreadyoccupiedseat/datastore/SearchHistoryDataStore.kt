@@ -37,6 +37,11 @@ class SearchHistoryDataStore @Inject constructor(@ApplicationContext private val
         return newHistories.toConvertedList()
     }
 
+    suspend fun initSearchedKeyword(): List<String> {
+        updateSearchedKeywordKey("")
+        return emptyList()
+    }
+
     private suspend fun getSearchedKeywordKey() = context.searchHistoryDataStore.data
         .map { preferences ->
             preferences[searchKeywordKey]
@@ -53,7 +58,9 @@ class SearchHistoryDataStore @Inject constructor(@ApplicationContext private val
     }
 
     private fun String.toConvertedList(): List<String> {
-        return this.split(",").map { it.trim() }
+        return this.split(",")
+            .filter { it.isNotBlank() }
+            .map { it.trim() }
     }
 
 }
