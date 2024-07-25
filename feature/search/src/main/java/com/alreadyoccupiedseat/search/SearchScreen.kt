@@ -1,6 +1,8 @@
 package com.alreadyoccupiedseat.search
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,12 +10,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -23,9 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
-import com.alreadyoccupiedseat.designsystem.component.SearchHistoryChip
+import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistSubscription
 import com.alreadyoccupiedseat.designsystem.component.ShowPotSearchBar
-import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B1_Regular
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
 import kotlinx.coroutines.launch
 
@@ -47,10 +52,10 @@ fun SearchScreen(
         },
         onSearchIsDone = {
             viewModel.updateSearchHistories()
-            viewModel.initInputText()
+            viewModel.stateChangeToSearched()
         },
         onChipClicked = {
-                        // TODO: Search
+            // TODO: Search
         },
         onDeleteAllClicked = {
             viewModel.deleteAllSearchHistory()
@@ -129,9 +134,48 @@ fun SearchScreenContent(
                     searchHistories = state.searchHistory,
                     onDeleteAllClicked = onDeleteAllClicked,
                     onChipClicked = onChipClicked,
-                    onDeleteHistoryClicked = onDeleteHistoryClicked)
+                    onDeleteHistoryClicked = onDeleteHistoryClicked
+                )
             } else {
-                // TODO: SearchedScreen
+                Column {
+                    Box(
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.CenterStart,
+                    ) {
+                        ShowPotKoreanText_H2(
+                            modifier = Modifier.padding(vertical = 8.dp),
+                            text = stringResource(R.string.artist), color = ShowpotColor.Gray100
+                        )
+                    }
+
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    ) {
+                        item { Spacer(modifier = Modifier.width(4.dp))}
+                        state.searchedArtists.forEach {
+                            item {
+                                ShowPotArtistSubscription(
+                                    // TODO: Change to real artist image
+                                    icon = painterResource(com.alreadyoccupiedseat.designsystem.R.drawable.img_artist_default),
+                                    text = it.name
+                                )
+                            }
+                        }
+                    }
+
+                    Box(
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                            .padding(top = 36.dp)
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.CenterStart,
+                    ) {
+                        ShowPotKoreanText_H2(
+                            modifier = Modifier.padding(vertical = 8.dp),
+                            text = stringResource(R.string.show_information), color = ShowpotColor.Gray100
+                        )
+                    }
+                }
             }
         }
     }
