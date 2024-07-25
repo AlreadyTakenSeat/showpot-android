@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ButtonColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -15,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -29,6 +32,7 @@ import com.alreadyoccupiedseat.designsystem.component.ShowPotButtonWithIcon
 import com.alreadyoccupiedseat.designsystem.component.ShowPotGenre
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMenu
+import com.alreadyoccupiedseat.designsystem.component.ShowPotTicket
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H0
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 
@@ -133,11 +137,11 @@ fun ComponentsPreview() {
             )
         }
         item {
-            ShowPotMenu(text = "장르 구독하기")
+            ShowPotMenu(text = stringResource(id = R.string.subscribe_genre))
         }
         item {
             ShowPotMenu(
-                text = "장르 구독하기",
+                text = stringResource(id = R.string.subscribe_genre),
                 endIcon = painterResource(id = R.drawable.ic_arrow_36_right)
             ) {
                 Log.d("menu", " onClick")
@@ -146,9 +150,46 @@ fun ComponentsPreview() {
         item {
             Spacer(modifier = Modifier.height(16.dp))
             ShowPotMenu(
-                text = "장르 구독하기",
+                text = stringResource(id = R.string.subscribe_genre),
                 startIcon = painterResource(id = R.drawable.ic_alarm_24_default),
                 endIcon = painterResource(id = R.drawable.ic_arrow_36_right)
+            )
+        }
+        item {
+            ShowPotKoreanText_H1(
+                text = stringResource(id = R.string.tickets_almost_sold_out)
+            )
+        }
+        item {
+            ShowPotTicket(
+                brush = Brush.horizontalGradient(
+                    colors = listOf(
+                        ShowpotColor.Gray700,
+                        ShowpotColor.Gray700.copy(alpha = 0.5f)
+                    ),
+                ),
+                image = painterResource(id = R.drawable.img_default_ticket),
+                showTime = "OPEN : 06.10(MON) AM 11:00",
+                showName = "Nothing But Thieves But Thieves ",
+                showLocation = "KBS 아레나홀"
+            )
+        }
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+        item {
+            ShowPotTicket(
+                brush = Brush.horizontalGradient(
+                    colors = listOf(
+                        ShowpotColor.MainRed,
+                        ShowpotColor.Gray700.copy(alpha = 0.5f)
+                    ),
+                ),
+                image = painterResource(id = R.drawable.img_default_ticket),
+                showTime = "OPEN : 06.10(MON) AM 11:00",
+                showTimeTextColor = ShowpotColor.MainBlue,
+                showName = "Nothing But Thieves But Thieves ",
+                showLocation = "KBS 아레나홀"
             )
         }
         item {
@@ -211,40 +252,48 @@ fun ComponentsPreview() {
         )
         item {
             ShowPotKoreanText_H1(text = "장르")
-            genreList.forEachIndexed { _, (resId, selectedResId) ->
-                ShowPotGenre(icon = painterResource(id = resId),)
-                Spacer(modifier = Modifier.height(16.dp))
+            LazyRow {
+                items(genreList) { (resId, selectedResId) ->
+                    ShowPotGenre(icon = painterResource(id = resId))
+                }
             }
+        }
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
         }
         item {
             ShowPotKoreanText_H1(text = "Select 장르")
-            genreList.forEachIndexed { _, (resId, selectedResId) ->
-                var isSelected by rememberSaveable { mutableStateOf(false) }
-                ShowPotGenre(
-                    enabled = true,
-                    icon = painterResource(id = resId),
-                    selectedIcon = painterResource(id = selectedResId),
-                    isSelected = isSelected,
-                    onSelectClicked = {
-                        isSelected = !isSelected
-                        Log.d("ShowPotBaseGenreView", "onSelectClick")
-                    }
-                )
-                Spacer(modifier = Modifier.height(16.dp))
+            LazyRow {
+                items(genreList) { (resId, selectedResId) ->
+                    var isSelected by rememberSaveable { mutableStateOf(false) }
+                    ShowPotGenre(
+                        enabled = true,
+                        icon = painterResource(id = resId),
+                        selectedIcon = painterResource(id = selectedResId),
+                        isSelected = isSelected,
+                        onSelectClicked = {
+                            isSelected = !isSelected
+                            Log.d("ShowPotBaseGenreView", "onSelectClick")
+                        }
+                    )
+                }
             }
+            Spacer(modifier = Modifier.height(16.dp))
         }
         item {
             ShowPotKoreanText_H1(text = "Delete 장르")
-            genreList.forEachIndexed { _, (resId, selectedResId) ->
-                ShowPotGenre(
-                    icon = painterResource(id = resId),
-                    isDeletable = true,
-                    onDeleteClicked = {
-                        Log.d("ShowPotBaseGenreView", "onDeleteClicked")
-                    }
-                )
-                Spacer(modifier = Modifier.height(16.dp))
+            LazyRow {
+                items(genreList) { (resId, selectedResId) ->
+                    ShowPotGenre(
+                        icon = painterResource(id = resId),
+                        isDeletable = true,
+                        onDeleteClicked = {
+                            Log.d("ShowPotBaseGenreView", "onDeleteClicked")
+                        }
+                    )
+                }
             }
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
