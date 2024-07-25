@@ -176,14 +176,12 @@ fun ComponentsPreview() {
             var isSelected by remember { mutableStateOf(false) }
             Spacer(modifier = Modifier.height(16.dp))
             ShowPotArtistSubscription(
+                icon = painterResource(id = R.drawable.img_artist_default),
                 text = "High Flying Birds",
                 isSelected = isSelected,
                 onClick = {
                     isSelected = !isSelected
                 },
-                onIconClick = {
-                    isSelected = !isSelected
-                }
             )
         }
         item {
