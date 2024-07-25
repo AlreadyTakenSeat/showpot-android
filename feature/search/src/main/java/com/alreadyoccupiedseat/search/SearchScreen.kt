@@ -55,7 +55,9 @@ fun SearchScreen(
             viewModel.stateChangeToSearched()
         },
         onChipClicked = {
-            // TODO: Search
+            // Should i group them into one function?
+            viewModel.updateInputText(it)
+            viewModel.searchArtistsAndShows()
         },
         onDeleteAllClicked = {
             viewModel.deleteAllSearchHistory()

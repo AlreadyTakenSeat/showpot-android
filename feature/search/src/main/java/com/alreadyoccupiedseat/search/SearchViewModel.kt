@@ -41,7 +41,6 @@ class SearchViewModel @Inject constructor(
             val searchHistory = searchHistoryDataStore.getSearchedKeyword()
             _state.value = _state.value.copy(searchHistory = searchHistory.reversed())
         }
-        searchArtistsAndShows()
     }
 
     fun updateInputText(inputText: String) {
@@ -110,6 +109,7 @@ class SearchViewModel @Inject constructor(
                 )
             )
             _state.value = _state.value.copy(searchedShows = searchedShows)
+            stateChangeToSearched()
         }
     }
 }
