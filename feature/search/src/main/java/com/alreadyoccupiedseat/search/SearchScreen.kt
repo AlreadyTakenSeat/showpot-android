@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Icon
@@ -29,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
+import com.alreadyoccupiedseat.designsystem.component.ShowInfo
 import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistSubscription
 import com.alreadyoccupiedseat.designsystem.component.ShowPotSearchBar
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
@@ -143,45 +146,11 @@ fun SearchScreenContent(
                     onDeleteHistoryClicked = onDeleteHistoryClicked
                 )
             } else {
-                Column {
-                    Box(
-                        modifier = Modifier.padding(horizontal = 16.dp)
-                            .fillMaxWidth(),
-                        contentAlignment = Alignment.CenterStart,
-                    ) {
-                        ShowPotKoreanText_H2(
-                            modifier = Modifier.padding(vertical = 8.dp),
-                            text = stringResource(R.string.artist), color = ShowpotColor.Gray100
-                        )
-                    }
-
-                    LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    ) {
-                        item { Spacer(modifier = Modifier.width(4.dp))}
-                        state.searchedArtists.forEach {
-                            item {
-                                ShowPotArtistSubscription(
-                                    // TODO: Change to real artist image
-                                    icon = painterResource(com.alreadyoccupiedseat.designsystem.R.drawable.img_artist_default),
-                                    text = it.name
-                                )
-                            }
-                        }
-                    }
-
-                    Box(
-                        modifier = Modifier.padding(horizontal = 16.dp)
-                            .padding(top = 36.dp)
-                            .fillMaxWidth(),
-                        contentAlignment = Alignment.CenterStart,
-                    ) {
-                        ShowPotKoreanText_H2(
-                            modifier = Modifier.padding(vertical = 8.dp),
-                            text = stringResource(R.string.show_information), color = ShowpotColor.Gray100
-                        )
-                    }
-                }
+                // TODO: change to real data
+                SearchedSection(
+                    searchedArtists = state.searchedArtists,
+                    searchedShows = state.searchedShows
+                )
             }
         }
     }
