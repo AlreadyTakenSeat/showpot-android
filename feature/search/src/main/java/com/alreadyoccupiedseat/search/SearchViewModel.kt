@@ -48,7 +48,10 @@ class SearchViewModel @Inject constructor(
     }
 
     fun stateChangeToSearched() {
-        _state.value = _state.value.copy(isSearchedScreen = true)
+        _state.value = _state.value.copy(
+            inputText = _state.value.inputText,
+            isSearchedScreen = true
+        )
     }
 
     fun stateChangeToNotSearched() {

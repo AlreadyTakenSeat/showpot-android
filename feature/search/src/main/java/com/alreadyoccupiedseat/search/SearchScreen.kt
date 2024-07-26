@@ -45,14 +45,18 @@ fun SearchScreen(
     SearchScreenContent(
         state = state.value,
         onBackButtonClicked = {
-            navController.popBackStack()
+            if (state.value.isSearchedScreen) {
+                viewModel.stateChangeToNotSearched()
+            } else {
+                navController.popBackStack()
+            }
         },
         onTextChanged = {
             viewModel.updateInputText(it)
         },
         onSearchIsDone = {
             viewModel.updateSearchHistories()
-            viewModel.stateChangeToSearched()
+            viewModel.searchArtistsAndShows()
         },
         onChipClicked = {
             // Should i group them into one function?
