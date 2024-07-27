@@ -7,8 +7,8 @@ import com.alreadyoccupiedseat.designsystem.R
 sealed class Screen(
     route: String,
     title: String,
-    @DrawableRes unSelectedIcon: Int?,
-    @DrawableRes selectedIcon: Int?,
+    @DrawableRes unSelectedIcon: Int? = null,
+    @DrawableRes selectedIcon: Int? = null,
 ): Screens(
     route = route,
     title = title,
@@ -35,6 +35,11 @@ sealed class Screen(
         title = "마이",
         unSelectedIcon = R.drawable.ic_my_24,
         selectedIcon = R.drawable.ic_my_24_filled,
+    )
+
+    data object Search: Screen(
+        route = "search",
+        title = "검색"
     )
 
     companion object {

@@ -1,5 +1,8 @@
 package com.alreadyoccupiedseat.showpot.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -14,6 +17,7 @@ import com.alreadyoccupiedseat.designsystem.component.ShowPotBottomNavigation
 import com.alreadyoccupiedseat.home.HomeScreen
 import com.alreadyoccupiedseat.mypage.MyPageScreen
 import com.alreadyoccupiedseat.notification.NotificationScreen
+import com.alreadyoccupiedseat.search.SearchScreen
 import com.alreadyoccupiedseat.showpot.Screen
 import com.alreadyoccupiedseat.showpot.Screen.Companion.bottomNavigationItems
 
@@ -32,16 +36,26 @@ fun AppScreenContent() {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentDestination = navBackStackEntry?.destination
 
-            ShowPotBottomNavigation(
-                bottomNavigationItems = bottomNavigationItems,
-                currentDestination?.route ?: String.EMPTY
+            AnimatedVisibility(
+                visible = currentDestination?.route in bottomNavigationItems.map { it.route },
+                enter = slideInVertically(initialOffsetY = {
+                    it
+                }),
+                exit = slideOutVertically(targetOffsetY = {
+                    it
+                })
             ) {
-                navController.navigate(it.route) {
-                    popUpTo(navController.graph.findStartDestination().id) {
-                        saveState = true
+                ShowPotBottomNavigation(
+                    bottomNavigationItems = bottomNavigationItems,
+                    currentDestination?.route ?: String.EMPTY
+                ) {
+                    navController.navigate(it.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
                     }
-                    launchSingleTop = true
-                    restoreState = true
                 }
             }
 
@@ -54,7 +68,9 @@ fun AppScreenContent() {
         ) {
 
             composable(Screen.Home.route) {
-                HomeScreen(navController)
+                HomeScreen(navController) {
+                    navController.navigate(Screen.Search.route)
+                }
             }
 
             composable(Screen.Notification.route) {
@@ -65,6 +81,9 @@ fun AppScreenContent() {
                 MyPageScreen(navController)
             }
 
+            composable(Screen.Search.route) {
+                SearchScreen(navController)
+            }
         }
     }
 }

@@ -1,22 +1,19 @@
 plugins {
-    alias(libs.plugins.showpot.application)
-    alias(libs.plugins.showpot.firebase)
-    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.androidLibrary)
     alias(libs.plugins.showpot.hilt)
+    alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
-    namespace = "com.alreadyoccupiedseat.showpot"
+    namespace = "com.alreadyoccupiedseat.search"
+    compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.alreadyoccupiedseat.showpot"
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        minSdk = 26
 
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -28,27 +25,21 @@ android {
             )
         }
     }
-    buildFeatures {
-        compose = true
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
 
 dependencies {
 
-    implementation(project(":feature:home"))
-    implementation(project(":feature:onboarding"))
-    implementation(project(":feature:notification"))
-    implementation(project(":feature:mypage"))
-    implementation(project(":feature:login"))
-    implementation(project(":feature:search"))
     implementation(project(":core:designsystem"))
+    implementation(project(":core:datastore"))
     implementation(project(":core:common"))
-    implementation(project(":core:notification"))
+    implementation(project(":model"))
 
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -57,6 +48,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+
     //
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -71,6 +63,4 @@ dependencies {
     implementation(libs.material)
 
     implementation(libs.coil.kt.compose)
-
-
 }
