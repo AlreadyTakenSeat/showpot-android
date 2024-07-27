@@ -21,13 +21,14 @@ import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.typo.english.ShowPotEnglishText_H4
 
 @Composable
-fun ShowPotRecommend(
+fun RecommendedShow(
     modifier: Modifier = Modifier,
     image: Painter,
     text: String,
     color: Color = ShowpotColor.White,
     onClick: () -> Unit = {}
 ) {
+
     Column(
         modifier = modifier
             .size(width = 192.dp, height = 309.dp)
