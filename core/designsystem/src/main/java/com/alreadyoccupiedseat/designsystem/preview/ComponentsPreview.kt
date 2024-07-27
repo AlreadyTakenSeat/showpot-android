@@ -26,6 +26,7 @@ import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistAlarm
 import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistDelete
 import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistSubscription
 import com.alreadyoccupiedseat.designsystem.component.ShowPotButtonWithIcon
+import com.alreadyoccupiedseat.designsystem.component.RecommendedShow
 import com.alreadyoccupiedseat.designsystem.component.ShowPotGenre
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMenu
@@ -132,6 +133,31 @@ fun ComponentsPreview() {
                 }
             )
         }
+
+        item {
+            RecommendedShow(
+                image = painterResource(id = R.drawable.img_default_poster_01),
+                text = "Nothing But Thieves hey.d.",
+                color = ShowpotColor.White,
+                onClick = {
+                    Log.d("ShowPotConcertCards", "onClick")
+                }
+            )
+        }
+
+        item {
+            RecommendedShow(
+                image = painterResource(id = R.drawable.img_default_poster_02),
+                text = "Christopher",
+                color = ShowpotColor.White,
+                onClick = {
+                    Log.d("ShowPotConcertCards", "onClick")
+                }
+            )
+        }
+
+        item { Spacer(modifier = Modifier.height(16.dp)) }
+
         item {
             ShowPotMenu(text = "장르 구독하기")
         }
@@ -143,6 +169,7 @@ fun ComponentsPreview() {
                 Log.d("menu", " onClick")
             }
         }
+
         item {
             Spacer(modifier = Modifier.height(16.dp))
             ShowPotMenu(
@@ -151,6 +178,7 @@ fun ComponentsPreview() {
                 endIcon = painterResource(id = R.drawable.ic_arrow_36_right)
             )
         }
+
         item {
             Spacer(modifier = Modifier.height(16.dp))
             ShowPotArtist(
@@ -158,6 +186,7 @@ fun ComponentsPreview() {
                 text = "High Flying Birds"
             )
         }
+
         item {
             var isSelected by remember { mutableStateOf(false) }
             Spacer(modifier = Modifier.height(16.dp))
@@ -172,6 +201,7 @@ fun ComponentsPreview() {
                 }
             )
         }
+
         item {
             var isSelected by remember { mutableStateOf(false) }
             Spacer(modifier = Modifier.height(16.dp))
@@ -184,6 +214,7 @@ fun ComponentsPreview() {
                 },
             )
         }
+
         item {
             var isSelected by remember { mutableStateOf(false) }
             Spacer(modifier = Modifier.height(16.dp))
@@ -193,6 +224,7 @@ fun ComponentsPreview() {
                 }
             )
         }
+
         val genreList = listOf(
             R.drawable.img_genre_rock to R.drawable.img_genre_selected_rock,
             R.drawable.img_genre_band to R.drawable.img_genre_selected_band,
@@ -207,13 +239,15 @@ fun ComponentsPreview() {
             R.drawable.img_genre_metal to R.drawable.img_genre_selected_metal,
             R.drawable.img_genre_band_jpop to R.drawable.img_genre_selected_band_jpop,
         )
+
         item {
             ShowPotKoreanText_H1(text = "장르")
             genreList.forEachIndexed { _, (resId, selectedResId) ->
-                ShowPotGenre(icon = painterResource(id = resId),)
+                ShowPotGenre(icon = painterResource(id = resId))
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
+
         item {
             ShowPotKoreanText_H1(text = "Select 장르")
             genreList.forEachIndexed { _, (resId, selectedResId) ->
@@ -231,6 +265,7 @@ fun ComponentsPreview() {
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
+
         item {
             ShowPotKoreanText_H1(text = "Delete 장르")
             genreList.forEachIndexed { _, (resId, selectedResId) ->
@@ -244,5 +279,6 @@ fun ComponentsPreview() {
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
+
     }
 }
