@@ -2,6 +2,7 @@ package com.alreadyoccupiedseat.designsystem.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,16 +21,20 @@ import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.typo.english.ShowPotEnglishText_H4
 
 @Composable
-fun ShowPotConcertCards(
+fun ShowPotRecommend(
     modifier: Modifier = Modifier,
     image: Painter,
     text: String,
     color: Color = ShowpotColor.White,
+    onClick: () -> Unit = {}
 ) {
     Column(
         modifier = modifier
             .size(width = 192.dp, height = 309.dp)
             .clip(RoundedCornerShape(2.dp))
+            .clickable {
+                onClick()
+            }
     ) {
 
         Image(
