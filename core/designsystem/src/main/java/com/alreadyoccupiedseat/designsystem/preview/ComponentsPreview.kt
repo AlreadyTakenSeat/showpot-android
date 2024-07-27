@@ -26,6 +26,7 @@ import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistAlarm
 import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistDelete
 import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistSubscription
 import com.alreadyoccupiedseat.designsystem.component.ShowPotButtonWithIcon
+import com.alreadyoccupiedseat.designsystem.component.ShowPotConcertCards
 import com.alreadyoccupiedseat.designsystem.component.ShowPotGenre
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMenu
@@ -133,6 +134,21 @@ fun ComponentsPreview() {
             )
         }
         item {
+            ShowPotConcertCards(
+                image = painterResource(id = R.drawable.img_default_poster_01),
+                text = "Nothing But Thieves hey.d.",
+                color = ShowpotColor.White
+            )
+        }
+        item {
+            ShowPotConcertCards(
+                image = painterResource(id = R.drawable.img_default_poster_02),
+                text = "Christopher",
+                color = ShowpotColor.White
+            )
+        }
+        item { Spacer(modifier = Modifier.height(16.dp)) }
+        item {
             ShowPotMenu(text = "장르 구독하기")
         }
         item {
@@ -212,7 +228,7 @@ fun ComponentsPreview() {
         item {
             ShowPotKoreanText_H1(text = "장르")
             genreList.forEachIndexed { _, (resId, selectedResId) ->
-                ShowPotGenre(icon = painterResource(id = resId),)
+                ShowPotGenre(icon = painterResource(id = resId))
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
