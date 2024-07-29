@@ -2,6 +2,7 @@ package com.alreadyoccupiedseat.designsystem.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,6 +36,7 @@ fun ShowPotTicket(
     showTimeTextColor: Color = ShowpotColor.MainYellow,
     showName: String,
     showLocation: String,
+    onClick: () -> Unit,
 ) {
 
     Box(
@@ -42,6 +44,9 @@ fun ShowPotTicket(
             .height(106.dp)
             .fillMaxWidth()
             .background(ShowpotColor.Gray700)
+            .clickable {
+                onClick()
+            }
     ) {
 
         Image(

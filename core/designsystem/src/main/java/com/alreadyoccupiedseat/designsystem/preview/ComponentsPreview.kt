@@ -171,7 +171,10 @@ fun ComponentsPreview() {
                 image = painterResource(id = R.drawable.img_default_ticket),
                 showTime = "OPEN : 06.10(MON) AM 11:00",
                 showName = "Nothing But Thieves But Thieves ",
-                showLocation = "KBS 아레나홀"
+                showLocation = "KBS 아레나홀",
+                onClick = {
+                    Log.d("ShowPotTicket", "onClick")
+                }
             )
         }
         item {
@@ -189,7 +192,10 @@ fun ComponentsPreview() {
                 showTime = "OPEN : 06.10(MON) AM 11:00",
                 showTimeTextColor = ShowpotColor.MainBlue,
                 showName = "Nothing But Thieves But Thieves ",
-                showLocation = "KBS 아레나홀"
+                showLocation = "KBS 아레나홀",
+                onClick = {
+                    Log.d("ShowPotTicket", "onClick")
+                }
             )
         }
         item {
