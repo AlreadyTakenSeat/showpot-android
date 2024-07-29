@@ -5,15 +5,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
@@ -39,8 +40,8 @@ fun ShowPotTicket(
     Box(
         modifier = modifier
             .height(106.dp)
-//            .fillMaxWidth()
-            .background(ShowpotColor.White)
+            .fillMaxWidth()
+            .background(ShowpotColor.Gray700)
     ) {
 
         Image(
@@ -48,55 +49,61 @@ fun ShowPotTicket(
             contentDescription = "Show Image",
             contentScale = ContentScale.FillBounds,
             modifier = Modifier
-                .alpha(0.3f)
-                .size(width = 178.50415.dp, height = 106.dp)
+                .width(178.5.dp)
+                .fillMaxHeight()
                 .align(Alignment.CenterEnd)
         )
 
-        Box(
-            modifier = Modifier
-                .width(117.dp)
-                .fillMaxHeight()
-                .background(
-                    brush = brush
-                )
-                .align(Alignment.Center)
-        )
-
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.Start,
-            modifier = Modifier
-                .fillMaxHeight()
-                .padding(
-                    vertical = 12.5.dp,
-                    horizontal = 16.dp
-                )
-        ) {
-            ShowPotEnglishText_H5(
+        Row {
+            Spacer(
                 modifier = Modifier
-                    .background(ShowpotColor.MainRed),
-                text = showTime,
-                color = showTimeTextColor,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
+                    .background(ShowpotColor.Gray700)
+                    .fillMaxHeight()
+                    .weight(1f)
             )
-            ShowPotEnglishText_H3(
+            Box(
                 modifier = Modifier
-                    .background(ShowpotColor.MainYellow)
-                    .padding(top = 3.dp),
-                text = showName,
-                color = ShowpotColor.White,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            ShowPotKoreanText_B2_Regular(
-                modifier = Modifier
-                    .background(ShowpotColor.MainGreen)
-                    .padding(top = 3.dp),
-                text = showLocation,
-                color = ShowpotColor.Gray300
+                    .fillMaxHeight()
+                    .weight(1f)
+                    .background(brush)
             )
         }
+
+        Row {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.Start,
+                modifier = Modifier
+                    .width(210.dp)
+                    .padding(
+                        vertical = 12.5.dp,
+                        horizontal = 16.dp
+                    )
+            ) {
+
+                ShowPotEnglishText_H5(
+                    text = showTime,
+                    color = showTimeTextColor,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+
+                ShowPotEnglishText_H3(
+                    modifier = Modifier.padding(top = 3.dp),
+                    text = showName,
+                    color = ShowpotColor.White,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                ShowPotKoreanText_B2_Regular(
+                    modifier = Modifier.padding(top = 3.dp),
+                    text = showLocation,
+                    color = ShowpotColor.Gray300
+                )
+
+            }
+        }
+
     }
 }

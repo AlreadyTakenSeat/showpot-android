@@ -155,17 +155,17 @@ fun ComponentsPreview() {
                 endIcon = painterResource(id = R.drawable.ic_arrow_36_right)
             )
         }
+
         item {
-            ShowPotKoreanText_H1(
-                text = stringResource(id = R.string.tickets_almost_sold_out)
-            )
+            Spacer(modifier = Modifier.height(16.dp))
         }
+
         item {
             ShowPotTicket(
                 brush = Brush.horizontalGradient(
                     colors = listOf(
                         ShowpotColor.Gray700,
-                        ShowpotColor.Gray700.copy(alpha = 0.5f)
+                        ShowpotColor.Gray700.copy(alpha = 0f)
                     ),
                 ),
                 image = painterResource(id = R.drawable.img_default_ticket),
@@ -181,8 +181,8 @@ fun ComponentsPreview() {
             ShowPotTicket(
                 brush = Brush.horizontalGradient(
                     colors = listOf(
-                        ShowpotColor.MainRed,
-                        ShowpotColor.Gray700.copy(alpha = 0.5f)
+                        ShowpotColor.Gray700,
+                        ShowpotColor.Gray700.copy(alpha = 0f)
                     ),
                 ),
                 image = painterResource(id = R.drawable.img_default_ticket),
