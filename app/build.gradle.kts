@@ -45,6 +45,7 @@ dependencies {
     implementation(project(":feature:notification"))
     implementation(project(":feature:mypage"))
     implementation(project(":feature:login"))
+    implementation(project(":feature:search"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:common"))
     implementation(project(":core:notification"))

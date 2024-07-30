@@ -1,6 +1,5 @@
 package com.alreadyoccupiedseat.home
 
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -44,12 +43,19 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun HomeScreen(navController: NavController) {
-    HomeScreenContent()
+fun HomeScreen(
+    navController: NavController,
+    onSearchBarClicked: () -> Unit
+) {
+    HomeScreenContent() {
+        onSearchBarClicked()
+    }
 }
 
 @Composable
-fun HomeScreenContent() {
+fun HomeScreenContent(
+    onSearchBarClicked: () -> Unit
+) {
 
     var isTopBarVisible by remember { mutableStateOf(true) }
     val scope = rememberCoroutineScope()
@@ -57,8 +63,6 @@ fun HomeScreenContent() {
     val scrollState = rememberLazyListState()
     val firstVisibleItemIndex =
         remember { derivedStateOf { scrollState.firstVisibleItemIndex } }.value
-
-    val context = LocalContext.current
 
     val viewModel = viewModel<HomeViewModel>()
 
@@ -180,9 +184,7 @@ fun HomeScreenContent() {
                     hint = stringResource(com.alreadyoccupiedseat.home.R.string.search_shows_and_artists_hint),
                     enabled = false,
                     onClickedWhenDisEnabled = {
-                        // Todo: navigate to the search page
-                        Toast.makeText(context, "clicked when it's not enabled", Toast.LENGTH_SHORT)
-                            .show()
+                        onSearchBarClicked()
                     }
                 )
             }
