@@ -5,4 +5,5 @@
     <string name="button_login_with_google">Google로 시작하기 </string>
     <string name="subscribe_genre">장르 구독하기</string>
     <string name="subscribe_artist">아티스트 구독하기</string>
+    <string name="tickets_almost_sold_out">티켓팅이 얼마 남지 않은 공연</string>
 </resources>
