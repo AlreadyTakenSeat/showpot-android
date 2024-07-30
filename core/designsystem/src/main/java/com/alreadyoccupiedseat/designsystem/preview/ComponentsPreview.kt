@@ -17,7 +17,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -162,14 +161,9 @@ fun ComponentsPreview() {
 
         item {
             ShowPotTicket(
-                brush = Brush.horizontalGradient(
-                    colors = listOf(
-                        ShowpotColor.Gray700,
-                        ShowpotColor.Gray700.copy(alpha = 0f)
-                    ),
-                ),
-                image = painterResource(id = R.drawable.img_default_ticket),
+                url = "https://fastly.picsum.photos/id/26/4209/2769.jpg?hmac=vcInmowFvPCyKGtV7Vfh7zWcA_Z0kStrPDW3ppP0iGI",
                 showTime = "OPEN : 06.10(MON) AM 11:00",
+                showTimeTextColor = ShowpotColor.MainYellow,
                 showName = "Nothing But Thieves But Thieves ",
                 showLocation = "KBS 아레나홀",
                 onClick = {
@@ -182,13 +176,7 @@ fun ComponentsPreview() {
         }
         item {
             ShowPotTicket(
-                brush = Brush.horizontalGradient(
-                    colors = listOf(
-                        ShowpotColor.Gray700,
-                        ShowpotColor.Gray700.copy(alpha = 0f)
-                    ),
-                ),
-                image = painterResource(id = R.drawable.img_default_ticket),
+                url = "https://fastly.picsum.photos/id/26/4209/2769.jpg?hmac=vcInmowFvPCyKGtV7Vfh7zWcA_Z0kStrPDW3ppP0iGI",
                 showTime = "OPEN : 06.10(MON) AM 11:00",
                 showTimeTextColor = ShowpotColor.MainBlue,
                 showName = "Nothing But Thieves But Thieves ",
