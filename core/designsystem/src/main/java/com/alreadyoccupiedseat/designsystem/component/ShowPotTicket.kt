@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -31,7 +32,7 @@ import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B2_Reg
 @Composable
 fun ShowPotTicket(
     modifier: Modifier = Modifier,
-    url: String,
+    imageUrl: String,
     showTime: String,
     showTimeTextColor: Color,
     showName: String,
@@ -50,18 +51,6 @@ fun ShowPotTicket(
                 onClick()
             }
     ) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(url)
-                .crossfade(true)
-                .build(),
-            contentScale = ContentScale.FillBounds,
-            contentDescription = "Loaded Image",
-            modifier = Modifier
-                .width(178.5.dp)
-                .fillMaxHeight()
-                .align(Alignment.CenterEnd),
-        )
 
         Row {
             Spacer(
@@ -70,19 +59,40 @@ fun ShowPotTicket(
                     .fillMaxHeight()
                     .weight(1f)
             )
+
             Box(
                 modifier = Modifier
                     .fillMaxHeight()
                     .weight(1f)
-                    .background(
-                        brush = Brush.horizontalGradient(
-                            colors = listOf(
-                                ShowpotColor.Gray700,
-                                ShowpotColor.Gray700.copy(alpha = 0f)
-                            ),
+            ) {
+
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(imageUrl)
+                        .crossfade(true)
+                        .build(),
+                    contentScale = ContentScale.Crop,
+                    contentDescription = "Loaded Image",
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .align(Alignment.Center),
+                )
+
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            brush = Brush.horizontalGradient(
+                                colors = listOf(
+                                    ShowpotColor.Gray700,
+                                    ShowpotColor.Gray700.copy(alpha = 0f)
+                                ),
+                            )
                         )
-                    )
-            )
+                        .align(Alignment.Center)
+                )
+            }
+
         }
 
         Row {

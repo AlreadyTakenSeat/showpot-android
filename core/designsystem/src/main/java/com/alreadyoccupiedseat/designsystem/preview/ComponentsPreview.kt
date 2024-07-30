@@ -23,12 +23,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
+import com.alreadyoccupiedseat.designsystem.component.RecommendedShow
 import com.alreadyoccupiedseat.designsystem.component.ShowPotArtist
 import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistAlarm
 import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistDelete
 import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistSubscription
 import com.alreadyoccupiedseat.designsystem.component.ShowPotButtonWithIcon
-import com.alreadyoccupiedseat.designsystem.component.RecommendedShow
 import com.alreadyoccupiedseat.designsystem.component.ShowPotGenre
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMenu
@@ -143,6 +143,44 @@ fun ComponentsPreview() {
         }
 
         item {
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        item {
+            ShowPotTicket(
+                imageUrl = "https://img.hankyung.com/photo/202406/01.37069998.1.jpg",
+                showTime = "OPEN : 06.10(MON) AM 11:00",
+                showTimeTextColor = ShowpotColor.MainYellow,
+                showName = "Nothing But Thieves But Thieves ",
+                showLocation = "KBS 아레나홀",
+                onClick = {
+                    Log.d("ShowPotTicket", "onClick")
+                }
+            )
+        }
+
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        item {
+            ShowPotTicket(
+                imageUrl = "https://img.hankyung.com/photo/202406/01.37069998.1.jpg",
+                showTime = "OPEN : 06.10(MON) AM 11:00",
+                showTimeTextColor = ShowpotColor.MainBlue,
+                showName = "Nothing But Thieves But Thieves ",
+                showLocation = "KBS 아레나홀",
+                onClick = {
+                    Log.d("ShowPotTicket", "onClick")
+                }
+            )
+        }
+
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        item {
             RecommendedShow(
                 image = painterResource(id = R.drawable.img_default_poster_01),
                 text = "Nothing But Thieves hey.d.",
@@ -151,6 +189,10 @@ fun ComponentsPreview() {
                     Log.d("ShowPotConcertCards", "onClick")
                 }
             )
+        }
+
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
         }
 
         item {
