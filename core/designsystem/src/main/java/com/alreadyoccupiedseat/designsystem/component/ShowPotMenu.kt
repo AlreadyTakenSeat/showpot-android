@@ -30,7 +30,10 @@ fun ShowPotMenu(
         modifier = modifier
             .background(ShowpotColor.Gray700)
             .height(44.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable {
+                onClick()
+            },
         verticalAlignment = Alignment.CenterVertically
     ) {
 
@@ -55,8 +58,7 @@ fun ShowPotMenu(
             Image(
                 painter = it,
                 contentDescription = "endIcon",
-                colorFilter = tint(ShowpotColor.Gray100),
-                modifier = Modifier.clickable { onClick() }
+                colorFilter = tint(ShowpotColor.Gray100)
             )
         }
     }
