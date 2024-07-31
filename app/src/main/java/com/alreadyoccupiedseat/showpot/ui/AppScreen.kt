@@ -20,6 +20,7 @@ import com.alreadyoccupiedseat.notification.NotificationScreen
 import com.alreadyoccupiedseat.search.SearchScreen
 import com.alreadyoccupiedseat.showpot.Screen
 import com.alreadyoccupiedseat.showpot.Screen.Companion.bottomNavigationItems
+import com.alreadyoccupiedseat.subscription_genre.SubscriptionGenreScreen
 
 @Composable
 fun AppScreen() {
@@ -68,9 +69,15 @@ fun AppScreenContent() {
         ) {
 
             composable(Screen.Home.route) {
-                HomeScreen(navController) {
-                    navController.navigate(Screen.Search.route)
-                }
+                HomeScreen(
+                    navController = navController,
+                    onSearchBarClicked = {
+                        navController.navigate(Screen.Search.route)
+                    },
+                    onSubscriptionGenreClicked = {
+                        navController.navigate(Screen.SubscriptionGenre.route)
+                    }
+                )
             }
 
             composable(Screen.Notification.route) {
@@ -84,6 +91,11 @@ fun AppScreenContent() {
             composable(Screen.Search.route) {
                 SearchScreen(navController)
             }
+
+            composable(Screen.SubscriptionGenre.route) {
+                SubscriptionGenreScreen(navController)
+            }
+
         }
     }
 }

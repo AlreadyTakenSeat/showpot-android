@@ -42,6 +42,11 @@ sealed class Screen(
         title = "검색"
     )
 
+    data object SubscriptionGenre: Screen(
+        route = "genre",
+        title = "장르 구독"
+    )
+
     companion object {
         val bottomNavigationItems = listOf(Home, Notification, MyPage)
     }

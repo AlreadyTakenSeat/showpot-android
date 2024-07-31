@@ -52,15 +52,18 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     navController: NavController,
     onSearchBarClicked: () -> Unit,
+    onSubscriptionGenreClicked: () -> Unit,
 ) {
-    HomeScreenContent() {
-        onSearchBarClicked()
-    }
+    HomeScreenContent(
+        onSearchBarClicked = onSearchBarClicked,
+        onSubscriptionGenreClicked = onSubscriptionGenreClicked,
+    )
 }
 
 @Composable
 fun HomeScreenContent(
     onSearchBarClicked: () -> Unit,
+    onSubscriptionGenreClicked: () -> Unit,
 ) {
 
     var isTopBarVisible by remember { mutableStateOf(true) }
@@ -117,6 +120,9 @@ fun HomeScreenContent(
             // item section
             item {
                 ShowPotMenu(
+                    onClick = {
+                        onSubscriptionGenreClicked()
+                    },
                     text = stringResource(id = R.string.subscribe_genre),
                     endIcon = painterResource(id = R.drawable.ic_arrow_36_right),
                 )
