@@ -23,6 +23,7 @@ class SearchHistoryDataStore @Inject constructor(@ApplicationContext private val
             .reversed()
             .distinct()
             .reversed()
+            .takeLast(7)
             .toConvertedString()
         updateSearchedKeywordKey(newHistories)
         return newHistories.toConvertedList()
