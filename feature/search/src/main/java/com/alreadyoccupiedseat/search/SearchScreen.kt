@@ -30,7 +30,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowInfo
 import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistSubscription
@@ -72,10 +71,6 @@ fun SearchScreen(
         },
         onDeleteHistoryClicked = {
             viewModel.deleteSearchHistory(it)
-        },
-        onCancelClicked = {
-            viewModel.updateInputText(String.EMPTY)
-            viewModel.stateChangeToNotSearched()
         }
     )
 }
@@ -89,7 +84,6 @@ fun SearchScreenContent(
     onChipClicked: (String) -> Unit = {},
     onDeleteAllClicked: () -> Unit = {},
     onDeleteHistoryClicked: (String) -> Unit = {},
-    onCancelClicked: () -> Unit = {},
 ) {
 
     val focusManager = LocalFocusManager.current
@@ -132,12 +126,6 @@ fun SearchScreenContent(
                             }
                         }
                     ),
-                    onCancelClicked = {
-                        scope.launch {
-                            onCancelClicked()
-                            focusManager.clearFocus()
-                        }
-                    }
                 )
             }
         }
