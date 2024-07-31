@@ -1,6 +1,5 @@
 package com.alreadyoccupiedseat.designsystem.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -13,17 +12,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.typo.english.ShowPotEnglishText_H4
 
 @Composable
 fun RecommendedShow(
     modifier: Modifier = Modifier,
-    image: Painter,
+    imageUrl: String,
     text: String,
     color: Color = ShowpotColor.White,
     onClick: () -> Unit = {}
@@ -38,13 +39,16 @@ fun RecommendedShow(
             }
     ) {
 
-        Image(
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(imageUrl)
+                .crossfade(true)
+                .build(),
+            contentScale = ContentScale.Crop,
+            contentDescription = "Show Image",
             modifier = Modifier
                 .fillMaxWidth()
                 .height(260.dp),
-            painter = image,
-            contentDescription = "Concert Image",
-            contentScale = ContentScale.Crop
         )
 
         ShowPotEnglishText_H4(
