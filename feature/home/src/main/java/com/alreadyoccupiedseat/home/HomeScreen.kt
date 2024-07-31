@@ -1,5 +1,6 @@
 package com.alreadyoccupiedseat.home
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -8,6 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,7 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -35,17 +37,21 @@ import androidx.navigation.NavController
 import com.alreadyoccupiedseat.core.extension.isScrollingUp
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
+import com.alreadyoccupiedseat.designsystem.component.RecommendedShow
 import com.alreadyoccupiedseat.designsystem.component.ShowPotArtist
 import com.alreadyoccupiedseat.designsystem.component.ShowPotGenre
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMenu
 import com.alreadyoccupiedseat.designsystem.component.ShowPotSearchBar
+import com.alreadyoccupiedseat.designsystem.component.ShowPotTicket
+import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B1_SemiBold
+import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
     navController: NavController,
-    onSearchBarClicked: () -> Unit
+    onSearchBarClicked: () -> Unit,
 ) {
     HomeScreenContent() {
         onSearchBarClicked()
@@ -54,7 +60,7 @@ fun HomeScreen(
 
 @Composable
 fun HomeScreenContent(
-    onSearchBarClicked: () -> Unit
+    onSearchBarClicked: () -> Unit,
 ) {
 
     var isTopBarVisible by remember { mutableStateOf(true) }
@@ -111,10 +117,11 @@ fun HomeScreenContent(
             // item section
             item {
                 ShowPotMenu(
-                    text = stringResource(id = R.string.subscribe_artist),
+                    text = stringResource(id = R.string.subscribe_genre),
                     endIcon = painterResource(id = R.drawable.ic_arrow_36_right),
                 )
             }
+
             item {
                 LazyRow(
                     modifier = Modifier.padding(start = 16.dp, top = 8.dp),
@@ -125,6 +132,7 @@ fun HomeScreenContent(
                     }
                 }
             }
+
             item {
                 ShowPotMenu(
                     modifier = Modifier.padding(top = 36.dp),
@@ -132,6 +140,7 @@ fun HomeScreenContent(
                     endIcon = painterResource(id = R.drawable.ic_arrow_36_right),
                 )
             }
+
             item {
                 LazyRow(
                     modifier = Modifier.padding(start = 16.dp, top = 6.dp),
@@ -145,15 +154,116 @@ fun HomeScreenContent(
                     }
                 }
             }
-            items(count = 10) { index ->
-                Spacer(
+
+            item {
+                Spacer(modifier = Modifier.height(38.dp))
+            }
+
+            item {
+                ShowPotKoreanText_H1(
                     modifier = Modifier
-                        .padding(horizontal = 10.dp, vertical = 10.dp)
-                        .background(if (index % 2 == 0) ShowpotColor.MainRed else ShowpotColor.MainGreen)
-                        .fillMaxWidth()
-                        .height(133.dp)
+                        .padding(vertical = 7.dp, horizontal = 16.dp),
+                    text = stringResource(id = R.string.tickets_almost_sold_out),
+                    color = ShowpotColor.Gray100
                 )
             }
+
+            item {
+                ShowPotTicket(
+                    modifier = Modifier
+                        .padding(top = 10.dp)
+                        .padding(horizontal = 16.dp),
+                    imageUrl = "https://images.pexels.com/photos/6865046/pexels-photo-6865046.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                    showTime = "OPEN : 06.10(MON) AM 11:00",
+                    showTimeTextColor = ShowpotColor.MainYellow,
+                    showName = "Nothing But Thieves But Thieves ",
+                    showLocation = "KBS 아레나홀",
+                    onClick = {
+                        Log.d("ShowPotTicket", "onClick")
+                    }
+                )
+            }
+
+            item {
+                ShowPotTicket(
+                    modifier = Modifier
+                        .padding(top = 10.dp)
+                        .padding(horizontal = 16.dp),
+                    imageUrl = "https://images.pexels.com/photos/6865046/pexels-photo-6865046.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                    showTime = "OPEN : 06.10(MON) AM 11:00",
+                    showTimeTextColor = ShowpotColor.MainBlue,
+                    showName = "Nothing But Thieves But Thieves ",
+                    showLocation = "KBS 아레나홀",
+                    onClick = {
+                        Log.d("ShowPotTicket", "onClick")
+                    }
+                )
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(10.dp))
+            }
+
+            item {
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .height(49.dp)
+                        .background(ShowpotColor.Gray500)
+                ) {
+
+                    ShowPotKoreanText_B1_SemiBold(
+                        text = stringResource(id = R.string.view_all_show),
+                        color = ShowpotColor.Gray100
+                    )
+
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_arrow_24_right),
+                        contentDescription = "arrow_right",
+                        colorFilter = ColorFilter.tint(ShowpotColor.Gray300)
+                    )
+
+                }
+            }
+
+            item {
+                ShowPotKoreanText_H1(
+                    modifier = Modifier
+                        .padding(top = 38.dp)
+                        .padding(horizontal = 16.dp, vertical = 7.dp),
+                    text = "춤추는 고래님을 위한 추천 공연", color = ShowpotColor.Gray100
+                )
+            }
+
+            item {
+                LazyRow(
+                    modifier = Modifier.padding(start = 16.dp, top = 6.dp),
+                    horizontalArrangement = Arrangement.spacedBy(18.dp)
+                ) {
+                    items(10) {
+                        val (imageUrl, text) = if (it % 2 == 0) {
+                            "https://img.hankyung.com/photo/202406/01.37069998.1.jpg" to "Nothing But Thieves But Thieves"
+                        } else {
+                            "https://thumb.mt.co.kr/06/2024/04/2024040913332068429_1.jpg/dims/optimize/" to "Christopher"
+                        }
+                        RecommendedShow(
+                            imageUrl = imageUrl,
+                            text = text,
+                            onClick = {
+                                Log.d("RecommendedShow", "onClick")
+                            }
+                        )
+                    }
+                }
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(100.dp))
+            }
+
         }
 
         AnimatedVisibility(
@@ -170,6 +280,7 @@ fun HomeScreenContent(
                     .fillMaxWidth()
                     .background(ShowpotColor.Gray700),
             ) {
+
                 Image(
                     modifier = Modifier.padding(horizontal = 17.dp, vertical = 13.dp),
                     painter = painterResource(id = R.drawable.img_logo),

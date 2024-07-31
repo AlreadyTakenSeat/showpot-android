@@ -180,32 +180,6 @@ fun ComponentsPreview() {
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        item {
-            RecommendedShow(
-                image = painterResource(id = R.drawable.img_default_poster_01),
-                text = "Nothing But Thieves hey.d.",
-                color = ShowpotColor.White,
-                onClick = {
-                    Log.d("ShowPotConcertCards", "onClick")
-                }
-            )
-        }
-
-        item {
-            Spacer(modifier = Modifier.height(16.dp))
-        }
-
-        item {
-            RecommendedShow(
-                image = painterResource(id = R.drawable.img_default_poster_02),
-                text = "Christopher",
-                color = ShowpotColor.White,
-                onClick = {
-                    Log.d("ShowPotConcertCards", "onClick")
-                }
-            )
-        }
-
         item { Spacer(modifier = Modifier.height(16.dp)) }
 
         item {
