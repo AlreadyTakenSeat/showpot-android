@@ -111,10 +111,11 @@ fun HomeScreenContent(
             // item section
             item {
                 ShowPotMenu(
-                    text = stringResource(id = R.string.subscribe_artist),
+                    text = stringResource(id = R.string.subscribe_genre),
                     endIcon = painterResource(id = R.drawable.ic_arrow_36_right),
                 )
             }
+
             item {
                 LazyRow(
                     modifier = Modifier.padding(start = 16.dp, top = 8.dp),
@@ -125,6 +126,7 @@ fun HomeScreenContent(
                     }
                 }
             }
+
             item {
                 ShowPotMenu(
                     modifier = Modifier.padding(top = 36.dp),
@@ -132,6 +134,7 @@ fun HomeScreenContent(
                     endIcon = painterResource(id = R.drawable.ic_arrow_36_right),
                 )
             }
+
             item {
                 LazyRow(
                     modifier = Modifier.padding(start = 16.dp, top = 6.dp),
@@ -145,6 +148,7 @@ fun HomeScreenContent(
                     }
                 }
             }
+
             items(count = 10) { index ->
                 Spacer(
                     modifier = Modifier
