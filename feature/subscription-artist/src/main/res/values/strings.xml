@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="subscribe_artist">아티스트 구독하기</string>
+    <string name="select_interesting_artist">관심 있는 아티스트를 선택주세요</string>
+    <string name="subscribe">구독하기</string>
+</resources>
