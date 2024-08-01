@@ -15,12 +15,14 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistSubscription
@@ -32,11 +34,23 @@ import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
 fun SubscriptionArtistScreen(
     navController: NavController,
 ) {
-    SubscriptionArtistScreenContent(
-        onBackClicked = {
-            navController.popBackStack()
+
+    val viewModel = hiltViewModel<SubscriptionArtistViewModel>()
+    val event = viewModel.event.collectAsState()
+
+    when (event.value) {
+        SubscriptionArtistScreenEvent.Idle -> {
+            SubscriptionArtistScreenContent(
+                onBackClicked = {
+                    navController.popBackStack()
+                },
+                onSubscribeButtonClicked = {
+                    viewModel.subscribeArtists()
+                }
+            )
         }
-    )
+
+    }
 }
 
 @Composable
