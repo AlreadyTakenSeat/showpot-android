@@ -28,7 +28,8 @@ fun ShowPotArtist(
     content: @Composable BoxScope.() -> Unit = {},
 ) {
     Column(
-        modifier = modifier
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box {
             Image(
