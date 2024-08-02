@@ -53,10 +53,12 @@ fun HomeScreen(
     navController: NavController,
     onSearchBarClicked: () -> Unit,
     onSubscriptionGenreClicked: () -> Unit,
+    subscribeArtistClicked: () -> Unit
 ) {
     HomeScreenContent(
         onSearchBarClicked = onSearchBarClicked,
         onSubscriptionGenreClicked = onSubscriptionGenreClicked,
+        subscribeArtistClicked = subscribeArtistClicked
     )
 }
 
@@ -64,6 +66,7 @@ fun HomeScreen(
 fun HomeScreenContent(
     onSearchBarClicked: () -> Unit,
     onSubscriptionGenreClicked: () -> Unit,
+    subscribeArtistClicked: () -> Unit
 ) {
 
     var isTopBarVisible by remember { mutableStateOf(true) }
@@ -144,7 +147,9 @@ fun HomeScreenContent(
                     modifier = Modifier.padding(top = 36.dp),
                     text = stringResource(id = R.string.subscribe_artist),
                     endIcon = painterResource(id = R.drawable.ic_arrow_36_right),
-                )
+                ) {
+                    subscribeArtistClicked()
+                }
             }
 
             item {
