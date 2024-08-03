@@ -14,8 +14,12 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,8 +31,10 @@ import androidx.navigation.NavController
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistSubscription
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
+import com.alreadyoccupiedseat.designsystem.component.snackbar.CheckIconSnackbar
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
+import kotlinx.coroutines.launch
 
 @Composable
 fun SubscriptionArtistScreen(
@@ -58,10 +64,29 @@ fun SubscriptionArtistScreenContent(
     onBackClicked: () -> Unit,
     onSubscribeButtonClicked: () -> Unit = {},
 ) {
+
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
         containerColor = ShowpotColor.Gray700,
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+            ) { snackbarData ->
+                CheckIconSnackbar(
+                    mainText = snackbarData.visuals.message,
+                    actionText = "보러가기",
+                    onIconClicked = {
+                        // onIconClicked()
+                    },
+                ) {
+                    // onActionClicked()
+                }
+            }
+        },
         // TODO: To be a component
         topBar = {
             Row(
@@ -118,7 +143,8 @@ fun SubscriptionArtistScreenContent(
                     items(count = 21) {
                         ShowPotArtistSubscription(
                             text = "High Flying Birds",
-                            icon = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.img_artist_default),)
+                            icon = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.img_artist_default),
+                        )
                     }
 
                 }
@@ -136,7 +162,10 @@ fun SubscriptionArtistScreenContent(
                             .fillMaxWidth(),
                         text = stringResource(R.string.subscribe)
                     ) {
-                        onSubscribeButtonClicked()
+                        scope.launch {
+                            onSubscribeButtonClicked()
+                            snackbarHostState.showSnackbar("구독 설정이 완료되었습니다")
+                        }
                     }
                 }
             }
