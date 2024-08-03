@@ -8,18 +8,23 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,6 +36,8 @@ import androidx.navigation.NavController
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistSubscription
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
+import com.alreadyoccupiedseat.designsystem.component.bottomSheet.SheetHandler
+import com.alreadyoccupiedseat.designsystem.component.bottomSheet.ShowPotBottomSheet
 import com.alreadyoccupiedseat.designsystem.component.snackbar.CheckIconSnackbar
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
@@ -59,6 +66,7 @@ fun SubscriptionArtistScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SubscriptionArtistScreenContent(
     onBackClicked: () -> Unit,
@@ -67,6 +75,48 @@ fun SubscriptionArtistScreenContent(
 
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+
+    // TODO: Supposed to be in a ViewModel State
+    var isSheetVisible by remember { mutableStateOf(true) }
+
+    if (isSheetVisible) {
+
+        ShowPotBottomSheet(
+            onDismissRequest = {
+                isSheetVisible = false
+            },
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(horizontal = 15.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                SheetHandler()
+
+                ShowPotKoreanText_H1(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "로그인 후 좋아하는\n" +
+                            "아티스트 구독을 해보세요!",
+                    color = Color.White
+                )
+
+                Spacer(modifier = Modifier.height(19.dp))
+
+                ShowPotMainButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "3초만에 로그인하기"
+                ) {
+                    // TODO: goto Login
+                }
+
+                Spacer(modifier = Modifier.height(54.dp))
+            }
+        }
+
+    }
+
+
 
     Scaffold(
         modifier = Modifier
@@ -144,7 +194,9 @@ fun SubscriptionArtistScreenContent(
                         ShowPotArtistSubscription(
                             text = "High Flying Birds",
                             icon = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.img_artist_default),
-                        )
+                        ) {
+                            isSheetVisible = true
+                        }
                     }
 
                 }
