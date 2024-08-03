@@ -12,12 +12,12 @@ object ShowpotColor {
 
     // Object, Line, Text Colors
     val White = Color(0xFFFFFFFF)
-    val Gray100 = Color(0xFFC3C3C6)
-    val Gray200 = Color(0xFF9EA0A3)
-    val Gray300 = Color(0xFF62646C)
+    val Gray100 = Color(0xFFD3D4DA)
+    val Gray200 = Color(0xFFA2A9B2)
+    val Gray300 = Color(0xFF77808C)
     val Gray400 = Color(0xFF454751)
     val Gray500 = Color(0xFF2C2E34)
-    val Gray600 = Color(0xFF202026)
+    val Gray600 = Color(0xFF2C2E34)
     val Gray700 = Color(0xFF17171B)
     val Gray800 = Color(0xFF101012)
 
