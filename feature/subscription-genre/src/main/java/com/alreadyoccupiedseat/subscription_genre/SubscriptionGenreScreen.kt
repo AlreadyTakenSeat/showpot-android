@@ -4,14 +4,13 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -20,7 +19,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -78,50 +76,31 @@ fun SubscriptionGenreScreenContent(modifier: Modifier = Modifier, navController:
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
+                val state = rememberLazyStaggeredGridState()
+                LazyVerticalStaggeredGrid(
+                    state = state,
+                    columns = StaggeredGridCells.Fixed(2),
+                    verticalItemSpacing = 40.dp,
+                    horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
-                        .fillMaxWidth()
                         .padding(horizontal = 48.dp)
                 ) {
-
-                    LazyColumn(
-                        verticalArrangement = Arrangement.spacedBy(40.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier
-                            .fillMaxWidth()
-//                            .background(ShowpotColor.MainRed)
-                    ) {
-
-                        items(viewModel.tempGenreList.chunked(2)) { pair ->
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                pair.forEachIndexed { index, (resId, selectedResId) ->
-                                    if (index % 2 != 0 ) {
-                                        Spacer(modifier = Modifier.padding(end = 7.dp))
-                                    } else {
-                                        Spacer(modifier = Modifier.padding(start = 7.dp))
-                                    }
-                                    var isSelected by rememberSaveable { mutableStateOf(false) }
-                                    ShowPotGenre(
-                                        enabled = true,
-                                        icon = painterResource(id = resId),
-                                        selectedIcon = painterResource(id = selectedResId),
-                                        isSelected = isSelected,
-                                        onSelectClicked = {
-                                            isSelected = !isSelected
-                                            Log.d("ShowPotBaseGenreView", "onSelectClick")
-                                        }
-                                    )
-                                }
+                    items(viewModel.tempGenreList.size) { index ->
+                        val (resId, selectedResId) = viewModel.tempGenreList[index]
+                        var isSelected by rememberSaveable { mutableStateOf(false) }
+                        ShowPotGenre(
+                            enabled = true,
+                            icon = painterResource(id = resId),
+                            selectedIcon = painterResource(id = selectedResId),
+                            isSelected = isSelected,
+                            onSelectClicked = {
+                                isSelected = !isSelected
+                                Log.d("ShowPotBaseGenreView", "onSelectClick")
                             }
-                        }
-
+                        )
                     }
                 }
+
             }
         }
     )
