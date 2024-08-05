@@ -17,6 +17,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -42,6 +43,7 @@ import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
 import com.alreadyoccupiedseat.designsystem.component.ShowPotTopBar
 import com.alreadyoccupiedseat.designsystem.component.bottomSheet.SheetHandler
 import com.alreadyoccupiedseat.designsystem.component.bottomSheet.ShowPotBottomSheet
+import com.alreadyoccupiedseat.designsystem.component.snackbar.CheckIconSnackbar
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
 import kotlinx.coroutines.CoroutineScope
@@ -95,6 +97,21 @@ fun SubscriptionGenreScreenContent(
     }
 
     Scaffold(
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackBarHostState,
+            ) { snackBarData ->
+                CheckIconSnackbar(
+                    mainText = snackBarData.visuals.message,
+                    actionText = "보러가기",
+                    onIconClicked = {
+                        // onIconClicked()
+                    },
+                ) {
+                    // onActionClicked()
+                }
+            }
+        },
         topBar = {
             SubscriptionTopBar(onBackClicked = onBackClicked)
         },
