@@ -33,7 +33,7 @@ fun ShowPotArtistSubscription(
                 Box(
                     modifier = modifier
                         .size(100.dp)
-                        .background(ShowpotColor.MainRed.copy(alpha = 0.7f), CircleShape)
+                        .background(ShowpotColor.MainOrange.copy(alpha = 0.7f), CircleShape)
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_check_36),
