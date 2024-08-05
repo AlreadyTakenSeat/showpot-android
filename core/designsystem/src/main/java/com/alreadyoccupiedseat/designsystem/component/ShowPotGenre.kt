@@ -24,12 +24,17 @@ fun ShowPotGenre(
 ) {
     val displayIcon = if (isSelected && selectedIcon != null) selectedIcon else icon
 
-    Box(contentAlignment = Alignment.Center) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
         Image(
             painter = displayIcon, contentDescription = "장르",
             modifier = modifier
                 .conditional(enabled) {
-                    clickable { onSelectClicked() }
+                    clickable {
+                        onSelectClicked()
+                    }
                 },
         )
         if (isDeletable) {
