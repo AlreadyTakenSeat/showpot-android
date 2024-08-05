@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -101,214 +102,225 @@ fun HomeScreenContent(
         }
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(ShowpotColor.Gray700),
-    ) {
-
-        LazyColumn(
-            state = scrollState,
-        ) {
-
-            // area occupied as big as topbar section
-            item {
-                Spacer(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(133.dp)
-                )
-            }
-
-            // item section
-            item {
-                ShowPotMenu(
-                    onClick = {
-                        onSubscriptionGenreClicked()
-                    },
-                    text = stringResource(id = R.string.subscribe_genre),
-                    endIcon = painterResource(id = R.drawable.ic_arrow_36_right),
-                )
-            }
-
-            item {
-                LazyRow(
-                    modifier = Modifier.padding(start = 16.dp, top = 8.dp),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    items(viewModel.genreList) { (resId, _) ->
-                        ShowPotGenre(icon = painterResource(id = resId))
-                    }
-                }
-            }
-
-            item {
-                ShowPotMenu(
-                    modifier = Modifier.padding(top = 36.dp),
-                    text = stringResource(id = R.string.subscribe_artist),
-                    endIcon = painterResource(id = R.drawable.ic_arrow_36_right),
-                ) {
-                    subscribeArtistClicked()
-                }
-            }
-
-            item {
-                LazyRow(
-                    modifier = Modifier.padding(start = 16.dp, top = 6.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    items(count = 10) {
-                        ShowPotArtist(
-                            text = "High Flying Birds",
-                            icon = painterResource(id = R.drawable.img_artist_default),
-                        )
-                    }
-                }
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(38.dp))
-            }
-
-            item {
-                ShowPotKoreanText_H1(
-                    modifier = Modifier
-                        .padding(vertical = 7.dp, horizontal = 16.dp),
-                    text = stringResource(id = R.string.tickets_almost_sold_out),
-                    color = ShowpotColor.Gray100
-                )
-            }
-
-            item {
-                ShowPotTicket(
-                    modifier = Modifier
-                        .padding(top = 10.dp)
-                        .padding(horizontal = 16.dp),
-                    imageUrl = "https://images.pexels.com/photos/6865046/pexels-photo-6865046.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-                    showTime = "OPEN : 06.10(MON) AM 11:00",
-                    showTimeTextColor = ShowpotColor.MainYellow,
-                    showName = "Nothing But Thieves But Thieves ",
-                    showLocation = "KBS 아레나홀",
-                    onClick = {
-                        Log.d("ShowPotTicket", "onClick")
-                    }
-                )
-            }
-
-            item {
-                ShowPotTicket(
-                    modifier = Modifier
-                        .padding(top = 10.dp)
-                        .padding(horizontal = 16.dp),
-                    imageUrl = "https://images.pexels.com/photos/6865046/pexels-photo-6865046.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-                    showTime = "OPEN : 06.10(MON) AM 11:00",
-                    showTimeTextColor = ShowpotColor.MainBlue,
-                    showName = "Nothing But Thieves But Thieves ",
-                    showLocation = "KBS 아레나홀",
-                    onClick = {
-                        Log.d("ShowPotTicket", "onClick")
-                    }
-                )
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(10.dp))
-            }
-
-            item {
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .height(49.dp)
-                        .background(ShowpotColor.Gray500)
-                ) {
-
-                    ShowPotKoreanText_B1_SemiBold(
-                        text = stringResource(id = R.string.view_all_show),
-                        color = ShowpotColor.Gray100
-                    )
-
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_arrow_24_right),
-                        contentDescription = "arrow_right",
-                        colorFilter = ColorFilter.tint(ShowpotColor.Gray300)
-                    )
-
-                }
-            }
-
-            item {
-                ShowPotKoreanText_H1(
-                    modifier = Modifier
-                        .padding(top = 38.dp)
-                        .padding(horizontal = 16.dp, vertical = 7.dp),
-                    text = "춤추는 고래님을 위한 추천 공연", color = ShowpotColor.Gray100
-                )
-            }
-
-            item {
-                LazyRow(
-                    modifier = Modifier.padding(start = 16.dp, top = 6.dp),
-                    horizontalArrangement = Arrangement.spacedBy(18.dp)
-                ) {
-                    items(10) {
-                        val (imageUrl, text) = if (it % 2 == 0) {
-                            "https://img.hankyung.com/photo/202406/01.37069998.1.jpg" to "Nothing But Thieves But Thieves"
-                        } else {
-                            "https://thumb.mt.co.kr/06/2024/04/2024040913332068429_1.jpg/dims/optimize/" to "Christopher"
-                        }
-                        RecommendedShow(
-                            imageUrl = imageUrl,
-                            text = text,
-                            onClick = {
-                                Log.d("RecommendedShow", "onClick")
-                            }
-                        )
-                    }
-                }
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(100.dp))
-            }
-
-        }
-
-        AnimatedVisibility(
-            visible = isTopBarVisible,
-            enter = slideInVertically(
-                initialOffsetY = { fullHeight -> -fullHeight },
-            ),
-            exit = slideOutVertically(
-                targetOffsetY = { fullHeight -> -fullHeight }
-            )
-        ) {
-            Column(
+    Scaffold(
+        topBar = {
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(ShowpotColor.Gray700),
             ) {
-
                 Image(
                     modifier = Modifier.padding(horizontal = 17.dp, vertical = 13.dp),
                     painter = painterResource(id = R.drawable.img_logo),
                     contentDescription = stringResource(com.alreadyoccupiedseat.home.R.string.showpot_logo_content_description)
                 )
+            }
 
-                ShowPotSearchBar(
+        }
+    ) { innerPadding ->
+        Box(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+                .background(ShowpotColor.Gray700),
+        ) {
+
+            LazyColumn(
+                state = scrollState,
+            ) {
+
+                // area occupied as big as topbar section
+                item {
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(66.dp)
+                    )
+                }
+
+                // item section
+                item {
+                    ShowPotMenu(
+                        onClick = {
+                            onSubscriptionGenreClicked()
+                        },
+                        text = stringResource(id = R.string.subscribe_genre),
+                        endIcon = painterResource(id = R.drawable.ic_arrow_36_right),
+                    )
+                }
+
+                item {
+                    LazyRow(
+                        modifier = Modifier.padding(start = 16.dp, top = 8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        items(viewModel.genreList) { (resId, _) ->
+                            ShowPotGenre(icon = painterResource(id = resId))
+                        }
+                    }
+                }
+
+                item {
+                    ShowPotMenu(
+                        modifier = Modifier.padding(top = 36.dp),
+                        text = stringResource(id = R.string.subscribe_artist),
+                        endIcon = painterResource(id = R.drawable.ic_arrow_36_right),
+                    ) {
+                        subscribeArtistClicked()
+                    }
+                }
+
+                item {
+                    LazyRow(
+                        modifier = Modifier.padding(start = 16.dp, top = 6.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        items(count = 10) {
+                            ShowPotArtist(
+                                text = "High Flying Birds",
+                                icon = painterResource(id = R.drawable.img_artist_default),
+                            )
+                        }
+                    }
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(38.dp))
+                }
+
+                item {
+                    ShowPotKoreanText_H1(
+                        modifier = Modifier
+                            .padding(vertical = 7.dp, horizontal = 16.dp),
+                        text = stringResource(id = R.string.tickets_almost_sold_out),
+                        color = ShowpotColor.Gray100
+                    )
+                }
+
+                item {
+                    ShowPotTicket(
+                        modifier = Modifier
+                            .padding(top = 10.dp)
+                            .padding(horizontal = 16.dp),
+                        imageUrl = "https://images.pexels.com/photos/6865046/pexels-photo-6865046.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                        showTime = "OPEN : 06.10(MON) AM 11:00",
+                        showTimeTextColor = ShowpotColor.MainYellow,
+                        showName = "Nothing But Thieves But Thieves ",
+                        showLocation = "KBS 아레나홀",
+                        onClick = {
+                            Log.d("ShowPotTicket", "onClick")
+                        }
+                    )
+                }
+
+                item {
+                    ShowPotTicket(
+                        modifier = Modifier
+                            .padding(top = 10.dp)
+                            .padding(horizontal = 16.dp),
+                        imageUrl = "https://images.pexels.com/photos/6865046/pexels-photo-6865046.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                        showTime = "OPEN : 06.10(MON) AM 11:00",
+                        showTimeTextColor = ShowpotColor.MainBlue,
+                        showName = "Nothing But Thieves But Thieves ",
+                        showLocation = "KBS 아레나홀",
+                        onClick = {
+                            Log.d("ShowPotTicket", "onClick")
+                        }
+                    )
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(10.dp))
+                }
+
+                item {
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .height(49.dp)
+                            .background(ShowpotColor.Gray500)
+                    ) {
+
+                        ShowPotKoreanText_B1_SemiBold(
+                            text = stringResource(id = R.string.view_all_show),
+                            color = ShowpotColor.Gray100
+                        )
+
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_arrow_24_right),
+                            contentDescription = "arrow_right",
+                            colorFilter = ColorFilter.tint(ShowpotColor.Gray300)
+                        )
+
+                    }
+                }
+
+                item {
+                    ShowPotKoreanText_H1(
+                        modifier = Modifier
+                            .padding(top = 38.dp)
+                            .padding(horizontal = 16.dp, vertical = 7.dp),
+                        text = "춤추는 고래님을 위한 추천 공연", color = ShowpotColor.Gray100
+                    )
+                }
+
+                item {
+                    LazyRow(
+                        modifier = Modifier.padding(start = 16.dp, top = 6.dp),
+                        horizontalArrangement = Arrangement.spacedBy(18.dp)
+                    ) {
+                        items(10) {
+                            val (imageUrl, text) = if (it % 2 == 0) {
+                                "https://img.hankyung.com/photo/202406/01.37069998.1.jpg" to "Nothing But Thieves But Thieves"
+                            } else {
+                                "https://thumb.mt.co.kr/06/2024/04/2024040913332068429_1.jpg/dims/optimize/" to "Christopher"
+                            }
+                            RecommendedShow(
+                                imageUrl = imageUrl,
+                                text = text,
+                                onClick = {
+                                    Log.d("RecommendedShow", "onClick")
+                                }
+                            )
+                        }
+                    }
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(100.dp))
+                }
+
+            }
+
+            AnimatedVisibility(
+                visible = isTopBarVisible,
+                enter = slideInVertically(
+                    initialOffsetY = { fullHeight -> -fullHeight },
+                ),
+                exit = slideOutVertically(
+                    targetOffsetY = { fullHeight -> -fullHeight }
+                )
+            ) {
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .padding(bottom = 14.dp),
-                    hint = stringResource(com.alreadyoccupiedseat.home.R.string.search_shows_and_artists_hint),
-                    enabled = false,
-                    onClickedWhenDisEnabled = {
-                        onSearchBarClicked()
-                    }
-                )
+                        .background(ShowpotColor.Gray700),
+                ) {
+                    ShowPotSearchBar(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .padding(bottom = 14.dp),
+                        hint = stringResource(com.alreadyoccupiedseat.home.R.string.search_shows_and_artists_hint),
+                        enabled = false,
+                        onClickedWhenDisEnabled = {
+                            onSearchBarClicked()
+                        }
+                    )
+                }
             }
         }
     }
