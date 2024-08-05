@@ -23,7 +23,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
-import com.alreadyoccupiedseat.designsystem.component.RecommendedShow
 import com.alreadyoccupiedseat.designsystem.component.ShowPotArtist
 import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistAlarm
 import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistDelete
@@ -262,7 +261,7 @@ fun ComponentsPreview() {
             R.drawable.img_genre_rnb to R.drawable.img_genre_selected_rnb,
             R.drawable.img_genre_musical to R.drawable.img_genre_selected_musical,
             R.drawable.img_genre_metal to R.drawable.img_genre_selected_metal,
-            R.drawable.img_genre_band_jpop to R.drawable.img_genre_selected_band_jpop,
+            R.drawable.img_genre_jpop to R.drawable.img_genre_selected_jpop,
         )
 
         item {

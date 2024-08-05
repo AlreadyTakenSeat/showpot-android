@@ -20,19 +20,23 @@ fun ShowPotGenre(
     isSelected: Boolean = false,
     isDeletable: Boolean = false,
     onSelectClicked: () -> Unit = {},
-    onDeleteClicked: () -> Unit = {}
+    onDeleteClicked: () -> Unit = {},
 ) {
     val displayIcon = if (isSelected && selectedIcon != null) selectedIcon else icon
 
     Box(
-        modifier = modifier
-            .conditional(enabled) {
-                clickable {
-                    onSelectClicked()
-                }
-            }
+        modifier = modifier,
+        contentAlignment = Alignment.Center
     ) {
-        Image(painter = displayIcon, contentDescription = "장르")
+        Image(
+            painter = displayIcon, contentDescription = "장르",
+            modifier = modifier
+                .conditional(enabled) {
+                    clickable {
+                        onSelectClicked()
+                    }
+                },
+        )
         if (isDeletable) {
             Image(
                 painter = painterResource(id = R.drawable.ic_circle_delete_40),

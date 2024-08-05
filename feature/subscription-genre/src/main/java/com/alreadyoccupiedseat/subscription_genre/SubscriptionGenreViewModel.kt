@@ -1,15 +1,28 @@
 package com.alreadyoccupiedseat.subscription_genre
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.alreadyoccupiedseat.model.Genre
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+sealed interface SubscriptionGenreScreenEvent {
+    data object Idle : SubscriptionGenreScreenEvent
+}
+
+data class SubscriptionGenreScreenState(
+    val selectedGenre: List<Genre> = emptyList(),
+)
 
 @HiltViewModel
 class SubscriptionGenreViewModel @Inject constructor(
 
 ) : ViewModel() {
+
+    val state = MutableStateFlow(SubscriptionGenreScreenState())
+    val event = MutableStateFlow(SubscriptionGenreScreenEvent.Idle)
 
     // 임시
     val tempGenreList = listOf(
@@ -24,14 +37,7 @@ class SubscriptionGenreViewModel @Inject constructor(
         com.alreadyoccupiedseat.designsystem.R.drawable.img_genre_rnb to com.alreadyoccupiedseat.designsystem.R.drawable.img_genre_selected_rnb,
         com.alreadyoccupiedseat.designsystem.R.drawable.img_genre_musical to com.alreadyoccupiedseat.designsystem.R.drawable.img_genre_selected_musical,
         com.alreadyoccupiedseat.designsystem.R.drawable.img_genre_metal to com.alreadyoccupiedseat.designsystem.R.drawable.img_genre_selected_metal,
-        com.alreadyoccupiedseat.designsystem.R.drawable.img_genre_band_jpop to com.alreadyoccupiedseat.designsystem.R.drawable.img_genre_selected_band_jpop,
-    )
-
-    private val _isAllGenresSubscribed = MutableStateFlow(false)
-    val isAllGenresSubscribed: StateFlow<Boolean> get() = _isAllGenresSubscribed
-
-    val genreList = listOf(
-        com.alreadyoccupiedseat.designsystem.R.drawable.img_genre_rock to com.alreadyoccupiedseat.designsystem.R.drawable.img_genre_selected_rock,
+        com.alreadyoccupiedseat.designsystem.R.drawable.img_genre_jpop to com.alreadyoccupiedseat.designsystem.R.drawable.img_genre_selected_jpop,
     )
 
     fun checkAllGenresSubscribed() {
@@ -39,5 +45,10 @@ class SubscriptionGenreViewModel @Inject constructor(
 //        _isAllGenresSubscribed.value = genreList.all { it.isSubscribed }
     }
 
+    fun subscribeGenres() {
+        viewModelScope.launch {
+
+        }
+    }
 
 }
