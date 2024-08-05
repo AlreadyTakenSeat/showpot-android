@@ -2,7 +2,6 @@ package com.alreadyoccupiedseat.home
 
 import androidx.lifecycle.ViewModel
 import com.alreadyoccupiedseat.designsystem.R
-import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 class HomeViewModel@Inject constructor() : ViewModel(){
@@ -20,7 +19,7 @@ class HomeViewModel@Inject constructor() : ViewModel(){
         R.drawable.img_genre_rnb to R.drawable.img_genre_selected_rnb,
         R.drawable.img_genre_musical to R.drawable.img_genre_selected_musical,
         R.drawable.img_genre_metal to R.drawable.img_genre_selected_metal,
-        R.drawable.img_genre_band_jpop to R.drawable.img_genre_selected_band_jpop,
+        R.drawable.img_genre_jpop to R.drawable.img_genre_selected_jpop,
     )
 
 }

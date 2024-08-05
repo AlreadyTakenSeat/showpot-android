@@ -37,7 +37,7 @@ class SubscriptionGenreViewModel @Inject constructor(
         com.alreadyoccupiedseat.designsystem.R.drawable.img_genre_rnb to com.alreadyoccupiedseat.designsystem.R.drawable.img_genre_selected_rnb,
         com.alreadyoccupiedseat.designsystem.R.drawable.img_genre_musical to com.alreadyoccupiedseat.designsystem.R.drawable.img_genre_selected_musical,
         com.alreadyoccupiedseat.designsystem.R.drawable.img_genre_metal to com.alreadyoccupiedseat.designsystem.R.drawable.img_genre_selected_metal,
-        com.alreadyoccupiedseat.designsystem.R.drawable.img_genre_band_jpop to com.alreadyoccupiedseat.designsystem.R.drawable.img_genre_selected_band_jpop,
+        com.alreadyoccupiedseat.designsystem.R.drawable.img_genre_jpop to com.alreadyoccupiedseat.designsystem.R.drawable.img_genre_selected_jpop,
     )
 
     fun checkAllGenresSubscribed() {
