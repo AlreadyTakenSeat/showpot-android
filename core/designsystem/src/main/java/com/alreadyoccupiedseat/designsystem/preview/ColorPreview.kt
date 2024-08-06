@@ -38,7 +38,7 @@ fun ColorPreview() {
         ) {
             items(
                 listOf(
-                    "MainRed" to ShowpotColor.MainRed,
+                    "MainRed" to ShowpotColor.MainOrange,
                     "MainGreen" to ShowpotColor.MainGreen,
                     "MainYellow" to ShowpotColor.MainYellow,
                     "MainBlue" to ShowpotColor.MainBlue

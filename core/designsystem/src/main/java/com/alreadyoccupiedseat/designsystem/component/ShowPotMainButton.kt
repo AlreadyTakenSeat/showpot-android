@@ -3,12 +3,10 @@ package com.alreadyoccupiedseat.designsystem.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
@@ -29,9 +27,9 @@ fun ShowPotMainButton(
         modifier = modifier
             .fillMaxWidth()
             .height(55.dp)
-            .background(ShowpotColor.MainRed),
+            .background(ShowpotColor.MainOrange),
         colors = ButtonColors(
-            containerColor = ShowpotColor.MainRed,
+            containerColor = ShowpotColor.MainOrange,
             contentColor = Color.Black,
             disabledContainerColor = ShowpotColor.Gray600,
             disabledContentColor = ShowpotColor.Gray400,

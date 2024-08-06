@@ -72,7 +72,7 @@ fun OnboardingContent(
     )
 
     var color by remember {
-        mutableStateOf(ShowpotColor.MainRed)
+        mutableStateOf(ShowpotColor.MainOrange)
     }
 
     Scaffold(
@@ -94,7 +94,7 @@ fun OnboardingContent(
                         modifier = Modifier.fillMaxWidth()
                             .graphicsLayer {
                                 color = lerp(
-                                    ShowpotColor.MainRed, ShowpotColor.MainGreen,
+                                    ShowpotColor.MainOrange, ShowpotColor.MainGreen,
                                     if (currentPage == 0) pageOffset.coerceIn(0f, 1f)
                                     else 1f - pageOffset.coerceIn(0f, 1f)
                                 )

@@ -59,7 +59,7 @@ fun ShowPotSnackbar(
                     onActionTextClicked()
                 },
             text = actionText,
-            color = ShowpotColor.MainRed
+            color = ShowpotColor.MainOrange
         )
     }
 }
