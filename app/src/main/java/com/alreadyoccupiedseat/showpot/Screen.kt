@@ -52,6 +52,11 @@ sealed class Screen(
         title = "아티스트 구독"
     )
 
+    data object ShowDetail: Screen(
+        route = "showDetail",
+        title = "공연정보"
+    )
+
     companion object {
         val bottomNavigationItems = listOf(Home, Notification, MyPage)
     }
