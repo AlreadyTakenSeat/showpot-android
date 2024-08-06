@@ -48,6 +48,7 @@ dependencies {
     implementation(project(":feature:search"))
     implementation(project(":feature:subscription-genre"))
     implementation(project(":feature:subscription-artist"))
+    implementation(project(":feature:show-detail"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:common"))
     implementation(project(":core:notification"))
