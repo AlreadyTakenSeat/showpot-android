@@ -91,7 +91,10 @@ fun SearchScreenContent(
 
     Scaffold(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .clickable {
+                focusManager.clearFocus()
+            },
         containerColor = ShowpotColor.Gray700,
         topBar = {
             Row(
