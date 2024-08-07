@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotSearchBar
 import kotlinx.coroutines.launch
@@ -46,6 +47,10 @@ fun SearchScreen(
         onTextChanged = {
             viewModel.updateInputText(it)
         },
+        onCancelClicked = {
+            viewModel.updateInputText(String.EMPTY)
+            viewModel.stateChangeToNotSearched()
+        },
         onSearchIsDone = {
             viewModel.updateSearchHistories()
             viewModel.searchArtistsAndShows()
@@ -69,6 +74,7 @@ fun SearchScreenContent(
     state: SearchScreenState,
     onBackButtonClicked: () -> Unit = {},
     onTextChanged: (String) -> Unit = {},
+    onCancelClicked: () -> Unit = {},
     onSearchIsDone: () -> Unit = {},
     onChipClicked: (String) -> Unit = {},
     onDeleteAllClicked: () -> Unit = {},
@@ -118,6 +124,9 @@ fun SearchScreenContent(
                             }
                         }
                     ),
+                    onCancelClicked = {
+                        onCancelClicked()
+                    }
                 )
             }
         }
