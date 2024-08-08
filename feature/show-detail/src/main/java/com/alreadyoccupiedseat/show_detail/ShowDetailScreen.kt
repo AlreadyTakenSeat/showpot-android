@@ -32,7 +32,7 @@ import com.alreadyoccupiedseat.core.extension.isScrollingUp
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.GenreChip
 import com.alreadyoccupiedseat.designsystem.component.ShowPotArtist
-import com.alreadyoccupiedseat.designsystem.component.button.AgentSiteButton
+import com.alreadyoccupiedseat.designsystem.component.button.LabelButton
 import com.alreadyoccupiedseat.designsystem.component.button.IconButtonWithShowPotMainButton
 import com.alreadyoccupiedseat.designsystem.typo.english.ShowPotEnglishText_H0
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
@@ -151,28 +151,28 @@ fun ShowDetailScreenContent() {
                         )
                     ) {
                         item {
-                            AgentSiteButton(
+                            LabelButton(
                                 backgroundColor = ShowpotColor.YES24,
                                 text = "YES24",
                             )
                         }
 
                         item {
-                            AgentSiteButton(
+                            LabelButton(
                                 backgroundColor = ShowpotColor.Interpark,
                                 text = "인터파크",
                             )
                         }
 
                         item {
-                            AgentSiteButton(
+                            LabelButton(
                                 backgroundColor = ShowpotColor.Melon,
                                 text = "멜론티켓",
                             )
                         }
 
                         item {
-                            AgentSiteButton(
+                            LabelButton(
                                 backgroundColor = ShowpotColor.Wemakeprice,
                                 text = "위메프",
                             )

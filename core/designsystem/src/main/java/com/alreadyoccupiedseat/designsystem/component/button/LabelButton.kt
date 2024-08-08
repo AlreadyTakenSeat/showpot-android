@@ -18,7 +18,7 @@ import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B2_Regular
 
 @Composable
-fun AgentSiteButton(
+fun LabelButton(
     backgroundColor: Color,
     text: String,
     onClicked: () -> Unit = {}
