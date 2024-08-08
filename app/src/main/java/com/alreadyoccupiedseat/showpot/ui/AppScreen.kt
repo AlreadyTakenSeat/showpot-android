@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.alreadyoccupiedseat.core.extension.EMPTY
+import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotBottomNavigation
 import com.alreadyoccupiedseat.home.HomeScreen
 import com.alreadyoccupiedseat.mypage.MyPageScreen
@@ -34,6 +35,7 @@ fun AppScreen() {
 fun AppScreenContent() {
     val navController = rememberNavController()
     Scaffold(
+        containerColor = ShowpotColor.Gray700,
         bottomBar = {
 
             val navBackStackEntry by navController.currentBackStackEntryAsState()
