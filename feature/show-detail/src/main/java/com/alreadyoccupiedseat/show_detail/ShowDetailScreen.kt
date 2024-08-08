@@ -15,10 +15,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -28,10 +32,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.alreadyoccupiedseat.core.extension.conditional
 import com.alreadyoccupiedseat.core.extension.isScrollingUp
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.GenreChip
 import com.alreadyoccupiedseat.designsystem.component.ShowPotArtist
+import com.alreadyoccupiedseat.designsystem.component.bottomSheet.TicketingNotificationBottomSheet
 import com.alreadyoccupiedseat.designsystem.component.button.LabelButton
 import com.alreadyoccupiedseat.designsystem.component.button.IconButtonWithShowPotMainButton
 import com.alreadyoccupiedseat.designsystem.typo.english.ShowPotEnglishText_H0
@@ -55,6 +61,35 @@ fun ShowDetailScreenContent() {
                 .not()
         ) ShowpotColor.Gray700 else Color.Transparent
     )
+
+    var isSheetVisible by remember { mutableStateOf(true) }
+    var isFirstItemSelected by remember { mutableStateOf(false) }
+    var isSecondItemSelected by remember { mutableStateOf(false) }
+    var isThirdItemSelected by remember { mutableStateOf(false) }
+
+    if (isSheetVisible) {
+
+        TicketingNotificationBottomSheet(
+            firstItemSelected = isFirstItemSelected,
+            secondItemSelected = isSecondItemSelected,
+            thirdItemSelected = isThirdItemSelected,
+            onFirstItemClicked = {
+                isFirstItemSelected = !isFirstItemSelected
+            },
+            onSecondItemClicked = {
+                isSecondItemSelected = !isSecondItemSelected
+            },
+            onThirdItemClicked = {
+                isThirdItemSelected = !isThirdItemSelected
+            },
+            onMainButtonClicked = {
+                // TODO: Implement
+            },
+            onDismissRequested = {
+                isSheetVisible = false
+            })
+
+    }
 
     Scaffold(
         modifier = Modifier
