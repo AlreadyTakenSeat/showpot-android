@@ -1,4 +1,4 @@
-package com.alreadyoccupiedseat.designsystem.component
+package com.alreadyoccupiedseat.designsystem.component.artistByPainter
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

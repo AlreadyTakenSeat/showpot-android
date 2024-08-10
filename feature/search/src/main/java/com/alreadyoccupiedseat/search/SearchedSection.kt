@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowInfo
-import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistSubscriptionByPainter
+import com.alreadyoccupiedseat.designsystem.component.artistByPainter.ShowPotArtistSubscriptionByPainter
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
 import com.alreadyoccupiedseat.model.Artist
 import com.alreadyoccupiedseat.model.Show

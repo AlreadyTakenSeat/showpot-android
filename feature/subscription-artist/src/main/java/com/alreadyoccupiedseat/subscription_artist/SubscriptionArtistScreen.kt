@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
-import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistSubscriptionByPainter
+import com.alreadyoccupiedseat.designsystem.component.artistByPainter.ShowPotArtistSubscriptionByPainter
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
 import com.alreadyoccupiedseat.designsystem.component.bottomSheet.SheetHandler
 import com.alreadyoccupiedseat.designsystem.component.bottomSheet.ShowPotBottomSheet

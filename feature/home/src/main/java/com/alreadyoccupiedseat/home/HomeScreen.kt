@@ -39,7 +39,7 @@ import com.alreadyoccupiedseat.core.extension.isScrollingUp
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.RecommendedShow
-import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistByPainter
+import com.alreadyoccupiedseat.designsystem.component.artistByPainter.ShowPotArtistByPainter
 import com.alreadyoccupiedseat.designsystem.component.ShowPotGenre
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMenu
 import com.alreadyoccupiedseat.designsystem.component.ShowPotSearchBar

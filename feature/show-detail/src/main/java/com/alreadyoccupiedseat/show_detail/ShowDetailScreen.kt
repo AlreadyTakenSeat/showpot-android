@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -35,7 +34,7 @@ import coil.compose.AsyncImage
 import com.alreadyoccupiedseat.core.extension.isScrollingUp
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.GenreChip
-import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistByPainter
+import com.alreadyoccupiedseat.designsystem.component.artistByPainter.ShowPotArtistByPainter
 import com.alreadyoccupiedseat.designsystem.component.bottomSheet.TicketingNotificationBottomSheet
 import com.alreadyoccupiedseat.designsystem.component.button.LabelButton
 import com.alreadyoccupiedseat.designsystem.component.button.IconButtonWithShowPotMainButton

@@ -23,10 +23,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
-import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistAlarmByPainter
-import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistByPainter
-import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistDeleteByPainter
-import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistSubscriptionByPainter
+import com.alreadyoccupiedseat.designsystem.component.artistByPainter.ShowPotArtistAlarmByPainter
+import com.alreadyoccupiedseat.designsystem.component.artistByPainter.ShowPotArtistByPainter
+import com.alreadyoccupiedseat.designsystem.component.artistByPainter.ShowPotArtistDeleteByPainter
+import com.alreadyoccupiedseat.designsystem.component.artistByPainter.ShowPotArtistSubscriptionByPainter
 import com.alreadyoccupiedseat.designsystem.component.ShowPotButtonWithIcon
 import com.alreadyoccupiedseat.designsystem.component.ShowPotGenre
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
