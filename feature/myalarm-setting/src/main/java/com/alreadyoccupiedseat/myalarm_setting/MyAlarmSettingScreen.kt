@@ -1,6 +1,5 @@
 package com.alreadyoccupiedseat.myalarm_setting
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -22,6 +22,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -29,10 +30,11 @@ import androidx.navigation.NavController
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowInfo
-import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
 import com.alreadyoccupiedseat.designsystem.component.ShowPotTopBar
 import com.alreadyoccupiedseat.designsystem.component.bottomSheet.SheetHandler
+import com.alreadyoccupiedseat.designsystem.component.bottomSheet.ShowPotBottomSheet
 import com.alreadyoccupiedseat.designsystem.component.bottomSheet.TicketingNotificationBottomSheet
+import com.alreadyoccupiedseat.designsystem.component.button.ShowPotSubButton
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 
 @Composable
@@ -90,7 +92,7 @@ fun MyAlarmSettingScreenContent(
             })
 
     }
-
+    val context = LocalContext.current
     Scaffold(
         containerColor = ShowpotColor.Gray700,
         topBar = {
@@ -109,7 +111,7 @@ fun MyAlarmSettingScreenContent(
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
                             .clickable {
-                                   // TODO 공연 상세 페이지 이동
+                                // TODO 공연 상세 페이지 이동
                             },
                         imageUrl = "https://img.hankyung.com/photo/202406/01.37069998.1.jpg",
                         "Nothing But Thieves Nothing But Thieves ",
@@ -119,7 +121,11 @@ fun MyAlarmSettingScreenContent(
                 }
                 item {
                     ShowInfo(
-                        modifier = Modifier.padding(horizontal = 16.dp),
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .clickable {
+                                // TODO 공연 상세 페이지 이동
+                            },
                         imageUrl = "https://thumb.mt.co.kr/06/2024/04/2024040913332068429_1.jpg/dims/optimize/",
                         "Dua Lipa",
                         "2024.12.4 (수) 오후 8시",
@@ -187,37 +193,49 @@ fun MyAlarmSettingTopBar(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlarmOptionsBottomSheet(onDismissRequest: () -> Unit) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    ShowPotBottomSheet(
+        onDismissRequest = onDismissRequest
     ) {
-
-        SheetHandler()
-
-        ShowPotMainButton(
+        Column(
             modifier = Modifier
-                .padding(top = 16.dp)
-                .background(ShowpotColor.Gray400),
-            text = stringResource(id = R.string.action_change),
-            onClicked = {
-                // TODO : Change Alarm
-            }
-        )
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-        ShowPotMainButton(
-            modifier = Modifier
-                .padding(top = 12.dp)
-                .background(ShowpotColor.Gray400),
-            text = stringResource(id = R.string.action_turn_off),
-            onClicked = {
-                // TODO : Turn Off Alarm
-            }
-        )
+            SheetHandler()
 
-        Spacer(modifier = Modifier.height(54.dp))
+            ShowPotKoreanText_H1(
+                text = stringResource(id = R.string.alarm),
+                color = ShowpotColor.White,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp)
+            )
+
+            ShowPotSubButton(
+                modifier = Modifier
+                    .padding(top = 16.dp),
+                text = stringResource(id = R.string.action_change),
+                onClicked = {
+                    // TODO : Change Alarm
+                }
+            )
+
+            ShowPotSubButton(
+                modifier = Modifier
+                    .padding(top = 12.dp),
+                text = stringResource(id = R.string.action_turn_off),
+                onClicked = {
+                    // TODO : Turn Off Alarm
+                }
+            )
+
+            Spacer(modifier = Modifier.height(54.dp))
+        }
     }
 }
+
