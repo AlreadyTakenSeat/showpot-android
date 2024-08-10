@@ -1,5 +1,6 @@
 package com.alreadyoccupiedseat.myalarm_setting
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -54,22 +55,19 @@ fun MyAlarmSettingScreenContent(
     onBackClicked: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
-    var isSheetVisible by remember { mutableStateOf(false) }
-    var isTicketSheetVisible by remember { mutableStateOf(true) }
+    var isAlarmOptionSheetVisible by remember { mutableStateOf(false) }
+    var isTicketSheetVisible by remember { mutableStateOf(false) }
     var isFirstItemSelected by remember { mutableStateOf(false) }
     var isSecondItemSelected by remember { mutableStateOf(false) }
     var isThirdItemSelected by remember { mutableStateOf(false) }
 
-    AlarmOptionsBottomSheet(
-        onDismissRequest = { isSheetVisible = false }
-    )
-
-    if (isSheetVisible) {
+    if (isAlarmOptionSheetVisible) {
         AlarmOptionsBottomSheet(
-            onDismissRequest = { isSheetVisible = false }
+            onDismissRequest = { isAlarmOptionSheetVisible = false }
         )
     }
 
+    // 알림 시간 변경 바텀 시트
     if (isTicketSheetVisible) {
         TicketingNotificationBottomSheet(
             firstItemSelected = isFirstItemSelected,
@@ -88,11 +86,10 @@ fun MyAlarmSettingScreenContent(
                 // TODO: Implement
             },
             onDismissRequested = {
-                isSheetVisible = false
+                isAlarmOptionSheetVisible = false
             })
 
     }
-
 
     Scaffold(
         containerColor = ShowpotColor.Gray700,
@@ -104,13 +101,16 @@ fun MyAlarmSettingScreenContent(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = modifier
-                    .background(ShowpotColor.MainYellow)
                     .padding(top = 12.dp)
                     .padding(it),
             ) {
                 item {
                     ShowInfo(
-                        modifier = Modifier.padding(horizontal = 16.dp),
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .clickable {
+                                   // TODO 공연 상세 페이지 이동
+                            },
                         imageUrl = "https://img.hankyung.com/photo/202406/01.37069998.1.jpg",
                         "Nothing But Thieves Nothing But Thieves ",
                         "2024.12.4 (수) 오후 8시",
@@ -129,7 +129,8 @@ fun MyAlarmSettingScreenContent(
                                 modifier = Modifier
                                     .background(ShowpotColor.Gray500)
                                     .clickable {
-
+                                        // TODO: 변경/해제 바텀 시트 노출
+                                        isAlarmOptionSheetVisible = true
                                     }
                             ) {
                                 Icon(
@@ -164,7 +165,7 @@ fun MyAlarmSettingTopBar(
 ) {
     ShowPotTopBar(
         navigationIcon = {
-            IconButton(onClick = onBackClicked) {
+            IconButton(onClick = { onBackClicked() }) {
                 Icon(
                     tint = ShowpotColor.White,
                     modifier = Modifier.padding(1.dp),
@@ -188,7 +189,6 @@ fun MyAlarmSettingTopBar(
 
 @Composable
 fun AlarmOptionsBottomSheet(onDismissRequest: () -> Unit) {
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
