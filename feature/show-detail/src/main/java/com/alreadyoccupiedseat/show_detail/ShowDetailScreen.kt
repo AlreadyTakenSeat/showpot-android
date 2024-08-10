@@ -32,11 +32,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.alreadyoccupiedseat.core.extension.conditional
 import com.alreadyoccupiedseat.core.extension.isScrollingUp
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.GenreChip
-import com.alreadyoccupiedseat.designsystem.component.ShowPotArtist
+import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistByPainter
 import com.alreadyoccupiedseat.designsystem.component.bottomSheet.TicketingNotificationBottomSheet
 import com.alreadyoccupiedseat.designsystem.component.button.LabelButton
 import com.alreadyoccupiedseat.designsystem.component.button.IconButtonWithShowPotMainButton
@@ -263,7 +262,7 @@ fun ShowDetailScreenContent() {
                         )
                     ) {
                         items(count = 10) {
-                            ShowPotArtist(
+                            ShowPotArtistByPainter(
                                 text = "High Flying Birds",
                                 icon = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.img_artist_default),
                             )

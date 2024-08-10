@@ -23,10 +23,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
-import com.alreadyoccupiedseat.designsystem.component.ShowPotArtist
-import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistAlarm
-import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistDelete
-import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistSubscription
+import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistAlarmByPainter
+import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistByPainter
+import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistDeleteByPainter
+import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistSubscriptionByPainter
 import com.alreadyoccupiedseat.designsystem.component.ShowPotButtonWithIcon
 import com.alreadyoccupiedseat.designsystem.component.ShowPotGenre
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
@@ -205,7 +205,7 @@ fun ComponentsPreview() {
         
         item {
             Spacer(modifier = Modifier.height(16.dp))
-            ShowPotArtist(
+            ShowPotArtistByPainter(
                 icon = painterResource(id = R.drawable.img_artist_default),
                 text = "High Flying Birds"
             )
@@ -214,7 +214,7 @@ fun ComponentsPreview() {
         item {
             var isSelected by remember { mutableStateOf(false) }
             Spacer(modifier = Modifier.height(16.dp))
-            ShowPotArtistAlarm(
+            ShowPotArtistAlarmByPainter(
                 text = "High Flying Birds",
                 isSelected = isSelected,
                 onClick = {
@@ -229,7 +229,7 @@ fun ComponentsPreview() {
         item {
             var isSelected by remember { mutableStateOf(false) }
             Spacer(modifier = Modifier.height(16.dp))
-            ShowPotArtistSubscription(
+            ShowPotArtistSubscriptionByPainter(
                 icon = painterResource(id = R.drawable.img_artist_default),
                 text = "High Flying Birds",
                 isSelected = isSelected,
@@ -242,7 +242,7 @@ fun ComponentsPreview() {
         item {
             var isSelected by remember { mutableStateOf(false) }
             Spacer(modifier = Modifier.height(16.dp))
-            ShowPotArtistDelete(
+            ShowPotArtistDeleteByPainter(
                 onIconClick = {
                     isSelected = !isSelected
                 }
