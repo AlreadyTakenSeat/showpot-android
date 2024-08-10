@@ -1,8 +1,10 @@
 package com.alreadyoccupiedseat.myalarm_setting
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -34,7 +36,7 @@ import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 
 @Composable
 fun MyAlarmSettingScreen(
-    navController: NavController
+    navController: NavController,
 ) {
 
     MyAlarmSettingScreenContent(
@@ -102,6 +104,7 @@ fun MyAlarmSettingScreenContent(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = modifier
+                    .background(ShowpotColor.MainYellow)
                     .padding(top = 12.dp)
                     .padding(it),
             ) {
@@ -120,7 +123,33 @@ fun MyAlarmSettingScreenContent(
                         imageUrl = "https://thumb.mt.co.kr/06/2024/04/2024040913332068429_1.jpg/dims/optimize/",
                         "Dua Lipa",
                         "2024.12.4 (수) 오후 8시",
-                        "KBS 아레나홀"
+                        "KBS 아레나홀",
+                        icon = {
+                            Row(
+                                modifier = Modifier
+                                    .background(ShowpotColor.Gray500)
+                                    .clickable {
+
+                                    }
+                            ) {
+                                Icon(
+                                    modifier = Modifier
+                                        .padding(start = 5.dp)
+                                        .padding(vertical = 5.dp),
+                                    painter = painterResource(R.drawable.ic_alarm_24_default),
+                                    contentDescription = null,
+                                    tint = ShowpotColor.White
+                                )
+                                Icon(
+                                    modifier = Modifier
+                                        .padding(end = 5.dp)
+                                        .padding(vertical = 5.dp),
+                                    painter = painterResource(R.drawable.ic_arrow_24_down),
+                                    contentDescription = null,
+                                    tint = ShowpotColor.Gray300
+                                )
+                            }
+                        }
                     )
                 }
             }

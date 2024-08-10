@@ -1,5 +1,6 @@
 package com.alreadyoccupiedseat.designsystem.component
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -23,13 +25,14 @@ fun ShowInfo(
     showTitle: String,
     dateInfo: String,
     locationInfo: String,
+    icon: @Composable () -> Unit = {},
 ) {
 
     Row(
         modifier = modifier
             .fillMaxWidth()
             .height(80.dp),
-        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(
             modifier = Modifier.size(80.dp),
@@ -38,21 +41,29 @@ fun ShowInfo(
 
         Spacer(modifier = Modifier.size(14.dp))
 
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .weight(1f)) {
+        Box {
 
-            ShowPotEnglishText_H2(text = showTitle, color = Color.White, maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis)
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterStart)) {
 
-            Spacer(modifier = Modifier.height(5.dp))
+                ShowPotEnglishText_H2(text = showTitle, color = Color.White, maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis)
 
-            ShowPotKoreanText_B3_Regular(text = dateInfo, color = ShowpotColor.Gray200)
+                Spacer(modifier = Modifier.height(5.dp))
 
-            Spacer(modifier = Modifier.height(1.dp))
+                ShowPotKoreanText_B3_Regular(text = dateInfo, color = ShowpotColor.Gray200)
 
-            ShowPotKoreanText_B3_Regular(text = locationInfo, color = ShowpotColor.Gray200)
+                Spacer(modifier = Modifier.height(1.dp))
 
+                ShowPotKoreanText_B3_Regular(text = locationInfo, color = ShowpotColor.Gray200)
+
+            }
+
+            Box(modifier = Modifier.align(Alignment.BottomEnd) ) {
+                icon()
+            }
         }
+
     }
 }
