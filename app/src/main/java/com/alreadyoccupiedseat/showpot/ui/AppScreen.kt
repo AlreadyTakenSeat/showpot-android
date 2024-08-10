@@ -16,6 +16,7 @@ import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotBottomNavigation
 import com.alreadyoccupiedseat.home.HomeScreen
+import com.alreadyoccupiedseat.myalarm_setting.MyAlarmSettingScreen
 import com.alreadyoccupiedseat.mypage.MyPageScreen
 import com.alreadyoccupiedseat.notification.NotificationScreen
 import com.alreadyoccupiedseat.search.SearchScreen
@@ -88,7 +89,12 @@ fun AppScreenContent() {
             }
 
             composable(Screen.Notification.route) {
-                NotificationScreen(navController)
+                NotificationScreen(
+                    navController,
+                    onMyAlarmSettingClicked = {
+                        navController.navigate(Screen.MyAlarmSetting.route)
+                    }
+                )
             }
 
             composable(Screen.MyPage.route) {
@@ -110,6 +116,11 @@ fun AppScreenContent() {
             composable(Screen.ShowDetail.route) {
                 ShowDetailScreen(navController)
             }
+
+            composable(Screen.MyAlarmSetting.route) {
+                MyAlarmSettingScreen(navController)
+            }
+
         }
     }
 }

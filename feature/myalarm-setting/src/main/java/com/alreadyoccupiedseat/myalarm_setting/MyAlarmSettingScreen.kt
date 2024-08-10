@@ -29,13 +29,20 @@ import com.alreadyoccupiedseat.designsystem.component.ShowInfo
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
 import com.alreadyoccupiedseat.designsystem.component.ShowPotTopBar
 import com.alreadyoccupiedseat.designsystem.component.bottomSheet.SheetHandler
+import com.alreadyoccupiedseat.designsystem.component.bottomSheet.TicketingNotificationBottomSheet
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 
 @Composable
 fun MyAlarmSettingScreen(
-    modifier: Modifier = Modifier,
-    navController: NavController,
+    navController: NavController
 ) {
+
+    MyAlarmSettingScreenContent(
+        modifier = Modifier,
+        onBackClicked = {
+            navController.popBackStack()
+        }
+    )
 
 }
 
@@ -46,6 +53,10 @@ fun MyAlarmSettingScreenContent(
 ) {
     val scope = rememberCoroutineScope()
     var isSheetVisible by remember { mutableStateOf(false) }
+    var isTicketSheetVisible by remember { mutableStateOf(true) }
+    var isFirstItemSelected by remember { mutableStateOf(false) }
+    var isSecondItemSelected by remember { mutableStateOf(false) }
+    var isThirdItemSelected by remember { mutableStateOf(false) }
 
     AlarmOptionsBottomSheet(
         onDismissRequest = { isSheetVisible = false }
@@ -57,16 +68,35 @@ fun MyAlarmSettingScreenContent(
         )
     }
 
+    if (isTicketSheetVisible) {
+        TicketingNotificationBottomSheet(
+            firstItemSelected = isFirstItemSelected,
+            secondItemSelected = isSecondItemSelected,
+            thirdItemSelected = isThirdItemSelected,
+            onFirstItemClicked = {
+                isFirstItemSelected = !isFirstItemSelected
+            },
+            onSecondItemClicked = {
+                isSecondItemSelected = !isSecondItemSelected
+            },
+            onThirdItemClicked = {
+                isThirdItemSelected = !isThirdItemSelected
+            },
+            onMainButtonClicked = {
+                // TODO: Implement
+            },
+            onDismissRequested = {
+                isSheetVisible = false
+            })
+
+    }
+
+
     Scaffold(
         containerColor = ShowpotColor.Gray700,
         topBar = {
-            MyAlarmSettingToaBar(
-                onBackClicked = {
-                    onBackClicked()
-                }
-            )
+            MyAlarmSettingTopBar(onBackClicked = onBackClicked)
         },
-
         content = {
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -84,7 +114,6 @@ fun MyAlarmSettingScreenContent(
                         "KBS 아레나홀"
                     )
                 }
-
                 item {
                     ShowInfo(
                         modifier = Modifier.padding(horizontal = 16.dp),
@@ -100,7 +129,7 @@ fun MyAlarmSettingScreenContent(
 }
 
 @Composable
-fun MyAlarmSettingToaBar(
+fun MyAlarmSettingTopBar(
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit,
 ) {
