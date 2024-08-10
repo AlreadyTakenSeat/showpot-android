@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
-import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistSubscription
+import com.alreadyoccupiedseat.designsystem.component.artistByPainter.ShowPotArtistSubscriptionByPainter
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
 import com.alreadyoccupiedseat.designsystem.component.bottomSheet.SheetHandler
 import com.alreadyoccupiedseat.designsystem.component.bottomSheet.ShowPotBottomSheet
@@ -191,7 +191,7 @@ fun SubscriptionArtistScreenContent(
                 ) {
                     // TODO: Real Data
                     items(count = 21) {
-                        ShowPotArtistSubscription(
+                        ShowPotArtistSubscriptionByPainter(
                             text = "High Flying Birds",
                             icon = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.img_artist_default),
                         ) {

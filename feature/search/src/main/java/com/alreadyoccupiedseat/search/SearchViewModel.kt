@@ -3,6 +3,7 @@ package com.alreadyoccupiedseat.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alreadyoccupiedseat.core.extension.EMPTY
+import com.alreadyoccupiedseat.data.artist.ArtistRepository
 import com.alreadyoccupiedseat.datastore.SearchHistoryDataStore
 import com.alreadyoccupiedseat.model.Artist
 import com.alreadyoccupiedseat.model.Genre
@@ -27,7 +28,8 @@ data class SearchScreenState(
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val searchHistoryDataStore: SearchHistoryDataStore
+    private val searchHistoryDataStore: SearchHistoryDataStore,
+    private val artistRepository: ArtistRepository,
 ) : ViewModel() {
 
     private var _state = MutableStateFlow<SearchScreenState>(SearchScreenState())
@@ -83,12 +85,9 @@ class SearchViewModel @Inject constructor(
     fun searchArtistsAndShows() {
         viewModelScope.launch {
             // TODO: Changed to real data
-            val searchedArtists = listOf(
-                Artist(
-                    id = "1",
-                    name = "Dua Lipa",
-                    image = ""
-                )
+            val searchedArtists = artistRepository.searchArtists(
+                size = 5,
+                search = _state.value.inputText,
             )
 
             _state.value = _state.value.copy(searchedArtists = searchedArtists)
@@ -97,8 +96,9 @@ class SearchViewModel @Inject constructor(
                 Show(
                     artist = Artist(
                         id = "1",
-                        name = "Dua Lipa",
-                        image = ""
+                        imageUrl = "",
+                        koreanName = "두아리파",
+                        englishName = "Dua Lipa"
                     ),
                     genre = Genre(
                         id = "1",

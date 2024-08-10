@@ -40,6 +40,7 @@ dependencies {
     implementation(project(":core:datastore"))
     implementation(project(":core:common"))
     implementation(project(":model"))
+    implementation(project(":core:data"))
 
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

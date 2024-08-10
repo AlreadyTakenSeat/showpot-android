@@ -1,4 +1,4 @@
-package com.alreadyoccupiedseat.designsystem.component
+package com.alreadyoccupiedseat.designsystem.component.artistByPainter
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -9,11 +9,11 @@ import androidx.compose.ui.res.painterResource
 import com.alreadyoccupiedseat.designsystem.R
 
 @Composable
-fun ShowPotArtistDelete(
+fun ShowPotArtistDeleteByPainter(
     modifier: Modifier = Modifier,
     onIconClick: () -> Unit,
 ) {
-    ShowPotArtist(
+    ShowPotArtistByPainter(
         icon = painterResource(id = R.drawable.img_artist_default),
         text = "High Flying Birds",
         content = {
