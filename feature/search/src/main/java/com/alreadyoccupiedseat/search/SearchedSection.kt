@@ -50,7 +50,7 @@ fun SearchedSection(
                     ShowPotArtistSubscription(
                         // TODO: Change to real artist image
                         icon = painterResource(com.alreadyoccupiedseat.designsystem.R.drawable.img_artist_default),
-                        text = artist.name
+                        text = artist.englishName
                     )
                 }
             }
