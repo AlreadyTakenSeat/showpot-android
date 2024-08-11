@@ -1,4 +1,4 @@
-package com.alreadyoccupiedseat.designsystem.component
+package com.alreadyoccupiedseat.designsystem.component.artistByPainter
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -20,7 +20,7 @@ import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.typo.english.ShowPotEnglishText_H5
 
 @Composable
-fun ShowPotArtist(
+fun ShowPotArtistByPainter(
     modifier: Modifier = Modifier,
     text: String,
     icon: Painter,

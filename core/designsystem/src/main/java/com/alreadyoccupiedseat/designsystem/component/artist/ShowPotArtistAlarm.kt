@@ -1,7 +1,8 @@
-package com.alreadyoccupiedseat.designsystem.component
+package com.alreadyoccupiedseat.designsystem.component.artist
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -10,41 +11,41 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 
 @Composable
-fun ShowPotArtistSubscription(
+fun ShowPotArtistAlarmByPainter(
     modifier: Modifier = Modifier,
-    icon: Painter,
     text: String,
-    isSelected: Boolean = false,
+    imageUrl: String,
+    isSelected: Boolean = false, // 구독 버튼 컴포저블이 필요함
     onClick: () -> Unit = {},
+    onIconClick: () -> Unit,
 ) {
     ShowPotArtist(
-        icon = icon,
+        imageUrl = imageUrl,
         text = text,
         onClick = onClick,
         content = {
-            if (isSelected) {
-                Box(
+            Box(
+                modifier = modifier
+                    .size(100.dp)
+                    .background(ShowpotColor.Gray700.copy(0.5f), CircleShape)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_alarm_plus_36),
+                    contentDescription = "Check",
+                    colorFilter = ColorFilter.tint(Color.White),
                     modifier = modifier
-                        .size(100.dp)
-                        .background(ShowpotColor.MainOrange.copy(alpha = 0.7f), CircleShape)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_check_36),
-                        contentDescription = "Check",
-                        colorFilter = ColorFilter.tint(Color.White),
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                    )
-                }
+                        .align(Alignment.Center)
+                        .clickable {
+                            onIconClick()
+                        }
+                )
             }
-
         }
     )
 }

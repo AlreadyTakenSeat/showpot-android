@@ -13,12 +13,11 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowInfo
-import com.alreadyoccupiedseat.designsystem.component.ShowPotArtistSubscription
+import com.alreadyoccupiedseat.designsystem.component.artist.ShowPotArtistSubscription
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
 import com.alreadyoccupiedseat.model.Artist
 import com.alreadyoccupiedseat.model.Show
@@ -45,12 +44,12 @@ fun SearchedSection(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             item { Spacer(modifier = Modifier.width(4.dp)) }
-            searchedArtists.forEach {artist ->
+            searchedArtists.forEach { artist ->
                 item {
                     ShowPotArtistSubscription(
                         // TODO: Change to real artist image
-                        icon = painterResource(com.alreadyoccupiedseat.designsystem.R.drawable.img_artist_default),
-                        text = artist.name
+                        imageUrl = artist.imageUrl,
+                        text = artist.englishName
                     )
                 }
             }

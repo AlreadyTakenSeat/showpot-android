@@ -1,4 +1,4 @@
-package com.alreadyoccupiedseat.designsystem.component
+package com.alreadyoccupiedseat.designsystem.component.artistByPainter
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -17,14 +17,14 @@ import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 
 @Composable
-fun ShowPotArtistAlarm(
+fun ShowPotArtistAlarmByPainter(
     modifier: Modifier = Modifier,
     text: String,
     isSelected: Boolean = false, // 구독 버튼 컴포저블이 필요함
     onClick: () -> Unit = {},
     onIconClick: () -> Unit,
 ) {
-    ShowPotArtist(
+    ShowPotArtistByPainter(
         icon = painterResource(id = R.drawable.img_artist_default),
         text = text,
         onClick = onClick,

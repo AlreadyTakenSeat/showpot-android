@@ -39,7 +39,7 @@ import com.alreadyoccupiedseat.core.extension.isScrollingUp
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.RecommendedShow
-import com.alreadyoccupiedseat.designsystem.component.ShowPotArtist
+import com.alreadyoccupiedseat.designsystem.component.artistByPainter.ShowPotArtistByPainter
 import com.alreadyoccupiedseat.designsystem.component.ShowPotGenre
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMenu
 import com.alreadyoccupiedseat.designsystem.component.ShowPotSearchBar
@@ -176,7 +176,7 @@ fun HomeScreenContent(
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         items(count = 10) {
-                            ShowPotArtist(
+                            ShowPotArtistByPainter(
                                 text = "High Flying Birds",
                                 icon = painterResource(id = R.drawable.img_artist_default),
                             )
