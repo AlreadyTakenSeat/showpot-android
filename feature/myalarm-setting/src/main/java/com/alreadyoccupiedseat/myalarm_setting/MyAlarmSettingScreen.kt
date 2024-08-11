@@ -54,9 +54,9 @@ fun MyAlarmSettingScreen(
 @Composable
 fun MyAlarmSettingScreenContent(
     modifier: Modifier,
-    onBackClicked: () -> Unit,
-    viewModel: MyAlarmSettingViewModel = hiltViewModel(), // ViewModel 사용
+    onBackClicked: () -> Unit
 ) {
+    val viewModel = hiltViewModel<MyAlarmSettingViewModel>()
     var isAlarmOptionSheetVisible by remember { mutableStateOf(false) }
     var isTicketSheetVisible by remember { mutableStateOf(false) }
     var selectedShowId by remember { mutableStateOf<String?>(null) }
