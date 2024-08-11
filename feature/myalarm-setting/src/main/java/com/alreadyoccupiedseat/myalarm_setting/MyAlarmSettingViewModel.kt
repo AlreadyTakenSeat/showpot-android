@@ -52,8 +52,9 @@ class MyAlarmSettingViewModel @Inject constructor() : ViewModel() {
                 Show(
                     artist = Artist(
                         id = index.toString(),
-                        image = "https://example.com/artist$index.jpg",
-                        name = "Artist $index"
+                        imageUrl = "https://example.com/artist$index.jpg",
+                        koreanName = "Artist $index",
+                        englishName = "Artist $index"
                     ),
                     genre = Genre(
                         id = index.toString(),
