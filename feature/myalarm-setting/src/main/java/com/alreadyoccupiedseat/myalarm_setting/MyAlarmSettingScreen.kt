@@ -6,10 +6,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -18,18 +20,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowInfo
+import com.alreadyoccupiedseat.designsystem.component.ShowPotEmpty
 import com.alreadyoccupiedseat.designsystem.component.ShowPotTopBar
 import com.alreadyoccupiedseat.designsystem.component.bottomSheet.SheetHandler
 import com.alreadyoccupiedseat.designsystem.component.bottomSheet.ShowPotBottomSheet
@@ -41,35 +43,45 @@ import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 fun MyAlarmSettingScreen(
     navController: NavController,
 ) {
-
     MyAlarmSettingScreenContent(
         modifier = Modifier,
         onBackClicked = {
             navController.popBackStack()
         }
     )
-
 }
 
 @Composable
 fun MyAlarmSettingScreenContent(
     modifier: Modifier,
     onBackClicked: () -> Unit,
+    viewModel: MyAlarmSettingViewModel = hiltViewModel(), // ViewModel 사용
 ) {
-    val scope = rememberCoroutineScope()
     var isAlarmOptionSheetVisible by remember { mutableStateOf(false) }
     var isTicketSheetVisible by remember { mutableStateOf(false) }
+    var selectedShowId by remember { mutableStateOf<String?>(null) }
     var isFirstItemSelected by remember { mutableStateOf(false) }
     var isSecondItemSelected by remember { mutableStateOf(false) }
     var isThirdItemSelected by remember { mutableStateOf(false) }
 
+
     if (isAlarmOptionSheetVisible) {
         AlarmOptionsBottomSheet(
-            onDismissRequest = { isAlarmOptionSheetVisible = false }
+            onTicketSheetVisible = {
+                isTicketSheetVisible = true
+            },
+            onDismissRequest = {
+                isAlarmOptionSheetVisible = false
+            },
+            onRemoveClicked = {
+                selectedShowId?.let { id ->
+                    viewModel.removeShowById(id)
+                }
+                isAlarmOptionSheetVisible = false
+            }
         )
     }
 
-    // 알림 시간 변경 바텀 시트
     if (isTicketSheetVisible) {
         TicketingNotificationBottomSheet(
             firstItemSelected = isFirstItemSelected,
@@ -88,11 +100,11 @@ fun MyAlarmSettingScreenContent(
                 // TODO: Implement
             },
             onDismissRequested = {
+                isTicketSheetVisible = false
                 isAlarmOptionSheetVisible = false
             })
-
     }
-    val context = LocalContext.current
+
     Scaffold(
         containerColor = ShowpotColor.Gray700,
         topBar = {
@@ -106,58 +118,53 @@ fun MyAlarmSettingScreenContent(
                     .padding(top = 12.dp)
                     .padding(it),
             ) {
-                item {
-                    ShowInfo(
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .clickable {
-                                // TODO 공연 상세 페이지 이동
-                            },
-                        imageUrl = "https://img.hankyung.com/photo/202406/01.37069998.1.jpg",
-                        "Nothing But Thieves Nothing But Thieves ",
-                        "2024.12.4 (수) 오후 8시",
-                        "KBS 아레나홀"
-                    )
-                }
-                item {
-                    ShowInfo(
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .clickable {
-                                // TODO 공연 상세 페이지 이동
-                            },
-                        imageUrl = "https://thumb.mt.co.kr/06/2024/04/2024040913332068429_1.jpg/dims/optimize/",
-                        "Dua Lipa",
-                        "2024.12.4 (수) 오후 8시",
-                        "KBS 아레나홀",
-                        icon = {
-                            Row(
-                                modifier = Modifier
-                                    .background(ShowpotColor.Gray500)
-                                    .clickable {
-                                        // TODO: 변경/해제 바텀 시트 노출
-                                        isAlarmOptionSheetVisible = true
-                                    }
-                            ) {
-                                Icon(
+                if (viewModel.showList.value.isEmpty()) {
+
+                    item {
+                        MyAlarmEmpty()
+                    }
+
+                } else {
+                    itemsIndexed(viewModel.showList.value) { index, show ->
+                        ShowInfo(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .clickable {
+                                    // TODO 공연 상세 페이지 이동
+                                },
+                            imageUrl = show.posterImageURL,
+                            showTitle = show.name,
+                            dateInfo = "2024.12.$index (수) 오후 $index 시",
+                            locationInfo = "KBS 아레나홀",
+                            icon = {
+                                Row(
                                     modifier = Modifier
-                                        .padding(start = 5.dp)
-                                        .padding(vertical = 5.dp),
-                                    painter = painterResource(R.drawable.ic_alarm_24_default),
-                                    contentDescription = null,
-                                    tint = ShowpotColor.White
-                                )
-                                Icon(
-                                    modifier = Modifier
-                                        .padding(end = 5.dp)
-                                        .padding(vertical = 5.dp),
-                                    painter = painterResource(R.drawable.ic_arrow_24_down),
-                                    contentDescription = null,
-                                    tint = ShowpotColor.Gray300
-                                )
+                                        .background(ShowpotColor.Gray500)
+                                        .clickable {
+                                            selectedShowId = show.id
+                                            isAlarmOptionSheetVisible = true
+                                        }
+                                ) {
+                                    Icon(
+                                        modifier = Modifier
+                                            .padding(start = 5.dp)
+                                            .padding(vertical = 5.dp),
+                                        painter = painterResource(R.drawable.ic_alarm_24_default),
+                                        contentDescription = null,
+                                        tint = ShowpotColor.White
+                                    )
+                                    Icon(
+                                        modifier = Modifier
+                                            .padding(end = 5.dp)
+                                            .padding(vertical = 5.dp),
+                                        painter = painterResource(R.drawable.ic_arrow_24_down),
+                                        contentDescription = null,
+                                        tint = ShowpotColor.Gray300
+                                    )
+                                }
                             }
-                        }
-                    )
+                        )
+                    }
                 }
             }
         }
@@ -195,7 +202,11 @@ fun MyAlarmSettingTopBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AlarmOptionsBottomSheet(onDismissRequest: () -> Unit) {
+fun AlarmOptionsBottomSheet(
+    onTicketSheetVisible: () -> Unit,
+    onDismissRequest: () -> Unit,
+    onRemoveClicked: () -> Unit,
+) {
     ShowPotBottomSheet(
         onDismissRequest = onDismissRequest
     ) {
@@ -221,7 +232,8 @@ fun AlarmOptionsBottomSheet(onDismissRequest: () -> Unit) {
                     .padding(top = 16.dp),
                 text = stringResource(id = R.string.action_change),
                 onClicked = {
-                    // TODO : Change Alarm
+                    onTicketSheetVisible()
+                    onDismissRequest()
                 }
             )
 
@@ -230,12 +242,39 @@ fun AlarmOptionsBottomSheet(onDismissRequest: () -> Unit) {
                     .padding(top = 12.dp),
                 text = stringResource(id = R.string.action_turn_off),
                 onClicked = {
-                    // TODO : Turn Off Alarm
+                    onRemoveClicked()
                 }
             )
 
             Spacer(modifier = Modifier.height(54.dp))
         }
+    }
+}
+
+@Composable
+fun MyAlarmEmpty(modifier: Modifier = Modifier) {
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .padding(top = 72.dp)
+            .fillMaxSize()
+    ) {
+
+        ShowPotEmpty(
+            imageResId = R.drawable.img_empty_alarm,
+            text = stringResource(id = R.string.no_alarm_show)
+        )
+
+        Spacer(modifier = Modifier.height(96.dp))
+
+        ShowPotSubButton(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            text = stringResource(id = R.string.action_show_info),
+            onClicked = {
+                // TODO 공연 찾기 페이지 이동
+            }
+        )
     }
 }
 
