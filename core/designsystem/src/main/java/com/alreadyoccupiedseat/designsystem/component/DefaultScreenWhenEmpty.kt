@@ -17,7 +17,7 @@ import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H0
 
 @Composable
-fun ShowPotEmpty(
+fun DefaultScreenWhenEmpty(
     modifier: Modifier = Modifier,
     imageResId: Int,
     text: String,
