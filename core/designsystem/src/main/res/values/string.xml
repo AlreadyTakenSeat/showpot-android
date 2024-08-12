@@ -14,4 +14,15 @@
 
     <string name="login_subscribe_genre">로그인 후 좋아하는\n장르를 구독을 해보세요!</string>
     <string name="login_in_3_seconds">3초만에 로그인하기</string>
+
+    <string name="alarm">알림</string>
+    <string name="alarm_settings_show">알림 설정한 공연</string>
+    <string name="action_change">변경하기</string>
+    <string name="action_turn_off">해제하기</string>
+    <string name="no_alarm_show">알림 설정한\n공연이 없어요</string>
+    <string name="no_subscribed_artists">구독한\n아티스트가 없어요</string>
+
+    <string name="action_subscribe_artist">아티스트 구독 하러가기</string>
+    <string name="action_show_info">공연 정보 보러가기</string>
+
 </resources>

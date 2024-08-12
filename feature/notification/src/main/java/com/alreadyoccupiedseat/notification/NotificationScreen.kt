@@ -22,14 +22,21 @@ import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H0
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 
 @Composable
-fun NotificationScreen(navController: NavController) {
-    NotificationScreenContent()
+fun NotificationScreen(
+    navController: NavController,
+    onMyAlarmSettingClicked: () -> Unit,
+) {
+    NotificationScreenContent(
+        onMyAlarmSettingClicked = onMyAlarmSettingClicked,
+    )
 }
 
 // Todo: Need To Real Data
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun NotificationScreenContent() {
+fun NotificationScreenContent(
+    onMyAlarmSettingClicked: () -> Unit,
+) {
 
     val pagerState = rememberPagerState(pageCount = { 5 })
     Scaffold(
@@ -94,7 +101,7 @@ fun NotificationScreenContent() {
                     title = "알림 설정한 공연",
                     count = 12,
                 ) {
-
+                    onMyAlarmSettingClicked()
                 }
             }
 

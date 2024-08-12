@@ -62,6 +62,11 @@ sealed class Screen(
         title = "공연정보"
     )
 
+    data object MyAlarmSetting: Screen(
+        route = "myAlarmSetting",
+        title = "알림 설정"
+    )
+
     companion object {
         val bottomNavigationItems = listOf(Home, Notification, MyPage)
     }
