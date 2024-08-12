@@ -3,7 +3,7 @@ package com.alreadyoccupiedseat.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alreadyoccupiedseat.data.login.KakaoLoginRepository
-import com.alreadyoccupiedseat.data.login.LoginDataSource
+import com.alreadyoccupiedseat.data.login.LoginRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -18,7 +18,7 @@ sealed interface LoginScreenEvent {
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    @KakaoLoginRepository private val kakaoLoginDataSource: LoginDataSource
+    @KakaoLoginRepository private val kakaoLoginRepository: LoginRepository
 ) : ViewModel() {
 
     private var _event = MutableStateFlow<LoginScreenEvent>(LoginScreenEvent.Idle)
@@ -27,7 +27,7 @@ class LoginViewModel @Inject constructor(
     fun tryKakaoLogin() {
         viewModelScope.launch {
             _event.emit(LoginScreenEvent.LoginRequested)
-            kakaoLoginDataSource.login()
+            kakaoLoginRepository.login()
         }
     }
 
