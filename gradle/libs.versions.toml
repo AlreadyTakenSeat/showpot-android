@@ -37,6 +37,8 @@ navigationCompose = "2.7.7"
 retrofit = "2.11.0"
 okhttp = "4.10.0"
 
+kakao = "2.20.3"
+
 [libraries]
 android-tools-build-gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -111,6 +113,9 @@ firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 room-gradlePlugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "room" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+
+# Kakao
+kakao = { group = "com.kakao.sdk", name = "v2-all", version.ref = "kakao" }
 
 
 [bundles]
