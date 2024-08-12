@@ -81,7 +81,7 @@ fun AppScreenContent() {
                 HomeScreen(
                     navController = navController,
                     onSearchBarClicked = {
-                        navController.navigate(Screen.Login.route)
+                        navController.navigate(Screen.Search.route)
                     },
                     onSubscriptionGenreClicked = {
                         navController.navigate(Screen.SubscriptionGenre.route)
