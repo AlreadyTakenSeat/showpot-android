@@ -16,6 +16,11 @@ sealed class Screen(
     selectedIcon = selectedIcon,
 ) {
 
+    data object Login: Screen(
+        route = "login",
+        title = "로그인"
+    )
+
     data object Home : Screen(
         route = "home",
         title = "홈",

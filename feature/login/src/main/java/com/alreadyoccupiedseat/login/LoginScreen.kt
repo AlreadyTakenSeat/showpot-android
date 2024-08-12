@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -23,7 +22,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
@@ -32,23 +32,40 @@ import com.alreadyoccupiedseat.designsystem.component.ShowPotTopBar
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier) {
-    val viewModel = viewModel<LoginViewModel>()
+fun LoginScreen(
+    navController: NavController
+) {
+    val viewModel = hiltViewModel<LoginViewModel>()
     val event = viewModel.event.collectAsState()
 
+    when (event.value) {
+        is LoginScreenEvent.Idle -> {
+
+        }
+
+        is LoginScreenEvent.LoginRequested -> {
+
+        }
+
+        is LoginScreenEvent.LoginCompleted -> {
+
+        }
+
+        is LoginScreenEvent.LoginError -> {
+
+        }
+    }
+
     LoginContent(
-        event = event.value,
-        onLoginCompleted = viewModel::loginCompleted,
+        onKakaoLoginClicked = viewModel::tryKakaoLogin
     )
 
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginContent(
-    event: LoginScreenEvent,
-    onLoginCompleted: () -> Unit,
+    onKakaoLoginClicked: () -> Unit,
 ) {
     val navController = rememberNavController()
 
@@ -117,7 +134,7 @@ fun LoginContent(
                         disabledContentColor = ShowpotColor.Gray400,
                     ),
                     onClick = {
-                        /* 카카오 로그인 */
+                        onKakaoLoginClicked()
                     }
                 )
 
@@ -144,24 +161,6 @@ fun LoginContent(
             }
         }
     )
-
-    when (event) {
-        is LoginScreenEvent.Idle -> {
-
-        }
-
-        is LoginScreenEvent.LoginRequested -> {
-
-        }
-
-        is LoginScreenEvent.LoginCompleted -> {
-            onLoginCompleted()
-        }
-
-        is LoginScreenEvent.LoginError -> {
-
-        }
-    }
 
 }
 
