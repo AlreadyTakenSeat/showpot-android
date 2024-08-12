@@ -2,6 +2,6 @@ package com.alreadyoccupiedseat.data.login
 
 interface LoginRepository {
 
-    fun login()
+    suspend fun login(): String
 
 }

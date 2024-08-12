@@ -10,7 +10,7 @@ import javax.inject.Inject
 class KakaoLoginRepositoryImpl @Inject constructor(
     @KakaoLoginDataSource private val kaKaoLoginDataSource: LoginDataSource
 ) : LoginRepository{
-    override fun login() {
-        kaKaoLoginDataSource.login()
+    override suspend fun login(): String {
+        return kaKaoLoginDataSource.login()
     }
 }
