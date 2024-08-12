@@ -16,6 +16,7 @@ import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotBottomNavigation
 import com.alreadyoccupiedseat.home.HomeScreen
+import com.alreadyoccupiedseat.login.LoginScreen
 import com.alreadyoccupiedseat.mypage.MyPageScreen
 import com.alreadyoccupiedseat.notification.NotificationScreen
 import com.alreadyoccupiedseat.search.SearchScreen
@@ -71,6 +72,10 @@ fun AppScreenContent() {
             startDestination = Screen.Home.route,
             androidx.compose.ui.Modifier.padding(innerPadding),
         ) {
+
+            composable(Screen.Login.route) {
+                LoginScreen(navController)
+            }
 
             composable(Screen.Home.route) {
                 HomeScreen(

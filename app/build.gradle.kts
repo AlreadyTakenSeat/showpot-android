@@ -1,9 +1,14 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.showpot.application)
     alias(libs.plugins.showpot.firebase)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.showpot.hilt)
 }
+
+val properties = Properties()
+properties.load(project.rootProject.file("local.properties").inputStream())
 
 android {
     namespace = "com.alreadyoccupiedseat.showpot"
@@ -13,6 +18,15 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+
+        // for using it on the .kt files
+        buildConfigField(
+            "String",
+            "kakaoNativeAppKeyString",
+            properties.getProperty("kakao_sdk_native_key_string")
+        )
+        // for using it on the manifest
+        manifestPlaceholders["kakaoNativeAppKey"] = properties["kakao_sdk_native_key"] as Any
 
         vectorDrawables {
             useSupportLibrary = true
@@ -30,6 +44,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     packaging {
         resources {
@@ -37,6 +52,7 @@ android {
         }
     }
 }
+
 
 dependencies {
 
@@ -75,5 +91,6 @@ dependencies {
 
     implementation(libs.coil.kt.compose)
 
+    implementation(libs.kakao)
 
 }
