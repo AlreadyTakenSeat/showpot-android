@@ -67,6 +67,11 @@ sealed class Screen(
         title = "알림 설정"
     )
 
+    data object MyFinishedShow: Screen(
+        route = "myFinishedShow",
+        title = "완료된 공연"
+    )
+
     companion object {
         val bottomNavigationItems = listOf(Home, Notification, MyPage)
     }
