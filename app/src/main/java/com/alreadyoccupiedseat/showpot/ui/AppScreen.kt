@@ -127,7 +127,7 @@ fun AppScreenContent() {
                 MyAlarmSettingScreen(navController)
             }
 
-            composable("settings") {
+            composable(Screen.Settings.route) {
                 SettingsScreen(navController)
             }
         }
