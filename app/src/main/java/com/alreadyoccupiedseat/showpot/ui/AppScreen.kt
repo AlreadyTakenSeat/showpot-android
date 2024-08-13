@@ -21,6 +21,7 @@ import com.alreadyoccupiedseat.login.LoginScreen
 import com.alreadyoccupiedseat.mypage.MyPageScreen
 import com.alreadyoccupiedseat.notification.NotificationScreen
 import com.alreadyoccupiedseat.search.SearchScreen
+import com.alreadyoccupiedseat.settings.SettingsScreen
 import com.alreadyoccupiedseat.show_detail.ShowDetailScreen
 import com.alreadyoccupiedseat.showpot.Screen
 import com.alreadyoccupiedseat.showpot.Screen.Companion.bottomNavigationItems
@@ -126,6 +127,9 @@ fun AppScreenContent() {
                 MyAlarmSettingScreen(navController)
             }
 
+            composable(Screen.Settings.route) {
+                SettingsScreen(navController)
+            }
         }
     }
 }
