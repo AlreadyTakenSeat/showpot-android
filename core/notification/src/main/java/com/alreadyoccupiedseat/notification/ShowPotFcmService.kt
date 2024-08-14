@@ -1,16 +1,29 @@
 package com.alreadyoccupiedseat.notification
 
+import com.alreadyoccupiedseat.datastore.AccountDataStore
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ShowPotFcmService : FirebaseMessagingService() {
+
+@AndroidEntryPoint
+class ShowPotFcmService @Inject constructor() : FirebaseMessagingService() {
+
+    @Inject
+    lateinit var accountDataStore: AccountDataStore
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
 
     }
 
     override fun onNewToken(token: String) {
-
+        CoroutineScope(Dispatchers.Default).launch {
+            accountDataStore.updateFcmToken(token)
+        }
     }
 
     companion object {
