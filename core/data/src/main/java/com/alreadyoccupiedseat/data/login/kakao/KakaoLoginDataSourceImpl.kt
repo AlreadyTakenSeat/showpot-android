@@ -1,6 +1,7 @@
 package com.alreadyoccupiedseat.data.login.kakao
 
 import android.content.Context
+import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.data.login.KakaoLoginDataSource
 import com.alreadyoccupiedseat.data.login.SocialLoginDataSource
 import com.kakao.sdk.auth.model.OAuthToken
@@ -24,7 +25,7 @@ class KakaoLoginDataSourceImpl @Inject constructor(
                     continuation.resumeWithException(Exception("카카오 소셜 로그인 실패"))
                 } else if (token != null) {
                     // TODO: it's supposed to be changed for specific identifier
-                    continuation.resume(token.accessToken) {
+                    continuation.resume(token.idToken ?: String.EMPTY) {
                         // onCancellation
                     }
                 } else {
