@@ -33,7 +33,8 @@ import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
 
 @Composable
 fun LoginScreen(
-    navController: NavController
+//    navController: NavController,
+    onKakaoLoginSuccess: () -> Unit,
 ) {
     val viewModel = hiltViewModel<LoginViewModel>()
     val event = viewModel.event.collectAsState()
@@ -48,7 +49,7 @@ fun LoginScreen(
         }
 
         is LoginScreenEvent.LoginCompleted -> {
-
+            onKakaoLoginSuccess()
         }
 
         is LoginScreenEvent.LoginError -> {

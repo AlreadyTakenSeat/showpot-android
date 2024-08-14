@@ -2,7 +2,7 @@ package com.alreadyoccupiedseat.data.login.kakao
 
 import android.content.Context
 import com.alreadyoccupiedseat.data.login.KakaoLoginDataSource
-import com.alreadyoccupiedseat.data.login.LoginDataSource
+import com.alreadyoccupiedseat.data.login.SocialLoginDataSource
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -14,7 +14,7 @@ import kotlin.coroutines.resumeWithException
 @KakaoLoginDataSource
 class KakaoLoginDataSourceImpl @Inject constructor(
     @ApplicationContext private val context: Context
-) : LoginDataSource {
+) : SocialLoginDataSource {
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun login(): String {
         return suspendCancellableCoroutine { continuation ->
@@ -23,6 +23,7 @@ class KakaoLoginDataSourceImpl @Inject constructor(
                 if (error != null) {
                     continuation.resumeWithException(Exception("카카오 소셜 로그인 실패"))
                 } else if (token != null) {
+                    // TODO: it's supposed to be changed for specific identifier
                     continuation.resume(token.accessToken) {
                         // onCancellation
                     }

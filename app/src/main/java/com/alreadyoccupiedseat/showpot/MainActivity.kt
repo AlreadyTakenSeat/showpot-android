@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.alreadyoccupiedseat.designsystem.ShowPotTheme
+import com.alreadyoccupiedseat.login.LoginScreen
 import com.alreadyoccupiedseat.notification.ShowPotFcmService
 import com.alreadyoccupiedseat.onboarding.OnboardingScreen
 import com.alreadyoccupiedseat.showpot.ui.AppScreen
@@ -24,8 +25,12 @@ class MainActivity : ComponentActivity() {
                 val viewModel = hiltViewModel<MainActivityViewModel>()
                 val state = viewModel.state.collectAsState()
 
-                if (state.value.isOnboardingCompleted) {
-                    AppScreen()
+                if (state.value.isOnboardingCompleted && state.value.isLoggedIn) {
+                    AppScreen(state.value.isLoggedIn)
+                } else if (!state.value.isLoggedIn) {
+                    LoginScreen() {
+                        viewModel.loginSuccess()
+                    }
                 } else {
                     OnboardingScreen {
                         viewModel.onboardingCompleted()

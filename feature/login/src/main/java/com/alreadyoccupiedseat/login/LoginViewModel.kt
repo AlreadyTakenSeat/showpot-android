@@ -18,7 +18,7 @@ sealed interface LoginScreenEvent {
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    @KakaoLoginRepository private val kakaoLoginRepository: LoginRepository
+    private val loginRepository: LoginRepository
 ) : ViewModel() {
 
     private var _event = MutableStateFlow<LoginScreenEvent>(LoginScreenEvent.Idle)
@@ -27,7 +27,11 @@ class LoginViewModel @Inject constructor(
     fun tryKakaoLogin() {
         viewModelScope.launch {
             _event.emit(LoginScreenEvent.LoginRequested)
-            kakaoLoginRepository.login()
+            if (loginRepository.kakaoLogin().isSuccess) {
+                _event.emit(LoginScreenEvent.LoginCompleted)
+            } else {
+                _event.emit(LoginScreenEvent.LoginError("카카오 로그인 실패"))
+            }
         }
     }
 

@@ -1,6 +1,6 @@
 package com.alreadyoccupiedseat.data.login
 
-interface LoginDataSource {
+interface SocialLoginDataSource {
 
     suspend fun login(): String
 
