@@ -2,7 +2,6 @@ package com.alreadyoccupiedseat.showpot
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alreadyoccupiedseat.data.login.LoginRepository
 import com.alreadyoccupiedseat.datastore.AccountDataStore
 import com.alreadyoccupiedseat.usecase.ReIssueTokenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +18,7 @@ data class MainActivityState(
 class MainActivityViewModel @Inject constructor(
     private val accountDataStore: AccountDataStore,
     private val reIssueTokenUseCase: ReIssueTokenUseCase
-): ViewModel() {
+) : ViewModel() {
 
     private val _state = MutableStateFlow(MainActivityState())
     val state = _state
@@ -27,8 +26,10 @@ class MainActivityViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             accountDataStore.getAccessToken()?.let {
-                reIssueTokenUseCase()
-                _state.value = state.value.copy(isLoggedIn = true)
+                if (it.isNotEmpty()) {
+                    reIssueTokenUseCase()
+                    _state.value = state.value.copy(isLoggedIn = true)
+                }
             }
         }
     }
