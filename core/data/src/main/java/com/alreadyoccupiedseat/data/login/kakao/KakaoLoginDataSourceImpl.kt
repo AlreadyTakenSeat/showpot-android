@@ -24,7 +24,6 @@ class KakaoLoginDataSourceImpl @Inject constructor(
                 if (error != null) {
                     continuation.resumeWithException(Exception("카카오 소셜 로그인 실패"))
                 } else if (token != null) {
-                    // TODO: it's supposed to be changed for specific identifier
                     continuation.resume(token.idToken ?: String.EMPTY) {
                         // onCancellation
                     }
