@@ -97,4 +97,6 @@ dependencies {
 
     implementation(libs.kakao)
 
+    implementation(libs.firebase.messaging)
+
 }

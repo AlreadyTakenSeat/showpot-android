@@ -8,7 +8,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.alreadyoccupiedseat.designsystem.ShowPotTheme
 import com.alreadyoccupiedseat.login.LoginScreen
-import com.alreadyoccupiedseat.notification.ShowPotFcmService
 import com.alreadyoccupiedseat.onboarding.OnboardingScreen
 import com.alreadyoccupiedseat.showpot.ui.AppScreen
 import dagger.hilt.android.AndroidEntryPoint
