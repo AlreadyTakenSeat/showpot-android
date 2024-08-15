@@ -2,7 +2,6 @@ package com.alreadyoccupiedseat.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alreadyoccupiedseat.data.login.KakaoLoginRepository
 import com.alreadyoccupiedseat.data.login.LoginRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
