@@ -8,4 +8,6 @@ interface LoginRepository {
 
     suspend fun googleLogin(): Result<Unit>
 
+    suspend fun reIssueToken(): Result<Unit>
+
 }

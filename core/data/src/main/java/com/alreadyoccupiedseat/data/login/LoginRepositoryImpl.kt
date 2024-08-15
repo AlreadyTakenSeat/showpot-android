@@ -23,4 +23,8 @@ class LoginRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun reIssueToken(): Result<Unit> {
+        return remoteLoginDataSource.reIssueToken()
+    }
+
 }
