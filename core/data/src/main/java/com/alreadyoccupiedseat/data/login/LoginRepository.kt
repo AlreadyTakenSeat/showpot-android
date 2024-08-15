@@ -1,8 +1,10 @@
 package com.alreadyoccupiedseat.data.login
 
+import android.content.Context
+
 interface LoginRepository {
 
-    suspend fun kakaoLogin(): Result<Unit>
+    suspend fun kakaoLogin(activityContext: Context): Result<Unit>
 
     suspend fun googleLogin(): Result<Unit>
 

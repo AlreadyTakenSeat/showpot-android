@@ -1,5 +1,6 @@
 package com.alreadyoccupiedseat.login
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alreadyoccupiedseat.data.login.LoginRepository
@@ -23,10 +24,10 @@ class LoginViewModel @Inject constructor(
     private var _event = MutableStateFlow<LoginScreenEvent>(LoginScreenEvent.Idle)
     val event = _event
 
-    fun tryKakaoLogin() {
+    fun tryKakaoLogin(activityContext: Context) {
         viewModelScope.launch {
             _event.emit(LoginScreenEvent.LoginRequested)
-            if (loginRepository.kakaoLogin().isSuccess) {
+            if (loginRepository.kakaoLogin(activityContext).isSuccess) {
                 _event.emit(LoginScreenEvent.LoginCompleted)
             } else {
                 _event.emit(LoginScreenEvent.LoginError("카카오 로그인 실패"))
