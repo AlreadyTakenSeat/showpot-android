@@ -70,6 +70,8 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:common"))
     implementation(project(":core:notification"))
+    implementation(project(":core:datastore"))
+    implementation(project(":core:data"))
 
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

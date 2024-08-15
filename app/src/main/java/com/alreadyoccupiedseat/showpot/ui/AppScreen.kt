@@ -29,13 +29,13 @@ import com.alreadyoccupiedseat.subscription_genre.SubscriptionGenreScreen
 import com.alreadyoccupiedseat.subscription_artist.SubscriptionArtistScreen
 
 @Composable
-fun AppScreen() {
+fun AppScreen(isLoggedIn: Boolean) {
 
-    AppScreenContent()
+    AppScreenContent(isLoggedIn)
 }
 
 @Composable
-fun AppScreenContent() {
+fun AppScreenContent(isLoggedIn: Boolean) {
     val navController = rememberNavController()
     Scaffold(
         containerColor = ShowpotColor.Gray700,
@@ -74,10 +74,6 @@ fun AppScreenContent() {
             startDestination = Screen.Home.route,
             androidx.compose.ui.Modifier.padding(innerPadding),
         ) {
-
-            composable(Screen.Login.route) {
-                LoginScreen(navController)
-            }
 
             composable(Screen.Home.route) {
                 HomeScreen(
