@@ -4,6 +4,10 @@
     package="com.alreadyoccupiedseat.showpot">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.POST_NOTIFICATIONS"
+        android:minSdkVersion="33" />
+
     <application
         android:name=".ShowPotApplication"
         android:allowBackup="true"
@@ -48,12 +52,13 @@
         <meta-data
             android:name="delivery_metrics_exported_to_big_query_enabled"
             android:value="true" />
-         <meta-data
+        <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@mipmap/ic_launcher" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/notification_channel" />
+
         <service
             android:name=".ShowPotFcmService"
             android:exported="false">
