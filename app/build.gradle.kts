@@ -99,4 +99,7 @@ dependencies {
 
     implementation(libs.firebase.messaging)
 
+    // rememberPermissionState
+    implementation(libs.accompanist.permissions)
+
 }
