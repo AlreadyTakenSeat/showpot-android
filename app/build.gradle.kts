@@ -98,4 +98,9 @@ dependencies {
 
     implementation(libs.kakao)
 
+    implementation(libs.firebase.messaging)
+
+    // rememberPermissionState
+    implementation(libs.accompanist.permissions)
+
 }
