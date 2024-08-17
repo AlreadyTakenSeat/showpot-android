@@ -24,5 +24,8 @@
 
     <string name="action_subscribe_artist">아티스트 구독 하러가기</string>
     <string name="action_show_info">공연 정보 보러가기</string>
+    
+    <!-- My Finished Show   -->
+    <string name="finished_show">티켓팅 종료 공연</string>
 
 </resources>
