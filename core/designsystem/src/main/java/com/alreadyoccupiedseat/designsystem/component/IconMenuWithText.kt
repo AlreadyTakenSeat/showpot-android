@@ -12,19 +12,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
-import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B1_SemiBold
+import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B1_Regular
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 
 @Composable
-fun IconMenuWithCount(
+fun IconMenuWithText(
     modifier: Modifier = Modifier,
     firstIcon: Painter,
     title: String,
-    count: Int? = null,
+    text: String,
     onClicked: () -> Unit = {}
 ) {
     Row(
@@ -53,23 +51,10 @@ fun IconMenuWithCount(
             color = ShowpotColor.Gray100,
         )
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            if (count != null) {
-                ShowPotKoreanText_B1_SemiBold(
-                    text = count.toString(),
-                    color = ShowpotColor.Gray100,
-                )
-            }
-
-            Icon(
-                painter = painterResource(id = R.drawable.ic_arrow_24_right),
-                contentDescription = "icon",
-                tint = ShowpotColor.Gray300,
-                modifier = Modifier.size(24.dp)
-            )
-        }
+        ShowPotKoreanText_B1_Regular(
+            text = text,
+            color = ShowpotColor.Gray200,
+        )
 
     }
 }
