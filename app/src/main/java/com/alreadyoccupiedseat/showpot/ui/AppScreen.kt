@@ -27,6 +27,7 @@ import com.alreadyoccupiedseat.showpot.Screen
 import com.alreadyoccupiedseat.showpot.Screen.Companion.bottomNavigationItems
 import com.alreadyoccupiedseat.subscription_artist.SubscriptionArtistScreen
 import com.alreadyoccupiedseat.subscription_genre.SubscriptionGenreScreen
+import com.alreadyoccupiedseat.withdraw.WithDrawScreen
 
 @Composable
 fun AppScreen(isLoggedIn: Boolean) {
@@ -130,6 +131,9 @@ fun AppScreenContent(isLoggedIn: Boolean) {
                 MyFinishedShowScreen(navController)
             }
 
+            composable(Screen.WithDraw.route) {
+                WithDrawScreen(navController)
+            }
         }
     }
 }

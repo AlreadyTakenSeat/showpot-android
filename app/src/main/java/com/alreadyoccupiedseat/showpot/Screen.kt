@@ -77,6 +77,11 @@ sealed class Screen(
         title = "완료된 공연"
     )
 
+    data object WithDraw: Screen(
+        route = "withDraw",
+        title = "회원 탈퇴"
+    )
+
     companion object {
         val bottomNavigationItems = listOf(Home, Notification, MyPage)
     }
