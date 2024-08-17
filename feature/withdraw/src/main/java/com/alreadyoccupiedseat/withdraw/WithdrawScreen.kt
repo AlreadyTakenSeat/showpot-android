@@ -189,7 +189,7 @@ fun WithDrawScreenContent(
                         disabledContentColor = ShowpotColor.Gray400,
                     ),
                 ) {
-                    ShowPotKoreanText_H1(
+                    ShowPotKoreanText_H2(
                         text = "제출하고 탈퇴하기",
                         color = if (state.inputText.isNotEmpty()) ShowpotColor.White else ShowpotColor.Gray400,
                     )
