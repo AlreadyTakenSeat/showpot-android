@@ -12,6 +12,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -123,8 +124,8 @@ fun NotificationScreenContent(
 
             item {
                 IconMenuWithCount(
-                    firstIcon = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.ic_artist_24),
-                    title = "구독한 아티스트",
+                    firstIcon = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.ic_heart_24),
+                    title = stringResource(com.alreadyoccupiedseat.designsystem.R.string.favorite_shows),
                     count = 3,
                 ) {
 
@@ -137,8 +138,8 @@ fun NotificationScreenContent(
 
             item {
                 IconMenuWithCount(
-                    firstIcon = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.ic_genre_24),
-                    title = "구독한 장르",
+                    firstIcon = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.ic_ticket_close_24), // Todo: Change Icon (?) -> 작아보임
+                    title = stringResource(com.alreadyoccupiedseat.designsystem.R.string.close_ticketing_shows),
                     count = 5,
                 ) {
 
