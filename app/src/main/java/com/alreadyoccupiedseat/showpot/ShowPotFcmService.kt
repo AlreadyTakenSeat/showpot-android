@@ -59,7 +59,7 @@ class ShowPotFcmService @Inject constructor() : FirebaseMessagingService() {
         val notificationBuilder = NotificationCompat
             .Builder(this, channel.id)
             .setPriority(NotificationManagerCompat.IMPORTANCE_HIGH)
-             .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.drawable.notification_icon)
             .setContentTitle(notification.title)
             .setContentText(notification.body)
             .setDefaults(NotificationCompat.DEFAULT_SOUND or NotificationCompat.DEFAULT_VIBRATE)
