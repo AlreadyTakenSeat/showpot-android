@@ -101,7 +101,20 @@ fun AppScreenContent(isLoggedIn: Boolean) {
             }
 
             composable(Screen.MyPage.route) {
-                MyPageScreen(navController)
+                MyPageScreen(
+                    onLoginClicked = {
+                        navController.navigate(Screen.Login.route)
+                    },
+                    onSettingClicked = {
+                        navController.navigate(Screen.Settings.route)
+                    },
+                    onMySubscribedArtistClicked = {
+                        // TODO 누락 화면 추가
+                    },
+                    onMySubscribedGenreClicked = {
+                        navController.navigate(Screen.SubscriptionGenre.route)
+                    }
+                )
             }
 
             composable(Screen.Search.route) {
