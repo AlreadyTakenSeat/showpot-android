@@ -68,6 +68,7 @@ dependencies {
     implementation(project(":feature:myalarm-setting"))
     implementation(project(":feature:settings"))
     implementation(project(":feature:myfinished-show"))
+    implementation(project(":feature:myfavorite-show"))
     implementation(project(":feature:withdraw"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:common"))

@@ -1,5 +1,6 @@
-package com.alreadyoccupiedseat.myalarm_setting
+package com.alreadyoccupiedseat.myfavorite_show
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,94 +15,63 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.DefaultScreenWhenEmpty
 import com.alreadyoccupiedseat.designsystem.component.ShowInfo
-import com.alreadyoccupiedseat.designsystem.component.bottomSheet.TicketingNotificationBottomSheet
 import com.alreadyoccupiedseat.designsystem.component.button.ShowPotSubButton
+import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B2_Regular
+
+@Preview
+@Composable
+fun MyFavoriteShowScreenPreview(modifier: Modifier = Modifier) {
+    val navController = rememberNavController()
+    MyFavoriteShowScreen(navController)
+}
 
 @Composable
-fun MyAlarmSettingScreen(
+fun MyFavoriteShowScreen(
     navController: NavController,
 ) {
-    MyAlarmSettingScreenContent(
+    val viewModel = hiltViewModel<MyFavoriteShowViewModel>()
+    val state = viewModel.state.collectAsState()
+    MyFavoriteShowScreenContent(
+        state = state.value,
         modifier = Modifier,
         onBackClicked = {
             navController.popBackStack()
+        },
+        onDeletedMyFavoriteShow = {
+            viewModel.deleteMyFavoriteShow(it)
         }
     )
 }
 
+typealias showId = String
+
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MyAlarmSettingScreenContent(
+private fun MyFavoriteShowScreenContent(
+    state: MyFavoriteShowState,
     modifier: Modifier,
-    onBackClicked: () -> Unit
+    onBackClicked: () -> Unit,
+    onDeletedMyFavoriteShow: (showId) -> Unit,
 ) {
-    val viewModel = hiltViewModel<MyAlarmSettingViewModel>()
-    var isAlarmOptionSheetVisible by remember { mutableStateOf(false) }
-    var isTicketSheetVisible by remember { mutableStateOf(false) }
-    var selectedShowId by remember { mutableStateOf<String?>(null) }
-    var isFirstItemSelected by remember { mutableStateOf(false) }
-    var isSecondItemSelected by remember { mutableStateOf(false) }
-    var isThirdItemSelected by remember { mutableStateOf(false) }
-
-
-    if (isAlarmOptionSheetVisible) {
-        AlarmOptionsBottomSheet(
-            onTicketSheetVisible = {
-                isTicketSheetVisible = true
-            },
-            onDismissRequest = {
-                isAlarmOptionSheetVisible = false
-            },
-            onRemoveClicked = {
-                selectedShowId?.let { id ->
-                    viewModel.removeShowById(id)
-                }
-                isAlarmOptionSheetVisible = false
-            }
-        )
-    }
-
-    if (isTicketSheetVisible) {
-        TicketingNotificationBottomSheet(
-            firstItemSelected = isFirstItemSelected,
-            secondItemSelected = isSecondItemSelected,
-            thirdItemSelected = isThirdItemSelected,
-            onFirstItemClicked = {
-                isFirstItemSelected = !isFirstItemSelected
-            },
-            onSecondItemClicked = {
-                isSecondItemSelected = !isSecondItemSelected
-            },
-            onThirdItemClicked = {
-                isThirdItemSelected = !isThirdItemSelected
-            },
-            onMainButtonClicked = {
-                // TODO: Implement
-            },
-            onDismissRequested = {
-                isTicketSheetVisible = false
-                isAlarmOptionSheetVisible = false
-            })
-    }
 
     Scaffold(
         containerColor = ShowpotColor.Gray700,
         topBar = {
-            MyAlarmSettingTopBar(onBackClicked = onBackClicked)
+            MyFavoriteShowTopBar(onBackClicked = onBackClicked)
         },
         content = {
             LazyColumn(
@@ -111,14 +81,10 @@ fun MyAlarmSettingScreenContent(
                     .padding(top = 12.dp)
                     .padding(it),
             ) {
-                if (viewModel.showList.value.isEmpty()) {
-
-                    item {
-                        MyAlarmEmpty()
-                    }
-
+                if (state.showList.isEmpty()) {
+                    item { MyFavoriteEmpty() }
                 } else {
-                    itemsIndexed(viewModel.showList.value) { index, show ->
+                    itemsIndexed(state.showList) { index, show ->
                         ShowInfo(
                             modifier = Modifier
                                 .padding(horizontal = 16.dp)
@@ -134,27 +100,28 @@ fun MyAlarmSettingScreenContent(
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.Center,
                                     modifier = Modifier
-                                        .background(ShowpotColor.Gray500)
                                         .clickable {
-                                            selectedShowId = show.id
-                                            isAlarmOptionSheetVisible = true
+                                            onDeletedMyFavoriteShow(show.id)
                                         }
+                                        .background(ShowpotColor.Gray500)
+
                                 ) {
+
                                     Icon(
                                         modifier = Modifier
                                             .padding(start = 5.dp)
-                                            .padding(vertical = 5.dp),
-                                        painter = painterResource(R.drawable.ic_alarm_24_default),
-                                        contentDescription = null,
-                                        tint = ShowpotColor.White
-                                    )
-                                    Icon(
-                                        modifier = Modifier
-                                            .padding(end = 5.dp)
-                                            .padding(vertical = 5.dp),
-                                        painter = painterResource(R.drawable.ic_arrow_24_down),
+                                            .padding(vertical = 8.dp),
+                                        painter = painterResource(R.drawable.ic_delete_24),
                                         contentDescription = null,
                                         tint = ShowpotColor.Gray300
+                                    )
+
+                                    ShowPotKoreanText_B2_Regular(
+                                        modifier = Modifier
+                                            .padding(vertical = 6.5.dp)
+                                            .padding(end = 10.dp),
+                                        text = stringResource(R.string.delete),
+                                        color = ShowpotColor.White,
                                     )
                                 }
                             }
@@ -164,10 +131,11 @@ fun MyAlarmSettingScreenContent(
             }
         }
     )
+
 }
 
 @Composable
-fun MyAlarmEmpty(modifier: Modifier = Modifier) {
+fun MyFavoriteEmpty(modifier: Modifier = Modifier) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -178,7 +146,7 @@ fun MyAlarmEmpty(modifier: Modifier = Modifier) {
 
         DefaultScreenWhenEmpty(
             imageResId = R.drawable.img_empty_alarm,
-            text = stringResource(id = R.string.no_alarm_show)
+            text = stringResource(id = R.string.no_favorite_show)
         )
 
         Spacer(modifier = Modifier.height(96.dp))
@@ -192,4 +160,3 @@ fun MyAlarmEmpty(modifier: Modifier = Modifier) {
         )
     }
 }
-
