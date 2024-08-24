@@ -1,5 +1,6 @@
 package com.alreadyoccupiedseat.network
 
+import com.alreadyoccupiedseat.datastore.AccountDataStore
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -18,10 +19,24 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideApiClient(): Retrofit {
+    fun provideApiClient(
+        accessDataStore: AccountDataStore
+    ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(API.BASE_URL)
-            .client(okhttpClient)
+            .client(
+                OkHttpClient.Builder()
+                    .readTimeout(10, TimeUnit.SECONDS)
+                    .connectTimeout(10, TimeUnit.SECONDS)
+                    .writeTimeout(15, TimeUnit.SECONDS)
+                    .addInterceptor(
+                        HttpLoggingInterceptor().apply {
+                            level = HttpLoggingInterceptor.Level.BODY
+                        }
+                    )
+                    .addInterceptor(AuthInterceptor(accessDataStore))
+                    .build()
+            )
             .addConverterFactory(
                 GsonConverterFactory.create(
                     GsonBuilder()
@@ -32,18 +47,4 @@ class NetworkModule {
             .build()
     }
 
-
-    companion object {
-
-        private val okhttpClient = OkHttpClient.Builder()
-            .readTimeout(10, TimeUnit.SECONDS)
-            .connectTimeout(10, TimeUnit.SECONDS)
-            .writeTimeout(15, TimeUnit.SECONDS)
-            .addInterceptor(
-                HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.BODY
-                },
-            )
-            .build()
-    }
 }
