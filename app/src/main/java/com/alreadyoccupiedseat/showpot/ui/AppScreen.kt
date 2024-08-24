@@ -25,6 +25,7 @@ import com.alreadyoccupiedseat.settings.SettingsScreen
 import com.alreadyoccupiedseat.show_detail.ShowDetailScreen
 import com.alreadyoccupiedseat.showpot.Screen
 import com.alreadyoccupiedseat.showpot.Screen.Companion.bottomNavigationItems
+import com.alreadyoccupiedseat.subscribed_artist.SubscribedArtistScreen
 import com.alreadyoccupiedseat.subscription_artist.SubscriptionArtistScreen
 import com.alreadyoccupiedseat.subscription_genre.SubscriptionGenreScreen
 import com.alreadyoccupiedseat.withdraw.WithDrawScreen
@@ -88,7 +89,6 @@ fun AppScreenContent(isLoggedIn: Boolean) {
                 ) {
                     navController.navigate(Screen.SubscriptionArtist.route)
                 }
-
             }
 
             composable(Screen.Notification.route) {
@@ -109,7 +109,7 @@ fun AppScreenContent(isLoggedIn: Boolean) {
                         navController.navigate(Screen.Settings.route)
                     },
                     onMySubscribedArtistClicked = {
-                        // TODO 누락 화면 추가
+                        navController.navigate(Screen.SubscribedArtist.route)
                     },
                     onMySubscribedGenreClicked = {
                         navController.navigate(Screen.SubscriptionGenre.route)
@@ -129,6 +129,10 @@ fun AppScreenContent(isLoggedIn: Boolean) {
                 SubscriptionArtistScreen(navController)
             }
 
+            composable(Screen.SubscribedArtist.route) {
+                SubscribedArtistScreen(navController)
+            }
+
             composable(Screen.ShowDetail.route) {
                 ShowDetailScreen(navController)
             }
@@ -140,6 +144,7 @@ fun AppScreenContent(isLoggedIn: Boolean) {
             composable(Screen.Settings.route) {
                 SettingsScreen(navController)
             }
+
             composable(Screen.MyFinishedShow.route) {
                 MyFinishedShowScreen(navController)
             }
