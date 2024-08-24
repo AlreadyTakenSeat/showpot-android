@@ -54,7 +54,7 @@ class MyPageViewModel @Inject constructor() : ViewModel() {
                 Show(
                     artist = Artist(
                         id = index.toString(),
-                        imageUrl = "https://example.com/artist$index.jpg",
+                        imageURL = "https://example.com/artist$index.jpg",
                         koreanName = "Artist $index",
                         englishName = "Artist $index"
                     ),

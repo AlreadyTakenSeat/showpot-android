@@ -209,7 +209,7 @@ fun SubscriptionArtistScreenContent(
                         val curArtist = state.unsubscribedArtists[index]
                         ShowPotArtistSubscription(
                             text = curArtist.englishName,
-                            imageUrl = curArtist.imageUrl,
+                            imageUrl = curArtist.imageURL,
                             isSelected = checkIsSelected(curArtist),
                         ) {
                             if (state.isLoggedIn.not()) {

@@ -79,7 +79,7 @@ private fun SubscribedArtistContent(
                     // TODO: Real Data
                     items(state.subscribedArtists) { artist ->
                         ShowPotArtistDelete(
-                            imageUrl = artist.imageUrl,
+                            imageUrl = artist.imageURL,
                             onIconClick = {
                                 onDeletedSubscribedArtist(artist.id)
                             }
