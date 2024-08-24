@@ -21,4 +21,10 @@ class ServiceModule {
     fun provideLoginService(retrofit: Retrofit): LoginService {
         return retrofit.create(LoginService::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun provideShowService(retrofit: Retrofit): ShowService {
+        return retrofit.create(ShowService::class.java)
+    }
 }

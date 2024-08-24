@@ -154,8 +154,11 @@ fun AppScreenContent() {
                 SubscribedArtistScreen(navController)
             }
 
-            composable(Screen.ShowDetail.route) {
-                ShowDetailScreen(navController)
+            composable(
+                Screen.ShowDetail.route,
+                Screen.ShowDetail.arguments
+                ) { backStackEntry ->
+                ShowDetailScreen(navController, backStackEntry.arguments?.getString("showId") ?: String.EMPTY)
             }
 
             composable(Screen.MyAlarmSetting.route) {

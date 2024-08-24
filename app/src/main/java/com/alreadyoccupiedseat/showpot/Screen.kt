@@ -1,6 +1,9 @@
 package com.alreadyoccupiedseat.showpot
 
 import androidx.annotation.DrawableRes
+import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.alreadyoccupiedseat.Screens
 import com.alreadyoccupiedseat.designsystem.R
 
@@ -9,6 +12,7 @@ sealed class Screen(
     title: String,
     @DrawableRes unSelectedIcon: Int? = null,
     @DrawableRes selectedIcon: Int? = null,
+    val arguments: List<NamedNavArgument> = emptyList(),
 ): Screens(
     route = route,
     title = title,
@@ -63,8 +67,11 @@ sealed class Screen(
     )
 
     data object ShowDetail: Screen(
-        route = "showDetail",
-        title = "공연정보"
+        route = "showDetail/{showId}",
+        title = "공연정보",
+        arguments = listOf(
+            navArgument("showId") { type = NavType.StringType },
+        ),
     )
 
     data object MyAlarmSetting: Screen(
