@@ -26,20 +26,23 @@ import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 
 @Composable
 fun SettingsScreen(
-    navController: NavController
+    navController: NavController,
+    onAccountClicked: () -> Unit,
 ) {
-
-
     SettingsScreenContent(
         onBackClicked = {
             navController.popBackStack()
+        },
+        onAccountClicked = {
+            onAccountClicked()
         }
     )
 }
 
 @Composable
 fun SettingsScreenContent(
-    onBackClicked: () -> Unit
+    onBackClicked: () -> Unit,
+    onAccountClicked: () -> Unit,
 ) {
 
     Scaffold(
@@ -89,8 +92,10 @@ fun SettingsScreenContent(
 
             IconMenuWithCount(
                 firstIcon = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.ic_profile_24),
-                title = "계정",
-                onClicked = {}
+                title = stringResource(com.alreadyoccupiedseat.designsystem.R.string.account),
+                onClicked = {
+                    onAccountClicked()
+                }
             )
 
             Spacer(modifier = Modifier.height(8.dp))
