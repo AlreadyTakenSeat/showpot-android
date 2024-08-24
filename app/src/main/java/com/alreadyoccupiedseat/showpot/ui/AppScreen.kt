@@ -16,6 +16,7 @@ import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotBottomNavigation
 import com.alreadyoccupiedseat.home.HomeScreen
+import com.alreadyoccupiedseat.login.LoginScreen
 import com.alreadyoccupiedseat.myalarm_setting.MyAlarmSettingScreen
 import com.alreadyoccupiedseat.myfinished_show.MyFinishedShowScreen
 import com.alreadyoccupiedseat.mypage.MyPageScreen
@@ -30,13 +31,12 @@ import com.alreadyoccupiedseat.subscription_genre.SubscriptionGenreScreen
 import com.alreadyoccupiedseat.withdraw.WithDrawScreen
 
 @Composable
-fun AppScreen(isLoggedIn: Boolean) {
-
-    AppScreenContent(isLoggedIn)
+fun AppScreen() {
+    AppScreenContent()
 }
 
 @Composable
-fun AppScreenContent(isLoggedIn: Boolean) {
+fun AppScreenContent() {
     val navController = rememberNavController()
     Scaffold(
         containerColor = ShowpotColor.Gray700,
@@ -75,6 +75,12 @@ fun AppScreenContent(isLoggedIn: Boolean) {
             startDestination = Screen.Home.route,
             androidx.compose.ui.Modifier.padding(innerPadding),
         ) {
+
+            composable(Screen.Login.route) {
+                LoginScreen {
+                    navController.popBackStack()
+                }
+            }
 
             composable(Screen.Home.route) {
                 HomeScreen(
