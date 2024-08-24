@@ -77,6 +77,11 @@ sealed class Screen(
         title = "완료된 공연"
     )
 
+    data object MyFavoriteShows: Screen(
+        route = "myFavoriteShows",
+        title = "관심 공연"
+    )
+
     data object WithDraw: Screen(
         route = "withDraw",
         title = "회원 탈퇴"
