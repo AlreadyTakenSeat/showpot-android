@@ -9,16 +9,12 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.compositionLocalOf
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.alreadyoccupiedseat.core.LocalAccessToken
 import com.alreadyoccupiedseat.designsystem.ShowPotTheme
 import com.alreadyoccupiedseat.onboarding.OnboardingScreen
 import com.alreadyoccupiedseat.showpot.ui.AppScreen
 import dagger.hilt.android.AndroidEntryPoint
-
-val LocalAccessToken = compositionLocalOf<String?> {
-    null
-}
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
