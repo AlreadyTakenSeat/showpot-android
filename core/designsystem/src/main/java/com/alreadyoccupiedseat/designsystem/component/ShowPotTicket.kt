@@ -123,10 +123,7 @@ fun ShowPotTicket(
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier
                     .width(210.dp)
-                    .padding(
-                        vertical = 12.5.dp,
-                        horizontal = 16.dp
-                    )
+                    .padding(vertical = 12.5.dp,)
             ) {
 
                 Row(
