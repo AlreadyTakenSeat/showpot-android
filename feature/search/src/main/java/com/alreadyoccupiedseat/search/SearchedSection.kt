@@ -48,7 +48,7 @@ fun SearchedSection(
                 item {
                     ShowPotArtistSubscription(
                         // TODO: Change to real artist image
-                        imageUrl = artist.imageUrl,
+                        imageUrl = artist.imageURL,
                         text = artist.englishName
                     )
                 }

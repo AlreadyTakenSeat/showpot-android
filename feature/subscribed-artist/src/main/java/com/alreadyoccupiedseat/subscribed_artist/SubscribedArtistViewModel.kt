@@ -46,7 +46,7 @@ class SubscribedArtistViewModel @Inject constructor() : ViewModel() {
                 }
                 Artist(
                     id = index.toString(),
-                    imageUrl = posterImageURL,
+                    imageURL = posterImageURL,
                     koreanName = "Artist $index",
                     englishName = "Artist $index"
                 )

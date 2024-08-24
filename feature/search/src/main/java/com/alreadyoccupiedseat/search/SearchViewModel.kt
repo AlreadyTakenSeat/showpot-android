@@ -96,7 +96,7 @@ class SearchViewModel @Inject constructor(
                 Show(
                     artist = Artist(
                         id = "1",
-                        imageUrl = "",
+                        imageURL = "",
                         koreanName = "두아리파",
                         englishName = "Dua Lipa"
                     ),
