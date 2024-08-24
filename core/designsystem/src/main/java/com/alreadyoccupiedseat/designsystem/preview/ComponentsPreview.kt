@@ -152,6 +152,7 @@ fun ComponentsPreview() {
                 showTimeTextColor = ShowpotColor.MainYellow,
                 showName = "Nothing But Thieves But Thieves ",
                 showLocation = "KBS 아레나홀",
+                hasTicketingOpen = false,
                 onClick = {
                     Log.d("ShowPotTicket", "onClick")
                 }
@@ -169,6 +170,7 @@ fun ComponentsPreview() {
                 showTimeTextColor = ShowpotColor.MainBlue,
                 showName = "Nothing But Thieves But Thieves ",
                 showLocation = "KBS 아레나홀",
+                hasTicketingOpen = true,
                 onClick = {
                     Log.d("ShowPotTicket", "onClick")
                 }
