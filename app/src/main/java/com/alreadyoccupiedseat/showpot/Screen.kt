@@ -87,6 +87,11 @@ sealed class Screen(
         title = "관심 공연"
     )
 
+    data object EntireShowList: Screen(
+        route = "entireShowList",
+        title = "전체 공연 목록"
+    )
+
     data object WithDraw: Screen(
         route = "withDraw",
         title = "회원 탈퇴"
