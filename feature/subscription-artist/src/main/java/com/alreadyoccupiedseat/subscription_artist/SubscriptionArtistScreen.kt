@@ -1,5 +1,6 @@
 package com.alreadyoccupiedseat.subscription_artist
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,7 +34,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.alreadyoccupiedseat.core.LocalAccessToken
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
 import com.alreadyoccupiedseat.designsystem.component.artist.ShowPotArtistSubscription
@@ -78,7 +78,7 @@ fun SubscriptionArtistScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun SubscriptionArtistScreenContent(
     state: SubscriptionArtistScreenState,
@@ -92,7 +92,6 @@ fun SubscriptionArtistScreenContent(
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    val isLoggedIn = LocalAccessToken.current != null
     // TODO: Supposed to be in a ViewModel State
     var isSheetVisible by remember { mutableStateOf(false) }
 
@@ -213,7 +212,7 @@ fun SubscriptionArtistScreenContent(
                             imageUrl = curArtist.imageUrl,
                             isSelected = checkIsSelected(curArtist),
                         ) {
-                            if (isLoggedIn) {
+                            if (state.isLoggedIn.not()) {
                                 isSheetVisible = true
                             } else {
                                 onArtistClicked(curArtist)
