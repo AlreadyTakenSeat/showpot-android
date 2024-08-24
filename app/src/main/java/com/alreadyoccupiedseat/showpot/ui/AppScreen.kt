@@ -27,6 +27,7 @@ import com.alreadyoccupiedseat.settings.SettingsScreen
 import com.alreadyoccupiedseat.show_detail.ShowDetailScreen
 import com.alreadyoccupiedseat.showpot.Screen
 import com.alreadyoccupiedseat.showpot.Screen.Companion.bottomNavigationItems
+import com.alreadyoccupiedseat.subscribed_artist.SubscribedArtistScreen
 import com.alreadyoccupiedseat.subscription_artist.SubscriptionArtistScreen
 import com.alreadyoccupiedseat.subscription_genre.SubscriptionGenreScreen
 import com.alreadyoccupiedseat.withdraw.WithDrawScreen
@@ -95,7 +96,6 @@ fun AppScreenContent() {
                 ) {
                     navController.navigate(Screen.SubscriptionArtist.route)
                 }
-
             }
 
             composable(Screen.Notification.route) {
@@ -121,7 +121,7 @@ fun AppScreenContent() {
                         navController.navigate(Screen.Settings.route)
                     },
                     onMySubscribedArtistClicked = {
-                        // TODO 누락 화면 추가
+                        navController.navigate(Screen.SubscribedArtist.route)
                     },
                     onMySubscribedGenreClicked = {
                         navController.navigate(Screen.SubscriptionGenre.route)
@@ -139,6 +139,10 @@ fun AppScreenContent() {
 
             composable(Screen.SubscriptionArtist.route) {
                 SubscriptionArtistScreen(navController)
+            }
+
+            composable(Screen.SubscribedArtist.route) {
+                SubscribedArtistScreen(navController)
             }
 
             composable(Screen.ShowDetail.route) {
