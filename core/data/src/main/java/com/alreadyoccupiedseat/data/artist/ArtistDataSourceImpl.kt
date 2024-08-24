@@ -1,6 +1,7 @@
 package com.alreadyoccupiedseat.data.artist
 
 import com.alreadyoccupiedseat.model.Artist
+import com.alreadyoccupiedseat.model.artist.SubscribeArtistsRequest
 import com.alreadyoccupiedseat.network.ArtistService
 import javax.inject.Inject
 
@@ -20,5 +21,28 @@ class ArtistDataSourceImpl @Inject constructor(
             size,
             search,
         ).body()?.data ?: emptyList()
+    }
+
+    override suspend fun getUnsubscribedArtists(
+        sortedStandard: String?,
+        artistGenderApiTypes: List<String>?,
+        artistApiTypes: List<String>?,
+        genreIds: List<String>?,
+        cursor: String?,
+        size: Int,
+    ): List<Artist> {
+        return artistService.getUnsubscribedArtists(
+            sortedStandard,
+            artistGenderApiTypes,
+            artistApiTypes,
+            genreIds,
+            cursor,
+            size,
+        ).body()?.data ?: emptyList()
+    }
+
+    override suspend fun subscribeArtists(artistIds: List<String>): List<String> {
+        return artistService.subscribeArtists(SubscribeArtistsRequest(artistIds))
+            .body()?.successSubscriptionArtistIds ?: emptyList()
     }
 }

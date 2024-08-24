@@ -33,7 +33,8 @@ class AuthInterceptor @Inject constructor(
 
         val accessToken = dataStore.getAccessToken()
 
-        val token = if (accessToken != null) "Bearer $accessToken" else ""
+        val token = if (accessToken != null) "Bearer $accessToken"
+        else return chain.proceed(chain.request().newBuilder().build())
         val newRequest = chain.request().newBuilder()
             .addHeader("Authorization", token)
             .build()

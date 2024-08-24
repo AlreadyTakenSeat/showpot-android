@@ -138,7 +138,9 @@ fun AppScreenContent() {
             }
 
             composable(Screen.SubscriptionArtist.route) {
-                SubscriptionArtistScreen(navController)
+                SubscriptionArtistScreen(navController) {
+                    navController.navigate(Screen.Login.route)
+                }
             }
 
             composable(Screen.SubscribedArtist.route) {

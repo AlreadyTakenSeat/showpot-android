@@ -53,6 +53,8 @@ class MainActivityViewModel @Inject constructor(
 
         }
 
+        refreshTokens()
+
     }
 
     fun onboardingCompleted() {
@@ -60,26 +62,11 @@ class MainActivityViewModel @Inject constructor(
             state.value.copy(isOnboardingCompleted = OnboardingCheckState.OnBoardingDone)
     }
 
-    // 초기 엑세스 토큰을 가져오기
-    // 토큰이 없다면 null로 설정
-    // 토큰이 있다면 토큰을 갱신하고 갱신된 토큰으로 설정
-    fun setInitAccessToken(onGetAccessTokenSuccess: (String?) -> Unit) {
+    private fun refreshTokens() {
         viewModelScope.launch {
-            val firstAccessToken = accountDataStore.getAccessToken()
-            if (firstAccessToken != null) {
-                refreshTokens { updatedAccessToken ->
-                    onGetAccessTokenSuccess(updatedAccessToken)
-                }
-            } else {
-                onGetAccessTokenSuccess(null)
+            accountDataStore.getRefreshToken()?.let {
+                reIssueTokenUseCase()
             }
-        }
-    }
-
-    private fun refreshTokens(onRefreshSuccess: (String?) -> Unit) {
-        viewModelScope.launch {
-            reIssueTokenUseCase()
-            onRefreshSuccess(accountDataStore.getAccessToken())
         }
     }
 
