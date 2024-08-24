@@ -42,6 +42,11 @@
     <string name="close_ticketing_shows">티켓팅 종료 공연</string>
     <string name="subscribed_artists">구독한 아티스트</string>
     <string name="subscribed_genre">구독한 장르</string>
+    
+    <!-- Entire Show   -->
+    <string name="entire_show">전체 공연</string>
+    <string name="open_soon">오픈 예정</string>
+    <string name="now_selling">예매 중</string>
 
     <!-- TEST  -->
     <string name="test_of_my_page1"> 후 다채로운\n내한공연을 만나보세요.</string>

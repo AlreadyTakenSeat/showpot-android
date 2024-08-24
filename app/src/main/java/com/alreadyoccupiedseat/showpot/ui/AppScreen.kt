@@ -15,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotBottomNavigation
+import com.alreadyoccupiedseat.entire_show.EntireShowScreen
 import com.alreadyoccupiedseat.home.HomeScreen
 import com.alreadyoccupiedseat.login.LoginScreen
 import com.alreadyoccupiedseat.myalarm_setting.MyAlarmSettingScreen
@@ -72,6 +73,7 @@ fun AppScreenContent() {
 
         }
     ) { innerPadding ->
+
         NavHost(
             navController,
             startDestination = Screen.Home.route,
@@ -92,10 +94,14 @@ fun AppScreenContent() {
                     },
                     onSubscriptionGenreClicked = {
                         navController.navigate(Screen.SubscriptionGenre.route)
+                    },
+                    onSubscribeArtistClicked = {
+                        navController.navigate(Screen.SubscriptionArtist.route)
+                    },
+                    onEntireShowClicked = {
+                        navController.navigate(Screen.EntireShowList.route)
                     }
-                ) {
-                    navController.navigate(Screen.SubscriptionArtist.route)
-                }
+                )
             }
 
             composable(Screen.Notification.route) {
@@ -165,6 +171,10 @@ fun AppScreenContent() {
 
             composable(Screen.MyFavoriteShows.route) {
                 MyFavoriteShowScreen(navController)
+            }
+
+            composable(Screen.EntireShowList.route) {
+                EntireShowScreen(navController)
             }
 
             composable(Screen.WithDraw.route) {

@@ -63,7 +63,6 @@ class MyFavoriteShowViewModel @Inject constructor() : ViewModel() {
                     ),
                     genre = Genre(
                         id = index.toString(),
-                        image = "https://example.com/genre$index.jpg",
                         name = genreName
                     ),
                     id = index.toString(),
