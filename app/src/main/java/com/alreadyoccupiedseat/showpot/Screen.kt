@@ -30,9 +30,9 @@ sealed class Screen(
 
     data object Notification: Screen(
         route = "notification",
-        title = "내 알림",
-        unSelectedIcon = R.drawable.ic_alarm_navigation_24,
-        selectedIcon = R.drawable.ic_alarm_navigation_24_filled,
+        title = "내 공연",
+        unSelectedIcon = R.drawable.ic_my_show_24,
+        selectedIcon = R.drawable.ic_my_show_24_filled,
     )
 
     data object MyPage: Screen(
