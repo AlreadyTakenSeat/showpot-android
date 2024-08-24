@@ -9,10 +9,20 @@ import retrofit2.http.Query
 interface ArtistService {
 
     @GET("api/v1/artists/search")
-    suspend fun  searchArtists(
+    suspend fun searchArtists(
         @Query("sortedStandard") sortedStandard: String? = null,
         @Query("cursor") cursor: String? = null,
         @Query("size") size: Int,
         @Query("search") search: String,
+    ): Response<PagingData<Artist>>
+
+    @GET("api/v1/artists/unsubscriptions")
+    suspend fun getUnsubscribedArtists(
+        @Query("sortedStandard") sortedStandard: String? = null,
+        @Query("artistGenderApiTypes") artistGenderApiTypes: List<String>? = null,
+        @Query("artistApiTypes") artistApiTypes: List<String>? = null,
+        @Query("genreIds") genreIds: List<String>? = null,
+        @Query("cursor") cursor: String? = null,
+        @Query("size") size: Int,
     ): Response<PagingData<Artist>>
 }

@@ -20,4 +20,22 @@ class ArtistRepositoryImpl @Inject constructor(
             search,
         )
     }
+
+    override suspend fun getUnsubscribedArtists(
+        sortedStandard: String?,
+        artistGenderApiTypes: List<String>?,
+        artistApiTypes: List<String>?,
+        genreIds: List<String>?,
+        cursor: String?,
+        size: Int,
+    ): List<Artist> {
+        return artistDataSource.getUnsubscribedArtists(
+            sortedStandard,
+            artistGenderApiTypes,
+            artistApiTypes,
+            genreIds,
+            cursor,
+            size,
+        )
+    }
 }
