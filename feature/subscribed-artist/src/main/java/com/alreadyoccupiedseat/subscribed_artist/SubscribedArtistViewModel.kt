@@ -56,10 +56,8 @@ class SubscribedArtistViewModel @Inject constructor() : ViewModel() {
 
     fun deleteSubscribedArtist(id: String) {
         viewModelScope.launch {
-            _state.emit(
-                _state.value.copy(
-                    subscribedArtists = _state.value.subscribedArtists.filter { it.id != id }
-                )
+            _state.value = _state.value.copy(
+                subscribedArtists = _state.value.subscribedArtists.filter { it.id != id }
             )
         }
     }
