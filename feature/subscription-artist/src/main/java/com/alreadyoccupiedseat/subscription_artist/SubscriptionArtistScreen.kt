@@ -33,33 +33,45 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.alreadyoccupiedseat.core.LocalAccessToken
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
-import com.alreadyoccupiedseat.designsystem.component.artistByPainter.ShowPotArtistSubscriptionByPainter
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
+import com.alreadyoccupiedseat.designsystem.component.artist.ShowPotArtistSubscription
 import com.alreadyoccupiedseat.designsystem.component.bottomSheet.SheetHandler
 import com.alreadyoccupiedseat.designsystem.component.bottomSheet.ShowPotBottomSheet
 import com.alreadyoccupiedseat.designsystem.component.snackbar.CheckIconSnackbar
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
+import com.alreadyoccupiedseat.model.Artist
 import kotlinx.coroutines.launch
 
 @Composable
 fun SubscriptionArtistScreen(
     navController: NavController,
+    onLoginRequested: () -> Unit = {},
 ) {
 
     val viewModel = hiltViewModel<SubscriptionArtistViewModel>()
+    val state = viewModel.state.collectAsState()
     val event = viewModel.event.collectAsState()
 
     when (event.value) {
         SubscriptionArtistScreenEvent.Idle -> {
             SubscriptionArtistScreenContent(
+                state = state.value,
                 onBackClicked = {
                     navController.popBackStack()
                 },
                 onSubscribeButtonClicked = {
                     viewModel.subscribeArtists()
-                }
+                },
+                onArtistClicked = {
+                    viewModel.selectArtist(it)
+                },
+                checkIsSelected = {
+                    viewModel.isSelected(it)
+                },
+                onLoginRequested = onLoginRequested
             )
         }
 
@@ -69,15 +81,20 @@ fun SubscriptionArtistScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SubscriptionArtistScreenContent(
+    state: SubscriptionArtistScreenState,
     onBackClicked: () -> Unit,
     onSubscribeButtonClicked: () -> Unit = {},
+    onArtistClicked: (Artist) -> Unit = {},
+    checkIsSelected: (Artist) -> Boolean,
+    onLoginRequested: () -> Unit = {},
 ) {
 
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
+    val isLoggedIn = LocalAccessToken.current != null
     // TODO: Supposed to be in a ViewModel State
-    var isSheetVisible by remember { mutableStateOf(true) }
+    var isSheetVisible by remember { mutableStateOf(false) }
 
     if (isSheetVisible) {
 
@@ -107,7 +124,7 @@ fun SubscriptionArtistScreenContent(
                     modifier = Modifier.fillMaxWidth(),
                     text = "3초만에 로그인하기"
                 ) {
-                    // TODO: goto Login
+                    onLoginRequested()
                 }
 
                 Spacer(modifier = Modifier.height(54.dp))
@@ -115,8 +132,6 @@ fun SubscriptionArtistScreenContent(
         }
 
     }
-
-
 
     Scaffold(
         modifier = Modifier
@@ -190,12 +205,19 @@ fun SubscriptionArtistScreenContent(
                     verticalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
                     // TODO: Real Data
-                    items(count = 21) {
-                        ShowPotArtistSubscriptionByPainter(
-                            text = "High Flying Birds",
-                            icon = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.img_artist_default),
+
+                    items(state.unsubscribedArtists.size) { index ->
+                        val curArtist = state.unsubscribedArtists[index]
+                        ShowPotArtistSubscription(
+                            text = curArtist.englishName,
+                            imageUrl = curArtist.imageUrl,
+                            isSelected = checkIsSelected(curArtist),
                         ) {
-                            isSheetVisible = true
+                            if (isLoggedIn) {
+                                isSheetVisible = true
+                            } else {
+                                onArtistClicked(curArtist)
+                            }
                         }
                     }
 
