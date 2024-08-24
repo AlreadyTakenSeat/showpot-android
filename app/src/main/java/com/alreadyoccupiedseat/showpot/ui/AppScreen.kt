@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.alreadyoccupiedseat.account.AccountScreen
 import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotBottomNavigation
@@ -162,7 +163,16 @@ fun AppScreenContent() {
             }
 
             composable(Screen.Settings.route) {
-                SettingsScreen(navController)
+                SettingsScreen(
+                    navController = navController,
+                    onAccountClicked = {
+                        navController.navigate(Screen.Account.route)
+                    }
+                )
+            }
+
+            composable(Screen.Account.route) {
+                AccountScreen(navController)
             }
 
             composable(Screen.MyFinishedShow.route) {
