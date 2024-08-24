@@ -30,13 +30,12 @@ import com.alreadyoccupiedseat.subscription_genre.SubscriptionGenreScreen
 import com.alreadyoccupiedseat.withdraw.WithDrawScreen
 
 @Composable
-fun AppScreen(isLoggedIn: Boolean) {
-
-    AppScreenContent(isLoggedIn)
+fun AppScreen() {
+    AppScreenContent()
 }
 
 @Composable
-fun AppScreenContent(isLoggedIn: Boolean) {
+fun AppScreenContent() {
     val navController = rememberNavController()
     Scaffold(
         containerColor = ShowpotColor.Gray700,
