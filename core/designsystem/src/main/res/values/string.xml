@@ -48,6 +48,12 @@
     <string name="open_soon">오픈 예정</string>
     <string name="now_selling">예매 중</string>
 
+    <!-- Account   -->
+    <string name="account">계정</string>
+    <string name="kakao_login">카카오 로그인</string>
+    <string name="logout">로그아웃</string>
+    <string name="withdrawal">회원탈퇴</string>
+
     <!-- TEST  -->
     <string name="test_of_my_page1"> 후 다채로운\n내한공연을 만나보세요.</string>
     <string name="test_of_my_page2">%s님,\n안녕하세요!</string>
