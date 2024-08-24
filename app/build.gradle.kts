@@ -72,6 +72,7 @@ dependencies {
     implementation(project(":feature:myfavorite-show"))
     implementation(project(":feature:entire-show"))
     implementation(project(":feature:withdraw"))
+    implementation(project(":feature:account"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:common"))
     implementation(project(":core:notification"))

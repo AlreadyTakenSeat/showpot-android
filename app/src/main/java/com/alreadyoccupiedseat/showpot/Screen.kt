@@ -92,6 +92,11 @@ sealed class Screen(
         title = "전체 공연 목록"
     )
 
+    data object Account: Screen(
+        route = "account",
+        title = "계정"
+    )
+
     data object WithDraw: Screen(
         route = "withDraw",
         title = "회원 탈퇴"

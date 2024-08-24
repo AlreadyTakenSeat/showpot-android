@@ -11,19 +11,34 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B1_SemiBold
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 
+@Preview
+@Composable
+private fun IconMenuWithCountPreview(modifier: Modifier = Modifier) {
+    IconMenuWithCount(
+        modifier = modifier,
+        firstIcon = painterResource(id = R.drawable.ic_arrow_16_right),
+        title = "알림",
+        tint = ShowpotColor.Gray100,
+        count = 3
+    )
+}
+
 @Composable
 fun IconMenuWithCount(
     modifier: Modifier = Modifier,
     firstIcon: Painter,
     title: String,
+    tint: Color = ShowpotColor.Gray300,
     count: Int? = null,
     onClicked: () -> Unit = {}
 ) {
@@ -66,7 +81,7 @@ fun IconMenuWithCount(
             Icon(
                 painter = painterResource(id = R.drawable.ic_arrow_24_right),
                 contentDescription = "icon",
-                tint = ShowpotColor.Gray300,
+                tint = tint,
                 modifier = Modifier.size(24.dp)
             )
         }
