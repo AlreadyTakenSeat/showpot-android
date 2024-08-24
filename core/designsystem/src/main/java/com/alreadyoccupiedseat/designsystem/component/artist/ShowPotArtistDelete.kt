@@ -19,7 +19,7 @@ fun ShowPotArtistDelete(
         text = "High Flying Birds",
         content = {
             Image(
-                painter = painterResource(id = R.drawable.ic_delete_24), // Genre 브런치와 합쳐지면 변경 필요
+                painter = painterResource(id = R.drawable.ic_circle_delete_40), // Genre 브런치와 합쳐지면 변경 필요
                 contentDescription = "Delete",
                 modifier = Modifier
                     .align(Alignment.TopEnd)
