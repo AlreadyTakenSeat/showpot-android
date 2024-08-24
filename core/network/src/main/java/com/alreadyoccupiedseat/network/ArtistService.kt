@@ -2,8 +2,12 @@ package com.alreadyoccupiedseat.network
 
 import com.alreadyoccupiedseat.model.Artist
 import com.alreadyoccupiedseat.model.PagingData
+import com.alreadyoccupiedseat.model.artist.SubscribeArtistsRequest
+import com.alreadyoccupiedseat.model.artist.SubscribeArtistsResponse
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface ArtistService {
@@ -25,4 +29,9 @@ interface ArtistService {
         @Query("cursor") cursor: String? = null,
         @Query("size") size: Int,
     ): Response<PagingData<Artist>>
+
+    @POST("api/v1/artists/subscribe")
+    suspend fun subscribeArtists(
+        @Body artistIds: SubscribeArtistsRequest,
+    ): Response<SubscribeArtistsResponse>
 }

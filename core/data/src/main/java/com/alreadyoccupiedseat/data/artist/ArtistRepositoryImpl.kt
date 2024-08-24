@@ -38,4 +38,8 @@ class ArtistRepositoryImpl @Inject constructor(
             size,
         )
     }
+
+    override suspend fun subscribeArtists(artistIds: List<String>): List<String> {
+        return artistDataSource.subscribeArtists(artistIds)
+    }
 }
