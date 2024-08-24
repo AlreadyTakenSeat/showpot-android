@@ -17,6 +17,7 @@ import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotBottomNavigation
 import com.alreadyoccupiedseat.home.HomeScreen
 import com.alreadyoccupiedseat.myalarm_setting.MyAlarmSettingScreen
+import com.alreadyoccupiedseat.myfavorite_show.MyFavoriteShowScreen
 import com.alreadyoccupiedseat.myfinished_show.MyFinishedShowScreen
 import com.alreadyoccupiedseat.mypage.MyPageScreen
 import com.alreadyoccupiedseat.notification.NotificationScreen
@@ -93,9 +94,14 @@ fun AppScreenContent(isLoggedIn: Boolean) {
 
             composable(Screen.Notification.route) {
                 NotificationScreen(
-                    navController,
                     onMyAlarmSettingClicked = {
                         navController.navigate(Screen.MyAlarmSetting.route)
+                    },
+                    onMyFavoriteShowsClicked = {
+                        navController.navigate(Screen.MyFavoriteShows.route)
+                    },
+                    onMyFinishedShowClicked = {
+                        navController.navigate(Screen.MyFinishedShow.route)
                     }
                 )
             }
@@ -140,13 +146,19 @@ fun AppScreenContent(isLoggedIn: Boolean) {
             composable(Screen.Settings.route) {
                 SettingsScreen(navController)
             }
+
             composable(Screen.MyFinishedShow.route) {
                 MyFinishedShowScreen(navController)
+            }
+
+            composable(Screen.MyFavoriteShows.route) {
+                MyFavoriteShowScreen(navController)
             }
 
             composable(Screen.WithDraw.route) {
                 WithDrawScreen(navController)
             }
+
         }
     }
 }
