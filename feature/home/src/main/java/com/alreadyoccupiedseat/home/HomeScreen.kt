@@ -6,6 +6,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -54,12 +55,14 @@ fun HomeScreen(
     navController: NavController,
     onSearchBarClicked: () -> Unit,
     onSubscriptionGenreClicked: () -> Unit,
-    subscribeArtistClicked: () -> Unit
+    onSubscribeArtistClicked: () -> Unit,
+    onEntireShowClicked: () -> Unit
 ) {
     HomeScreenContent(
         onSearchBarClicked = onSearchBarClicked,
         onSubscriptionGenreClicked = onSubscriptionGenreClicked,
-        subscribeArtistClicked = subscribeArtistClicked
+        onSubscribeArtistClicked = onSubscribeArtistClicked,
+        onEntireShowClicked = onEntireShowClicked
     )
 }
 
@@ -67,7 +70,8 @@ fun HomeScreen(
 fun HomeScreenContent(
     onSearchBarClicked: () -> Unit,
     onSubscriptionGenreClicked: () -> Unit,
-    subscribeArtistClicked: () -> Unit
+    onSubscribeArtistClicked: () -> Unit,
+    onEntireShowClicked: () -> Unit
 ) {
 
     var isTopBarVisible by remember { mutableStateOf(true) }
@@ -166,7 +170,7 @@ fun HomeScreenContent(
                         text = stringResource(id = R.string.subscribe_artist),
                         endIcon = painterResource(id = R.drawable.ic_arrow_36_right),
                     ) {
-                        subscribeArtistClicked()
+                        onSubscribeArtistClicked()
                     }
                 }
 
@@ -207,6 +211,7 @@ fun HomeScreenContent(
                         showTimeTextColor = ShowpotColor.MainYellow,
                         showName = "Nothing But Thieves But Thieves ",
                         showLocation = "KBS 아레나홀",
+                        hasTicketingOpen = false,
                         onClick = {
                             Log.d("ShowPotTicket", "onClick")
                         }
@@ -223,6 +228,7 @@ fun HomeScreenContent(
                         showTimeTextColor = ShowpotColor.MainBlue,
                         showName = "Nothing But Thieves But Thieves ",
                         showLocation = "KBS 아레나홀",
+                        hasTicketingOpen = true,
                         onClick = {
                             Log.d("ShowPotTicket", "onClick")
                         }
@@ -238,6 +244,9 @@ fun HomeScreenContent(
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
                         modifier = Modifier
+                            .clickable {
+                                onEntireShowClicked()
+                            }
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp)
                             .height(49.dp)
