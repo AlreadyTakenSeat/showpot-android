@@ -12,6 +12,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -26,20 +27,29 @@ import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 @Preview
 @Composable
 fun PreviewNotificationScreen(modifier: Modifier = Modifier) {
-    val navController = rememberNavController()
     NotificationScreen(
-        navController = navController,
-        onMyAlarmSettingClicked = {}
+        onMyAlarmSettingClicked = {},
+        onMyFavoriteShowsClicked = {},
+        onMyFinishedShowClicked = {}
     )
 }
 
 @Composable
 fun NotificationScreen(
-    navController: NavController,
     onMyAlarmSettingClicked: () -> Unit,
+    onMyFavoriteShowsClicked: () -> Unit,
+    onMyFinishedShowClicked: () -> Unit,
 ) {
     NotificationScreenContent(
-        onMyAlarmSettingClicked = onMyAlarmSettingClicked,
+        onMyAlarmSettingClicked = {
+            onMyAlarmSettingClicked()
+        },
+        onMyFavoriteShowsClicked = {
+            onMyFavoriteShowsClicked()
+        },
+        onMyFinishedShowClicked = {
+            onMyFinishedShowClicked()
+        }
     )
 }
 
@@ -48,6 +58,8 @@ fun NotificationScreen(
 @Composable
 fun NotificationScreenContent(
     onMyAlarmSettingClicked: () -> Unit,
+    onMyFavoriteShowsClicked: () -> Unit,
+    onMyFinishedShowClicked: () -> Unit,
 ) {
 
     val pagerState = rememberPagerState(pageCount = { 5 })
@@ -120,28 +132,26 @@ fun NotificationScreenContent(
             item {
                 Spacer(Modifier.height(12.dp))
             }
-
+            // 관심 공연
             item {
                 IconMenuWithCount(
-                    firstIcon = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.ic_artist_24),
-                    title = "구독한 아티스트",
+                    firstIcon = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.ic_heart_24),
+                    title = stringResource(com.alreadyoccupiedseat.designsystem.R.string.favorite_shows),
                     count = 3,
                 ) {
-
+                    onMyFavoriteShowsClicked()
                 }
             }
 
-            item {
-                Spacer(Modifier.height(12.dp))
-            }
-
+            item { Spacer(Modifier.height(12.dp)) }
+            // 티켓팅 종료 공연
             item {
                 IconMenuWithCount(
-                    firstIcon = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.ic_genre_24),
-                    title = "구독한 장르",
+                    firstIcon = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.ic_ticket_close_24), // Todo: Change Icon (?) -> 작아보임
+                    title = stringResource(com.alreadyoccupiedseat.designsystem.R.string.close_ticketing_shows),
                     count = 5,
                 ) {
-
+                    onMyFinishedShowClicked()
                 }
             }
         }

@@ -23,7 +23,9 @@ fun MyAlarmSettingTopBar(
             IconButton(onClick = { onBackClicked() }) {
                 Icon(
                     tint = ShowpotColor.White,
-                    modifier = Modifier.padding(1.dp),
+                    modifier = Modifier
+                        .padding(vertical = 4.dp)
+                        .padding(start = 6.dp),
                     painter = painterResource(id = R.drawable.ic_arrow_36_left),
                     contentDescription = "Back"
                 )
