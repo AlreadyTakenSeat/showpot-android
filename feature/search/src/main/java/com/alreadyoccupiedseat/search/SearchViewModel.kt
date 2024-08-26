@@ -103,6 +103,7 @@ class SearchViewModel @Inject constructor(
                     genre = Genre(
                         id = "1",
                         name = "Pop",
+                        isSubscribed = false
                     ),
                     id = "1",
                     name = "Dua Lipa Studio Live",
