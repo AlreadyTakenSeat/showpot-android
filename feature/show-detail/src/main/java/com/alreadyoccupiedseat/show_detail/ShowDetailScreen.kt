@@ -2,6 +2,7 @@ package com.alreadyoccupiedseat.show_detail
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,6 +19,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,15 +32,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.core.extension.isScrollingUp
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.GenreChip
+import com.alreadyoccupiedseat.designsystem.component.artist.ShowPotArtist
 import com.alreadyoccupiedseat.designsystem.component.artistByPainter.ShowPotArtistByPainter
 import com.alreadyoccupiedseat.designsystem.component.bottomSheet.TicketingNotificationBottomSheet
 import com.alreadyoccupiedseat.designsystem.component.button.LabelButton
 import com.alreadyoccupiedseat.designsystem.component.button.IconButtonWithShowPotMainButton
+import com.alreadyoccupiedseat.designsystem.getTicketSiteButtonColor
 import com.alreadyoccupiedseat.designsystem.typo.english.ShowPotEnglishText_H0
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
@@ -45,12 +52,26 @@ import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
 @Composable
 fun ShowDetailScreen(
     navController: NavController,
+    showId: String
 ) {
-    ShowDetailScreenContent()
+
+    val viewModel = hiltViewModel<ShowDetailViewModel>()
+    val state = viewModel.state.collectAsState()
+
+    LaunchedEffect(showId) {
+        viewModel.getShowDetail(showId)
+    }
+
+    ShowDetailScreenContent(
+        state = state.value,
+    )
 }
 
 @Composable
-fun ShowDetailScreenContent() {
+fun ShowDetailScreenContent(
+    state: ShowDetailState,
+    onBackButtonClicked: () -> Unit = { },
+) {
 
     val lazyColumnState = rememberLazyListState()
 
@@ -109,7 +130,7 @@ fun ShowDetailScreenContent() {
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(524.dp),
-                        model = "https://cdn-p.smehost.net/sites/5cfaf3980b294dd89a79248f35560b2f/wp-content/uploads/2024/02/NBT-NA-Poster-1x1-1.png",
+                        model = state.showDetail?.posterImageURL,
                         contentDescription = "show image",
                         contentScale = androidx.compose.ui.layout.ContentScale.Crop,
                     )
@@ -118,7 +139,7 @@ fun ShowDetailScreenContent() {
                 item {
                     ShowPotEnglishText_H0(
                         modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
-                        "Nothing But Thieves",
+                        state.showDetail?.name ?: "",
                         color = Color.White
                     )
                 }
@@ -137,7 +158,7 @@ fun ShowDetailScreenContent() {
                     HorizontalTitleAndInfoText(
                         Modifier.padding(horizontal = 16.dp),
                         "기간",
-                        "2024.08.21"
+                        state.showDetail?.startDate?.replace("-", ".") ?: String.EMPTY
                     )
                 }
 
@@ -147,11 +168,12 @@ fun ShowDetailScreenContent() {
                     )
                 }
 
+                // TODO: Model should be updated
                 item {
                     HorizontalTitleAndInfoText(
                         Modifier.padding(horizontal = 16.dp),
                         "장소",
-                        "KBS 아레나홀"
+                        state.showDetail?.location ?: String.EMPTY
                     )
                 }
 
@@ -183,42 +205,26 @@ fun ShowDetailScreenContent() {
                             8.dp
                         )
                     ) {
-                        item {
-                            LabelButton(
-                                backgroundColor = ShowpotColor.YES24,
-                                text = "YES24",
-                            )
-                        }
 
-                        item {
-                            LabelButton(
-                                backgroundColor = ShowpotColor.Interpark,
-                                text = "인터파크",
-                            )
-                        }
-
-                        item {
-                            LabelButton(
-                                backgroundColor = ShowpotColor.Melon,
-                                text = "멜론티켓",
-                            )
-                        }
-
-                        item {
-                            LabelButton(
-                                backgroundColor = ShowpotColor.Wemakeprice,
-                                text = "위메프",
-                            )
+                        state.showDetail?.ticketingSites?.forEach {
+                            item {
+                                LabelButton(
+                                    backgroundColor = it.name.getTicketSiteButtonColor(),
+                                    text = it.name,
+                                )
+                            }
                         }
                     }
                 }
-                item {
-                    HorizontalTitleAndInfoText(
-                        Modifier.padding(horizontal = 16.dp),
-                        "선예매 오픈",
-                        "6월 20일 (목) 12:00"
-                    )
-                }
+
+                // TODO: After MVP
+//                item {
+//                    HorizontalTitleAndInfoText(
+//                        Modifier.padding(horizontal = 16.dp),
+//                        "선예매 오픈",
+//                        "6월 20일 (목) 12:00"
+//                    )
+//                }
 
                 item {
                     Spacer(modifier = Modifier.height(4.dp))
@@ -228,7 +234,7 @@ fun ShowDetailScreenContent() {
                     HorizontalTitleAndInfoText(
                         Modifier.padding(horizontal = 16.dp),
                         "일반예매 오픈",
-                        "6월 21일 (금) 18:00"
+                        state.showDetail?.startDate?.replace("-", ".") ?: String.EMPTY
                     )
                 }
 
@@ -260,12 +266,15 @@ fun ShowDetailScreenContent() {
                             18.dp
                         )
                     ) {
-                        items(count = 10) {
-                            ShowPotArtistByPainter(
-                                text = "High Flying Birds",
-                                icon = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.img_artist_default),
-                            )
+                        state.showDetail?.artists?.forEach { artist ->
+                            item {
+                                ShowPotArtist(
+                                    text = artist.englishName,
+                                    imageUrl = artist.imageURL,
+                                )
+                            }
                         }
+
                     }
                 }
 
@@ -297,13 +306,20 @@ fun ShowDetailScreenContent() {
                             4.dp
                         )
                     ) {
-                        HorizontalTitleAndInfoText(title = "스탠딩 P", infoText = "154,000원")
-                        HorizontalTitleAndInfoText(title = "스탠딩 R", infoText = "143,000원")
-                        HorizontalTitleAndInfoText(title = "지정석 P", infoText = "176,000원")
-                        HorizontalTitleAndInfoText(title = "지정석 R", infoText = "165,000원")
-                        HorizontalTitleAndInfoText(title = "지정석 S", infoText = "143,000원")
-                        HorizontalTitleAndInfoText(title = "지정석 A", infoText = "132,000원")
-                        HorizontalTitleAndInfoText(title = "지정석 B", infoText = "121,000원")
+
+                        state.showDetail?.seats?.forEach {
+                            HorizontalTitleAndInfoText(
+                                title = it.seatType,
+                                infoText = it.price.toString() + "원"
+                            )
+                        }
+//                        HorizontalTitleAndInfoText(title = "스탠딩 P", infoText = "154,000원")
+//                        HorizontalTitleAndInfoText(title = "스탠딩 R", infoText = "143,000원")
+//                        HorizontalTitleAndInfoText(title = "지정석 P", infoText = "176,000원")
+//                        HorizontalTitleAndInfoText(title = "지정석 R", infoText = "165,000원")
+//                        HorizontalTitleAndInfoText(title = "지정석 S", infoText = "143,000원")
+//                        HorizontalTitleAndInfoText(title = "지정석 A", infoText = "132,000원")
+//                        HorizontalTitleAndInfoText(title = "지정석 B", infoText = "121,000원")
                     }
                 }
 
@@ -335,8 +351,10 @@ fun ShowDetailScreenContent() {
                         horizontalArrangement =
                         androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)
                     ) {
-                        items(listOf("EDM", "락", "밴드음악")) {
-                            GenreChip(genre = it)
+                        state.showDetail?.genres?.forEach {
+                            item {
+                                GenreChip(genre = it.name)
+                            }
                         }
                     }
                 }
@@ -370,7 +388,10 @@ fun ShowDetailScreenContent() {
                     verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
                 ) {
                     Icon(
-                        modifier = Modifier.padding(start = 6.dp, top = 4.dp, bottom = 4.dp),
+                        modifier = Modifier.padding(start = 6.dp, top = 4.dp, bottom = 4.dp)
+                            .clickable {
+                                onBackButtonClicked()
+                            },
                         painter = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.ic_arrow_36_left),
                         contentDescription = "backButton",
                         tint = Color.White,
