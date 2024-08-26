@@ -14,8 +14,6 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -30,7 +28,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -40,50 +37,55 @@ import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotGenre
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
-import com.alreadyoccupiedseat.designsystem.component.ShowPotTopBar
-import com.alreadyoccupiedseat.designsystem.component.bottomSheet.SheetHandler
-import com.alreadyoccupiedseat.designsystem.component.bottomSheet.ShowPotBottomSheet
 import com.alreadyoccupiedseat.designsystem.component.snackbar.CheckIconSnackbar
-import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
+import com.alreadyoccupiedseat.model.Genre
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 fun SubscriptionGenreScreen(
     navController: NavController,
-    modifier: Modifier = Modifier,
+    onLoginRequested: () -> Unit = {},
 ) {
 
     val viewModel = hiltViewModel<SubscriptionGenreViewModel>()
-    val event = viewModel.event.collectAsState()
-
-    when (event.value) {
+    val state = viewModel.state.collectAsState(SubscriptionGenreScreenState())
+    val event = viewModel.event.collectAsState(SubscriptionGenreScreenEvent.Idle)
+    when(event.value) {
         SubscriptionGenreScreenEvent.Idle -> {
-            SubscriptionGenreScreenContent(
-                modifier = modifier,
-                viewModel = viewModel,
-                onBackClicked = {
-                    navController.popBackStack()
-                },
-                onSubscribeButtonClicked = {
-                    viewModel.subscribeGenres()
-                },
-            )
+
         }
+
     }
+
+    SubscriptionGenreScreenContent(
+        state = state.value,
+        onBackClicked = {
+            navController.popBackStack()
+        },
+        onSubscribeButtonClicked = {
+            viewModel.subscribeGenre()
+        },
+        checkIsSelected = {
+            viewModel.isSelected(it)
+        },
+        onLoginRequested = onLoginRequested
+    )
 
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SubscriptionGenreScreenContent(
-    modifier: Modifier = Modifier,
-    viewModel: SubscriptionGenreViewModel,
+    state: SubscriptionGenreScreenState,
     onBackClicked: () -> Unit,
     onSubscribeButtonClicked: () -> Unit = {},
+    onGenreClicked: (Genre) -> Unit = {},
+    checkIsSelected: (Genre) -> Boolean,
+    onLoginRequested: () -> Unit = {},
 ) {
-    val genreList by remember { mutableStateOf(viewModel.tempGenreList) }
+    val viewmodel = hiltViewModel<SubscriptionGenreViewModel>()
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
 
@@ -91,7 +93,7 @@ fun SubscriptionGenreScreenContent(
     var isSubscribeButtonVisible by remember { mutableStateOf(false) }
 
     if (isSheetVisible) {
-        SubscriptionBottomSheet(
+        SubscriptionGenreBottomSheet(
             onDismissRequest = { isSheetVisible = false }
         )
     }
@@ -103,7 +105,7 @@ fun SubscriptionGenreScreenContent(
             ) { snackBarData ->
                 CheckIconSnackbar(
                     mainText = snackBarData.visuals.message,
-                    actionText = "보러가기",
+                    actionText = String(),
                     onIconClicked = {
                         // onIconClicked()
                     },
@@ -117,9 +119,8 @@ fun SubscriptionGenreScreenContent(
         },
         content = {
             SubscriptionGenreContent(
-                modifier = modifier,
                 innerPadding = it,
-                genreList = genreList,
+                genreList = viewmodel.tempGenreList,
                 isSubscribeButtonVisible = isSubscribeButtonVisible,
                 onGenreClick = { isSelected ->
                     if (isSelected) {
@@ -136,66 +137,7 @@ fun SubscriptionGenreScreenContent(
 }
 
 @Composable
-fun SubscriptionTopBar(onBackClicked: () -> Unit) {
-    ShowPotTopBar(
-        navigationIcon = {
-            IconButton(onClick = onBackClicked) {
-                Icon(
-                    modifier = Modifier.padding(1.dp),
-                    painter = painterResource(R.drawable.ic_arrow_36_left),
-                    contentDescription = "Back"
-                )
-            }
-        },
-        title = {
-            ShowPotKoreanText_H1(
-                text = stringResource(id = R.string.subscribe_genre),
-                color = ShowpotColor.Gray100,
-                modifier = Modifier.padding(start = 4.dp)
-            )
-        },
-        backgroundColor = ShowpotColor.Gray700,
-        contentColor = ShowpotColor.White
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun SubscriptionBottomSheet(onDismissRequest: () -> Unit) {
-    ShowPotBottomSheet(
-        onDismissRequest = onDismissRequest,
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 15.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            SheetHandler()
-
-            ShowPotKoreanText_H1(
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(id = R.string.login_subscribe_genre),
-                color = Color.White
-            )
-
-            Spacer(modifier = Modifier.height(19.dp))
-
-            ShowPotMainButton(
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(id = R.string.login_in_3_seconds)
-            ) {
-                // TODO: goto Login
-            }
-
-            Spacer(modifier = Modifier.height(54.dp))
-        }
-    }
-}
-
-@Composable
 fun SubscriptionGenreContent(
-    modifier: Modifier,
     innerPadding: PaddingValues,
     genreList: List<Pair<Int, Int>>,
     isSubscribeButtonVisible: Boolean,
