@@ -20,7 +20,10 @@ import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SubscriptionGenreBottomSheet(onDismissRequest: () -> Unit) {
+fun SubscriptionGenreBottomSheet(
+    onLoginRequested: () -> Unit,
+    onDismissRequest: () -> Unit
+) {
     ShowPotBottomSheet(
         onDismissRequest = onDismissRequest,
     ) {
@@ -44,7 +47,7 @@ fun SubscriptionGenreBottomSheet(onDismissRequest: () -> Unit) {
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(id = R.string.login_in_3_seconds)
             ) {
-                // TODO: goto Login
+                onLoginRequested()
             }
 
             Spacer(modifier = Modifier.height(54.dp))

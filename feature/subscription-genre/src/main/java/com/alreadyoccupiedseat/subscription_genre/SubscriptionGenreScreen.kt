@@ -94,6 +94,7 @@ fun SubscriptionGenreScreenContent(
 
     if (isSheetVisible) {
         SubscriptionGenreBottomSheet(
+            onLoginRequested = { onLoginRequested() },
             onDismissRequest = { isSheetVisible = false }
         )
     }
