@@ -1,6 +1,10 @@
 package com.alreadyoccupiedseat.subscription_artist
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -221,21 +226,39 @@ fun SubscriptionArtistScreenContent(
                 }
 
                 // Todo: Visibility depends on whether artists are selected
-                Box(
-                    modifier = Modifier
-                        .padding(top = 4.dp)
-                        .fillMaxWidth()
-                        .padding(bottom = 54.dp),
+                this@Column.AnimatedVisibility(
+                    visible = state.selectedArtists.isNotEmpty(),
+                    enter = slideInVertically(
+                        initialOffsetY = { fullHeight -> fullHeight },
+                    ),
+                    exit = slideOutVertically(
+                        targetOffsetY = { fullHeight -> fullHeight }
+                    )
                 ) {
-                    ShowPotMainButton(
+                    Box(
                         modifier = Modifier
-                            .padding(horizontal = 20.dp)
-                            .fillMaxWidth(),
-                        text = stringResource(R.string.subscribe)
+                            .padding(top = 4.dp)
+                            .fillMaxWidth()
+                            .background(
+                                brush = Brush.verticalGradient(
+                                    colors = listOf(
+                                        ShowpotColor.Gray700.copy(alpha = 0f),
+                                        ShowpotColor.Gray700
+                                    ),
+                                )
+                            )
+                            .padding(bottom = 54.dp),
                     ) {
-                        scope.launch {
-                            onSubscribeButtonClicked()
-                            snackbarHostState.showSnackbar("구독 설정이 완료되었습니다")
+                        ShowPotMainButton(
+                            modifier = Modifier
+                                .padding(horizontal = 20.dp)
+                                .fillMaxWidth(),
+                            text = stringResource(R.string.subscribe)
+                        ) {
+                            scope.launch {
+                                onSubscribeButtonClicked()
+                                snackbarHostState.showSnackbar("구독 설정이 완료되었습니다")
+                            }
                         }
                     }
                 }
