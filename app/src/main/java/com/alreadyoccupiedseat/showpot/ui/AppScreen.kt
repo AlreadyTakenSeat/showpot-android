@@ -82,9 +82,7 @@ fun AppScreenContent() {
         ) {
 
             composable(Screen.Login.route) {
-                LoginScreen {
-                    navController.popBackStack()
-                }
+                LoginScreen(navController)
             }
 
             composable(Screen.Home.route) {

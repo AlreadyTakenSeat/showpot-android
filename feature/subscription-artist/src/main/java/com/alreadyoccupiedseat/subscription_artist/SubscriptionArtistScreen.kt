@@ -1,6 +1,10 @@
 package com.alreadyoccupiedseat.subscription_artist
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,13 +25,11 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -62,6 +64,9 @@ fun SubscriptionArtistScreen(
                 onBackClicked = {
                     navController.popBackStack()
                 },
+                onSheetStateChanged = { isVisible ->
+                    viewModel.setSheetVisible(isVisible)
+                },
                 onSubscribeButtonClicked = {
                     viewModel.subscribeArtists()
                 },
@@ -83,6 +88,7 @@ fun SubscriptionArtistScreen(
 fun SubscriptionArtistScreenContent(
     state: SubscriptionArtistScreenState,
     onBackClicked: () -> Unit,
+    onSheetStateChanged: (Boolean) -> Unit = {},
     onSubscribeButtonClicked: () -> Unit = {},
     onArtistClicked: (Artist) -> Unit = {},
     checkIsSelected: (Artist) -> Boolean,
@@ -92,14 +98,11 @@ fun SubscriptionArtistScreenContent(
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    // TODO: Supposed to be in a ViewModel State
-    var isSheetVisible by remember { mutableStateOf(false) }
-
-    if (isSheetVisible) {
+    if (state.isSheetVisible) {
 
         ShowPotBottomSheet(
             onDismissRequest = {
-                isSheetVisible = false
+                onSheetStateChanged(false)
             },
         ) {
             Column(
@@ -213,7 +216,7 @@ fun SubscriptionArtistScreenContent(
                             isSelected = checkIsSelected(curArtist),
                         ) {
                             if (state.isLoggedIn.not()) {
-                                isSheetVisible = true
+                                onSheetStateChanged(true)
                             } else {
                                 onArtistClicked(curArtist)
                             }
@@ -223,21 +226,39 @@ fun SubscriptionArtistScreenContent(
                 }
 
                 // Todo: Visibility depends on whether artists are selected
-                Box(
-                    modifier = Modifier
-                        .padding(top = 4.dp)
-                        .fillMaxWidth()
-                        .padding(bottom = 54.dp),
+                this@Column.AnimatedVisibility(
+                    visible = state.selectedArtists.isNotEmpty(),
+                    enter = slideInVertically(
+                        initialOffsetY = { fullHeight -> fullHeight },
+                    ),
+                    exit = slideOutVertically(
+                        targetOffsetY = { fullHeight -> fullHeight }
+                    )
                 ) {
-                    ShowPotMainButton(
+                    Box(
                         modifier = Modifier
-                            .padding(horizontal = 20.dp)
-                            .fillMaxWidth(),
-                        text = stringResource(R.string.subscribe)
+                            .padding(top = 4.dp)
+                            .fillMaxWidth()
+                            .background(
+                                brush = Brush.verticalGradient(
+                                    colors = listOf(
+                                        ShowpotColor.Gray700.copy(alpha = 0f),
+                                        ShowpotColor.Gray700
+                                    ),
+                                )
+                            )
+                            .padding(bottom = 54.dp),
                     ) {
-                        scope.launch {
-                            onSubscribeButtonClicked()
-                            snackbarHostState.showSnackbar("구독 설정이 완료되었습니다")
+                        ShowPotMainButton(
+                            modifier = Modifier
+                                .padding(horizontal = 20.dp)
+                                .fillMaxWidth(),
+                            text = stringResource(R.string.subscribe)
+                        ) {
+                            scope.launch {
+                                onSubscribeButtonClicked()
+                                snackbarHostState.showSnackbar("구독 설정이 완료되었습니다")
+                            }
                         }
                     }
                 }

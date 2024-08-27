@@ -65,6 +65,12 @@ fun SearchScreen(
         },
         onDeleteHistoryClicked = {
             viewModel.deleteSearchHistory(it)
+        },
+        onchangeArtistUnSubscriptionSheetVisibility = {
+            viewModel.changeArtistUnSubscriptionSheetVisibility(it)
+        },
+        onChangeUnSubscribeTargetArtist = {
+            viewModel.changeUnSubscribeTargetArtist(it)
         }
     )
 }
@@ -79,6 +85,8 @@ fun SearchScreenContent(
     onChipClicked: (String) -> Unit = {},
     onDeleteAllClicked: () -> Unit = {},
     onDeleteHistoryClicked: (String) -> Unit = {},
+    onchangeArtistUnSubscriptionSheetVisibility: (Boolean) -> Unit = {},
+    onChangeUnSubscribeTargetArtist: (String) -> Unit = {},
 ) {
 
     val focusManager = LocalFocusManager.current
@@ -147,11 +155,17 @@ fun SearchScreenContent(
                     onDeleteHistoryClicked = onDeleteHistoryClicked
                 )
             } else {
-                // TODO: change to real data
                 SearchedSection(
+                    isArtistUnSubscriptionSheetVisible = state.isArtistUnSubscriptionSheetVisible,
                     searchedArtists = state.searchedArtists,
-                    searchedShows = state.searchedShows
-                )
+                    searchedShows = state.searchedShows,
+                    unSubscribeTargetArtist = state.unSubscribeTargetArtist,
+                    onUnSubscribeTargetArtistChanged = {
+                        onChangeUnSubscribeTargetArtist(it)
+                    },
+                ) {
+                    onchangeArtistUnSubscriptionSheetVisibility(it)
+                }
             }
         }
     }
