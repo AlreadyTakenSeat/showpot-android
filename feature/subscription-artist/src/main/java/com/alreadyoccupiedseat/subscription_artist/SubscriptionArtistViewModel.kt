@@ -17,7 +17,8 @@ sealed interface SubscriptionArtistScreenEvent {
 data class SubscriptionArtistScreenState(
     val selectedArtists: List<Artist> = emptyList(),
     val unsubscribedArtists: List<Artist> = emptyList(),
-    val isLoggedIn: Boolean = false
+    val isLoggedIn: Boolean = false,
+    val isSheetVisible: Boolean = false,
 )
 
 
@@ -68,6 +69,12 @@ class SubscriptionArtistViewModel @Inject constructor(
 
     fun isSelected(artist: Artist): Boolean {
         return state.value.selectedArtists.contains(artist)
+    }
+
+    fun setSheetVisible(isVisible: Boolean) {
+        _state.value = _state.value.copy(
+            isSheetVisible = isVisible,
+        )
     }
 
     private fun getUnsubscribedArtists() {
