@@ -25,6 +25,7 @@ data class SearchScreenState(
     val searchedArtists: List<SubscribedArtist> = emptyList(),
     val searchedShows: List<Show> = emptyList(),
     val isArtistUnSubscriptionSheetVisible: Boolean = false,
+    val unSubscribeTargetArtist: String = String.EMPTY,
 )
 
 
@@ -87,6 +88,12 @@ class SearchViewModel @Inject constructor(
     fun changeArtistUnSubscriptionSheetVisibility(isVisible: Boolean) {
         _state.value = _state.value.copy(
             isArtistUnSubscriptionSheetVisible = isVisible
+        )
+    }
+
+    fun changeUnSubscribeTargetArtist(artist: String) {
+        _state.value = _state.value.copy(
+            unSubscribeTargetArtist = artist
         )
     }
 

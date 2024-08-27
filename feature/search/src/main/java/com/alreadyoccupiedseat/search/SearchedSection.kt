@@ -36,6 +36,8 @@ fun SearchedSection(
     isArtistUnSubscriptionSheetVisible: Boolean,
     searchedArtists: List<SubscribedArtist>,
     searchedShows: List<Show>,
+    unSubscribeTargetArtist: String,
+    onUnSubscribeTargetArtistChanged: (String) -> Unit = {},
     onArtistUnSubscriptionSheetVisibilityChanged: (Boolean) -> Unit = {}
 ) {
 
@@ -54,10 +56,9 @@ fun SearchedSection(
 
                 SheetHandler()
 
-                // TODO: Change to selected artist name
                 ShowPotEnglishText_H1(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Post Malone",
+                    text = unSubscribeTargetArtist,
                     color = Color.White
                 )
 
@@ -107,8 +108,12 @@ fun SearchedSection(
                         text = artist.englishName,
                         isSubscribed = artist.isSubscribed,
                     ) {
-                        // TODO: condition
-                        onArtistUnSubscriptionSheetVisibilityChanged(true)
+                        if (artist.isSubscribed) {
+                            onUnSubscribeTargetArtistChanged(artist.englishName)
+                            onArtistUnSubscriptionSheetVisibilityChanged(true)
+                        } else {
+                            // TODO: subscribe
+                        }
                     }
                 }
             }
