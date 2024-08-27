@@ -1,6 +1,7 @@
 package com.alreadyoccupiedseat.data.artist
 
 import com.alreadyoccupiedseat.model.Artist
+import com.alreadyoccupiedseat.model.SubscribedArtist
 import javax.inject.Inject
 
 class ArtistRepositoryImpl @Inject constructor(
@@ -12,7 +13,7 @@ class ArtistRepositoryImpl @Inject constructor(
         cursor: String?,
         size: Int,
         search: String,
-    ): List<Artist> {
+    ): List<SubscribedArtist> {
         return artistDataSource.searchArtists(
             sortedStandard,
             cursor,
