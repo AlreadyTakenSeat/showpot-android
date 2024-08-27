@@ -17,13 +17,12 @@ import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 
 @Composable
-fun ShowPotArtistAlarmByPainter(
+fun ShowPotArtistAlarm(
     modifier: Modifier = Modifier,
     text: String,
     imageUrl: String,
-    isSelected: Boolean = false, // 구독 버튼 컴포저블이 필요함
+    isSubscribed: Boolean = false,
     onClick: () -> Unit = {},
-    onIconClick: () -> Unit,
 ) {
     ShowPotArtist(
         imageUrl = imageUrl,
@@ -33,17 +32,19 @@ fun ShowPotArtistAlarmByPainter(
             Box(
                 modifier = modifier
                     .size(100.dp)
-                    .background(ShowpotColor.Gray700.copy(0.5f), CircleShape)
+                    .background(
+                        if (isSubscribed) ShowpotColor.MainOrange.copy(0.5f)
+                        else ShowpotColor.Gray700.copy(0.5f), CircleShape
+                    )
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.ic_alarm_plus_36),
+                    painter = if (isSubscribed) painterResource(id = R.drawable.ic_alarm_checked_36)
+                    else painterResource(id = R.drawable.ic_alarm_plus_36),
                     contentDescription = "Check",
                     colorFilter = ColorFilter.tint(Color.White),
                     modifier = modifier
                         .align(Alignment.Center)
-                        .clickable {
-                            onIconClick()
-                        }
+
                 )
             }
         }
