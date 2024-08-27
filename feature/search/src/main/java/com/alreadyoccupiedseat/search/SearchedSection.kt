@@ -10,24 +10,80 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowInfo
-import com.alreadyoccupiedseat.designsystem.component.artist.ShowPotArtistSubscription
+import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
+import com.alreadyoccupiedseat.designsystem.component.artist.ShowPotArtistAlarm
+import com.alreadyoccupiedseat.designsystem.component.bottomSheet.SheetHandler
+import com.alreadyoccupiedseat.designsystem.component.bottomSheet.ShowPotBottomSheet
+import com.alreadyoccupiedseat.designsystem.typo.english.ShowPotEnglishText_H1
+import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
-import com.alreadyoccupiedseat.model.Artist
 import com.alreadyoccupiedseat.model.Show
+import com.alreadyoccupiedseat.model.SubscribedArtist
 
 // TODO: ShowInfo
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchedSection(
-    searchedArtists: List<Artist>,
+    isArtistUnSubscriptionSheetVisible: Boolean,
+    searchedArtists: List<SubscribedArtist>,
     searchedShows: List<Show>,
+    onArtistUnSubscriptionSheetVisibilityChanged: (Boolean) -> Unit = {}
 ) {
+
+    if (isArtistUnSubscriptionSheetVisible) {
+
+        ShowPotBottomSheet(
+            onDismissRequest = {
+                onArtistUnSubscriptionSheetVisibilityChanged(false)
+            },
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(horizontal = 15.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                SheetHandler()
+
+                // TODO: Change to selected artist name
+                ShowPotEnglishText_H1(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Post Malone",
+                    color = Color.White
+                )
+
+                Spacer(modifier = Modifier.height(1.dp))
+
+                ShowPotKoreanText_H1(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "구독을 취소하시겠습니까?",
+                    color = Color.White
+                )
+
+                Spacer(modifier = Modifier.height(19.dp))
+
+                ShowPotMainButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "구독 취소하기"
+                ) {
+
+                }
+
+                Spacer(modifier = Modifier.height(54.dp))
+            }
+        }
+
+    }
+
     Column {
         Box(
             modifier = Modifier.padding(horizontal = 16.dp)
@@ -46,11 +102,14 @@ fun SearchedSection(
             item { Spacer(modifier = Modifier.width(4.dp)) }
             searchedArtists.forEach { artist ->
                 item {
-                    ShowPotArtistSubscription(
-                        // TODO: Change to real artist image
+                    ShowPotArtistAlarm(
                         imageUrl = artist.imageURL,
-                        text = artist.englishName
-                    )
+                        text = artist.englishName,
+                        isSubscribed = artist.isSubscribed,
+                    ) {
+                        // TODO: condition
+                        onArtistUnSubscriptionSheetVisibilityChanged(true)
+                    }
                 }
             }
         }

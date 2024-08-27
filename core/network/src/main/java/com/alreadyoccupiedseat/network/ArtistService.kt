@@ -2,6 +2,7 @@ package com.alreadyoccupiedseat.network
 
 import com.alreadyoccupiedseat.model.Artist
 import com.alreadyoccupiedseat.model.PagingData
+import com.alreadyoccupiedseat.model.SubscribedArtist
 import com.alreadyoccupiedseat.model.artist.SubscribeArtistsRequest
 import com.alreadyoccupiedseat.model.artist.SubscribeArtistsResponse
 import retrofit2.Response
@@ -18,7 +19,7 @@ interface ArtistService {
         @Query("cursor") cursor: String? = null,
         @Query("size") size: Int,
         @Query("search") search: String,
-    ): Response<PagingData<Artist>>
+    ): Response<PagingData<SubscribedArtist>>
 
     @GET("api/v1/artists/unsubscriptions")
     suspend fun getUnsubscribedArtists(

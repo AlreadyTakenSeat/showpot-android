@@ -8,6 +8,7 @@ import com.alreadyoccupiedseat.datastore.SearchHistoryDataStore
 import com.alreadyoccupiedseat.model.Artist
 import com.alreadyoccupiedseat.model.Genre
 import com.alreadyoccupiedseat.model.Show
+import com.alreadyoccupiedseat.model.SubscribedArtist
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -21,8 +22,9 @@ data class SearchScreenState(
     val searchHistory: List<String> = emptyList(),
     val inputText: String = String.EMPTY,
     val isSearchedScreen: Boolean = false,
-    val searchedArtists: List<Artist> = emptyList(),
+    val searchedArtists: List<SubscribedArtist> = emptyList(),
     val searchedShows: List<Show> = emptyList(),
+    val isArtistUnSubscriptionSheetVisible: Boolean = false,
 )
 
 
@@ -82,11 +84,17 @@ class SearchViewModel @Inject constructor(
         }
     }
 
+    fun changeArtistUnSubscriptionSheetVisibility(isVisible: Boolean) {
+        _state.value = _state.value.copy(
+            isArtistUnSubscriptionSheetVisible = isVisible
+        )
+    }
+
     fun searchArtistsAndShows() {
         viewModelScope.launch {
             // TODO: Changed to real data
             val searchedArtists = artistRepository.searchArtists(
-                size = 5,
+                size = 100,
                 search = _state.value.inputText,
             )
 
