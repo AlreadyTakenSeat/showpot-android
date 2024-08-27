@@ -14,7 +14,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,23 +26,25 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavController
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotButtonWithIcon
 import com.alreadyoccupiedseat.designsystem.component.ShowPotTopBar
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
-//    navController: NavController,
-    onKakaoLoginSuccess: () -> Unit,
+    navController: NavController,
 ) {
 
     val context = LocalContext.current
     val viewModel = hiltViewModel<LoginViewModel>()
     val event = viewModel.event.collectAsState()
 
+    val coroutineScope = rememberCoroutineScope()
     when (event.value) {
         is LoginScreenEvent.Idle -> {
 
@@ -51,7 +55,12 @@ fun LoginScreen(
         }
 
         is LoginScreenEvent.LoginCompleted -> {
-            onKakaoLoginSuccess()
+            LaunchedEffect(true) {
+                coroutineScope.launch {
+                    delay(500)
+                    navController.popBackStack()
+                }
+            }
         }
 
         is LoginScreenEvent.LoginError -> {
@@ -60,6 +69,9 @@ fun LoginScreen(
     }
 
     LoginContent(
+        onBackButtonClicked = {
+            navController.popBackStack()
+        },
         onKakaoLoginClicked = {
             viewModel.tryKakaoLogin(context)
         }
@@ -70,15 +82,17 @@ fun LoginScreen(
 
 @Composable
 fun LoginContent(
+    onBackButtonClicked: () -> Unit = {},
     onKakaoLoginClicked: () -> Unit,
 ) {
-    val navController = rememberNavController()
 
     Scaffold(
         topBar = {
             ShowPotTopBar(
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = {
+                        onBackButtonClicked()
+                    }) {
                         Icon(
                             modifier = Modifier.padding(1.dp),
                             painter = painterResource(R.drawable.ic_arrow_36_left),
