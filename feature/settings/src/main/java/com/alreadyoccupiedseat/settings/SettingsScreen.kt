@@ -27,23 +27,36 @@ import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 @Composable
 fun SettingsScreen(
     navController: NavController,
+    versionName: String,
     onAccountClicked: () -> Unit,
-) {
+    onPrivacyPolicyClicked: () -> Unit = { },
+    onTermsOfServiceClicked: () -> Unit = { },
+    onNotificationSettingClicked: () -> Unit = { },
+
+    ) {
     SettingsScreenContent(
+        versionName = versionName,
         onBackClicked = {
             navController.popBackStack()
         },
         onAccountClicked = {
             onAccountClicked()
-        }
+        },
+        onPrivacyPolicyClicked = onPrivacyPolicyClicked,
+        onTermsOfServiceClicked = onTermsOfServiceClicked,
+        onNotificationSettingClicked = onNotificationSettingClicked
     )
 }
 
 @Composable
 fun SettingsScreenContent(
+    versionName: String,
     onBackClicked: () -> Unit,
     onAccountClicked: () -> Unit,
-) {
+    onPrivacyPolicyClicked: () -> Unit = { },
+    onTermsOfServiceClicked: () -> Unit = { },
+    onNotificationSettingClicked: () -> Unit = { },
+    ) {
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -83,7 +96,8 @@ fun SettingsScreenContent(
 
             IconMenuWithText(
                 firstIcon = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.ic_info_24),
-                title = "버전 0.0.1",
+                title = "버전 $versionName",
+                // TODO: after MVP
                 text = "최신 버전입니다",
                 onClicked = {}
             )
@@ -103,7 +117,9 @@ fun SettingsScreenContent(
             IconMenuWithCount(
                 firstIcon = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.ic_alarm_24_default),
                 title = "알림 설정",
-                onClicked = {}
+                onClicked = {
+                    onNotificationSettingClicked()
+                }
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -111,7 +127,9 @@ fun SettingsScreenContent(
             IconMenuWithCount(
                 firstIcon = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.ic_privacy_24),
                 title = "개인정보 처리 방침",
-                onClicked = {}
+                onClicked = {
+                    onPrivacyPolicyClicked()
+                }
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -119,16 +137,19 @@ fun SettingsScreenContent(
             IconMenuWithCount(
                 firstIcon = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.ic_report_24),
                 title = "이용 약관",
-                onClicked = {}
+                onClicked = {
+                    onTermsOfServiceClicked()
+                }
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            IconMenuWithCount(
-                firstIcon = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.ic_faq_24),
-                title = "카카오 문의하기",
-                onClicked = {}
-            )
+            // TODO: after MVP
+//            IconMenuWithCount(
+//                firstIcon = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.ic_faq_24),
+//                title = "카카오 문의하기",
+//                onClicked = {}
+//            )
 
         }
 

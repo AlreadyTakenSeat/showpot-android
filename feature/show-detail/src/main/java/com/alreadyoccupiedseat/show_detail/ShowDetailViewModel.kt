@@ -2,7 +2,7 @@ package com.alreadyoccupiedseat.show_detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alreadyoccupiedseat.data.show.ShowDataSource
+import com.alreadyoccupiedseat.data.show.ShowRepository
 import com.alreadyoccupiedseat.model.show.ShowDetail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,15 +15,15 @@ data class ShowDetailState(
 
 @HiltViewModel
 class ShowDetailViewModel @Inject constructor(
-    private val showDataSource: ShowDataSource
-): ViewModel()    {
+    private val showRepository: ShowRepository
+) : ViewModel() {
 
     private val _state = MutableStateFlow(ShowDetailState())
     val state = _state
 
     fun getShowDetail(showId: String) {
         viewModelScope.launch {
-            val result = showDataSource.getShowDetail(showId)
+            val result = showRepository.getShowDetail(showId)
             _state.value = ShowDetailState(showDetail = result)
         }
     }

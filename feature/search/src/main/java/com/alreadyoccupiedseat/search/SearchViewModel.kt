@@ -4,9 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.data.artist.ArtistRepository
+import com.alreadyoccupiedseat.data.show.ShowDataSource
+import com.alreadyoccupiedseat.data.show.ShowRepository
 import com.alreadyoccupiedseat.datastore.SearchHistoryDataStore
 import com.alreadyoccupiedseat.model.Artist
 import com.alreadyoccupiedseat.model.Genre
+import com.alreadyoccupiedseat.model.SearchedShow
 import com.alreadyoccupiedseat.model.Show
 import com.alreadyoccupiedseat.model.SubscribedArtist
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +26,7 @@ data class SearchScreenState(
     val inputText: String = String.EMPTY,
     val isSearchedScreen: Boolean = false,
     val searchedArtists: List<SubscribedArtist> = emptyList(),
-    val searchedShows: List<Show> = emptyList(),
+    val searchedShows: List<SearchedShow> = emptyList(),
     val isArtistUnSubscriptionSheetVisible: Boolean = false,
     val unSubscribeTargetArtist: String = String.EMPTY,
 )
@@ -33,6 +36,7 @@ data class SearchScreenState(
 class SearchViewModel @Inject constructor(
     private val searchHistoryDataStore: SearchHistoryDataStore,
     private val artistRepository: ArtistRepository,
+    private val showRepository: ShowRepository
 ) : ViewModel() {
 
     private var _state = MutableStateFlow<SearchScreenState>(SearchScreenState())
@@ -107,26 +111,13 @@ class SearchViewModel @Inject constructor(
 
             _state.value = _state.value.copy(searchedArtists = searchedArtists)
 
-            val searchedShows = listOf(
-                Show(
-                    artist = Artist(
-                        id = "1",
-                        imageURL = "",
-                        koreanName = "두아리파",
-                        englishName = "Dua Lipa"
-                    ),
-                    genre = Genre(
-                        id = "1",
-                        name = "Pop",
-                        isSubscribed = false
-                    ),
-                    id = "1",
-                    name = "Dua Lipa Studio Live",
-                    posterImageURL = "",
-                    ticketingAndShowInfo = emptyList()
-                )
+            val searchedShows = showRepository.searchShows(
+                size = 100,
+                search = _state.value.inputText,
             )
+
             _state.value = _state.value.copy(searchedShows = searchedShows)
+
             stateChangeToSearched()
         }
     }
