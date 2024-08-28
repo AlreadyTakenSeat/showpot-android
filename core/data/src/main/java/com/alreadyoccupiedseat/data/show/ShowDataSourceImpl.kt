@@ -3,6 +3,8 @@ package com.alreadyoccupiedseat.data.show
 import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.Settings
+import com.alreadyoccupiedseat.model.SearchedShow
+import com.alreadyoccupiedseat.model.ShowSort
 import com.alreadyoccupiedseat.model.show.ShowDetail
 import com.alreadyoccupiedseat.network.ShowService
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -13,6 +15,17 @@ class ShowDataSourceImpl @Inject constructor(
     private val showService: ShowService,
     @ApplicationContext private val context: Context
 ) : ShowDataSource {
+    override suspend fun searchShows(
+        cursorId: String?,
+        size: Int,
+        search: String
+    ): List<SearchedShow> {
+        return showService.searchShows(
+            cursorId = cursorId,
+            size = size,
+            search = search,
+        ).body()?.data ?: emptyList()
+    }
 
     @SuppressLint("HardwareIds")
     override suspend fun getShowDetail(showId: String): ShowDetail {
