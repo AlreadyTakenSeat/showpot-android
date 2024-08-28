@@ -26,6 +26,7 @@ import com.alreadyoccupiedseat.designsystem.component.bottomSheet.ShowPotBottomS
 import com.alreadyoccupiedseat.designsystem.typo.english.ShowPotEnglishText_H1
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
+import com.alreadyoccupiedseat.model.SearchedShow
 import com.alreadyoccupiedseat.model.Show
 import com.alreadyoccupiedseat.model.SubscribedArtist
 
@@ -35,7 +36,7 @@ import com.alreadyoccupiedseat.model.SubscribedArtist
 fun SearchedSection(
     isArtistUnSubscriptionSheetVisible: Boolean,
     searchedArtists: List<SubscribedArtist>,
-    searchedShows: List<Show>,
+    searchedShows: List<SearchedShow>,
     unSubscribeTargetArtist: String,
     onUnSubscribeTargetArtistChanged: (String) -> Unit = {},
     onArtistUnSubscriptionSheetVisibilityChanged: (Boolean) -> Unit = {}
@@ -142,22 +143,13 @@ fun SearchedSection(
                 item {
                     ShowInfo(
                         modifier = Modifier.padding(horizontal = 16.dp),
-                        imageUrl = "https://img.hankyung.com/photo/202406/01.37069998.1.jpg",
-                        "Nothing But Thieves Nothing But Thieves ",
-                        "2024.12.4 (수) 오후 8시",
-                        "KBS 아레나홀"
+                        imageUrl = show.imageURL,
+                        show.title,
+                        show.startAt.replace("-", "."),
+                        show.location
                     )
                 }
 
-                item {
-                    ShowInfo(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        imageUrl = "https://img.hankyung.com/photo/202406/01.37069998.1.jpg",
-                        "Dua Lipa",
-                        "2024.12.4 (수) 오후 8시",
-                        "KBS 아레나홀"
-                    )
-                }
             }
         }
 
