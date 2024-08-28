@@ -102,7 +102,7 @@ fun SubscriptionGenreScreenContent(
     val snackBarHostState = remember { SnackbarHostState() }
 
     if (state.isLoggedIn.not() && state.isLoginRequestBottomSheetVisible) {
-        RequestLoginBottomSheet(
+        LoginBottomSheet(
             onLoginRequested = { onLoginRequested() },
             onDismissRequest = { onLoginRequestSheetChange(false) }
         )

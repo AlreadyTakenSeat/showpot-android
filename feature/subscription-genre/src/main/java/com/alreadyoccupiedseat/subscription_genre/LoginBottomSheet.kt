@@ -20,7 +20,7 @@ import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RequestLoginBottomSheet(
+fun LoginBottomSheet(
     onLoginRequested: () -> Unit,
     onDismissRequest: () -> Unit
 ) {
