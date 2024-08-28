@@ -9,10 +9,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.alreadyoccupiedseat.designsystem.R
+import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
 import com.alreadyoccupiedseat.designsystem.component.bottomSheet.SheetHandler
 import com.alreadyoccupiedseat.designsystem.component.bottomSheet.ShowPotBottomSheet
@@ -20,7 +20,7 @@ import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SubscriptionGenreBottomSheet(
+fun RequestLoginBottomSheet(
     onLoginRequested: () -> Unit,
     onDismissRequest: () -> Unit
 ) {
@@ -38,7 +38,7 @@ fun SubscriptionGenreBottomSheet(
             ShowPotKoreanText_H1(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(id = R.string.login_subscribe_genre),
-                color = Color.White
+                color = ShowpotColor.White
             )
 
             Spacer(modifier = Modifier.height(19.dp))
