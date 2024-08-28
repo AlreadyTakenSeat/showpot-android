@@ -70,29 +70,26 @@ private fun EntireShowScreenContent(
                 } else {
                     itemsIndexed(state.entireShowList.data) { index, show ->
                         // TODO index로 수정 필요
-                        val genre = show.genres.firstOrNull()
-                        val artist = show.artists.firstOrNull()
-                        val textColor = if (show.hasTicketingOpenSchedule) {
+                        val textColor = if (show.isOpen) {
                             ShowpotColor.MainBlue
                         } else {
                             ShowpotColor.MainYellow
                         }
-                        val ticketingTime = show.showTicketingTimes.firstOrNull()
+                        val ticketingTime = show.ticketingAt
 
-                        if (genre != null && artist != null && ticketingTime != null) {
-                            ShowPotTicket(
-                                modifier = Modifier.padding(horizontal = 16.dp),
-                                imageUrl = show.posterImageURL,
-                                showTime = ticketingTime.ticketingAt,
-                                showTimeTextColor = textColor,
-                                showName = show.title,
-                                showLocation = show.location,
-                                hasTicketingOpen = show.hasTicketingOpenSchedule,
-                                onClick = {
-                                    onShowClicked(show.id)
-                                }
-                            )
-                        }
+                        ShowPotTicket(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            imageUrl = show.posterImageURL,
+                            showTime = ticketingTime,
+                            showTimeTextColor = textColor,
+                            showName = show.title,
+                            showLocation = show.location,
+                            hasTicketingOpen = show.isOpen,
+                            onClick = {
+                                onShowClicked(show.id)
+                            }
+                        )
+
                     }
                 }
             }
