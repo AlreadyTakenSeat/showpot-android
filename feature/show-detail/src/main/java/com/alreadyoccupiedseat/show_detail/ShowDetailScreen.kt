@@ -64,13 +64,16 @@ fun ShowDetailScreen(
 
     ShowDetailScreenContent(
         state = state.value,
+        onBackButtonClicked = {
+            navController.popBackStack()
+        }
     )
 }
 
 @Composable
 fun ShowDetailScreenContent(
     state: ShowDetailState,
-    onBackButtonClicked: () -> Unit = { },
+    onBackButtonClicked: () -> Unit,
 ) {
 
     val lazyColumnState = rememberLazyListState()

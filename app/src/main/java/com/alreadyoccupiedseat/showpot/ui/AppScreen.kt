@@ -209,7 +209,12 @@ fun AppScreenContent(
             }
 
             composable(Screen.EntireShowList.route) {
-                EntireShowScreen(navController)
+                EntireShowScreen(
+                    navController = navController,
+                    onShowClicked = {
+                        navController.navigate(Screen.ShowDetail.route.replace("{showId}", it))
+                    }
+                )
             }
 
             composable(Screen.WithDraw.route) {

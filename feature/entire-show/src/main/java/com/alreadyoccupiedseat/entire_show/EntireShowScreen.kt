@@ -21,12 +21,16 @@ import com.alreadyoccupiedseat.designsystem.component.ShowPotTicket
 @Composable
 fun EntireShowScreenPreview() {
     val navController = rememberNavController()
-    EntireShowScreen(navController)
+    EntireShowScreen(
+        navController = navController,
+        onShowClicked = {}
+    )
 }
 
 @Composable
 fun EntireShowScreen(
     navController: NavController,
+    onShowClicked: (String) -> Unit,
 ) {
 
     val viewModel = hiltViewModel<EntireShowViewModel>()
@@ -37,7 +41,7 @@ fun EntireShowScreen(
             navController.popBackStack()
         },
         onShowClicked = {
-            // TODO 공연 상세 화면으로 이동
+            onShowClicked(it)
         }
     )
 
