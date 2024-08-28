@@ -19,12 +19,8 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -39,6 +35,7 @@ import com.alreadyoccupiedseat.designsystem.component.ShowPotGenre
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
 import com.alreadyoccupiedseat.designsystem.component.snackbar.CheckIconSnackbar
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
+import com.alreadyoccupiedseat.enum.GenreType
 import com.alreadyoccupiedseat.model.Genre
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -51,26 +48,37 @@ fun SubscriptionGenreScreen(
 
     val viewModel = hiltViewModel<SubscriptionGenreViewModel>()
     val state = viewModel.state.collectAsState(SubscriptionGenreScreenState())
-    val event = viewModel.event.collectAsState(SubscriptionGenreScreenEvent.Idle)
-    when(event.value) {
-        SubscriptionGenreScreenEvent.Idle -> {
-
-        }
-
-    }
 
     SubscriptionGenreScreenContent(
         state = state.value,
         onBackClicked = {
             navController.popBackStack()
         },
-        onSubscribeButtonClicked = {
-            viewModel.subscribeGenre()
+        onLoginRequested = {
+            onLoginRequested()
         },
-        checkIsSelected = {
+        onLoginRequestSheetChange = {
+            viewModel.setLoginRequestSheetVisible(it)
+        },
+        isSelected = {
             viewModel.isSelected(it)
         },
-        onLoginRequested = onLoginRequested
+        onGenreClicked = {
+            viewModel.selectGenre(it)
+        },
+        onSubscribeButtonClicked = {
+            // TODO 서버와 정상 통신 시, snackBar 표기
+            viewModel.subscribeGenre()
+        },
+        onUnsubscribeSheetChange = { isVisible ->
+            viewModel.setUnSubscriptionSheetVisible(isVisible)
+        },
+        onUnsubscribeGenreClicked = { genre ->
+            viewModel.selectUnSubscribeGenre(genre)
+        },
+        onUnsubscribeGenreButtonClicked = {
+            viewModel.unSubscribeGenre()
+        },
     )
 
 }
@@ -80,22 +88,31 @@ fun SubscriptionGenreScreen(
 fun SubscriptionGenreScreenContent(
     state: SubscriptionGenreScreenState,
     onBackClicked: () -> Unit,
+    isSelected: (Genre) -> Boolean,
+    onGenreClicked: (Genre) -> Unit,
     onSubscribeButtonClicked: () -> Unit = {},
-    onGenreClicked: (Genre) -> Unit = {},
-    checkIsSelected: (Genre) -> Boolean,
+    onUnsubscribeGenreClicked: (Genre) -> Unit,
+    onUnsubscribeGenreButtonClicked: () -> Unit,
+    onUnsubscribeSheetChange: (Boolean) -> Unit,
     onLoginRequested: () -> Unit = {},
+    onLoginRequestSheetChange: (Boolean) -> Unit,
 ) {
-    val viewmodel = hiltViewModel<SubscriptionGenreViewModel>()
+
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
 
-    var isSheetVisible by remember { mutableStateOf(false) }
-    var isSubscribeButtonVisible by remember { mutableStateOf(false) }
-
-    if (isSheetVisible) {
-        SubscriptionGenreBottomSheet(
+    if (state.isLoggedIn.not() && state.isLoginRequestBottomSheetVisible) {
+        RequestLoginBottomSheet(
             onLoginRequested = { onLoginRequested() },
-            onDismissRequest = { isSheetVisible = false }
+            onDismissRequest = { onLoginRequestSheetChange(false) }
+        )
+    }
+
+    if (state.isUnSubscriptionSheetVisible && state.unSelectedGenre != null) {
+        UnsubscribeBottomSheet(
+            genreName = state.unSelectedGenre.name,
+            onUnsubscribe = { onUnsubscribeGenreButtonClicked() },
+            onDismissRequest = { onUnsubscribeSheetChange(false) }
         )
     }
 
@@ -118,19 +135,17 @@ fun SubscriptionGenreScreenContent(
         topBar = {
             SubscriptionTopBar(onBackClicked = onBackClicked)
         },
-        content = {
+        content = { innerPadding ->
             SubscriptionGenreContent(
-                innerPadding = it,
-                genreList = viewmodel.tempGenreList,
-                isSubscribeButtonVisible = isSubscribeButtonVisible,
-                onGenreClick = { isSelected ->
-                    if (isSelected) {
-                        isSheetVisible = true
-                    }
-                    isSubscribeButtonVisible = true
-                },
+                state = state,
+                innerPadding = innerPadding,
+                onGenreClick = { onGenreClicked(it) },
+                isSelected = { isSelected(it) },
                 onSubscribeButtonClicked = onSubscribeButtonClicked,
+                onUnsubscribeGenreClicked = onUnsubscribeGenreClicked,
+                onUnsubscribeSheetChange = onUnsubscribeSheetChange,
                 snackBarHostState = snackBarHostState,
+                onLoginRequestSheetChange = onLoginRequestSheetChange,
                 scope = scope
             )
         }
@@ -139,14 +154,18 @@ fun SubscriptionGenreScreenContent(
 
 @Composable
 fun SubscriptionGenreContent(
-    innerPadding: PaddingValues,
-    genreList: List<Pair<Int, Int>>,
-    isSubscribeButtonVisible: Boolean,
-    onGenreClick: (Boolean) -> Unit,
-    onSubscribeButtonClicked: () -> Unit,
-    snackBarHostState: SnackbarHostState,
     scope: CoroutineScope,
+    innerPadding: PaddingValues,
+    state: SubscriptionGenreScreenState,
+    isSelected: (Genre) -> Boolean,
+    onGenreClick: (Genre) -> Unit,
+    onSubscribeButtonClicked: () -> Unit,
+    onUnsubscribeGenreClicked: (Genre) -> Unit,
+    onUnsubscribeSheetChange: (Boolean) -> Unit,
+    onLoginRequestSheetChange: (Boolean) -> Unit,
+    snackBarHostState: SnackbarHostState,
 ) {
+
     Column(
         modifier = Modifier
             .background(ShowpotColor.Gray700)
@@ -175,28 +194,50 @@ fun SubscriptionGenreContent(
                     .fillMaxWidth()
                     .padding(horizontal = 48.dp)
             ) {
-                items(genreList.size) { index ->
-                    val isEvenIndex = index % 2 == 0
-                    val (resId, selectedResId) = genreList[index]
-                    var isSelected by rememberSaveable { mutableStateOf(false) }
-                    val align = if (isEvenIndex) Alignment.TopEnd else Alignment.TopStart
+                items(state.genres.size) { index ->
 
+                    val genre = state.genres[index]
+                    // UI 표기 계산
+                    val isEvenIndex = index % 2 == 0
+                    val align = if (isEvenIndex) Alignment.TopEnd else Alignment.TopStart
                     val topPadding = if (index == 1) 90.dp else 0.dp
-                    val bottomPadding = if (index == genreList.size - 1) 74.dp else 0.dp
+                    val bottomPadding = if (index == state.genres.size - 1) 74.dp else 0.dp
 
                     Box(
                         modifier = Modifier
                             .padding(top = topPadding, bottom = bottomPadding)
                     ) {
+                        val isLoggedIn = state.isLoggedIn
+                        val displayIcon = when {
+                            isLoggedIn && state.subscribedGenre.contains(genre) -> {
+                                painterResource(id = GenreType.getSubscribedRes(genre.id))
+                            }
+                            isLoggedIn && isSelected(genre) -> {
+                                painterResource(id = GenreType.getSelectedRes(genre.id))
+                            }
+                            else -> {
+                                painterResource(id = GenreType.getNormalRes(genre.id))
+                            }
+                        }
+
                         ShowPotGenre(
                             modifier = Modifier.align(align),
                             enabled = true,
-                            icon = painterResource(id = resId),
-                            selectedIcon = painterResource(id = selectedResId),
-                            isSelected = isSelected,
+                            icon = displayIcon,
                             onSelectClicked = {
-                                onGenreClick(isSelected)
-                                isSelected = !isSelected
+                                if (state.isLoggedIn.not()) {
+                                    onLoginRequestSheetChange(true)
+                                } else {
+                                    state.subscribedGenre.contains(genre)
+                                        .let { isSubscribed ->
+                                            if (isSubscribed) {
+                                                onUnsubscribeGenreClicked(genre)
+                                                onUnsubscribeSheetChange(true)
+                                            } else {
+                                                onGenreClick(genre)
+                                            }
+                                        }
+                                }
                             }
                         )
                     }
@@ -218,19 +259,31 @@ fun SubscriptionGenreContent(
                     ).align(Alignment.BottomCenter)
             )
 
-            if (isSubscribeButtonVisible) {
+            if (state.unSelectedGenre?.name.isNullOrBlank().not()) {
+
+            }
+
+            if (state.selectedGenre.isNotEmpty()) {
                 Box(
                     modifier = Modifier
                         .padding(top = 4.dp)
-                        .fillMaxWidth()
                         .padding(bottom = 54.dp)
-                        .align(Alignment.BottomCenter),
+                        .fillMaxWidth()
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(
+                                    ShowpotColor.Gray700.copy(alpha = 0f),
+                                    ShowpotColor.Gray700
+                                ),
+                            )
+                        ).align(Alignment.BottomCenter),
                 ) {
                     ShowPotMainButton(
                         modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .fillMaxWidth(),
-                        text = stringResource(id = R.string.subscribe)
+                            .padding(horizontal = 20.dp)
+                            .fillMaxWidth()
+                            .align(Alignment.BottomCenter),
+                        text = stringResource(R.string.subscribe)
                     ) {
                         scope.launch {
                             onSubscribeButtonClicked()
@@ -239,6 +292,13 @@ fun SubscriptionGenreContent(
                     }
                 }
             }
+
         }
     }
 }
+
+
+
+
+
+
