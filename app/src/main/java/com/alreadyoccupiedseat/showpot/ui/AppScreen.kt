@@ -35,12 +35,27 @@ import com.alreadyoccupiedseat.subscription_genre.SubscriptionGenreScreen
 import com.alreadyoccupiedseat.withdraw.WithDrawScreen
 
 @Composable
-fun AppScreen() {
-    AppScreenContent()
+fun AppScreen(
+    onPrivacyPolicyClicked: () -> Unit = { },
+    onTermsOfServiceClicked: () -> Unit = { },
+    onNotificationSettingClicked: () -> Unit = { },
+    versionName: String
+) {
+    AppScreenContent(
+        onPrivacyPolicyClicked = onPrivacyPolicyClicked,
+        onTermsOfServiceClicked = onTermsOfServiceClicked,
+        onNotificationSettingClicked = onNotificationSettingClicked,
+        versionName = versionName
+    )
 }
 
 @Composable
-fun AppScreenContent() {
+fun AppScreenContent(
+    onPrivacyPolicyClicked: () -> Unit = { },
+    onTermsOfServiceClicked: () -> Unit = { },
+    onNotificationSettingClicked: () -> Unit = { },
+    versionName: String
+) {
     val navController = rememberNavController()
     Scaffold(
         containerColor = ShowpotColor.Gray700,
@@ -168,7 +183,11 @@ fun AppScreenContent() {
                     navController = navController,
                     onAccountClicked = {
                         navController.navigate(Screen.Account.route)
-                    }
+                    },
+                    onPrivacyPolicyClicked = onPrivacyPolicyClicked,
+                    onTermsOfServiceClicked = onTermsOfServiceClicked,
+                    onNotificationSettingClicked = onNotificationSettingClicked,
+                    versionName = versionName
                 )
             }
 
