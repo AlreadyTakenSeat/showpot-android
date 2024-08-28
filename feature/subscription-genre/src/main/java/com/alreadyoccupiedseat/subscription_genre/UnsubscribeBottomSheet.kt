@@ -71,6 +71,6 @@ private fun String.formatGenreName(): String {
     return when (this.lowercase()) {
         "jpop" -> "J-POP"
         "rnb" -> "R&B"
-        else -> this.lowercase().replaceFirstChar { it.uppercase() }
+        else -> this.uppercase()
     }
 }
