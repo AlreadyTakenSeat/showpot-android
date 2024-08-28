@@ -1,5 +1,6 @@
 package com.alreadyoccupiedseat.subscription_genre
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,6 +27,7 @@ fun UnsubscribeBottomSheet(
     onUnsubscribe: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
+    Log.d("UnsubscribeBottomSheet", "genreName: $genreName, formatted: ${genreName.formatGenreName()}")
     ShowPotBottomSheet(
         onDismissRequest = onDismissRequest,
     ) {
@@ -39,7 +41,7 @@ fun UnsubscribeBottomSheet(
 
             ShowPotEnglishText_H1(
                 modifier = Modifier.fillMaxWidth(),
-                text = genreName,
+                text = genreName.formatGenreName(),
                 color = ShowpotColor.White
             )
 
@@ -62,5 +64,13 @@ fun UnsubscribeBottomSheet(
 
             Spacer(modifier = Modifier.height(54.dp))
         }
+    }
+}
+
+private fun String.formatGenreName(): String {
+    return when (this.lowercase()) {
+        "jpop" -> "J-POP"
+        "rnb" -> "R&B"
+        else -> this.lowercase().replaceFirstChar { it.uppercase() }
     }
 }
