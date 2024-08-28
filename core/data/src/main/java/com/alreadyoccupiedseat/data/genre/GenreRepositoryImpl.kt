@@ -1,5 +1,6 @@
 package com.alreadyoccupiedseat.data.genre
 
+import com.alreadyoccupiedseat.model.Genre
 import javax.inject.Inject
 
 class GenreRepositoryImpl @Inject constructor(
@@ -7,6 +8,15 @@ class GenreRepositoryImpl @Inject constructor(
 ): GenreRepository {
     override suspend fun getGenres(
         size: Int
-    ) = genreDataSource.getGenres(size)
+    ): List<Genre> {
+      return genreDataSource.getGenres(size)
+    }
 
+    override suspend fun unsubscribeGenres(genreIds: List<String>): List<String> {
+        return genreDataSource.unsubscribeGenres(genreIds)
+    }
+
+    override suspend fun subscribeGenres(genreIds: List<String>): List<String> {
+        return genreDataSource.subscribeGenres(genreIds)
+    }
 }
