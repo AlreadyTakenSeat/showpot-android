@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.data.artist.ArtistRepository
 import com.alreadyoccupiedseat.data.show.ShowDataSource
+import com.alreadyoccupiedseat.data.show.ShowRepository
 import com.alreadyoccupiedseat.datastore.SearchHistoryDataStore
 import com.alreadyoccupiedseat.model.Artist
 import com.alreadyoccupiedseat.model.Genre
@@ -35,7 +36,7 @@ data class SearchScreenState(
 class SearchViewModel @Inject constructor(
     private val searchHistoryDataStore: SearchHistoryDataStore,
     private val artistRepository: ArtistRepository,
-    private val showRepository: ShowDataSource
+    private val showRepository: ShowRepository
 ) : ViewModel() {
 
     private var _state = MutableStateFlow<SearchScreenState>(SearchScreenState())

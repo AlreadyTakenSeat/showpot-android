@@ -10,28 +10,24 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 
-class ShowDataSourceImpl @Inject constructor(
-    private val showService: ShowService,
-    @ApplicationContext private val context: Context
-) : ShowDataSource {
+class ShowRepositoryImpl @Inject constructor(
+    private val showDataSource: ShowDataSource
+) : ShowRepository {
     override suspend fun searchShows(
         cursorId: String?,
         size: Int,
         search: String
     ): List<SearchedShow> {
-        return showService.searchShows(
+        return showDataSource.searchShows(
             cursorId = cursorId,
             size = size,
             search = search,
-        ).body()?.data ?: emptyList()
+        )
     }
 
-    @SuppressLint("HardwareIds")
+
     override suspend fun getShowDetail(showId: String): ShowDetail {
-        val viewIdentifier =
-            Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
-        return showService.getShowDetail(showId, viewIdentifier).body()
-            ?: throw Exception("Show not found")
+        return showDataSource.getShowDetail(showId)
     }
 
 }
