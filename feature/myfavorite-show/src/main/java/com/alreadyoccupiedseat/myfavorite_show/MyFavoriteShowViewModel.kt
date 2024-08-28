@@ -63,7 +63,8 @@ class MyFavoriteShowViewModel @Inject constructor() : ViewModel() {
                     ),
                     genre = Genre(
                         id = index.toString(),
-                        name = genreName
+                        name = genreName,
+                        isSubscribed = index % 2 == 0
                     ),
                     id = index.toString(),
                     name = "Concert $index",

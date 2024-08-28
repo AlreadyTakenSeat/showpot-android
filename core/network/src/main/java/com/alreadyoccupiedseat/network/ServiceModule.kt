@@ -27,4 +27,11 @@ class ServiceModule {
     fun provideShowService(retrofit: Retrofit): ShowService {
         return retrofit.create(ShowService::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun provideGenreService(retrofit: Retrofit): GenreService {
+        return retrofit.create(GenreService::class.java)
+    }
+
 }
