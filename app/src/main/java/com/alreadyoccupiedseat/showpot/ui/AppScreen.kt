@@ -114,6 +114,9 @@ fun AppScreenContent(
                     },
                     onEntireShowClicked = {
                         navController.navigate(Screen.EntireShowList.route)
+                    },
+                    onRecommendedShowClicked = {
+                        navController.navigate(Screen.ShowDetail.route.replace("{showId}", it))
                     }
                 )
             }

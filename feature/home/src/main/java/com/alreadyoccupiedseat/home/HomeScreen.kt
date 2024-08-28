@@ -56,13 +56,15 @@ fun HomeScreen(
     onSearchBarClicked: () -> Unit,
     onSubscriptionGenreClicked: () -> Unit,
     onSubscribeArtistClicked: () -> Unit,
-    onEntireShowClicked: () -> Unit
+    onEntireShowClicked: () -> Unit,
+    onRecommendedShowClicked: (String) -> Unit
 ) {
     HomeScreenContent(
         onSearchBarClicked = onSearchBarClicked,
         onSubscriptionGenreClicked = onSubscriptionGenreClicked,
         onSubscribeArtistClicked = onSubscribeArtistClicked,
-        onEntireShowClicked = onEntireShowClicked
+        onEntireShowClicked = onEntireShowClicked,
+        onRecommendedShowClicked = onRecommendedShowClicked
     )
 }
 
@@ -71,7 +73,8 @@ fun HomeScreenContent(
     onSearchBarClicked: () -> Unit,
     onSubscriptionGenreClicked: () -> Unit,
     onSubscribeArtistClicked: () -> Unit,
-    onEntireShowClicked: () -> Unit
+    onEntireShowClicked: () -> Unit,
+    onRecommendedShowClicked: (String) -> Unit
 ) {
 
     var isTopBarVisible by remember { mutableStateOf(true) }
@@ -281,54 +284,51 @@ fun HomeScreenContent(
                         modifier = Modifier.padding(start = 16.dp, top = 6.dp),
                         horizontalArrangement = Arrangement.spacedBy(18.dp)
                     ) {
-                        items(10) {
-                            val (imageUrl, text) = if (it % 2 == 0) {
-                                "https://img.hankyung.com/photo/202406/01.37069998.1.jpg" to "Nothing But Thieves But Thieves"
-                            } else {
-                                "https://thumb.mt.co.kr/06/2024/04/2024040913332068429_1.jpg/dims/optimize/" to "Christopher"
-                            }
+
+                        items(performances.size) { index ->
+                            val performance = performances[index]
                             RecommendedShow(
-                                imageUrl = imageUrl,
-                                text = text,
+                                imageUrl = performance.recommendedPerformanceThumbnailURL,
+                                text = performance.recommendedPerformanceTitle,
                                 onClick = {
-                                    Log.d("RecommendedShow", "onClick")
+                                    onRecommendedShowClicked(performance.showID)
+                                }
+                            )
+                        }
+
+                        item {
+                            Spacer(modifier = Modifier.height(100.dp))
+                        }
+
+                    }
+
+                    AnimatedVisibility(
+                        visible = isTopBarVisible,
+                        enter = slideInVertically(
+                            initialOffsetY = { fullHeight -> -fullHeight },
+                        ),
+                        exit = slideOutVertically(
+                            targetOffsetY = { fullHeight -> -fullHeight }
+                        )
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(ShowpotColor.Gray700),
+                        ) {
+                            ShowPotSearchBar(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp)
+                                    .padding(bottom = 14.dp),
+                                hint = stringResource(com.alreadyoccupiedseat.home.R.string.search_shows_and_artists_hint),
+                                enabled = false,
+                                onClickedWhenDisEnabled = {
+                                    onSearchBarClicked()
                                 }
                             )
                         }
                     }
-                }
-
-                item {
-                    Spacer(modifier = Modifier.height(100.dp))
-                }
-
-            }
-
-            AnimatedVisibility(
-                visible = isTopBarVisible,
-                enter = slideInVertically(
-                    initialOffsetY = { fullHeight -> -fullHeight },
-                ),
-                exit = slideOutVertically(
-                    targetOffsetY = { fullHeight -> -fullHeight }
-                )
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(ShowpotColor.Gray700),
-                ) {
-                    ShowPotSearchBar(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                            .padding(bottom = 14.dp),
-                        hint = stringResource(com.alreadyoccupiedseat.home.R.string.search_shows_and_artists_hint),
-                        enabled = false,
-                        onClickedWhenDisEnabled = {
-                            onSearchBarClicked()
-                        }
-                    )
                 }
             }
         }
