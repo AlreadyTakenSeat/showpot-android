@@ -56,13 +56,15 @@ fun HomeScreen(
     onSearchBarClicked: () -> Unit,
     onSubscriptionGenreClicked: () -> Unit,
     onSubscribeArtistClicked: () -> Unit,
-    onEntireShowClicked: () -> Unit
+    onEntireShowClicked: () -> Unit,
+    onRecommendedShowClicked: (String) -> Unit
 ) {
     HomeScreenContent(
         onSearchBarClicked = onSearchBarClicked,
         onSubscriptionGenreClicked = onSubscriptionGenreClicked,
         onSubscribeArtistClicked = onSubscribeArtistClicked,
-        onEntireShowClicked = onEntireShowClicked
+        onEntireShowClicked = onEntireShowClicked,
+        onRecommendedShowClicked = onRecommendedShowClicked
     )
 }
 
@@ -71,7 +73,8 @@ fun HomeScreenContent(
     onSearchBarClicked: () -> Unit,
     onSubscriptionGenreClicked: () -> Unit,
     onSubscribeArtistClicked: () -> Unit,
-    onEntireShowClicked: () -> Unit
+    onEntireShowClicked: () -> Unit,
+    onRecommendedShowClicked: (String) -> Unit
 ) {
 
     var isTopBarVisible by remember { mutableStateOf(true) }
@@ -288,27 +291,10 @@ fun HomeScreenContent(
                                 imageUrl = performance.recommendedPerformanceThumbnailURL,
                                 text = performance.recommendedPerformanceTitle,
                                 onClick = {
-                                    Log.d("RecommendedShow", "Clicked on ${performance.showID}")
+                                    onRecommendedShowClicked(performance.showID)
                                 }
                             )
                         }
-//
-//                        items(10) {
-//                            val (imageUrl, text) = if (it % 2 == 0) {
-//                                "https://img.hankyung.com/photo/202406/01.37069998.1.jpg" to "Nothing But Thieves But Thieves"
-//                            } else {
-//                                "https://thumb.mt.co.kr/06/2024/04/2024040913332068429_1.jpg/dims/optimize/" to "Christopher"
-//                            }
-//                            RecommendedShow(
-//                                imageUrl = imageUrl,
-//                                text = text,
-//                                onClick = {
-//                                    Log.d("RecommendedShow", "onClick")
-//                                }
-//                            )
-//                        }
-//                    }
-//                }
 
                         item {
                             Spacer(modifier = Modifier.height(100.dp))
