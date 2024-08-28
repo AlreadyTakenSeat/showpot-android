@@ -3,7 +3,7 @@ package com.alreadyoccupiedseat.data.show
 import com.alreadyoccupiedseat.model.SearchedShow
 import com.alreadyoccupiedseat.model.show.ShowDetail
 
-interface ShowDataSource {
+interface ShowRepository {
 
     suspend fun searchShows(
         cursorId: String? = null,

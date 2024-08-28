@@ -14,4 +14,8 @@ abstract class ShowModule {
     @Binds
     abstract fun bindShowDataSource(showDataSourceImpl: ShowDataSourceImpl): ShowDataSource
 
+    @Singleton
+    @Binds
+    abstract fun bindShowRepository(showRepositoryImpl: ShowRepositoryImpl): ShowRepository
+
 }
