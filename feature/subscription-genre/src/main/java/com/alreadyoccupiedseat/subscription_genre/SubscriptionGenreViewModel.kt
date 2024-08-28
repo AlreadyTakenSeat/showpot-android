@@ -23,7 +23,6 @@ data class SubscriptionGenreScreenState(
     val subscribedGenre: List<Genre> = emptyList(),
     val unSelectedGenre: Genre? = null,
     val isLoggedIn: Boolean = false,
-    // Visible
     val isLoginRequestBottomSheetVisible: Boolean = false,
     val isSubscriptionSheetVisible: Boolean = false,
     val isUnSubscriptionSheetVisible: Boolean = false,
@@ -67,11 +66,9 @@ class SubscriptionGenreViewModel @Inject constructor(
             val genreIds = state.value.selectedGenre.map { it.id }
             Log.d("subscribeGenre", "subscribeGenre: $genreIds")
             genreRepository.subscribeGenres(genreIds).let {
-                // Add new subscribed genres to the list
-                val newSubscribedGenres =  state.value.subscribedGenre + state.value.genres.filter { genre -> genreIds.contains(genre.id) }
                 _state.value = _state.value.copy(
                     selectedGenre = emptyList(),
-                    subscribedGenre = newSubscribedGenres
+                    subscribedGenre = state.value.subscribedGenre + state.value.genres.filter { genre -> genreIds.contains(genre.id) }
                 )
             }
         }
