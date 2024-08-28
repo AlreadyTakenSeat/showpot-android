@@ -52,7 +52,8 @@ class EntireShowViewModel @Inject constructor(): ViewModel() {
                             10 -> "Metal"
                             11 -> "Jpop"
                             else -> "Jazz"
-                        }
+                        },
+                        isSubscribed = index % 2 == 0
                     )
                 )
                 val posterImageURL = if (index % 2 != 0) {

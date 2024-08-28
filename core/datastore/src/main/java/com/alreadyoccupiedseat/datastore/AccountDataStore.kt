@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -23,6 +24,20 @@ class AccountDataStore @Inject constructor(@ApplicationContext private val conte
         .map { preferences ->
             preferences[accessTokenKey]
         }.first()
+
+    /** 액세스 토큰을 Flow 반환 ***/
+    fun getAccessTokenFlow(): Flow<String?> {
+        return context.accountDataStore.data.map { preferences ->
+            preferences[accessTokenKey]
+        }
+    }
+
+    /** 로그 아웃 - 임시 ***/
+    suspend fun clearAccessToken() {
+        context.accountDataStore.edit { preferences ->
+            preferences.remove(accessTokenKey)
+        }
+    }
 
     suspend fun updateAccessToken(accessToken: String) {
         context.accountDataStore.edit { preferences ->

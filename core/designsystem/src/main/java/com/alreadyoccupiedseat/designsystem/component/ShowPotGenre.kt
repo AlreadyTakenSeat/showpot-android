@@ -16,20 +16,17 @@ fun ShowPotGenre(
     modifier: Modifier = Modifier,
     enabled: Boolean = false,
     icon: Painter,
-    selectedIcon: Painter? = null,
-    isSelected: Boolean = false,
     isDeletable: Boolean = false,
     onSelectClicked: () -> Unit = {},
     onDeleteClicked: () -> Unit = {},
 ) {
-    val displayIcon = if (isSelected && selectedIcon != null) selectedIcon else icon
 
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = displayIcon, contentDescription = "장르",
+            painter = icon, contentDescription = "장르",
             modifier = modifier
                 .conditional(enabled) {
                     clickable {
