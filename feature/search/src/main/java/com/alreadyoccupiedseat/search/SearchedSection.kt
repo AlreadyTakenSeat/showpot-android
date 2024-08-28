@@ -1,5 +1,6 @@
 package com.alreadyoccupiedseat.search
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,6 +40,7 @@ fun SearchedSection(
     searchedShows: List<SearchedShow>,
     unSubscribeTargetArtist: String,
     onUnSubscribeTargetArtistChanged: (String) -> Unit = {},
+    onShowClicked: (String) -> Unit = {},
     onArtistUnSubscriptionSheetVisibilityChanged: (Boolean) -> Unit = {}
 ) {
 
@@ -142,7 +144,10 @@ fun SearchedSection(
                 // TODO: Remove one of item scope and assign the real data into the ShowInfo
                 item {
                     ShowInfo(
-                        modifier = Modifier.padding(horizontal = 16.dp),
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                            .clickable {
+                                onShowClicked(show.id)
+                            },
                         imageUrl = show.imageURL,
                         show.title,
                         show.startAt.replace("-", "."),
