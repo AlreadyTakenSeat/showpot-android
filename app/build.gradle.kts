@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Properties
 
 plugins {
@@ -51,6 +53,27 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    applicationVariants.configureEach {
+        val dateFormat = SimpleDateFormat("yyyyMMdd")
+        val today = dateFormat.format(Date())
+        val appName = "showPot"
+        val versionName = defaultConfig.versionName.orEmpty()
+        this.outputs.configureEach {
+            val flavorName = if (flavorName.isNullOrBlank()) "" else flavorName
+            buildOutputs.forEach { _ ->
+                val buildType =buildType.name
+                val archivesBaseName = if (flavorName.isNotEmpty()) {
+                    "${appName}-${flavorName}-${buildType}-v$versionName-$today.apk"
+                } else {
+                    "${appName}-${buildType}-v$versionName-$today.apk"
+                }
+                val variantOutputImpl = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
+                variantOutputImpl.outputFileName =  archivesBaseName
+            }
+        }
+    }
+
 }
 
 
