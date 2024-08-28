@@ -286,8 +286,6 @@ fun ComponentsPreview() {
                     ShowPotGenre(
                         enabled = true,
                         icon = painterResource(id = resId),
-                        selectedIcon = painterResource(id = selectedResId),
-                        isSelected = isSelected,
                         onSelectClicked = {
                             isSelected = !isSelected
                             Log.d("ShowPotBaseGenreView", "onSelectClick")
