@@ -30,6 +30,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun SearchScreen(
     navController: NavController,
+    onShowClicked: (String) -> Unit = {}
 ) {
 
     val viewModel = hiltViewModel<SearchViewModel>()
@@ -71,6 +72,9 @@ fun SearchScreen(
         },
         onChangeUnSubscribeTargetArtist = {
             viewModel.changeUnSubscribeTargetArtist(it)
+        },
+        onShowClicked = {
+            onShowClicked(it)
         }
     )
 }
@@ -87,6 +91,7 @@ fun SearchScreenContent(
     onDeleteHistoryClicked: (String) -> Unit = {},
     onchangeArtistUnSubscriptionSheetVisibility: (Boolean) -> Unit = {},
     onChangeUnSubscribeTargetArtist: (String) -> Unit = {},
+    onShowClicked: (String) -> Unit = {}
 ) {
 
     val focusManager = LocalFocusManager.current
@@ -163,6 +168,7 @@ fun SearchScreenContent(
                     onUnSubscribeTargetArtistChanged = {
                         onChangeUnSubscribeTargetArtist(it)
                     },
+                    onShowClicked = onShowClicked,
                 ) {
                     onchangeArtistUnSubscriptionSheetVisibility(it)
                 }

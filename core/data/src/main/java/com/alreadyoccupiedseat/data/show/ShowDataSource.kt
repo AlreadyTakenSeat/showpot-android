@@ -19,4 +19,6 @@ interface ShowDataSource {
     ): List<SearchedShow>
     suspend fun getShowDetail(showId: String): ShowDetail
 
+    suspend fun registerShowInterest(showId: String): Boolean
+
 }

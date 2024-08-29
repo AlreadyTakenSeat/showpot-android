@@ -48,4 +48,8 @@ class ShowDataSourceImpl @Inject constructor(
             ?: throw Exception("Show not found")
     }
 
+    override suspend fun registerShowInterest(showId: String): Boolean {
+        return showService.registerShowInterest(showId).body()?.hasInterest ?: false
+    }
+
 }

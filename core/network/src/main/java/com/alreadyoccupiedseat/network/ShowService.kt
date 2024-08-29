@@ -2,11 +2,13 @@ package com.alreadyoccupiedseat.network
 
 import com.alreadyoccupiedseat.model.PagingData
 import com.alreadyoccupiedseat.model.SearchedShow
+import com.alreadyoccupiedseat.model.show.RegisterInterestResponse
 import com.alreadyoccupiedseat.model.show.ShowDetail
 import com.alreadyoccupiedseat.model.show.Shows
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -31,5 +33,11 @@ interface ShowService {
         @Path("showId") showId: String,
         @Header("viewIdentifier") viewIdentifier: String
     ): Response<ShowDetail>
+
+    @POST("api/v1/shows/{showId}/interests")
+    suspend fun registerShowInterest(
+        @Path("showId") showId: String
+    ): Response<RegisterInterestResponse>
+
 
 }

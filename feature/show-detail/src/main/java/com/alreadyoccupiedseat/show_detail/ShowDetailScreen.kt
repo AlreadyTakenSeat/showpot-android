@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -40,7 +39,6 @@ import com.alreadyoccupiedseat.core.extension.isScrollingUp
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.GenreChip
 import com.alreadyoccupiedseat.designsystem.component.artist.ShowPotArtist
-import com.alreadyoccupiedseat.designsystem.component.artistByPainter.ShowPotArtistByPainter
 import com.alreadyoccupiedseat.designsystem.component.bottomSheet.TicketingNotificationBottomSheet
 import com.alreadyoccupiedseat.designsystem.component.button.LabelButton
 import com.alreadyoccupiedseat.designsystem.component.button.IconButtonWithShowPotMainButton
@@ -66,7 +64,14 @@ fun ShowDetailScreen(
         state = state.value,
         onBackButtonClicked = {
             navController.popBackStack()
+        },
+        onIconButtonClicked = {
+            viewModel.registerShowInterest(showId)
+        },
+        onChangeSheetVisibility = {
+            viewModel.changeSheetVisibility(it)
         }
+
     )
 }
 
@@ -74,6 +79,8 @@ fun ShowDetailScreen(
 fun ShowDetailScreenContent(
     state: ShowDetailState,
     onBackButtonClicked: () -> Unit,
+    onIconButtonClicked: () -> Unit,
+    onChangeSheetVisibility: (Boolean) -> Unit
 ) {
 
     val lazyColumnState = rememberLazyListState()
@@ -84,12 +91,11 @@ fun ShowDetailScreenContent(
         ) ShowpotColor.Gray700 else Color.Transparent
     )
 
-    var isSheetVisible by remember { mutableStateOf(true) }
     var isFirstItemSelected by remember { mutableStateOf(false) }
     var isSecondItemSelected by remember { mutableStateOf(false) }
     var isThirdItemSelected by remember { mutableStateOf(false) }
 
-    if (isSheetVisible) {
+    if (state.isSheetVisible) {
 
         TicketingNotificationBottomSheet(
             firstItemSelected = isFirstItemSelected,
@@ -108,7 +114,7 @@ fun ShowDetailScreenContent(
                 // TODO: Implement
             },
             onDismissRequested = {
-                isSheetVisible = false
+                onChangeSheetVisibility(false)
             })
 
     }
@@ -313,16 +319,9 @@ fun ShowDetailScreenContent(
                         state.showDetail?.seats?.forEach {
                             HorizontalTitleAndInfoText(
                                 title = it.seatType,
-                                infoText = it.price.toString() + "원"
+                                infoText = it.price.toFormattedString() + "원"
                             )
                         }
-//                        HorizontalTitleAndInfoText(title = "스탠딩 P", infoText = "154,000원")
-//                        HorizontalTitleAndInfoText(title = "스탠딩 R", infoText = "143,000원")
-//                        HorizontalTitleAndInfoText(title = "지정석 P", infoText = "176,000원")
-//                        HorizontalTitleAndInfoText(title = "지정석 R", infoText = "165,000원")
-//                        HorizontalTitleAndInfoText(title = "지정석 S", infoText = "143,000원")
-//                        HorizontalTitleAndInfoText(title = "지정석 A", infoText = "132,000원")
-//                        HorizontalTitleAndInfoText(title = "지정석 B", infoText = "121,000원")
                     }
                 }
 
@@ -416,17 +415,22 @@ fun ShowDetailScreenContent(
             ) {
 
                 IconButtonWithShowPotMainButton(
-                    painterResource(com.alreadyoccupiedseat.designsystem.R.drawable.ic_heart_36_off),
+                    if (state.showDetail?.isInterested == true) painterResource(com.alreadyoccupiedseat.designsystem.R.drawable.ic_heart_36_off)
+                    else painterResource(com.alreadyoccupiedseat.designsystem.R.drawable.ic_heart_36_on),
                     stringResource(R.string.set_notification),
                     onIconButtonClicked = {
-
+                        onIconButtonClicked()
                     },
                     onMainButtonClicked = {
-
+                        onChangeSheetVisibility(true)
                     }
                 )
 
             }
         }
     }
+}
+
+fun Int.toFormattedString(): String {
+    return "%,d".format(this)
 }

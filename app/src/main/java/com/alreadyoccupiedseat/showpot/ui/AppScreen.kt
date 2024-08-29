@@ -153,7 +153,9 @@ fun AppScreenContent(
             }
 
             composable(Screen.Search.route) {
-                SearchScreen(navController)
+                SearchScreen(navController) {
+                    navController.navigate("showDetail/$it")
+                }
             }
 
             composable(Screen.SubscriptionGenre.route) {

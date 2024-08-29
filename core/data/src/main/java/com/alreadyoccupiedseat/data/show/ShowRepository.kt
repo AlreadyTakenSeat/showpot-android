@@ -3,7 +3,6 @@ package com.alreadyoccupiedseat.data.show
 import com.alreadyoccupiedseat.model.SearchedShow
 import com.alreadyoccupiedseat.model.show.Data
 import com.alreadyoccupiedseat.model.show.ShowDetail
-import com.alreadyoccupiedseat.model.show.Shows
 
 interface ShowRepository {
     suspend fun getEntireShow(
@@ -18,5 +17,7 @@ interface ShowRepository {
         search: String
     ): List<SearchedShow>
     suspend fun getShowDetail(showId: String): ShowDetail
+
+    suspend fun registerShowInterest(showId: String): Boolean
 
 }
