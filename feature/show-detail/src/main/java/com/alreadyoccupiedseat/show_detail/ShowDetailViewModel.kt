@@ -11,6 +11,7 @@ import javax.inject.Inject
 
 data class ShowDetailState(
     val showDetail: ShowDetail? = null,
+    val isSheetVisible: Boolean = false
 )
 
 @HiltViewModel
@@ -33,5 +34,9 @@ class ShowDetailViewModel @Inject constructor(
             val isInterested =  showRepository.registerShowInterest(showId)
             _state.value = _state.value.copy(showDetail = _state.value.showDetail?.copy(isInterested = isInterested))
         }
+    }
+
+    fun changeSheetVisibility(isVisible: Boolean) {
+        _state.value = _state.value.copy(isSheetVisible = isVisible)
     }
 }

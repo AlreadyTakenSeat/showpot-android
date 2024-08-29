@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -68,7 +67,11 @@ fun ShowDetailScreen(
         },
         onIconButtonClicked = {
             viewModel.registerShowInterest(showId)
+        },
+        onChangeSheetVisibility = {
+            viewModel.changeSheetVisibility(it)
         }
+
     )
 }
 
@@ -77,6 +80,7 @@ fun ShowDetailScreenContent(
     state: ShowDetailState,
     onBackButtonClicked: () -> Unit,
     onIconButtonClicked: () -> Unit,
+    onChangeSheetVisibility: (Boolean) -> Unit
 ) {
 
     val lazyColumnState = rememberLazyListState()
@@ -87,12 +91,11 @@ fun ShowDetailScreenContent(
         ) ShowpotColor.Gray700 else Color.Transparent
     )
 
-    var isSheetVisible by remember { mutableStateOf(true) }
     var isFirstItemSelected by remember { mutableStateOf(false) }
     var isSecondItemSelected by remember { mutableStateOf(false) }
     var isThirdItemSelected by remember { mutableStateOf(false) }
 
-    if (isSheetVisible) {
+    if (state.isSheetVisible) {
 
         TicketingNotificationBottomSheet(
             firstItemSelected = isFirstItemSelected,
@@ -111,7 +114,7 @@ fun ShowDetailScreenContent(
                 // TODO: Implement
             },
             onDismissRequested = {
-                isSheetVisible = false
+                onChangeSheetVisibility(false)
             })
 
     }
@@ -419,7 +422,7 @@ fun ShowDetailScreenContent(
                         onIconButtonClicked()
                     },
                     onMainButtonClicked = {
-
+                        onChangeSheetVisibility(true)
                     }
                 )
 
