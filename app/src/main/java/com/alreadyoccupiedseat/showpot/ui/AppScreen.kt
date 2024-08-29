@@ -210,7 +210,12 @@ fun AppScreenContent(
             }
 
             composable(Screen.MyFavoriteShows.route) {
-                MyFavoriteShowScreen(navController)
+                MyFavoriteShowScreen(
+                    navController = navController,
+                    onShowClicked = {
+                        navController.navigate(Screen.ShowDetail.route.replace("{showId}", it))
+                    }
+                )
             }
 
             composable(Screen.EntireShowList.route) {

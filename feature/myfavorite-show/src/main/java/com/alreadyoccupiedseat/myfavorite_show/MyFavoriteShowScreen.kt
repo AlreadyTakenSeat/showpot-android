@@ -36,12 +36,16 @@ import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B2_Reg
 @Composable
 fun MyFavoriteShowScreenPreview(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
-    MyFavoriteShowScreen(navController)
+    MyFavoriteShowScreen(
+        navController = navController,
+        onShowClicked = {}
+        )
 }
 
 @Composable
 fun MyFavoriteShowScreen(
     navController: NavController,
+    onShowClicked: (String) -> Unit,
 ) {
     val viewModel = hiltViewModel<MyFavoriteShowViewModel>()
     val state = viewModel.state.collectAsState()
@@ -50,6 +54,9 @@ fun MyFavoriteShowScreen(
         modifier = Modifier,
         onBackClicked = {
             navController.popBackStack()
+        },
+        onShowClicked = {
+            onShowClicked(it)
         },
         onDeletedMyFavoriteShow = {
             viewModel.deleteMyFavoriteShow(it)
@@ -65,6 +72,7 @@ private fun MyFavoriteShowScreenContent(
     state: MyFavoriteShowState,
     modifier: Modifier,
     onBackClicked: () -> Unit,
+    onShowClicked: (String) -> Unit,
     onDeletedMyFavoriteShow: (showId) -> Unit,
 ) {
 
@@ -89,7 +97,7 @@ private fun MyFavoriteShowScreenContent(
                             modifier = Modifier
                                 .padding(horizontal = 16.dp)
                                 .clickable {
-                                    // TODO 공연 상세 페이지 이동
+                                    onShowClicked(item.id)
                                 },
                             imageUrl = item.posterImageURL,
                             showTitle = item.title,
