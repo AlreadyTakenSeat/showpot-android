@@ -33,6 +33,7 @@ class AccountViewModel @Inject constructor(
 
     private fun getFcmToken() {
         viewModelScope.launch {
+            Log.i("AccountViewModel", "getAccessToken: ${accountDataStore.getAccessToken()}")
             Log.i("AccountViewModel", "getFcmToken: ${accountDataStore.getFcmToken()}")
         }
     }
