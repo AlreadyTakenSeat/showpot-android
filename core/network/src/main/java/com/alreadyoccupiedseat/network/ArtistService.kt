@@ -31,6 +31,15 @@ interface ArtistService {
         @Query("size") size: Int,
     ): Response<PagingData<Artist>>
 
+    // TODO: Make sort to enum class
+    @GET("api/v1/artists/subscriptions")
+    suspend fun getSubscribedArtists(
+        @Query("sort") sort: String? = null,
+        @Query("cursor") cursor: String? = null,
+        @Query("size") size: Int,
+    ): Response<PagingData<Artist>>
+
+
     @POST("api/v1/artists/subscribe")
     suspend fun subscribeArtists(
         @Body artistIds: SubscribeArtistsRequest,

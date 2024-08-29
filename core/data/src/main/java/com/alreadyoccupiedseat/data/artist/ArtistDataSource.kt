@@ -21,6 +21,12 @@ interface ArtistDataSource {
         size: Int,
     ): List<Artist>
 
+    suspend fun getSubscribedArtists(
+        sort: String? = null,
+        cursor: String? = null,
+        size: Int,
+    ): List<Artist>
+
     suspend fun subscribeArtists(
         artistIds: List<String>,
     ): List<String>
