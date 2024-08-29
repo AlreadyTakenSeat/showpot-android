@@ -57,7 +57,7 @@ fun HomeScreen(
     onSubscriptionGenreClicked: () -> Unit,
     onSubscribeArtistClicked: () -> Unit,
     onEntireShowClicked: () -> Unit,
-    onRecommendedShowClicked: (String) -> Unit
+    onRecommendedShowClicked: (String) -> Unit,
 ) {
     HomeScreenContent(
         onSearchBarClicked = onSearchBarClicked,
@@ -74,7 +74,7 @@ fun HomeScreenContent(
     onSubscriptionGenreClicked: () -> Unit,
     onSubscribeArtistClicked: () -> Unit,
     onEntireShowClicked: () -> Unit,
-    onRecommendedShowClicked: (String) -> Unit
+    onRecommendedShowClicked: (String) -> Unit,
 ) {
 
     var isTopBarVisible by remember { mutableStateOf(true) }
@@ -295,43 +295,46 @@ fun HomeScreenContent(
                                 }
                             )
                         }
-
-                        item {
-                            Spacer(modifier = Modifier.height(100.dp))
-                        }
-
-                    }
-
-                    AnimatedVisibility(
-                        visible = isTopBarVisible,
-                        enter = slideInVertically(
-                            initialOffsetY = { fullHeight -> -fullHeight },
-                        ),
-                        exit = slideOutVertically(
-                            targetOffsetY = { fullHeight -> -fullHeight }
-                        )
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(ShowpotColor.Gray700),
-                        ) {
-                            ShowPotSearchBar(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp)
-                                    .padding(bottom = 14.dp),
-                                hint = stringResource(com.alreadyoccupiedseat.home.R.string.search_shows_and_artists_hint),
-                                enabled = false,
-                                onClickedWhenDisEnabled = {
-                                    onSearchBarClicked()
-                                }
-                            )
-                        }
                     }
                 }
+
+                item {
+                    Spacer(modifier = Modifier.height(100.dp))
+                }
+
             }
+
+            AnimatedVisibility(
+                visible = isTopBarVisible,
+                enter = slideInVertically(
+                    initialOffsetY = { fullHeight -> -fullHeight },
+                ),
+                exit = slideOutVertically(
+                    targetOffsetY = { fullHeight -> -fullHeight }
+                )
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(ShowpotColor.Gray700),
+                ) {
+                    ShowPotSearchBar(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .padding(bottom = 14.dp),
+                        hint = stringResource(com.alreadyoccupiedseat.home.R.string.search_shows_and_artists_hint),
+                        enabled = false,
+                        onClickedWhenDisEnabled = {
+                            onSearchBarClicked()
+                        }
+                    )
+                }
+            }
+
         }
     }
 }
+
+
 
