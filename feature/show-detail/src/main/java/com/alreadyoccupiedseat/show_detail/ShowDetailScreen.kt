@@ -319,7 +319,7 @@ fun ShowDetailScreenContent(
                         state.showDetail?.seats?.forEach {
                             HorizontalTitleAndInfoText(
                                 title = it.seatType,
-                                infoText = it.price.toString() + "원"
+                                infoText = it.price.toFormattedString() + "원"
                             )
                         }
                     }
@@ -429,4 +429,8 @@ fun ShowDetailScreenContent(
             }
         }
     }
+}
+
+fun Int.toFormattedString(): String {
+    return "%,d".format(this)
 }
