@@ -11,6 +11,7 @@ data class ShowDetail(
     val location: String,
     val name: String,
     val posterImageURL: String,
+    val isInterested: Boolean,
     val seats: List<Seat>,
     val startDate: String,
     val ticketingSites: List<TicketingSite>,
