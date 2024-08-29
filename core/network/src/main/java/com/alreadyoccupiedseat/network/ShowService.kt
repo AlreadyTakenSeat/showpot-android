@@ -3,6 +3,7 @@ package com.alreadyoccupiedseat.network
 import com.alreadyoccupiedseat.model.PagingData
 import com.alreadyoccupiedseat.model.SearchedShow
 import com.alreadyoccupiedseat.model.show.ShowDetail
+import com.alreadyoccupiedseat.model.show.Shows
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -10,6 +11,13 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ShowService {
+
+    @GET("api/v1/shows")
+    suspend fun getEntireShow(
+        @Query("sort") sort: String,
+        @Query("onlyOpenSchedule") onlyOpenSchedule: Boolean,
+        @Query("size") size: Int,
+    ): Response<Shows>
 
     @GET("api/v1/shows/search")
     suspend fun searchShows(
