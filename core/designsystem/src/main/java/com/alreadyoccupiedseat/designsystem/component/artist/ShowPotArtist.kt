@@ -41,6 +41,7 @@ fun ShowPotArtist(
                     .clickable {
                         onClick()
                     },
+                contentScale = androidx.compose.ui.layout.ContentScale.Crop,
                 model = imageUrl,
                 contentDescription = "Artist Image",
             )
