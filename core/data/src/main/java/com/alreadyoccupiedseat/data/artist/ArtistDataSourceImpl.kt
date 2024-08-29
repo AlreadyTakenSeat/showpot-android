@@ -58,4 +58,9 @@ class ArtistDataSourceImpl @Inject constructor(
         return artistService.subscribeArtists(SubscribeArtistsRequest(artistIds))
             .body()?.successSubscriptionArtistIds ?: emptyList()
     }
+
+    override suspend fun unSubscribeArtists(artistIds: List<String>): List<String> {
+        return artistService.unSubscribeArtists(SubscribeArtistsRequest(artistIds))
+            .body()?.successSubscriptionArtistIds ?: emptyList()
+    }
 }
