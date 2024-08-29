@@ -81,9 +81,52 @@ private fun MyFavoriteShowScreenContent(
                     .padding(top = 12.dp)
                     .padding(it),
             ) {
-                if (state.showList.isEmpty()) {
+                if (state.interestedShowList.isEmpty()) {
                     item { MyFavoriteEmpty() }
                 } else {
+                    itemsIndexed(state.interestedShowList) { index, item ->
+                        ShowInfo(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .clickable {
+                                    // TODO 공연 상세 페이지 이동
+                                },
+                            imageUrl = item.posterImageURL,
+                            showTitle = item.title,
+                            dateInfo =item.startAt,
+                            locationInfo = item.location,
+                            icon = {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Center,
+                                    modifier = Modifier
+                                        .clickable {
+                                            onDeletedMyFavoriteShow(item.id)
+                                        }
+                                        .background(ShowpotColor.Gray500)
+
+                                ) {
+                                    Icon(
+                                        modifier = Modifier
+                                            .padding(start = 5.dp)
+                                            .padding(vertical = 8.dp),
+                                        painter = painterResource(R.drawable.ic_delete_24),
+                                        contentDescription = null,
+                                        tint = ShowpotColor.Gray300
+                                    )
+
+                                    ShowPotKoreanText_B2_Regular(
+                                        modifier = Modifier
+                                            .padding(vertical = 6.5.dp)
+                                            .padding(end = 10.dp),
+                                        text = stringResource(R.string.delete),
+                                        color = ShowpotColor.White,
+                                    )
+                                }
+                            }
+                        )
+                    }
+
                     itemsIndexed(state.showList) { index, show ->
                         ShowInfo(
                             modifier = Modifier
@@ -135,7 +178,7 @@ private fun MyFavoriteShowScreenContent(
 }
 
 @Composable
-fun MyFavoriteEmpty(modifier: Modifier = Modifier) {
+fun MyFavoriteEmpty() {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,

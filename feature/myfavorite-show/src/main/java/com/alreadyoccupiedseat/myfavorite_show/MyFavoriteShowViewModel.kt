@@ -2,9 +2,11 @@ package com.alreadyoccupiedseat.myfavorite_show
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alreadyoccupiedseat.data.show.ShowRepository
 import com.alreadyoccupiedseat.model.Artist
 import com.alreadyoccupiedseat.model.Genre
 import com.alreadyoccupiedseat.model.Show
+import com.alreadyoccupiedseat.model.show.InterestedData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,66 +15,31 @@ import javax.inject.Inject
 
 data class MyFavoriteShowState(
     val showList: List<Show> = emptyList(),
+    val interestedShowList: List<InterestedData> = emptyList()
 )
 
 @HiltViewModel
-class MyFavoriteShowViewModel @Inject constructor() : ViewModel() {
+class MyFavoriteShowViewModel @Inject constructor(
+    private val showRepository: ShowRepository
+) : ViewModel() {
 
-    private val _state = MutableStateFlow<MyFavoriteShowState>(MyFavoriteShowState())
+    private val _state = MutableStateFlow(MyFavoriteShowState())
     val state = _state
 
     init {
-        loadShowsWithDelay()
+        getInterestedShow()
     }
 
-    private fun loadShowsWithDelay() {
+    /** 관심 공연 ***/
+    private fun getInterestedShow() {
         viewModelScope.launch {
-            // TODO RealData
-            delay(3000)
-
-            _state.value = _state.value.copy(showList =
-            (1..10).map { index ->
-                val genres = listOf(
-                    "Rock",
-                    "Band",
-                    "EDM",
-                    "Classic",
-                    "Hiphop",
-                    "House",
-                    "Opera",
-                    "Pop",
-                    "Rnb",
-                    "Musical",
-                    "Metal",
-                    "Jpop",
-                    "Jazz"
+            showRepository.getInterestedShowList(
+                size = 100
+            ).let {
+                _state.value = _state.value.copy(
+                    interestedShowList = it
                 )
-                val genreName = genres[(index - 1) % genres.size]
-                val posterImageURL = if (index % 2 != 0) {
-                    "https://www.dailypop.kr/news/photo/201509/12537_8555_1158.JPG"
-                } else {
-                    "https://cdnimage.dailian.co.kr/news/201502/news_1423016119_486190_m_1.jpg"
-                }
-
-                Show(
-                    artist = Artist(
-                        id = index.toString(),
-                        imageURL = "https://example.com/artist$index.jpg",
-                        koreanName = "Artist $index",
-                        englishName = "Artist $index"
-                    ),
-                    genre = Genre(
-                        id = index.toString(),
-                        name = genreName,
-                        isSubscribed = index % 2 == 0
-                    ),
-                    id = index.toString(),
-                    name = "Concert $index",
-                    posterImageURL = posterImageURL,
-                    ticketingAndShowInfo = listOf(/* ... */)
-                )
-            })
-
+            }
         }
     }
 
