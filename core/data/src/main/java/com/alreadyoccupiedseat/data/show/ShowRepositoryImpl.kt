@@ -2,6 +2,7 @@ package com.alreadyoccupiedseat.data.show
 
 import com.alreadyoccupiedseat.model.SearchedShow
 import com.alreadyoccupiedseat.model.show.Data
+import com.alreadyoccupiedseat.model.show.InterestedData
 import com.alreadyoccupiedseat.model.show.ShowDetail
 import javax.inject.Inject
 
@@ -20,6 +21,10 @@ class ShowRepositoryImpl @Inject constructor(
             onlyOpenSchedule = onlyOpenSchedule,
             size = size
         )
+    }
+
+    override suspend fun getInterestedShowList(size: Int): List<InterestedData> {
+        return showDataSource.getInterestedShowList(size)
     }
 
     override suspend fun searchShows(

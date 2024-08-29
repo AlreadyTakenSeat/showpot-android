@@ -2,6 +2,7 @@ package com.alreadyoccupiedseat.data.show
 
 import com.alreadyoccupiedseat.model.SearchedShow
 import com.alreadyoccupiedseat.model.show.Data
+import com.alreadyoccupiedseat.model.show.InterestedData
 import com.alreadyoccupiedseat.model.show.ShowDetail
 
 interface ShowDataSource {
@@ -11,6 +12,10 @@ interface ShowDataSource {
         onlyOpenSchedule: Boolean,
         size: Int
     ): List<Data>
+
+    suspend fun getInterestedShowList(
+        size: Int
+    ): List<InterestedData>
 
     suspend fun searchShows(
         cursorId: String? = null,

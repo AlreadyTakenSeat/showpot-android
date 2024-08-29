@@ -2,6 +2,7 @@ package com.alreadyoccupiedseat.network
 
 import com.alreadyoccupiedseat.model.PagingData
 import com.alreadyoccupiedseat.model.SearchedShow
+import com.alreadyoccupiedseat.model.show.InterestedData
 import com.alreadyoccupiedseat.model.show.RegisterInterestResponse
 import com.alreadyoccupiedseat.model.show.ShowDetail
 import com.alreadyoccupiedseat.model.show.Shows
@@ -20,6 +21,11 @@ interface ShowService {
         @Query("onlyOpenSchedule") onlyOpenSchedule: Boolean,
         @Query("size") size: Int,
     ): Response<Shows>
+
+    @GET("api/v1/shows/interests")
+    suspend fun getInterestedShowList(
+        @Query("size") size: Int
+    ): Response<PagingData<InterestedData>>
 
     @GET("api/v1/shows/search")
     suspend fun searchShows(

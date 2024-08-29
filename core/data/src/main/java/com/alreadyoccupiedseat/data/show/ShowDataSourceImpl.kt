@@ -5,6 +5,7 @@ import android.content.Context
 import android.provider.Settings
 import com.alreadyoccupiedseat.model.SearchedShow
 import com.alreadyoccupiedseat.model.show.Data
+import com.alreadyoccupiedseat.model.show.InterestedData
 import com.alreadyoccupiedseat.model.show.ShowDetail
 import com.alreadyoccupiedseat.network.ShowService
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -26,6 +27,10 @@ class ShowDataSourceImpl @Inject constructor(
             onlyOpenSchedule = onlyOpenSchedule,
             size = size
         ).body()?.data ?: emptyList()
+    }
+
+override suspend fun getInterestedShowList(size: Int): List<InterestedData> {
+        return showService.getInterestedShowList(size).body()?.data ?: emptyList()
     }
 
     override suspend fun searchShows(
