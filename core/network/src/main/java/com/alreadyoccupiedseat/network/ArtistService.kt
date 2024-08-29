@@ -5,6 +5,7 @@ import com.alreadyoccupiedseat.model.PagingData
 import com.alreadyoccupiedseat.model.SubscribedArtist
 import com.alreadyoccupiedseat.model.artist.SubscribeArtistsRequest
 import com.alreadyoccupiedseat.model.artist.SubscribeArtistsResponse
+import com.alreadyoccupiedseat.model.artist.UnSubscribeArtistsResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -31,8 +32,23 @@ interface ArtistService {
         @Query("size") size: Int,
     ): Response<PagingData<Artist>>
 
+    // TODO: Make sort to enum class
+    @GET("api/v1/artists/subscriptions")
+    suspend fun getSubscribedArtists(
+        @Query("sort") sort: String? = null,
+        @Query("cursor") cursor: String? = null,
+        @Query("size") size: Int,
+    ): Response<PagingData<Artist>>
+
+
     @POST("api/v1/artists/subscribe")
     suspend fun subscribeArtists(
         @Body artistIds: SubscribeArtistsRequest,
     ): Response<SubscribeArtistsResponse>
+
+    // TODO: check request and response model's name
+    @POST("api/v1/artists/unsubscribe")
+    suspend fun unSubscribeArtists(
+        @Body artistIds: SubscribeArtistsRequest,
+    ): Response<UnSubscribeArtistsResponse>
 }

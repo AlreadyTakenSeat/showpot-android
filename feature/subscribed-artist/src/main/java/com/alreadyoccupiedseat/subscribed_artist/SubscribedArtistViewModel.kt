@@ -2,6 +2,7 @@ package com.alreadyoccupiedseat.subscribed_artist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alreadyoccupiedseat.data.artist.ArtistRepository
 import com.alreadyoccupiedseat.model.Artist
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -21,7 +22,9 @@ data class SubscribedArtistState(
 )
 
 @HiltViewModel
-class SubscribedArtistViewModel @Inject constructor() : ViewModel() {
+class SubscribedArtistViewModel @Inject constructor(
+    private val aristRepository: ArtistRepository
+) : ViewModel() {
 
     private val _state = MutableStateFlow<SubscribedArtistState>(SubscribedArtistState())
     val state = _state
@@ -35,30 +38,21 @@ class SubscribedArtistViewModel @Inject constructor() : ViewModel() {
 
     private fun loadSubscribedArtist() {
         viewModelScope.launch {
-            // TODO RealData
-            delay(3000)
-            _state.value = _state.value.copy(subscribedArtists =
-            (1..10).map { index ->
-                val posterImageURL = if (index % 2 != 0) {
-                    "https://www.dailypop.kr/news/photo/201509/12537_8555_1158.JPG"
-                } else {
-                    "https://cdnimage.dailian.co.kr/news/201502/news_1423016119_486190_m_1.jpg"
-                }
-                Artist(
-                    id = index.toString(),
-                    imageURL = posterImageURL,
-                    koreanName = "Artist $index",
-                    englishName = "Artist $index"
-                )
-            })
+            val result = aristRepository.getSubscribedArtists(
+                size = 100
+            )
+            _state.value = _state.value.copy(subscribedArtists = result)
         }
     }
 
     fun deleteSubscribedArtist(id: String) {
         viewModelScope.launch {
-            _state.value = _state.value.copy(
-                subscribedArtists = _state.value.subscribedArtists.filter { it.id != id }
+            val unSubscribedArtists = aristRepository.unSubscribeArtists(
+                artistIds = listOf(id)
             )
+
+            _state.value =
+                _state.value.copy(subscribedArtists = _state.value.subscribedArtists.filter { it.id !in unSubscribedArtists.first() })
         }
     }
 

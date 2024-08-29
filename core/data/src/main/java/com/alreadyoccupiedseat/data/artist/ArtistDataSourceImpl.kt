@@ -42,8 +42,25 @@ class ArtistDataSourceImpl @Inject constructor(
         ).body()?.data ?: emptyList()
     }
 
+    override suspend fun getSubscribedArtists(
+        sort: String?,
+        cursor: String?,
+        size: Int
+    ): List<Artist> {
+        return artistService.getSubscribedArtists(
+            sort,
+            cursor,
+            size,
+        ).body()?.data ?: emptyList()
+    }
+
     override suspend fun subscribeArtists(artistIds: List<String>): List<String> {
         return artistService.subscribeArtists(SubscribeArtistsRequest(artistIds))
             .body()?.successSubscriptionArtistIds ?: emptyList()
+    }
+
+    override suspend fun unSubscribeArtists(artistIds: List<String>): List<String> {
+        return artistService.unSubscribeArtists(SubscribeArtistsRequest(artistIds))
+            .body()?.successUnsubscriptionArtistIds ?: emptyList()
     }
 }
