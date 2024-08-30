@@ -1,6 +1,5 @@
 package com.alreadyoccupiedseat.home
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -36,7 +35,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.alreadyoccupiedseat.core.extension.isScrollingUp
 import com.alreadyoccupiedseat.designsystem.R
@@ -46,7 +44,7 @@ import com.alreadyoccupiedseat.designsystem.component.ShowPotGenre
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMenu
 import com.alreadyoccupiedseat.designsystem.component.ShowPotSearchBar
 import com.alreadyoccupiedseat.designsystem.component.ShowPotTicket
-import com.alreadyoccupiedseat.designsystem.component.artistByPainter.ShowPotArtistByPainter
+import com.alreadyoccupiedseat.designsystem.component.artist.ShowPotArtist
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B1_SemiBold
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 import kotlinx.coroutines.delay
@@ -63,6 +61,11 @@ fun HomeScreen(
 ) {
     val viewModel = hiltViewModel<HomeViewModel>()
     val state = viewModel.state.collectAsState()
+
+    LaunchedEffect(true) {
+        viewModel.getUbSubscribedArtists()
+    }
+
     HomeScreenContent(
         state = state.value,
         onSearchBarClicked = onSearchBarClicked,
@@ -86,7 +89,8 @@ fun HomeScreenContent(
     var isTopBarVisible by remember { mutableStateOf(true) }
     val scope = rememberCoroutineScope()
     val scrollState = rememberLazyListState()
-    val firstVisibleItemIndex = remember { derivedStateOf { scrollState.firstVisibleItemIndex } }.value
+    val firstVisibleItemIndex =
+        remember { derivedStateOf { scrollState.firstVisibleItemIndex } }.value
 
     // 첫 번째 아이템이 보이면 무조건 상단바 노출
     if (firstVisibleItemIndex == 0) {
@@ -185,11 +189,13 @@ fun HomeScreenContent(
                         modifier = Modifier.padding(start = 16.dp, top = 6.dp),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        items(count = 10) {
-                            ShowPotArtistByPainter(
-                                text = "High Flying Birds",
-                                icon = painterResource(id = R.drawable.img_artist_default),
-                            )
+                        state.unSubscribedArtists.forEach { curArtist ->
+                            item {
+                                ShowPotArtist(
+                                    text = curArtist.englishName,
+                                    imageUrl = curArtist.imageURL,
+                                )
+                            }
                         }
                     }
                 }
