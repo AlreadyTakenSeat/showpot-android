@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.SearchHistoryChip
@@ -49,8 +50,8 @@ fun RecentSearchHistorySection(
         ShowPotKoreanText_B1_SemiBold(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 44.dp)
-                .padding(horizontal = 138.dp), text = "검색 기록이 없어요", color = ShowpotColor.Gray400
+                .padding(top = 44.dp), text = "검색 기록이 없어요", color = ShowpotColor.Gray400,
+            textAlign = TextAlign.Center
         )
     } else {
         FlowRow(
