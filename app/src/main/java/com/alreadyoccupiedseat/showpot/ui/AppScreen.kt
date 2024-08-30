@@ -187,6 +187,9 @@ fun AppScreenContent(
             composable(Screen.MyAlarmSetting.route) {
                 MyAlarmSettingScreen(
                     navController = navController,
+                    onShowClicked = {
+                        navController.navigate(Screen.ShowDetail.route.replace("{showId}", it))
+                    },
                     onEntireShowClicked = {
                         navController.navigate(Screen.EntireShowList.route)
                     }

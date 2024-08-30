@@ -3,7 +3,9 @@ package com.alreadyoccupiedseat.myalarm_setting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alreadyoccupiedseat.data.show.ShowRepository
+import com.alreadyoccupiedseat.enum.TicketingAlertTime
 import com.alreadyoccupiedseat.model.show.Shows
+import com.alreadyoccupiedseat.model.show.Shows.Companion.NORMAL
 import com.alreadyoccupiedseat.model.temp.AlarmReservedShow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,12 +15,15 @@ import javax.inject.Inject
 //getAlertReservedShow
 data class MyAlarmSettingState(
     val alarmReservedShow: List<AlarmReservedShow> = emptyList(),
-    val isAlarmOptionSheetVisible: Boolean = false, // 알람 옵션 시트 표시 상태
-    val isTicketSheetVisible: Boolean = false, // 티켓 시트 표시 상태
-    val selectedShowId: String? = null, // 선택된 쇼 ID
-    val isFirstItemSelected: Boolean = false, // 첫 번째 아이템 선택 상태
-    val isSecondItemSelected: Boolean = false, // 두 번째 아이템 선택 상태
-    val isThirdItemSelected: Boolean = false, // 세 번째 아이템 선택 상태
+    val isAlarmOptionSheetVisible: Boolean = false,
+    val isTicketSheetVisible: Boolean = false,
+    val selectedShowId: String? = null,
+    val isFirstItemAvailable: Boolean = false,
+    val isSecondItemAvailable: Boolean = false,
+    val isThirdItemAvailable: Boolean = true,
+    val isFirstItemSelected: Boolean = false,
+    val isSecondItemSelected: Boolean = false,
+    val isThirdItemSelected: Boolean = false,
 )
 
 @HiltViewModel
@@ -33,7 +38,7 @@ class MyAlarmSettingViewModel @Inject constructor(
         getAlarmReservedShow()
     }
 
-    private fun getAlarmReservedShow() {
+    fun getAlarmReservedShow() {
         viewModelScope.launch {
             showRepository.getAlarmReservedShow(
                 size = 100,
@@ -70,37 +75,69 @@ class MyAlarmSettingViewModel @Inject constructor(
         }
     }
 
-    fun setFirstItemSelected(isFirstItemSelected: Boolean) {
+    fun changeFirstItemSelection() {
         viewModelScope.launch {
             _state.value = _state.value.copy(
-                isFirstItemSelected = isFirstItemSelected
+                isFirstItemSelected = !_state.value.isFirstItemSelected
             )
         }
     }
 
-    fun setSecondItemSelected(isSecondItemSelected: Boolean) {
+    fun changeSecondItemSelection() {
         viewModelScope.launch {
             _state.value = _state.value.copy(
-                isSecondItemSelected = isSecondItemSelected
+                isSecondItemSelected = !_state.value.isSecondItemSelected
             )
         }
     }
 
-    fun setThirdItemSelected(isThirdItemSelected: Boolean) {
+    fun changeThirdItemSelection() {
         viewModelScope.launch {
             _state.value = _state.value.copy(
-                isThirdItemSelected = isThirdItemSelected
+                isThirdItemSelected = !_state.value.isThirdItemSelected
             )
+        }
+    }
+
+    fun registerTicketingAlert() {
+        viewModelScope.launch {
+            val showId = _state.value.selectedShowId ?: String()
+            val alertTimes = if (state.value.isThirdItemSelected) {
+                listOf(TicketingAlertTime.BEFORE_1.name)
+            } else {
+                emptyList()
+            }
+            alertTimes.ifEmpty {
+                _state.value = _state.value.copy(
+                    alarmReservedShow = _state.value.alarmReservedShow.filter { it.id != showId }
+                )
+            }
+            val result = showRepository.registerTicketingAlert(showId, NORMAL, alertTimes)
+            if (result.isSuccess) {
+                println("Alert registered successfully")
+            } else {
+                println(result.exceptionOrNull())
+            }
         }
     }
 
     fun removeClicked() {
         viewModelScope.launch {
-            _state.value = _state.value.copy(
-                alarmReservedShow = _state.value.alarmReservedShow.filter { it.id != _state.value.selectedShowId },
-                isAlarmOptionSheetVisible = false,
-                selectedShowId = null,
-            )
+            val showId = _state.value.selectedShowId ?: String()
+            val isSuccess = showRepository.registerTicketingAlert(
+                showId = showId,
+                ticketingApiType = NORMAL,
+                alertTimes = emptyList()
+            ).isSuccess
+            if (isSuccess) {
+                _state.value = _state.value.copy(
+                    alarmReservedShow = _state.value.alarmReservedShow.filter { it.id != showId },
+                    isAlarmOptionSheetVisible = false,
+                    selectedShowId = null,
+                )
+            } else {
+                println("Failed to remove alert")
+            }
         }
     }
 
