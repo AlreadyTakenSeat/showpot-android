@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowInfo
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
@@ -37,10 +38,12 @@ fun SearchedSection(
     isArtistUnSubscriptionSheetVisible: Boolean,
     searchedArtists: List<SubscribedArtist>,
     searchedShows: List<SearchedShow>,
-    unSubscribeTargetArtist: String,
-    onUnSubscribeTargetArtistChanged: (String) -> Unit = {},
+    unSubscribeTargetArtist: SubscribedArtist?,
+    onUnSubscribeTargetArtistChanged: (SubscribedArtist) -> Unit = {},
     onShowClicked: (String) -> Unit = {},
-    onArtistUnSubscriptionSheetVisibilityChanged: (Boolean) -> Unit = {}
+    onArtistUnSubscriptionSheetVisibilityChanged: (Boolean) -> Unit = {},
+    onSubscribeArtist: (String) -> Unit = {},
+    onUnSubscribeArtist: () -> Unit = {},
 ) {
 
     if (isArtistUnSubscriptionSheetVisible) {
@@ -60,7 +63,7 @@ fun SearchedSection(
 
                 ShowPotEnglishText_H1(
                     modifier = Modifier.fillMaxWidth(),
-                    text = unSubscribeTargetArtist,
+                    text = unSubscribeTargetArtist?.englishName ?: String.EMPTY,
                     color = Color.White
                 )
 
@@ -78,7 +81,8 @@ fun SearchedSection(
                     modifier = Modifier.fillMaxWidth(),
                     text = "구독 취소하기"
                 ) {
-
+                    onUnSubscribeArtist()
+                    onArtistUnSubscriptionSheetVisibilityChanged(false)
                 }
 
                 Spacer(modifier = Modifier.height(54.dp))
@@ -111,10 +115,10 @@ fun SearchedSection(
                         isSubscribed = artist.isSubscribed,
                     ) {
                         if (artist.isSubscribed) {
-                            onUnSubscribeTargetArtistChanged(artist.englishName)
+                            onUnSubscribeTargetArtistChanged(artist)
                             onArtistUnSubscriptionSheetVisibilityChanged(true)
                         } else {
-                            // TODO: subscribe
+                            onSubscribeArtist(artist.id)
                         }
                     }
                 }
@@ -139,8 +143,6 @@ fun SearchedSection(
             item { Spacer(modifier = Modifier.height(6.dp)) }
             searchedShows.forEach { show ->
 
-                // the reason it has two item just in a foreach scope is because the mock response type isn't clear
-                // TODO: Remove one of item scope and assign the real data into the ShowInfo
                 item {
                     ShowInfo(
                         modifier = Modifier.padding(horizontal = 16.dp)
