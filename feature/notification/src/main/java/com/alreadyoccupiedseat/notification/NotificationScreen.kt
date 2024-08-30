@@ -15,12 +15,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.IconMenuWithCount
-import com.alreadyoccupiedseat.designsystem.component.ticketSlider.TicketSlidePager
 import com.alreadyoccupiedseat.designsystem.typo.english.ShowPotEnglishText_H0
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H0
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
@@ -79,7 +79,8 @@ fun NotificationScreenContent(
     onMyFinishedShowClicked: () -> Unit,
 ) {
 
-    val pagerState = rememberPagerState(pageCount = { state.upcomingTicketingShows.size - 1 })
+    val pagerState = rememberPagerState(pageCount = { state.upcomingTicketingShows.size })
+
     Scaffold(
         containerColor = ShowpotColor.Gray700,
     ) {
@@ -109,7 +110,9 @@ fun NotificationScreenContent(
                     ShowPotEnglishText_H0(
                         text = state.upcomingTicketingShows[pagerState.currentPage].title,
                         modifier = Modifier.padding(horizontal = 16.dp),
-                        color = ShowpotColor.Gray100
+                        color = ShowpotColor.Gray100,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
 
