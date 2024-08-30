@@ -13,12 +13,17 @@ import com.alreadyoccupiedseat.model.SearchedShow
 import com.alreadyoccupiedseat.model.Show
 import com.alreadyoccupiedseat.model.SubscribedArtist
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 sealed interface SearchScreenEvent {
     data object Idle : SearchScreenEvent
+
+    data object SubscribeArtistSuccess : SearchScreenEvent
+
+    data object UnSubscribeArtistSuccess : SearchScreenEvent
 }
 
 data class SearchScreenState(
@@ -28,7 +33,7 @@ data class SearchScreenState(
     val searchedArtists: List<SubscribedArtist> = emptyList(),
     val searchedShows: List<SearchedShow> = emptyList(),
     val isArtistUnSubscriptionSheetVisible: Boolean = false,
-    val unSubscribeTargetArtist: String = String.EMPTY,
+    val unSubscribeTargetArtist: SubscribedArtist? = null,
 )
 
 
@@ -42,7 +47,7 @@ class SearchViewModel @Inject constructor(
     private var _state = MutableStateFlow<SearchScreenState>(SearchScreenState())
     val state = _state
 
-    private var _event = MutableStateFlow<SearchScreenEvent>(SearchScreenEvent.Idle)
+    private var _event = MutableSharedFlow<SearchScreenEvent>()
     val event = _event
 
     init {
@@ -95,30 +100,78 @@ class SearchViewModel @Inject constructor(
         )
     }
 
-    fun changeUnSubscribeTargetArtist(artist: String) {
+    fun changeUnSubscribeTargetArtist(subscribedArtist: SubscribedArtist) {
         _state.value = _state.value.copy(
-            unSubscribeTargetArtist = artist
+            unSubscribeTargetArtist = subscribedArtist
         )
     }
 
     fun searchArtistsAndShows() {
+
         viewModelScope.launch {
-            // TODO: Changed to real data
+            searchArtists()
+            searchShows()
+            stateChangeToSearched()
+        }
+    }
+
+    fun subscribeArtist(artistId: String) {
+        viewModelScope.launch {
+            val result = artistRepository.subscribeArtists(listOf(artistId))
+
+            _state.value = _state.value.copy(
+                searchedArtists = _state.value.searchedArtists.map {
+                    if (it.id == result.first()) {
+                        it.copy(isSubscribed = true)
+                    } else {
+                        it
+                    }
+                }
+            )
+
+            _event.emit(SearchScreenEvent.SubscribeArtistSuccess)
+        }
+    }
+
+    fun unSubscribeArtist() {
+        viewModelScope.launch {
+            state.value.unSubscribeTargetArtist?.let { targetArtist ->
+                val result = artistRepository.unSubscribeArtists(listOf(targetArtist.id))
+
+                _state.value = _state.value.copy(
+                    searchedArtists = _state.value.searchedArtists.map {
+                        if (it.id == result.first()) {
+                            it.copy(isSubscribed = false)
+                        } else {
+                            it
+                        }
+                    }
+                )
+
+                _event.emit(SearchScreenEvent.UnSubscribeArtistSuccess)
+            }
+        }
+    }
+
+    private fun searchArtists() {
+        viewModelScope.launch {
             val searchedArtists = artistRepository.searchArtists(
                 size = 100,
                 search = _state.value.inputText,
             )
 
             _state.value = _state.value.copy(searchedArtists = searchedArtists)
+        }
+    }
 
+    private fun searchShows() {
+        viewModelScope.launch {
             val searchedShows = showRepository.searchShows(
                 size = 100,
                 search = _state.value.inputText,
             )
 
             _state.value = _state.value.copy(searchedShows = searchedShows)
-
-            stateChangeToSearched()
         }
     }
 }

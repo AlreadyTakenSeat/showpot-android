@@ -64,6 +64,7 @@ fun HomeScreen(
 
     LaunchedEffect(true) {
         viewModel.getUbSubscribedArtists()
+        viewModel.getNickName()
     }
 
     HomeScreenContent(
@@ -274,7 +275,7 @@ fun HomeScreenContent(
                         modifier = Modifier
                             .padding(top = 38.dp)
                             .padding(horizontal = 16.dp, vertical = 7.dp),
-                        text = "춤추는 고래님을 위한 추천 공연", color = ShowpotColor.Gray100
+                        text = if (state.nickName.isNotEmpty()) "${state.nickName}을 위한 추천 공연" else "이달의 추천공연", color = ShowpotColor.Gray100
                     )
                 }
 

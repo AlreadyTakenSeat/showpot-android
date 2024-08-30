@@ -2,7 +2,9 @@ package com.alreadyoccupiedseat.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.data.artist.ArtistRepository
+import com.alreadyoccupiedseat.data.login.LoginRepository
 import com.alreadyoccupiedseat.data.show.ShowRepository
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.model.Artist
@@ -47,13 +49,15 @@ val performances = listOf(
 data class HomeScreenState(
     val genreList: List<Pair<Int, Int>> = emptyList(),
     val entireShowList: Shows = Shows(data = emptyList(), hasNext = false, size = 0),
-    val unSubscribedArtists: List<Artist> = emptyList()
+    val unSubscribedArtists: List<Artist> = emptyList(),
+    val nickName: String = String.EMPTY
 )
 
 @HiltViewModel
 class HomeViewModel@Inject constructor(
     private val showRepository: ShowRepository,
-    private val artistRepository: ArtistRepository
+    private val artistRepository: ArtistRepository,
+    private val loginRepository: LoginRepository
 ) : ViewModel(){
 
     private val _state = MutableStateFlow(HomeScreenState())
@@ -110,6 +114,14 @@ class HomeViewModel@Inject constructor(
             _state.value = _state.value.copy(
                 unSubscribedArtists = unSubscribedArtists
             )
+        }
+    }
+
+    fun getNickName() {
+        viewModelScope.launch {
+            loginRepository.getProfile().onSuccess { profile ->
+                _state.value = state.value.copy(nickName = profile.nickname)
+            }
         }
     }
 
