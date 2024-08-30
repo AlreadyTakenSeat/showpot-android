@@ -2,6 +2,7 @@ package com.alreadyoccupiedseat.network
 
 import com.alreadyoccupiedseat.model.PagingData
 import com.alreadyoccupiedseat.model.SearchedShow
+import com.alreadyoccupiedseat.model.alert.CheckAlertReservationResponse
 import com.alreadyoccupiedseat.model.alert.TicketingAlertRequest
 import com.alreadyoccupiedseat.model.show.InterestedData
 import com.alreadyoccupiedseat.model.show.RegisterInterestResponse
@@ -55,6 +56,11 @@ interface ShowService {
         @Body alertTimes: TicketingAlertRequest
     ): Response<Unit>
 
+    @POST("api/v1/shows/{showId}/alert/reservations")
+    suspend fun checkAlertReservation(
+        @Path("showId") showId: String,
+        @Query("ticketingApiType") ticketingApiType: String,
+    ): Response<CheckAlertReservationResponse>
     @GET("api/v1/shows/alerts")
     suspend fun getAlarmReservedShow(
         @Query("size") size: Int,

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.Settings
 import com.alreadyoccupiedseat.model.SearchedShow
+import com.alreadyoccupiedseat.model.alert.CheckAlertReservationResponse
 import com.alreadyoccupiedseat.model.alert.TicketingAlertRequest
 import com.alreadyoccupiedseat.model.show.Data
 import com.alreadyoccupiedseat.model.show.InterestedData
@@ -71,6 +72,14 @@ class ShowDataSourceImpl @Inject constructor(
                 TicketingAlertRequest(alertTimes)
             )
         }
+    }
+
+    override suspend fun checkAlertReservation(
+        showId: String,
+        ticketingApiType: String
+    ): CheckAlertReservationResponse {
+        return showService.checkAlertReservation(showId, ticketingApiType).body()
+            ?: throw Exception("Check Alert Reservation failed")
     }
 
     /** 알림 설정한 공연 목록 조회 ***/
