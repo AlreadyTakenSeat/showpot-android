@@ -110,6 +110,22 @@ class SearchViewModel @Inject constructor(
         }
     }
 
+    fun subscribeArtist(artistId: String) {
+        viewModelScope.launch {
+            val result = artistRepository.subscribeArtists(listOf(artistId))
+
+            _state.value = _state.value.copy(
+                searchedArtists = _state.value.searchedArtists.map {
+                    if (it.id == result.first()) {
+                        it.copy(isSubscribed = true)
+                    } else {
+                        it
+                    }
+                }
+            )
+        }
+    }
+
     private fun searchArtists() {
         viewModelScope.launch {
             val searchedArtists = artistRepository.searchArtists(

@@ -80,6 +80,9 @@ fun SearchScreen(
         },
         onShowClicked = {
             onShowClicked(it)
+        },
+        onRequestSubscribeArtist = {
+            viewModel.subscribeArtist(it)
         }
     )
 }
@@ -96,7 +99,8 @@ fun SearchScreenContent(
     onDeleteHistoryClicked: (String) -> Unit = {},
     onchangeArtistUnSubscriptionSheetVisibility: (Boolean) -> Unit = {},
     onChangeUnSubscribeTargetArtist: (String) -> Unit = {},
-    onShowClicked: (String) -> Unit = {}
+    onShowClicked: (String) -> Unit = {},
+    onRequestSubscribeArtist: (String) -> Unit = {}
 ) {
 
     val focusRequester = remember { FocusRequester() }
@@ -188,9 +192,13 @@ fun SearchScreenContent(
                         onChangeUnSubscribeTargetArtist(it)
                     },
                     onShowClicked = onShowClicked,
-                ) {
-                    onchangeArtistUnSubscriptionSheetVisibility(it)
-                }
+                    onArtistUnSubscriptionSheetVisibilityChanged = {
+                        onchangeArtistUnSubscriptionSheetVisibility(it)
+                    },
+                    onSubscribeArtist = {
+                        onRequestSubscribeArtist(it)
+                    }
+                )
             }
         }
     }

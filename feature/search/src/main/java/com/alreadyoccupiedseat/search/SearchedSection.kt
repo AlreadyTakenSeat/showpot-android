@@ -40,7 +40,8 @@ fun SearchedSection(
     unSubscribeTargetArtist: String,
     onUnSubscribeTargetArtistChanged: (String) -> Unit = {},
     onShowClicked: (String) -> Unit = {},
-    onArtistUnSubscriptionSheetVisibilityChanged: (Boolean) -> Unit = {}
+    onArtistUnSubscriptionSheetVisibilityChanged: (Boolean) -> Unit = {},
+    onSubscribeArtist: (String) -> Unit = {},
 ) {
 
     if (isArtistUnSubscriptionSheetVisible) {
@@ -114,7 +115,7 @@ fun SearchedSection(
                             onUnSubscribeTargetArtistChanged(artist.englishName)
                             onArtistUnSubscriptionSheetVisibilityChanged(true)
                         } else {
-                            // TODO: subscribe
+                            onSubscribeArtist(artist.id)
                         }
                     }
                 }
@@ -138,9 +139,7 @@ fun SearchedSection(
         ) {
             item { Spacer(modifier = Modifier.height(6.dp)) }
             searchedShows.forEach { show ->
-
-                // the reason it has two item just in a foreach scope is because the mock response type isn't clear
-                // TODO: Remove one of item scope and assign the real data into the ShowInfo
+                
                 item {
                     ShowInfo(
                         modifier = Modifier.padding(horizontal = 16.dp)
