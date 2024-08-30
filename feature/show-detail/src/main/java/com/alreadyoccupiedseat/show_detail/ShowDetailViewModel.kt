@@ -66,7 +66,7 @@ class ShowDetailViewModel @Inject constructor(
         viewModelScope.launch {
             val result = showRepository.registerTicketingAlert(showId, ticketingApiType, alertTimes)
             if (result.isSuccess) {
-                checkAlertAvailability()
+//                checkAlertAvailability()
                 _event.emit(ShowDetailEvent.AlertRegisterSuccess)
             } else {
                 println(result.exceptionOrNull())
@@ -95,15 +95,16 @@ class ShowDetailViewModel @Inject constructor(
         )
     }
 
-    private fun checkAlertAvailability() {
-        viewModelScope.launch {
-            // TODO: not only for Third Item
-            val availabilitiesInfo = showRepository.checkAlertReservation(state.value.showId, "NORMAL")
-            _state.value = _state.value.copy(
-                isThirdItemSelected = availabilitiesInfo.alertReservationStatus.before1
-            )
-        }
-    }
+    // TODO: Bug
+//    private fun checkAlertAvailability() {
+//        viewModelScope.launch {
+//            // TODO: not only for Third Item
+//            val availabilitiesInfo = showRepository.checkAlertReservation(state.value.showId, "NORMAL")
+//            _state.value = _state.value.copy(
+//                isThirdItemSelected = availabilitiesInfo.alertReservationStatus.before1
+//            )
+//        }
+//    }
 
     // TODO: generate fun to change the availability of the first, second, and third item
 }

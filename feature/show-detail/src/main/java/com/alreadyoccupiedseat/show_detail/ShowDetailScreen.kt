@@ -107,7 +107,11 @@ fun ShowDetailScreen(
                 showId,
                 "NORMAL",
                 // TODO: request the actual alert times after MVP
-                listOf(TicketingAlertTime.BEFORE_1.name)
+                if (state.value.isThirdItemSelected) {
+                    listOf(TicketingAlertTime.BEFORE_1.name)
+                } else {
+                    emptyList()
+                }
             )
         }
 
@@ -286,7 +290,8 @@ fun ShowDetailScreenContent(
                     HorizontalTitleAndInfoText(
                         Modifier.padding(horizontal = 16.dp),
                         "일반예매 오픈",
-                        state.showDetail?.ticketingTimes?.first()?.ticketingAt?.replace("-", ".") ?: String.EMPTY
+                        state.showDetail?.ticketingTimes?.first()?.ticketingAt?.replace("-", ".")
+                            ?: String.EMPTY
                     )
                 }
 
