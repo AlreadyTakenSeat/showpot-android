@@ -48,4 +48,12 @@ class ShowRepositoryImpl @Inject constructor(
         return showDataSource.registerShowInterest(showId)
     }
 
+    override suspend fun registerTicketingAlert(
+        showId: String,
+        ticketingApiType: String,
+        alertTimes: List<String>
+    ): Result<Unit> {
+        return showDataSource.registerTicketingAlert(showId, ticketingApiType, alertTimes)
+    }
+
 }

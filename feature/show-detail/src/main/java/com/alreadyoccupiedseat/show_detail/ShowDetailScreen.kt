@@ -1,5 +1,6 @@
 package com.alreadyoccupiedseat.show_detail
 
+import android.widget.Toast
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,13 +22,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -46,6 +45,8 @@ import com.alreadyoccupiedseat.designsystem.getTicketSiteButtonColor
 import com.alreadyoccupiedseat.designsystem.typo.english.ShowPotEnglishText_H0
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
+import com.alreadyoccupiedseat.enum.TicketingAlertTime
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun ShowDetailScreen(
@@ -56,9 +57,31 @@ fun ShowDetailScreen(
     val viewModel = hiltViewModel<ShowDetailViewModel>()
     val state = viewModel.state.collectAsState()
 
+    val context = LocalContext.current
+    LaunchedEffect(viewModel.event) {
+        viewModel.event.collectLatest { event ->
+            when (event) {
+                is ShowDetailEvent.Idle -> {
+
+
+                }
+
+                is ShowDetailEvent.AlertRegisterSuccess -> {
+                    Toast.makeText(
+                        context,
+                        "알림 요청에 성공하였습니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+    }
+    val event = viewModel.event
+
     LaunchedEffect(showId) {
         viewModel.getShowDetail(showId)
     }
+
 
     ShowDetailScreenContent(
         state = state.value,
@@ -70,6 +93,23 @@ fun ShowDetailScreen(
         },
         onChangeSheetVisibility = {
             viewModel.changeSheetVisibility(it)
+        },
+        onFirstItemClicked = {
+            viewModel.changeFirstItemSelection()
+        },
+        onSecondItemClicked = {
+            viewModel.changeSecondItemSelection()
+        },
+        onThirdItemClicked = {
+            viewModel.changeThirdItemSelection()
+        },
+        onRegisterAlertButtonClicked = {
+            viewModel.registerTicketingAlert(
+                showId,
+                "NORMAL",
+                // TODO: request the actual alert times after MVP
+                listOf(TicketingAlertTime.BEFORE_1.name)
+            )
         }
 
     )
@@ -80,7 +120,11 @@ fun ShowDetailScreenContent(
     state: ShowDetailState,
     onBackButtonClicked: () -> Unit,
     onIconButtonClicked: () -> Unit,
-    onChangeSheetVisibility: (Boolean) -> Unit
+    onChangeSheetVisibility: (Boolean) -> Unit,
+    onFirstItemClicked: () -> Unit,
+    onSecondItemClicked: () -> Unit,
+    onThirdItemClicked: () -> Unit,
+    onRegisterAlertButtonClicked: () -> Unit,
 ) {
 
     val lazyColumnState = rememberLazyListState()
@@ -91,27 +135,27 @@ fun ShowDetailScreenContent(
         ) ShowpotColor.Gray700 else Color.Transparent
     )
 
-    var isFirstItemSelected by remember { mutableStateOf(false) }
-    var isSecondItemSelected by remember { mutableStateOf(false) }
-    var isThirdItemSelected by remember { mutableStateOf(false) }
-
     if (state.isSheetVisible) {
 
         TicketingNotificationBottomSheet(
-            firstItemSelected = isFirstItemSelected,
-            secondItemSelected = isSecondItemSelected,
-            thirdItemSelected = isThirdItemSelected,
+            isFirstItemAvailable = state.isFirstItemAvailable,
+            isSecondItemAvailable = state.isSecondItemAvailable,
+            isThirdItemAvailable = state.isThirdItemAvailable,
+            firstItemSelected = state.isFirstItemSelected,
+            secondItemSelected = state.isSecondItemSelected,
+            thirdItemSelected = state.isThirdItemSelected,
             onFirstItemClicked = {
-                isFirstItemSelected = !isFirstItemSelected
+                onFirstItemClicked()
             },
             onSecondItemClicked = {
-                isSecondItemSelected = !isSecondItemSelected
+                onSecondItemClicked()
             },
             onThirdItemClicked = {
-                isThirdItemSelected = !isThirdItemSelected
+                onThirdItemClicked()
             },
             onMainButtonClicked = {
-                // TODO: Implement
+                onRegisterAlertButtonClicked()
+                onChangeSheetVisibility(false)
             },
             onDismissRequested = {
                 onChangeSheetVisibility(false)
@@ -415,8 +459,8 @@ fun ShowDetailScreenContent(
             ) {
 
                 IconButtonWithShowPotMainButton(
-                    if (state.showDetail?.isInterested == true) painterResource(com.alreadyoccupiedseat.designsystem.R.drawable.ic_heart_36_off)
-                    else painterResource(com.alreadyoccupiedseat.designsystem.R.drawable.ic_heart_36_on),
+                    if (state.showDetail?.isInterested == true) painterResource(com.alreadyoccupiedseat.designsystem.R.drawable.ic_heart_36_on)
+                    else painterResource(com.alreadyoccupiedseat.designsystem.R.drawable.ic_heart_36_off),
                     stringResource(R.string.set_notification),
                     onIconButtonClicked = {
                         onIconButtonClicked()
