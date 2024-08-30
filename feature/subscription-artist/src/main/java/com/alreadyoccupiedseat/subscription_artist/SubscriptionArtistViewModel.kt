@@ -12,6 +12,8 @@ import javax.inject.Inject
 
 sealed interface SubscriptionArtistScreenEvent {
     data object Idle : SubscriptionArtistScreenEvent
+
+    data object SubscribeArtistsSuccess : SubscriptionArtistScreenEvent
 }
 
 data class SubscriptionArtistScreenState(
@@ -31,8 +33,10 @@ class SubscriptionArtistViewModel @Inject constructor(
     init {
         getUnsubscribedArtists()
         viewModelScope.launch {
-            accountDataStore.getAccessToken()?.let {
-                _state.value = _state.value.copy(isLoggedIn = true)
+            accountDataStore.getAccessTokenFlow().collect {
+                _state.value = _state.value.copy(
+                    isLoggedIn = it?.isNotEmpty() ?: false,
+                )
             }
         }
     }
@@ -40,7 +44,7 @@ class SubscriptionArtistViewModel @Inject constructor(
     private var _state = MutableStateFlow(SubscriptionArtistScreenState())
     val state = _state
 
-    val event = MutableStateFlow(SubscriptionArtistScreenEvent.Idle)
+    val event = MutableStateFlow<SubscriptionArtistScreenEvent>(SubscriptionArtistScreenEvent.Idle)
 
     fun subscribeArtists() {
         viewModelScope.launch {
@@ -50,6 +54,7 @@ class SubscriptionArtistViewModel @Inject constructor(
                 selectedArtists = emptyList(),
                 unsubscribedArtists = state.value.unsubscribedArtists.filter { it.id !in subscribedArtistsIds },
             )
+            event.emit(SubscriptionArtistScreenEvent.SubscribeArtistsSuccess)
         }
     }
 
