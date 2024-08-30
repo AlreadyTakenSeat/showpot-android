@@ -185,7 +185,12 @@ fun AppScreenContent(
             }
 
             composable(Screen.MyAlarmSetting.route) {
-                MyAlarmSettingScreen(navController)
+                MyAlarmSettingScreen(
+                    navController = navController,
+                    onEntireShowClicked = {
+                        navController.navigate(Screen.EntireShowList.route)
+                    }
+                )
             }
 
             composable(Screen.Settings.route) {

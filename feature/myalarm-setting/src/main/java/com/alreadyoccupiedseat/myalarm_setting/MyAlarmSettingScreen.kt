@@ -32,6 +32,7 @@ import com.alreadyoccupiedseat.designsystem.component.button.ShowPotSubButton
 @Composable
 fun MyAlarmSettingScreen(
     navController: NavController,
+    onEntireShowClicked: () -> Unit
 ) {
 
     val viewModel = hiltViewModel<MyAlarmSettingViewModel>()
@@ -44,6 +45,9 @@ fun MyAlarmSettingScreen(
         },
         onDismissRequested = {
 
+        },
+        onEntireShowClicked = {
+            onEntireShowClicked()
         },
         onTicketSheetVisible = { isVisible ->
             viewModel.setTicketSheetVisible(isVisible)
@@ -75,6 +79,7 @@ fun MyAlarmSettingScreenContent(
     state: MyAlarmSettingState,
     onBackClicked: () -> Unit,
     onDismissRequested: () -> Unit,
+    onEntireShowClicked: () -> Unit,
     onTicketSheetVisible: (Boolean) -> Unit,
     onAlarmOptionSheetVisible: (Boolean) -> Unit,
     onSelectedShowId: (String) -> Unit,
@@ -138,7 +143,7 @@ fun MyAlarmSettingScreenContent(
                 val alarmReservedShow = state.alarmReservedShow
                 if (alarmReservedShow.isEmpty()) {
                     item {
-                        MyAlarmEmpty()
+                        MyAlarmEmpty(onEntireShowClicked = onEntireShowClicked)
                     }
                 } else {
                     itemsIndexed(alarmReservedShow) { index, show ->
@@ -190,7 +195,7 @@ fun MyAlarmSettingScreenContent(
 }
 
 @Composable
-fun MyAlarmEmpty() {
+fun MyAlarmEmpty(onEntireShowClicked: () -> Unit) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -210,7 +215,7 @@ fun MyAlarmEmpty() {
             modifier = Modifier.padding(horizontal = 16.dp),
             text = stringResource(id = R.string.action_show_info),
             onClicked = {
-                // TODO 공연 찾기 페이지 이동
+                onEntireShowClicked()
             }
         )
     }
