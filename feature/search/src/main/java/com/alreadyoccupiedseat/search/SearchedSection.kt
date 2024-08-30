@@ -28,7 +28,6 @@ import com.alreadyoccupiedseat.designsystem.typo.english.ShowPotEnglishText_H1
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
 import com.alreadyoccupiedseat.model.SearchedShow
-import com.alreadyoccupiedseat.model.Show
 import com.alreadyoccupiedseat.model.SubscribedArtist
 
 // TODO: ShowInfo
