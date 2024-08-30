@@ -1,5 +1,8 @@
 package com.alreadyoccupiedseat.subscription_genre
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -212,9 +215,11 @@ fun SubscriptionGenreContent(
                             isLoggedIn && state.subscribedGenre.contains(genre) -> {
                                 painterResource(id = GenreType.getSubscribedRes(genre.id))
                             }
+
                             isLoggedIn && isSelected(genre) -> {
                                 painterResource(id = GenreType.getSelectedRes(genre.id))
                             }
+
                             else -> {
                                 painterResource(id = GenreType.getNormalRes(genre.id))
                             }
@@ -263,31 +268,45 @@ fun SubscriptionGenreContent(
 
             }
 
-            if (state.selectedGenre.isNotEmpty()) {
-                Box(
-                    modifier = Modifier
-                        .padding(top = 4.dp)
-                        .padding(bottom = 54.dp)
-                        .fillMaxWidth()
-                        .background(
-                            brush = Brush.verticalGradient(
-                                colors = listOf(
-                                    ShowpotColor.Gray700.copy(alpha = 0f),
-                                    ShowpotColor.Gray700
-                                ),
-                            )
-                        ).align(Alignment.BottomCenter),
+
+            Box(
+                Modifier.fillMaxSize(),
+                Alignment.BottomCenter
+            ) {
+                this@Column.AnimatedVisibility(
+                    visible = state.selectedGenre.isNotEmpty(),
+                    enter = slideInVertically(
+                        initialOffsetY = { fullHeight -> fullHeight },
+                    ),
+                    exit = slideOutVertically(
+                        targetOffsetY = { fullHeight -> fullHeight }
+                    )
                 ) {
-                    ShowPotMainButton(
+                    Box(
                         modifier = Modifier
-                            .padding(horizontal = 20.dp)
+                            .padding(top = 4.dp)
+                            .padding(bottom = 54.dp)
                             .fillMaxWidth()
-                            .align(Alignment.BottomCenter),
-                        text = stringResource(R.string.subscribe)
+                            .background(
+                                brush = Brush.verticalGradient(
+                                    colors = listOf(
+                                        ShowpotColor.Gray700.copy(alpha = 0f),
+                                        ShowpotColor.Gray700
+                                    ),
+                                )
+                            ).align(Alignment.BottomCenter),
                     ) {
-                        scope.launch {
-                            onSubscribeButtonClicked()
-                            snackBarHostState.showSnackbar("구독 설정이 완료되었습니다")
+                        ShowPotMainButton(
+                            modifier = Modifier
+                                .padding(horizontal = 20.dp)
+                                .fillMaxWidth()
+                                .align(Alignment.BottomCenter),
+                            text = stringResource(R.string.subscribe)
+                        ) {
+                            scope.launch {
+                                onSubscribeButtonClicked()
+                                snackBarHostState.showSnackbar("구독 설정이 완료되었습니다")
+                            }
                         }
                     }
                 }
