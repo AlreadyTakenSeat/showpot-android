@@ -39,4 +39,10 @@ class ShowDetailViewModel @Inject constructor(
     fun changeSheetVisibility(isVisible: Boolean) {
         _state.value = _state.value.copy(isSheetVisible = isVisible)
     }
+
+    fun registerTicketingAlert(showId: String, ticketingApiType: String, alertTimes: List<String>) {
+        viewModelScope.launch {
+            showRepository.registerTicketingAlert(showId, ticketingApiType, alertTimes)
+        }
+    }
 }

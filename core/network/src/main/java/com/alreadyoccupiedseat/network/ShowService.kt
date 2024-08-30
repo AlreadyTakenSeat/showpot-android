@@ -2,11 +2,13 @@ package com.alreadyoccupiedseat.network
 
 import com.alreadyoccupiedseat.model.PagingData
 import com.alreadyoccupiedseat.model.SearchedShow
+import com.alreadyoccupiedseat.model.alert.TicketingAlertRequest
 import com.alreadyoccupiedseat.model.show.InterestedData
 import com.alreadyoccupiedseat.model.show.RegisterInterestResponse
 import com.alreadyoccupiedseat.model.show.ShowDetail
 import com.alreadyoccupiedseat.model.show.Shows
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -44,6 +46,13 @@ interface ShowService {
     suspend fun registerShowInterest(
         @Path("showId") showId: String
     ): Response<RegisterInterestResponse>
+
+    @POST("/api/v1/shows/{showId}/alert")
+    suspend fun registerTicketingAlert(
+        @Path("showId") showId: String,
+        @Query("ticketingApiType") ticketingApiType: String,
+        @Body alertTimes: TicketingAlertRequest
+    ): Response<Unit>
 
 
 }

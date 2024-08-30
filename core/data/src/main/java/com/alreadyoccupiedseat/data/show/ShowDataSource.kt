@@ -22,8 +22,15 @@ interface ShowDataSource {
         size: Int,
         search: String
     ): List<SearchedShow>
+
     suspend fun getShowDetail(showId: String): ShowDetail
 
     suspend fun registerShowInterest(showId: String): Boolean
+
+    suspend fun registerTicketingAlert(
+        showId: String,
+        ticketingApiType: String,
+        alertTimes: List<String>,
+    ): Result<Unit>
 
 }

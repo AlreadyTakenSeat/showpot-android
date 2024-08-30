@@ -25,4 +25,10 @@ interface ShowRepository {
 
     suspend fun registerShowInterest(showId: String): Boolean
 
+    suspend fun registerTicketingAlert(
+        showId: String,
+        ticketingApiType: String,
+        alertTimes: List<String>,
+    ): Result<Unit>
+
 }
