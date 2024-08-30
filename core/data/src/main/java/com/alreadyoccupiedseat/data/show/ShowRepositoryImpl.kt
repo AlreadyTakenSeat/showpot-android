@@ -49,6 +49,14 @@ class ShowRepositoryImpl @Inject constructor(
         return showDataSource.registerShowInterest(showId)
     }
 
+    override suspend fun registerTicketingAlert(
+        showId: String,
+        ticketingApiType: String,
+        alertTimes: List<String>
+    ): Result<Unit> {
+        return showDataSource.registerTicketingAlert(showId, ticketingApiType, alertTimes)
+    }
+
     /** 알림 설정한 공연 목록 조회 ***/
     override suspend fun getAlarmReservedShow(size: Int, type: String): List<AlarmReservedShow> {
         return showDataSource.getAlarmReservedShow(size, type)

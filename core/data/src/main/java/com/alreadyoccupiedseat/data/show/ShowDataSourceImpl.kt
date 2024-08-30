@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.Settings
 import com.alreadyoccupiedseat.model.SearchedShow
+import com.alreadyoccupiedseat.model.alert.TicketingAlertRequest
 import com.alreadyoccupiedseat.model.show.Data
 import com.alreadyoccupiedseat.model.show.InterestedData
 import com.alreadyoccupiedseat.model.show.ShowDetail
@@ -30,7 +31,7 @@ class ShowDataSourceImpl @Inject constructor(
         ).body()?.data ?: emptyList()
     }
 
-override suspend fun getInterestedShowList(size: Int): List<InterestedData> {
+    override suspend fun getInterestedShowList(size: Int): List<InterestedData> {
         return showService.getInterestedShowList(size).body()?.data ?: emptyList()
     }
 
@@ -56,6 +57,20 @@ override suspend fun getInterestedShowList(size: Int): List<InterestedData> {
 
     override suspend fun registerShowInterest(showId: String): Boolean {
         return showService.registerShowInterest(showId).body()?.hasInterest ?: false
+    }
+
+    override suspend fun registerTicketingAlert(
+        showId: String,
+        ticketingApiType: String,
+        alertTimes: List<String>
+    ): Result<Unit> {
+        return runCatching {
+            showService.registerTicketingAlert(
+                showId,
+                ticketingApiType,
+                TicketingAlertRequest(alertTimes)
+            )
+        }
     }
 
     /** 알림 설정한 공연 목록 조회 ***/

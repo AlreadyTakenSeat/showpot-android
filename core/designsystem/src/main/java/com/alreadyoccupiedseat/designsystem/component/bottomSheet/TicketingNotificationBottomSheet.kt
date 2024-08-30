@@ -24,12 +24,16 @@ import com.alreadyoccupiedseat.core.extension.conditional
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
+import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B3_SemiBold
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TicketingNotificationBottomSheet(
+    isFirstItemAvailable: Boolean = true,
+    isSecondItemAvailable: Boolean = true,
+    isThirdItemAvailable: Boolean = true,
     firstItemSelected: Boolean,
     secondItemSelected: Boolean,
     thirdItemSelected: Boolean,
@@ -68,27 +72,37 @@ fun TicketingNotificationBottomSheet(
                     .conditional(firstItemSelected) {
                         border(1.dp, ShowpotColor.MainOrange, RoundedCornerShape(2.dp))
                     }
+                    .conditional(isFirstItemAvailable) {
+                        clickable {
+                            onFirstItemClicked()
+                        }
+                    }
                     .padding(
                         horizontal = 24.dp,
                         vertical = 14.dp
-                    )
-                    .clickable {
-                        onFirstItemClicked()
-                    },
+                    ),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 ShowPotKoreanText_H2(
                     text = "티켓팅 24시간 전",
-                    color = Color.White
+                    color = if (isFirstItemAvailable) Color.White else ShowpotColor.Gray400
                 )
 
-                Image(
-                    modifier = Modifier.size(24.dp),
-                    painter = if (firstItemSelected) painterResource(id = R.drawable.ic_checked_checkbox_24) else
-                        painterResource(id = R.drawable.ic_checkbox_24),
-                    contentDescription = "first check box",
-                )
+                if (isFirstItemAvailable) {
+                    Image(
+                        modifier = Modifier.size(24.dp),
+                        painter = if (firstItemSelected) painterResource(id = R.drawable.ic_checked_checkbox_24) else
+                            painterResource(id = R.drawable.ic_checkbox_24),
+                        contentDescription = "first check box",
+                    )
+                } else {
+                    ShowPotKoreanText_B3_SemiBold(
+                        text = "해당 시간 선택은 불가능해요",
+                        color = ShowpotColor.MainOrange
+                    )
+                }
+
             }
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -100,27 +114,36 @@ fun TicketingNotificationBottomSheet(
                     .conditional(secondItemSelected) {
                         border(1.dp, ShowpotColor.MainOrange, RoundedCornerShape(2.dp))
                     }
+                    .conditional(isSecondItemAvailable) {
+                        clickable {
+                            onSecondItemClicked()
+                        }
+                    }
                     .padding(
                         horizontal = 24.dp,
                         vertical = 14.dp
-                    )
-                    .clickable {
-                        onSecondItemClicked()
-                    },
+                    ),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 ShowPotKoreanText_H2(
                     text = "티켓팅 6시간 전",
-                    color = Color.White
+                    color = if (isSecondItemAvailable) Color.White else ShowpotColor.Gray400
                 )
 
-                Image(
-                    modifier = Modifier.size(24.dp),
-                    painter = if (secondItemSelected) painterResource(id = R.drawable.ic_checked_checkbox_24) else
-                        painterResource(id = R.drawable.ic_checkbox_24),
-                    contentDescription = "second check box",
-                )
+                if (isSecondItemAvailable) {
+                    Image(
+                        modifier = Modifier.size(24.dp),
+                        painter = if (secondItemSelected) painterResource(id = R.drawable.ic_checked_checkbox_24) else
+                            painterResource(id = R.drawable.ic_checkbox_24),
+                        contentDescription = "second check box",
+                    )
+                } else {
+                    ShowPotKoreanText_B3_SemiBold(
+                        text = "해당 시간 선택은 불가능해요",
+                        color = ShowpotColor.MainOrange
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -132,27 +155,36 @@ fun TicketingNotificationBottomSheet(
                     .conditional(thirdItemSelected) {
                         border(1.dp, ShowpotColor.MainOrange, RoundedCornerShape(2.dp))
                     }
+                    .conditional(isThirdItemAvailable) {
+                        clickable {
+                            onThirdItemClicked()
+                        }
+                    }
                     .padding(
                         horizontal = 24.dp,
                         vertical = 14.dp
-                    )
-                    .clickable {
-                        onThirdItemClicked()
-                    },
+                    ),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 ShowPotKoreanText_H2(
                     text = "티켓팅 1시간 전",
-                    color = Color.White
+                    color = if (isThirdItemAvailable) Color.White else ShowpotColor.Gray400
                 )
 
-                Image(
-                    modifier = Modifier.size(24.dp),
-                    painter = if (thirdItemSelected) painterResource(id = R.drawable.ic_checked_checkbox_24) else
-                        painterResource(id = R.drawable.ic_checkbox_24),
-                    contentDescription = "second check box",
-                )
+                if (isThirdItemAvailable) {
+                    Image(
+                        modifier = Modifier.size(24.dp),
+                        painter = if (thirdItemSelected) painterResource(id = R.drawable.ic_checked_checkbox_24) else
+                            painterResource(id = R.drawable.ic_checkbox_24),
+                        contentDescription = "second check box",
+                    )
+                } else {
+                    ShowPotKoreanText_B3_SemiBold(
+                        text = "해당 시간 선택은 불가능해요",
+                        color = ShowpotColor.MainOrange
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(20.dp))

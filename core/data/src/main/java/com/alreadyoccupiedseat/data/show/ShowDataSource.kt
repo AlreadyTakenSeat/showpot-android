@@ -23,9 +23,16 @@ interface ShowDataSource {
         size: Int,
         search: String
     ): List<SearchedShow>
+
     suspend fun getShowDetail(showId: String): ShowDetail
 
     suspend fun registerShowInterest(showId: String): Boolean
+
+    suspend fun registerTicketingAlert(
+        showId: String,
+        ticketingApiType: String,
+        alertTimes: List<String>,
+    ): Result<Unit>
 
     /** 알림 설정한 공연 목록 조회 ***/
     suspend fun getAlarmReservedShow(size: Int, type: String): List<AlarmReservedShow>
