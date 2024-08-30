@@ -24,6 +24,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -57,39 +58,52 @@ fun SubscriptionArtistScreen(
     val state = viewModel.state.collectAsState()
     val event = viewModel.event.collectAsState()
 
+    val coroutineScope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+
     when (event.value) {
         SubscriptionArtistScreenEvent.Idle -> {
-            SubscriptionArtistScreenContent(
-                state = state.value,
-                onBackClicked = {
-                    navController.popBackStack()
-                },
-                onSheetStateChanged = { isVisible ->
-                    viewModel.setSheetVisible(isVisible)
-                },
-                onSubscribeButtonClicked = {
-                    viewModel.subscribeArtists()
-                },
-                onArtistClicked = {
-                    viewModel.selectArtist(it)
-                },
-                checkIsSelected = {
-                    viewModel.isSelected(it)
-                },
-                onLoginRequested = {
-                    viewModel.setSheetVisible(false)
-                    onLoginRequested()
-                }
-            )
         }
 
+        SubscriptionArtistScreenEvent.SubscribeArtistsSuccess -> {
+            LaunchedEffect(snackbarHostState) {
+                coroutineScope.launch {
+                    snackbarHostState.showSnackbar("구독 설정이 완료되었습니다")
+                }
+            }
+        }
     }
+
+    SubscriptionArtistScreenContent(
+        state = state.value,
+        snackbarHostState = snackbarHostState,
+        onBackClicked = {
+            navController.popBackStack()
+        },
+        onSheetStateChanged = { isVisible ->
+            viewModel.setSheetVisible(isVisible)
+        },
+        onSubscribeButtonClicked = {
+            viewModel.subscribeArtists()
+        },
+        onArtistClicked = {
+            viewModel.selectArtist(it)
+        },
+        checkIsSelected = {
+            viewModel.isSelected(it)
+        },
+        onLoginRequested = {
+            viewModel.setSheetVisible(false)
+            onLoginRequested()
+        }
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun SubscriptionArtistScreenContent(
     state: SubscriptionArtistScreenState,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     onBackClicked: () -> Unit,
     onSheetStateChanged: (Boolean) -> Unit = {},
     onSubscribeButtonClicked: () -> Unit = {},
@@ -99,7 +113,6 @@ fun SubscriptionArtistScreenContent(
 ) {
 
     val scope = rememberCoroutineScope()
-    val snackbarHostState = remember { SnackbarHostState() }
 
     if (state.isSheetVisible) {
 
@@ -260,7 +273,6 @@ fun SubscriptionArtistScreenContent(
                         ) {
                             scope.launch {
                                 onSubscribeButtonClicked()
-                                snackbarHostState.showSnackbar("구독 설정이 완료되었습니다")
                             }
                         }
                     }
