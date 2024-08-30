@@ -8,6 +8,7 @@ import com.alreadyoccupiedseat.model.show.InterestedData
 import com.alreadyoccupiedseat.model.show.RegisterInterestResponse
 import com.alreadyoccupiedseat.model.show.ShowDetail
 import com.alreadyoccupiedseat.model.show.Shows
+import com.alreadyoccupiedseat.model.temp.AlarmReservedShow
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -60,5 +61,10 @@ interface ShowService {
         @Path("showId") showId: String,
         @Query("ticketingApiType") ticketingApiType: String,
     ): Response<CheckAlertReservationResponse>
+    @GET("api/v1/shows/alerts")
+    suspend fun getAlarmReservedShow(
+        @Query("size") size: Int,
+        @Query("type") type: String
+    ): Response<PagingData<AlarmReservedShow>>
 
 }

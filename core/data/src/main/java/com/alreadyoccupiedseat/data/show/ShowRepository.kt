@@ -5,6 +5,7 @@ import com.alreadyoccupiedseat.model.alert.CheckAlertReservationResponse
 import com.alreadyoccupiedseat.model.show.Data
 import com.alreadyoccupiedseat.model.show.InterestedData
 import com.alreadyoccupiedseat.model.show.ShowDetail
+import com.alreadyoccupiedseat.model.temp.AlarmReservedShow
 
 interface ShowRepository {
     suspend fun getEntireShow(
@@ -36,5 +37,8 @@ interface ShowRepository {
         showId: String,
         ticketingApiType: String,
     ): CheckAlertReservationResponse
+
+    /** 알림 설정한 공연 목록 조회 ***/
+    suspend fun getAlarmReservedShow(size: Int, type: String): List<AlarmReservedShow>
 
 }

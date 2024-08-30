@@ -14,10 +14,8 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -35,11 +33,56 @@ import com.alreadyoccupiedseat.designsystem.component.button.ShowPotSubButton
 @Composable
 fun MyAlarmSettingScreen(
     navController: NavController,
+    onShowClicked: (String) -> Unit,
+    onEntireShowClicked: () -> Unit
 ) {
+
+    val viewModel = hiltViewModel<MyAlarmSettingViewModel>()
+    val state = viewModel.state.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.getAlarmReservedShow()
+    }
+
     MyAlarmSettingScreenContent(
         modifier = Modifier,
+        state = state.value,
         onBackClicked = {
             navController.popBackStack()
+        },
+        onDismissRequested = {
+            viewModel.setAlarmOptionSheetVisible(false)
+            viewModel.setTicketSheetVisible(false)
+        },
+        onShowClicked = { id ->
+            onShowClicked(id)
+        },
+        onEntireShowClicked = {
+            onEntireShowClicked()
+        },
+        onTicketSheetVisible = { isVisible ->
+            viewModel.setTicketSheetVisible(isVisible)
+        },
+        onAlarmOptionSheetVisible = { isVisible ->
+            viewModel.setAlarmOptionSheetVisible(isVisible)
+        },
+        onSelectedShowId = { id ->
+            viewModel.setSelectedShowId(id)
+        },
+        onRemoveClicked = {
+              viewModel.removeClicked()
+        },
+        onFirstItemClicked = {
+            viewModel.changeFirstItemSelection()
+        },
+        onSecondItemClicked = {
+            viewModel.changeSecondItemSelection()
+        },
+        onThirdItemClicked = {
+            viewModel.changeThirdItemSelection()
+        },
+        onRegisterAlertButtonClicked = {
+            viewModel.registerTicketingAlert()
         }
     )
 }
@@ -47,54 +90,60 @@ fun MyAlarmSettingScreen(
 @Composable
 fun MyAlarmSettingScreenContent(
     modifier: Modifier,
-    onBackClicked: () -> Unit
+    state: MyAlarmSettingState,
+    onBackClicked: () -> Unit,
+    onDismissRequested: () -> Unit,
+    onShowClicked: (String) -> Unit,
+    onEntireShowClicked: () -> Unit,
+    onTicketSheetVisible: (Boolean) -> Unit,
+    onAlarmOptionSheetVisible: (Boolean) -> Unit,
+    onSelectedShowId: (String) -> Unit,
+    onRemoveClicked: () -> Unit,
+    onFirstItemClicked: () -> Unit,
+    onSecondItemClicked: () -> Unit,
+    onThirdItemClicked: () -> Unit,
+    onRegisterAlertButtonClicked: () -> Unit,
 ) {
-    val viewModel = hiltViewModel<MyAlarmSettingViewModel>()
-    var isAlarmOptionSheetVisible by remember { mutableStateOf(false) }
-    var isTicketSheetVisible by remember { mutableStateOf(false) }
-    var selectedShowId by remember { mutableStateOf<String?>(null) }
-    var isFirstItemSelected by remember { mutableStateOf(false) }
-    var isSecondItemSelected by remember { mutableStateOf(false) }
-    var isThirdItemSelected by remember { mutableStateOf(false) }
 
 
-    if (isAlarmOptionSheetVisible) {
+    if (state.isAlarmOptionSheetVisible) {
         AlarmOptionsBottomSheet(
             onTicketSheetVisible = {
-                isTicketSheetVisible = true
+                onTicketSheetVisible(true)
             },
             onDismissRequest = {
-                isAlarmOptionSheetVisible = false
+                onAlarmOptionSheetVisible(false)
             },
             onRemoveClicked = {
-                selectedShowId?.let { id ->
-                    viewModel.removeShowById(id)
-                }
-                isAlarmOptionSheetVisible = false
+                onRemoveClicked()
             }
         )
     }
 
-    if (isTicketSheetVisible) {
+    if (state.isTicketSheetVisible) {
+
         TicketingNotificationBottomSheet(
-            firstItemSelected = isFirstItemSelected,
-            secondItemSelected = isSecondItemSelected,
-            thirdItemSelected = isThirdItemSelected,
+            isFirstItemAvailable = state.isFirstItemAvailable,
+            isSecondItemAvailable = state.isSecondItemAvailable,
+            isThirdItemAvailable = state.isThirdItemAvailable,
+            firstItemSelected = state.isFirstItemSelected,
+            secondItemSelected = state.isSecondItemSelected,
+            thirdItemSelected = state.isThirdItemSelected,
             onFirstItemClicked = {
-                isFirstItemSelected = !isFirstItemSelected
+                onFirstItemClicked()
             },
             onSecondItemClicked = {
-                isSecondItemSelected = !isSecondItemSelected
+                onSecondItemClicked()
             },
             onThirdItemClicked = {
-                isThirdItemSelected = !isThirdItemSelected
+                onThirdItemClicked()
             },
             onMainButtonClicked = {
-                // TODO: Implement
+                onRegisterAlertButtonClicked()
+                onTicketSheetVisible(false)
             },
             onDismissRequested = {
-                isTicketSheetVisible = false
-                isAlarmOptionSheetVisible = false
+                onDismissRequested()
             })
     }
 
@@ -111,24 +160,23 @@ fun MyAlarmSettingScreenContent(
                     .padding(top = 12.dp)
                     .padding(it),
             ) {
-                if (viewModel.showList.value.isEmpty()) {
-
+                val alarmReservedShow = state.alarmReservedShow
+                if (alarmReservedShow.isEmpty()) {
                     item {
-                        MyAlarmEmpty()
+                        MyAlarmEmpty(onEntireShowClicked = onEntireShowClicked)
                     }
-
                 } else {
-                    itemsIndexed(viewModel.showList.value) { index, show ->
+                    itemsIndexed(alarmReservedShow) { index, show ->
                         ShowInfo(
                             modifier = Modifier
                                 .padding(horizontal = 16.dp)
                                 .clickable {
-                                    // TODO 공연 상세 페이지 이동
+                                    onShowClicked(show.id)
                                 },
-                            imageUrl = show.posterImageURL,
-                            showTitle = show.name,
-                            dateInfo = "2024.12.$index (수) 오후 $index 시",
-                            locationInfo = "KBS 아레나홀",
+                            imageUrl = show.imageURL,
+                            showTitle = show.title,
+                            dateInfo = show.cursorValue,
+                            locationInfo = show.location,
                             icon = {
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
@@ -136,8 +184,8 @@ fun MyAlarmSettingScreenContent(
                                     modifier = Modifier
                                         .background(ShowpotColor.Gray500)
                                         .clickable {
-                                            selectedShowId = show.id
-                                            isAlarmOptionSheetVisible = true
+                                            onSelectedShowId(show.id)
+                                            onAlarmOptionSheetVisible(true)
                                         }
                                 ) {
                                     Icon(
@@ -167,7 +215,7 @@ fun MyAlarmSettingScreenContent(
 }
 
 @Composable
-fun MyAlarmEmpty(modifier: Modifier = Modifier) {
+fun MyAlarmEmpty(onEntireShowClicked: () -> Unit) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -187,7 +235,7 @@ fun MyAlarmEmpty(modifier: Modifier = Modifier) {
             modifier = Modifier.padding(horizontal = 16.dp),
             text = stringResource(id = R.string.action_show_info),
             onClicked = {
-                // TODO 공연 찾기 페이지 이동
+                onEntireShowClicked()
             }
         )
     }
