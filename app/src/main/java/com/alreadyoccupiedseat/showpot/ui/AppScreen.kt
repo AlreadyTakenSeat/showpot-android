@@ -174,9 +174,13 @@ fun AppScreenContent(
             }
 
             composable(Screen.SubscriptionArtist.route) {
-                SubscriptionArtistScreen(navController) {
-                    navController.navigate(Screen.Login.route)
-                }
+                SubscriptionArtistScreen(navController,
+                    onLoginRequested = {
+                        navController.navigate(Screen.Login.route)
+                    },
+                    onGoToSeeClicked = {
+                        navController.navigate(Screen.SubscribedArtist.route)
+                    })
             }
 
             composable(Screen.SubscribedArtist.route) {

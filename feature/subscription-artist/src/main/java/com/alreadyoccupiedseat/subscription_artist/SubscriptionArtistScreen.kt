@@ -51,6 +51,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun SubscriptionArtistScreen(
     navController: NavController,
+    onGoToSeeClicked: () -> Unit = {},
     onLoginRequested: () -> Unit = {},
 ) {
 
@@ -94,6 +95,9 @@ fun SubscriptionArtistScreen(
         onLoginRequested = {
             viewModel.setSheetVisible(false)
             onLoginRequested()
+        },
+        onGoToSeeClicked = {
+            onGoToSeeClicked()
         }
     )
 }
@@ -109,6 +113,7 @@ fun SubscriptionArtistScreenContent(
     onArtistClicked: (Artist) -> Unit = {},
     checkIsSelected: (Artist) -> Boolean,
     onLoginRequested: () -> Unit = {},
+    onGoToSeeClicked: () -> Unit = {},
 ) {
 
     val scope = rememberCoroutineScope()
@@ -165,7 +170,7 @@ fun SubscriptionArtistScreenContent(
                         // onIconClicked()
                     },
                 ) {
-                    // onActionClicked()
+                    onGoToSeeClicked()
                 }
             }
         },
