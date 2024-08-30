@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -46,6 +47,10 @@ fun NotificationScreen(
     val viewModel = hiltViewModel<NotificationViewModel>()
     val state = viewModel.state.collectAsState()
 
+    LaunchedEffect(true) {
+        viewModel.getUpcomingTicketingShows()
+    }
+
     NotificationScreenContent(
         state = state.value,
         onLoginRequested = {
@@ -74,7 +79,7 @@ fun NotificationScreenContent(
     onMyFinishedShowClicked: () -> Unit,
 ) {
 
-    val pagerState = rememberPagerState(pageCount = { 5 })
+    val pagerState = rememberPagerState(pageCount = { state.upcomingTicketingShows.size - 1 })
     Scaffold(
         containerColor = ShowpotColor.Gray700,
     ) {
@@ -102,7 +107,7 @@ fun NotificationScreenContent(
             if (state.isLoggedIn && state.upcomingTicketingShows.isNotEmpty()) {
                 item {
                     ShowPotEnglishText_H0(
-                        text = "Dua Lipa",
+                        text = state.upcomingTicketingShows[pagerState.currentPage].title,
                         modifier = Modifier.padding(horizontal = 16.dp),
                         color = ShowpotColor.Gray100
                     )
@@ -118,14 +123,14 @@ fun NotificationScreenContent(
 
                         ShowPotKoreanText_H0(
                             modifier = Modifier.padding(start = 8.dp),
-                            text = "D-5",
+                            text = "D-" + daysUntil(state.upcomingTicketingShows[pagerState.currentPage].cursorValue),
                             color = ShowpotColor.MainOrange,
                         )
                     }
                 }
 
                 item {
-                    TicketSlidePager(pagerState)
+                    TicketSlidePagerForAlarmReservedShow(pagerState, state.upcomingTicketingShows)
                 }
             } else {
                 item {
