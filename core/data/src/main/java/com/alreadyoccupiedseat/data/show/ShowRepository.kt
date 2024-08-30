@@ -34,7 +34,7 @@ interface ShowRepository {
 
     suspend fun checkAlertReservation(
         showId: String,
-        alertId: String,
+        ticketingApiType: String,
     ): CheckAlertReservationResponse
 
 }

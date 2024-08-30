@@ -75,9 +75,9 @@ class ShowDataSourceImpl @Inject constructor(
 
     override suspend fun checkAlertReservation(
         showId: String,
-        alertId: String
+        ticketingApiType: String
     ): CheckAlertReservationResponse {
-        return showService.checkAlertReservation(showId, alertId).body()
+        return showService.checkAlertReservation(showId, ticketingApiType).body()
             ?: throw Exception("Check Alert Reservation failed")
     }
 

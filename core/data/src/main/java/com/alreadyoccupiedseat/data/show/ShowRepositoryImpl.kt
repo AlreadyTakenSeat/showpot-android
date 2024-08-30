@@ -59,9 +59,9 @@ class ShowRepositoryImpl @Inject constructor(
 
     override suspend fun checkAlertReservation(
         showId: String,
-        alertId: String,
+        ticketingApiType: String,
     ): CheckAlertReservationResponse {
-        return showDataSource.checkAlertReservation(showId, alertId)
+        return showDataSource.checkAlertReservation(showId, ticketingApiType)
     }
 
 }

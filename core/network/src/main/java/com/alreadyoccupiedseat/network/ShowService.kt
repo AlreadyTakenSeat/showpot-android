@@ -58,7 +58,7 @@ interface ShowService {
     @POST("api/v1/shows/{showId}/alert/reservations")
     suspend fun checkAlertReservation(
         @Path("showId") showId: String,
-        @Query("ticketingApi") ticketingApi: String,
+        @Query("ticketingApiType") ticketingApiType: String,
     ): Response<CheckAlertReservationResponse>
 
 }
