@@ -13,4 +13,6 @@ interface LoginRepository {
 
     suspend fun getProfile(): Result<ProfileResponse>
 
+    suspend fun requestWithDraw(): Result<Unit>
+
 }
