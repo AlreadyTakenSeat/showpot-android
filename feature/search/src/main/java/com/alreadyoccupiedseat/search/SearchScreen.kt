@@ -104,7 +104,9 @@ fun SearchScreenContent(
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(focusRequester) {
-        focusRequester.requestFocus()
+        if (state.isSearchedScreen.not()) {
+            focusRequester.requestFocus()
+        }
     }
 
     BackHandler {
