@@ -213,14 +213,17 @@ fun HomeScreenContent(
                     )
                 }
 
-                itemsIndexed(state.entireShowList.data) { _, show ->
+                itemsIndexed(state.entireShowList.data) { index, show ->
                     val textColor = if (show.isOpen) {
                         ShowpotColor.MainBlue
                     } else {
                         ShowpotColor.MainYellow
                     }
                     val ticketingTime = show.ticketingAt
-                    ShowPotTicket(
+                    if (index != 0) {
+                        Spacer(modifier = Modifier.height(10.dp))
+                    }
+                     ShowPotTicket(
                         modifier = Modifier.padding(horizontal = 16.dp),
                         imageUrl = show.posterImageURL,
                         showTime = ticketingTime,
