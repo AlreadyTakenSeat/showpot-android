@@ -452,8 +452,8 @@ fun ShowDetailScreenContent(
             ) {
 
                 IconButtonWithShowPotMainButton(
-                    if (state.showDetail?.isInterested == true) painterResource(com.alreadyoccupiedseat.designsystem.R.drawable.ic_heart_36_off)
-                    else painterResource(com.alreadyoccupiedseat.designsystem.R.drawable.ic_heart_36_on),
+                    if (state.showDetail?.isInterested == true) painterResource(com.alreadyoccupiedseat.designsystem.R.drawable.ic_heart_36_on)
+                    else painterResource(com.alreadyoccupiedseat.designsystem.R.drawable.ic_heart_36_off),
                     stringResource(R.string.set_notification),
                     onIconButtonClicked = {
                         onIconButtonClicked()
