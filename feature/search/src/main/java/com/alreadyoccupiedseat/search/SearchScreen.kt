@@ -12,10 +12,14 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -94,8 +98,13 @@ fun SearchScreenContent(
     onShowClicked: (String) -> Unit = {}
 ) {
 
+    val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
+
+    LaunchedEffect(focusRequester) {
+        focusRequester.requestFocus()
+    }
 
     Scaffold(
         modifier = Modifier
@@ -123,7 +132,8 @@ fun SearchScreenContent(
 
                 ShowPotSearchBar(
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .focusRequester(focusRequester),
                     hint = stringResource(R.string.search_shows_and_artists_hint),
                     inputText = state.inputText,
                     onTextChanged = {
@@ -138,6 +148,7 @@ fun SearchScreenContent(
                         }
                     ),
                     onCancelClicked = {
+                        focusManager.clearFocus()
                         onCancelClicked()
                     }
                 )
@@ -156,7 +167,10 @@ fun SearchScreenContent(
                 RecentSearchHistorySection(
                     searchHistories = state.searchHistory,
                     onDeleteAllClicked = onDeleteAllClicked,
-                    onChipClicked = onChipClicked,
+                    onChipClicked = {
+                        focusManager.clearFocus()
+                        onChipClicked(it)
+                    },
                     onDeleteHistoryClicked = onDeleteHistoryClicked
                 )
             } else {
