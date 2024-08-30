@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +28,7 @@ import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.IconMenuWithCount
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B1_Regular
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
+import kotlinx.coroutines.delay
 
 @Preview
 @Composable
@@ -40,19 +42,38 @@ fun AccountScreen(
     navController: NavController,
 ) {
     val viewModel = hiltViewModel<AccountViewModel>()
+    val state = viewModel.state.collectAsState()
     val event = viewModel.event.collectAsState(AccountScreenEvent.Idle)
     val context = LocalContext.current
+
+    LaunchedEffect(true) {
+        viewModel.getNickName()
+    }
+
     when (event.value) {
         AccountScreenEvent.Idle -> {}
         AccountScreenEvent.AccountLogout -> {
-            Toast.makeText(context, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
-            viewModel.clear()
+            // TODO: 화면 프레임 스킵되는 이슈 찾아서 해결 필요
+            LaunchedEffect(true) {
+                delay(300L)
+                viewModel.clear()
+                Toast.makeText(context, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
+                navController.popBackStack()
+            }
         }
+
         AccountScreenEvent.Withdrawal -> {
-            Toast.makeText(context, "회원 탈퇴가 요청되었습니다.", Toast.LENGTH_SHORT).show()
+            // TODO: 화면 프레임 스킵되는 이슈 찾아서 해결 필요
+            LaunchedEffect(true) {
+                delay(300L)
+                viewModel.clear()
+                Toast.makeText(context, "회원 탈퇴가 성공하였습니다.", Toast.LENGTH_SHORT).show()
+                navController.popBackStack()
+            }
         }
     }
     AccountScreenContent(
+        state = state.value,
         onBackClicked = {
             navController.popBackStack()
         },
@@ -68,6 +89,7 @@ fun AccountScreen(
 
 @Composable
 private fun AccountScreenContent(
+    state: AccountScreenState,
     onBackClicked: () -> Unit,
     onAccountLogOut: () -> Unit,
     onWithdrawal: () -> Unit,
@@ -96,7 +118,7 @@ private fun AccountScreenContent(
                         ShowPotKoreanText_H2(
                             modifier = Modifier
                                 .weight(1f),
-                            text = "춤추는 고래", // TODO NickName
+                            text = state.nickName,
                             color = ShowpotColor.Gray100
                         )
                         ShowPotKoreanText_B1_Regular(

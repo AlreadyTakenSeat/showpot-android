@@ -3,9 +3,12 @@ package com.alreadyoccupiedseat.account
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alreadyoccupiedseat.core.extension.EMPTY
+import com.alreadyoccupiedseat.data.login.LoginRepository
 import com.alreadyoccupiedseat.datastore.AccountDataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,10 +20,18 @@ sealed interface AccountScreenEvent {
 
 }
 
+data class AccountScreenState(
+    val nickName: String = String.EMPTY,
+)
+
 @HiltViewModel
 class AccountViewModel @Inject constructor(
     private val accountDataStore: AccountDataStore,
+    private val loginRepository: LoginRepository
 ): ViewModel() {
+
+    private val _state = MutableStateFlow<AccountScreenState>(AccountScreenState())
+    val state = _state
 
     private var _event = MutableSharedFlow<AccountScreenEvent>()
     val event = _event
@@ -51,7 +62,17 @@ class AccountViewModel @Inject constructor(
 
     fun withdrawal() {
         viewModelScope.launch {
-            _event.emit(AccountScreenEvent.Withdrawal)
+            loginRepository.requestWithDraw().onSuccess {
+                _event.emit(AccountScreenEvent.Withdrawal)
+            }
+        }
+    }
+
+    fun getNickName() {
+        viewModelScope.launch {
+            loginRepository.getProfile().onSuccess {
+                _state.value = state.value.copy(nickName = it.nickname)
+            }
         }
     }
 

@@ -9,4 +9,6 @@ interface RemoteLoginDataSource {
     suspend fun reIssueToken(): Result<Unit>
 
     suspend fun getProfile(): Result<ProfileResponse>
+
+    suspend fun requestWithDraw(): Result<Unit>
 }

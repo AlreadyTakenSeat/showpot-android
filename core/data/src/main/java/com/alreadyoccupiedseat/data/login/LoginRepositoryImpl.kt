@@ -32,4 +32,8 @@ class LoginRepositoryImpl @Inject constructor(
         return remoteLoginDataSource.getProfile()
     }
 
+    override suspend fun requestWithDraw(): Result<Unit> {
+        return remoteLoginDataSource.requestWithDraw()
+    }
+
 }
