@@ -9,18 +9,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import com.alreadyoccupiedseat.Screens
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.IconMenuWithCount
@@ -34,12 +30,19 @@ fun MyPageScreen(
     onMySubscribedArtistClicked: () -> Unit,
     onMySubscribedGenreClicked: () -> Unit,
 ) {
-    // TODO 로그인 상태에 따라 isLogin 값 변경 (LaunchedEffect 사용 + 샘영주기)
-    var isLogin by remember { mutableStateOf(false) }
+
+    val viewModel = hiltViewModel<MyPageViewModel>()
+    val state = viewModel.state.collectAsState()
+
+    LaunchedEffect(true) {
+        viewModel.getNickName()
+    }
+
     MyPageScreenContent(
-        isLogin = isLogin,
+        modifier = Modifier,
+        state = state.value,
         onLoginClicked = {
-            isLogin = true
+            onLoginClicked()
         },
         onSettingClicked = {
             onSettingClicked()
@@ -56,17 +59,17 @@ fun MyPageScreen(
 @Composable
 fun MyPageScreenContent(
     modifier: Modifier = Modifier,
-    isLogin: Boolean,
+    state: MyPageScreenState,
     onLoginClicked: () -> Unit,
     onSettingClicked: () -> Unit,
     onMySubscribedArtistClicked: () -> Unit,
     onMySubscribedGenreClicked: () -> Unit,
 ) {
-    val viewModel = hiltViewModel<MyPageViewModel>()
+
     Scaffold(
         containerColor = ShowpotColor.Gray700,
         topBar = {
-            MyPageTopBar (onSettingClicked = onSettingClicked)
+            MyPageTopBar(onSettingClicked = onSettingClicked)
         },
         content = {
             LazyColumn(
@@ -79,9 +82,10 @@ fun MyPageScreenContent(
 
                 item {
                     WelcomeMessage(
-                        isLogin = isLogin,
-                        onActionMoveLogin = onLoginClicked
-                    )
+                        nickname = state.nickName
+                    ) {
+                        onLoginClicked()
+                    }
                 }
 
                 item {
@@ -97,7 +101,7 @@ fun MyPageScreenContent(
                     IconMenuWithCount(
                         firstIcon = painterResource(id = R.drawable.ic_artist_24),
                         title = stringResource(R.string.subscribed_artists),
-                        count = if (isLogin) 3 else 0
+                        count = 0
                     ) {
                         onMySubscribedArtistClicked()
                     }
@@ -107,7 +111,7 @@ fun MyPageScreenContent(
                     IconMenuWithCount(
                         firstIcon = painterResource(id = R.drawable.ic_genre_24),
                         title = stringResource(R.string.subscribed_genre),
-                        count = if (isLogin) 5 else 0
+                        count = 0
                     ) {
                         onMySubscribedGenreClicked()
                     }
@@ -123,17 +127,16 @@ fun MyPageScreenContent(
 }
 
 @Composable
-fun WelcomeMessage(isLogin: Boolean, onActionMoveLogin: () -> Unit) {
+fun WelcomeMessage(nickname: String, onLoginClicked: () -> Unit) {
 
     Spacer(modifier = Modifier.height(25.dp))
 
-    if (isLogin) {
-        val nickName = "화이팅 현수"
+    if (nickname.isNotEmpty()) {
         ShowPotKoreanText_H0(
             modifier = Modifier.padding(start = 16.dp),
             text = String.format(
                 stringResource(R.string.test_of_my_page2),
-                nickName
+                nickname
             ),
             color = ShowpotColor.White
         )
@@ -148,7 +151,7 @@ fun WelcomeMessage(isLogin: Boolean, onActionMoveLogin: () -> Unit) {
             color = ShowpotColor.Gray100,
             clickablePart = startText,
             onClick = {
-                onActionMoveLogin()
+                onLoginClicked()
             }
         )
     }
