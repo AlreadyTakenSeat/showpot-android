@@ -123,6 +123,9 @@ fun AppScreenContent(
 
             composable(Screen.Notification.route) {
                 NotificationScreen(
+                    onLoginRequested = {
+                        navController.navigate(Screen.Login.route)
+                    },
                     onMyAlarmSettingClicked = {
                         navController.navigate(Screen.MyAlarmSetting.route)
                     },
@@ -180,8 +183,11 @@ fun AppScreenContent(
             composable(
                 Screen.ShowDetail.route,
                 Screen.ShowDetail.arguments
-                ) { backStackEntry ->
-                ShowDetailScreen(navController, backStackEntry.arguments?.getString("showId") ?: String.EMPTY)
+            ) { backStackEntry ->
+                ShowDetailScreen(
+                    navController,
+                    backStackEntry.arguments?.getString("showId") ?: String.EMPTY
+                )
             }
 
             composable(Screen.MyAlarmSetting.route) {
