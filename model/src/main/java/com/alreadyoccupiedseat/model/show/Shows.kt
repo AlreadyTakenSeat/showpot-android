@@ -12,5 +12,8 @@ data class Shows(
         // 공연 알림 목록 조회 타입
         const val CONTINUE = "CONTINUED"
         const val TERMINATE = "TERMINATE"
+
+        // 티켓팅 타입
+        const val NORMAL = "NORMAL"
     }
 }
