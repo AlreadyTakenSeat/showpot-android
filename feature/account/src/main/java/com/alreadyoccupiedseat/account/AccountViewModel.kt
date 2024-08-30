@@ -62,7 +62,9 @@ class AccountViewModel @Inject constructor(
 
     fun withdrawal() {
         viewModelScope.launch {
-
+            loginRepository.requestWithDraw().onSuccess {
+                _event.emit(AccountScreenEvent.Withdrawal)
+            }
         }
     }
 

@@ -28,6 +28,7 @@ import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.IconMenuWithCount
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B1_Regular
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
+import kotlinx.coroutines.delay
 
 @Preview
 @Composable
@@ -52,12 +53,23 @@ fun AccountScreen(
     when (event.value) {
         AccountScreenEvent.Idle -> {}
         AccountScreenEvent.AccountLogout -> {
-            Toast.makeText(context, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
-            viewModel.clear()
+            // TODO: 화면 프레임 스킵되는 이슈 찾아서 해결 필요
+            LaunchedEffect(true) {
+                delay(300L)
+                viewModel.clear()
+                Toast.makeText(context, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
+                navController.popBackStack()
+            }
         }
 
         AccountScreenEvent.Withdrawal -> {
-            Toast.makeText(context, "회원 탈퇴가 요청되었습니다.", Toast.LENGTH_SHORT).show()
+            // TODO: 화면 프레임 스킵되는 이슈 찾아서 해결 필요
+            LaunchedEffect(true) {
+                delay(300L)
+                viewModel.clear()
+                Toast.makeText(context, "회원 탈퇴가 성공하였습니다.", Toast.LENGTH_SHORT).show()
+                navController.popBackStack()
+            }
         }
     }
     AccountScreenContent(
