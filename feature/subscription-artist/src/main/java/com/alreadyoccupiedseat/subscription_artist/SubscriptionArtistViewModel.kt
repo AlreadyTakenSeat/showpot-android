@@ -6,6 +6,7 @@ import com.alreadyoccupiedseat.data.artist.ArtistRepository
 import com.alreadyoccupiedseat.datastore.AccountDataStore
 import com.alreadyoccupiedseat.model.Artist
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -44,7 +45,8 @@ class SubscriptionArtistViewModel @Inject constructor(
     private var _state = MutableStateFlow(SubscriptionArtistScreenState())
     val state = _state
 
-    val event = MutableStateFlow<SubscriptionArtistScreenEvent>(SubscriptionArtistScreenEvent.Idle)
+    private val _event = MutableSharedFlow<SubscriptionArtistScreenEvent>()
+    val event = _event
 
     fun subscribeArtists() {
         viewModelScope.launch {

@@ -51,28 +51,28 @@ import kotlinx.coroutines.launch
 @Composable
 fun SubscriptionArtistScreen(
     navController: NavController,
+    onGoToSeeClicked: () -> Unit = {},
     onLoginRequested: () -> Unit = {},
 ) {
 
     val viewModel = hiltViewModel<SubscriptionArtistViewModel>()
     val state = viewModel.state.collectAsState()
-    val event = viewModel.event.collectAsState()
 
-    val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    when (event.value) {
-        SubscriptionArtistScreenEvent.Idle -> {
-        }
+    LaunchedEffect(true) {
+        viewModel.event.collect {
+            when (it) {
+                SubscriptionArtistScreenEvent.Idle -> {
 
-        SubscriptionArtistScreenEvent.SubscribeArtistsSuccess -> {
-            LaunchedEffect(snackbarHostState) {
-                coroutineScope.launch {
+                }
+                SubscriptionArtistScreenEvent.SubscribeArtistsSuccess -> {
                     snackbarHostState.showSnackbar("구독 설정이 완료되었습니다")
                 }
             }
         }
     }
+
 
     SubscriptionArtistScreenContent(
         state = state.value,
@@ -95,6 +95,9 @@ fun SubscriptionArtistScreen(
         onLoginRequested = {
             viewModel.setSheetVisible(false)
             onLoginRequested()
+        },
+        onGoToSeeClicked = {
+            onGoToSeeClicked()
         }
     )
 }
@@ -110,6 +113,7 @@ fun SubscriptionArtistScreenContent(
     onArtistClicked: (Artist) -> Unit = {},
     checkIsSelected: (Artist) -> Boolean,
     onLoginRequested: () -> Unit = {},
+    onGoToSeeClicked: () -> Unit = {},
 ) {
 
     val scope = rememberCoroutineScope()
@@ -166,7 +170,7 @@ fun SubscriptionArtistScreenContent(
                         // onIconClicked()
                     },
                 ) {
-                    // onActionClicked()
+                    onGoToSeeClicked()
                 }
             }
         },
