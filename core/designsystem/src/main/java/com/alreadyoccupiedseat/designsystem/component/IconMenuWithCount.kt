@@ -71,12 +71,13 @@ fun IconMenuWithCount(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (count != null) {
-                ShowPotKoreanText_B1_SemiBold(
-                    text = count.toString(),
-                    color = ShowpotColor.Gray100,
-                )
-            }
+            // TODO: after MVP
+//            if (count != null) {
+//                ShowPotKoreanText_B1_SemiBold(
+//                    text = count.toString(),
+//                    color = ShowpotColor.Gray100,
+//                )
+//            }
 
             Icon(
                 painter = painterResource(id = R.drawable.ic_arrow_24_right),
