@@ -170,15 +170,15 @@ fun NotificationScreenContent(
 
             item { Spacer(Modifier.height(12.dp)) }
             // 티켓팅 종료 공연
-            item {
-                IconMenuWithCount(
-                    firstIcon = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.ic_ticket_close_24), // Todo: Change Icon (?) -> 작아보임
-                    title = stringResource(com.alreadyoccupiedseat.designsystem.R.string.close_ticketing_shows),
-                    count = 5,
-                ) {
-                    onMyFinishedShowClicked()
-                }
-            }
+//            item {
+//                IconMenuWithCount(
+//                    firstIcon = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.ic_ticket_close_24), // Todo: Change Icon (?) -> 작아보임
+//                    title = stringResource(com.alreadyoccupiedseat.designsystem.R.string.close_ticketing_shows),
+//                    count = 5,
+//                ) {
+//                    onMyFinishedShowClicked()
+//                }
+//            }
         }
 
     }
