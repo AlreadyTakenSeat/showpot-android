@@ -1,73 +1,36 @@
 package com.alreadyoccupiedseat.mypage
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alreadyoccupiedseat.model.Artist
-import com.alreadyoccupiedseat.model.Genre
-import com.alreadyoccupiedseat.model.Show
+import com.alreadyoccupiedseat.core.extension.EMPTY
+import com.alreadyoccupiedseat.data.login.LoginRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-sealed class MyPageScreenEvent {
-    data object Idle : MyPageScreenEvent()
-    data object LoginComplete : MyPageScreenEvent()
+sealed interface MyPageScreenEvent {
+    data object Idle : MyPageScreenEvent
+    data object LoginComplete : MyPageScreenEvent
 }
 
+data class MyPageScreenState(
+    val nickName: String = String.EMPTY,
+)
+
 @HiltViewModel
-class MyPageViewModel @Inject constructor() : ViewModel() {
+class MyPageViewModel @Inject constructor(
+    private val loginRepository: LoginRepository,
+) : ViewModel() {
 
-    private val _showList = mutableStateOf<List<Show>>(emptyList())
-    val showList: State<List<Show>> = _showList
+    private val _state = MutableStateFlow(MyPageScreenState())
+    val state: StateFlow<MyPageScreenState> = _state
 
-    init {
-        loadShows()
-    }
-
-    private fun loadShows() {
+    fun getNickName() {
         viewModelScope.launch {
-            _showList.value = (1..3).map { index ->
-                val genres = listOf(
-                    "Rock",
-                    "Band",
-                    "EDM",
-                    "Classic",
-                    "Hiphop",
-                    "House",
-                    "Opera",
-                    "Pop",
-                    "Rnb",
-                    "Musical",
-                    "Metal",
-                    "Jpop",
-                    "Jazz"
-                )
-                val genreName = genres[(index - 1) % genres.size]
-                val posterImageURL = if (index % 2 != 0) {
-                    "https://img.hankyung.com/photo/202406/01.37069998.1.jpg"
-                } else {
-                    "https://thumb.mt.co.kr/06/2024/04/2024040913332068429_1.jpg/dims/optimize/"
-                }
-
-                Show(
-                    artist = Artist(
-                        id = index.toString(),
-                        imageURL = "https://example.com/artist$index.jpg",
-                        koreanName = "Artist $index",
-                        englishName = "Artist $index"
-                    ),
-                    genre = Genre(
-                        id = index.toString(),
-                        name = genreName,
-                        isSubscribed = index % 2 == 0
-                    ),
-                    id = index.toString(),
-                    name = "Concert $index",
-                    posterImageURL = posterImageURL,
-                    ticketingAndShowInfo = listOf(/* ... */)
-                )
+            loginRepository.getProfile().onSuccess { profile ->
+                _state.value = state.value.copy(nickName = profile.nickname)
             }
         }
     }
