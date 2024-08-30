@@ -10,13 +10,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.IconMenuWithCount
 import com.alreadyoccupiedseat.designsystem.component.ticketSlider.TicketSlidePager
@@ -28,6 +28,7 @@ import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 @Composable
 fun PreviewNotificationScreen(modifier: Modifier = Modifier) {
     NotificationScreen(
+        onLoginRequested = {},
         onMyAlarmSettingClicked = {},
         onMyFavoriteShowsClicked = {},
         onMyFinishedShowClicked = {}
@@ -36,11 +37,20 @@ fun PreviewNotificationScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun NotificationScreen(
+    onLoginRequested: () -> Unit,
     onMyAlarmSettingClicked: () -> Unit,
     onMyFavoriteShowsClicked: () -> Unit,
     onMyFinishedShowClicked: () -> Unit,
 ) {
+
+    val viewModel = hiltViewModel<NotificationViewModel>()
+    val state = viewModel.state.collectAsState()
+
     NotificationScreenContent(
+        state = state.value,
+        onLoginRequested = {
+            onLoginRequested()
+        },
         onMyAlarmSettingClicked = {
             onMyAlarmSettingClicked()
         },
@@ -57,6 +67,8 @@ fun NotificationScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NotificationScreenContent(
+    state: NotificationState,
+    onLoginRequested: () -> Unit,
     onMyAlarmSettingClicked: () -> Unit,
     onMyFavoriteShowsClicked: () -> Unit,
     onMyFinishedShowClicked: () -> Unit,
@@ -87,32 +99,40 @@ fun NotificationScreenContent(
                 Spacer(Modifier.height(1.dp))
             }
 
-            item {
-                ShowPotEnglishText_H0(
-                    text = "Dua Lipa",
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    color = ShowpotColor.Gray100
-                )
-            }
-
-            item {
-                Row {
-                    ShowPotKoreanText_H0(
-                        modifier = Modifier.padding(start = 16.dp),
-                        text = "공연 티켓팅까지, ",
-                        color = ShowpotColor.Gray100,
-                    )
-
-                    ShowPotKoreanText_H0(
-                        modifier = Modifier.padding(start = 8.dp),
-                        text = "D-5",
-                        color = ShowpotColor.MainOrange,
+            if (state.isLoggedIn && state.upcomingTicketingShows.isNotEmpty()) {
+                item {
+                    ShowPotEnglishText_H0(
+                        text = "Dua Lipa",
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        color = ShowpotColor.Gray100
                     )
                 }
-            }
 
-            item {
-                TicketSlidePager(pagerState)
+                item {
+                    Row {
+                        ShowPotKoreanText_H0(
+                            modifier = Modifier.padding(start = 16.dp),
+                            text = "공연 티켓팅까지, ",
+                            color = ShowpotColor.Gray100,
+                        )
+
+                        ShowPotKoreanText_H0(
+                            modifier = Modifier.padding(start = 8.dp),
+                            text = "D-5",
+                            color = ShowpotColor.MainOrange,
+                        )
+                    }
+                }
+
+                item {
+                    TicketSlidePager(pagerState)
+                }
+            } else {
+                item {
+                    NotificationScreenEmpty(state.isLoggedIn) {
+                        onLoginRequested()
+                    }
+                }
             }
 
             item {
