@@ -56,8 +56,8 @@ fun ShowDetailScreen(
 
     val viewModel = hiltViewModel<ShowDetailViewModel>()
     val state = viewModel.state.collectAsState()
-
     val context = LocalContext.current
+
     LaunchedEffect(viewModel.event) {
         viewModel.event.collectLatest { event ->
             when (event) {
@@ -76,12 +76,11 @@ fun ShowDetailScreen(
             }
         }
     }
-    val event = viewModel.event
 
     LaunchedEffect(showId) {
         viewModel.getShowDetail(showId)
+        viewModel.registerShowId(showId)
     }
-
 
     ShowDetailScreenContent(
         state = state.value,
@@ -108,7 +107,11 @@ fun ShowDetailScreen(
                 showId,
                 "NORMAL",
                 // TODO: request the actual alert times after MVP
-                listOf(TicketingAlertTime.BEFORE_1.name)
+                if (state.value.isThirdItemSelected) {
+                    listOf(TicketingAlertTime.BEFORE_1.name)
+                } else {
+                    emptyList()
+                }
             )
         }
 
@@ -287,7 +290,8 @@ fun ShowDetailScreenContent(
                     HorizontalTitleAndInfoText(
                         Modifier.padding(horizontal = 16.dp),
                         "일반예매 오픈",
-                        state.showDetail?.startDate?.replace("-", ".") ?: String.EMPTY
+                        state.showDetail?.ticketingTimes?.first()?.ticketingAt?.replace("-", ".")
+                            ?: String.EMPTY
                     )
                 }
 
