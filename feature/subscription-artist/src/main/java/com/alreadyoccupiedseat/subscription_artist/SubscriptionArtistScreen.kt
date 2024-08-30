@@ -241,7 +241,20 @@ fun SubscriptionArtistScreenContent(
 
                 }
 
-                // Todo: Visibility depends on whether artists are selected
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(
+                                    ShowpotColor.Gray700.copy(alpha = 0f),
+                                    ShowpotColor.Gray700
+                                ),
+                            )
+                        ).align(Alignment.BottomCenter)
+                )
+
                 this@Column.AnimatedVisibility(
                     visible = state.selectedArtists.isNotEmpty(),
                     enter = slideInVertically(
@@ -255,14 +268,6 @@ fun SubscriptionArtistScreenContent(
                         modifier = Modifier
                             .padding(top = 4.dp)
                             .fillMaxWidth()
-                            .background(
-                                brush = Brush.verticalGradient(
-                                    colors = listOf(
-                                        ShowpotColor.Gray700.copy(alpha = 0f),
-                                        ShowpotColor.Gray700
-                                    ),
-                                )
-                            )
                             .padding(bottom = 54.dp),
                     ) {
                         ShowPotMainButton(
