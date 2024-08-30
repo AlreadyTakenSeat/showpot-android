@@ -56,33 +56,14 @@ fun SettingsScreenContent(
     onPrivacyPolicyClicked: () -> Unit = { },
     onTermsOfServiceClicked: () -> Unit = { },
     onNotificationSettingClicked: () -> Unit = { },
-    ) {
+) {
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            Row(
-                modifier = Modifier
-                    .padding(top = 12.dp)
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Spacer(modifier = Modifier.width(6.dp))
-
-                Icon(
-                    painter = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.ic_arrow_36_left),
-                    contentDescription = "back",
-                    tint = Color.White,
-                    modifier = Modifier.clickable {
-                        onBackClicked()
-                    }
-                )
-
-                ShowPotKoreanText_H1(
-                    text = "설정",
-                    color = ShowpotColor.Gray300,
-                )
-            }
+            SettingsTopBar(
+                onBackClicked = onBackClicked
+            )
         },
         containerColor = ShowpotColor.Gray700
     ) { innerPadding ->
