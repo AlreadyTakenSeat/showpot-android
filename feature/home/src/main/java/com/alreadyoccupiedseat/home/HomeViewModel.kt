@@ -2,8 +2,10 @@ package com.alreadyoccupiedseat.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alreadyoccupiedseat.data.artist.ArtistRepository
 import com.alreadyoccupiedseat.data.show.ShowRepository
 import com.alreadyoccupiedseat.designsystem.R
+import com.alreadyoccupiedseat.model.Artist
 import com.alreadyoccupiedseat.model.show.Shows
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,11 +47,13 @@ val performances = listOf(
 data class HomeScreenState(
     val genreList: List<Pair<Int, Int>> = emptyList(),
     val entireShowList: Shows = Shows(data = emptyList(), hasNext = false, size = 0),
+    val unSubscribedArtists: List<Artist> = emptyList()
 )
 
 @HiltViewModel
 class HomeViewModel@Inject constructor(
-    private val showRepository: ShowRepository
+    private val showRepository: ShowRepository,
+    private val artistRepository: ArtistRepository
 ) : ViewModel(){
 
     private val _state = MutableStateFlow(HomeScreenState())
@@ -94,6 +98,18 @@ class HomeViewModel@Inject constructor(
                     )
                 )
             }
+        }
+    }
+
+    fun getUbSubscribedArtists() {
+        viewModelScope.launch {
+            val unSubscribedArtists = artistRepository.getUnsubscribedArtists(
+                size = 10
+            )
+
+            _state.value = _state.value.copy(
+                unSubscribedArtists = unSubscribedArtists
+            )
         }
     }
 
