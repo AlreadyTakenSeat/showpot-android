@@ -89,5 +89,5 @@ class ShowDetailViewModel @Inject constructor(
         )
     }
 
-    // TODO: generate fun to change the avialability of the first, second, and third item
+    // TODO: generate fun to change the availability of the first, second, and third item
 }
