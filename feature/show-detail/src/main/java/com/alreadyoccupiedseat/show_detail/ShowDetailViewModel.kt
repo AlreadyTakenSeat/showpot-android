@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.alreadyoccupiedseat.data.show.ShowRepository
 import com.alreadyoccupiedseat.model.show.ShowDetail
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -34,7 +35,7 @@ class ShowDetailViewModel @Inject constructor(
     private val _state = MutableStateFlow(ShowDetailState())
     val state = _state
 
-    private val _event = MutableStateFlow<ShowDetailEvent>(ShowDetailEvent.Idle)
+    private val _event = MutableSharedFlow<ShowDetailEvent>()
     val event = _event
 
     fun getShowDetail(showId: String) {

@@ -46,6 +46,7 @@ import com.alreadyoccupiedseat.designsystem.typo.english.ShowPotEnglishText_H0
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
 import com.alreadyoccupiedseat.enum.TicketingAlertTime
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun ShowDetailScreen(
@@ -55,24 +56,30 @@ fun ShowDetailScreen(
 
     val viewModel = hiltViewModel<ShowDetailViewModel>()
     val state = viewModel.state.collectAsState()
-    val event = viewModel.event.collectAsState()
+
+    val context = LocalContext.current
+    LaunchedEffect(viewModel.event) {
+        viewModel.event.collectLatest { event ->
+            when (event) {
+                is ShowDetailEvent.Idle -> {
+
+
+                }
+
+                is ShowDetailEvent.AlertRegisterSuccess -> {
+                    Toast.makeText(
+                        context,
+                        "알림 요청에 성공하였습니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+    }
+    val event = viewModel.event
 
     LaunchedEffect(showId) {
         viewModel.getShowDetail(showId)
-    }
-
-    when (event.value) {
-        is ShowDetailEvent.Idle -> {
-
-        }
-
-        is ShowDetailEvent.AlertRegisterSuccess -> {
-            Toast.makeText(
-                LocalContext.current,
-                "알림 요청에 성공하였습니다.",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
     }
 
 
