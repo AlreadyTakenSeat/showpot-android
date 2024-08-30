@@ -159,24 +159,25 @@ fun LoginContent(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                ShowPotButtonWithIcon(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(
-                            horizontal = 16.dp,
-                        ),
-                    text = stringResource(R.string.button_login_with_google),
-                    icon = painterResource(R.drawable.ic_google),
-                    colors = ButtonColors(
-                        containerColor = ShowpotColor.White,
-                        contentColor = Color.Black,
-                        disabledContainerColor = ShowpotColor.Gray600,
-                        disabledContentColor = ShowpotColor.Gray400,
-                    ),
-                    onClick = {
-                        /* 구글 로그인 */
-                    }
-                )
+                // TODO MVP 제외 -> 이후 구현
+//                ShowPotButtonWithIcon(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(
+//                            horizontal = 16.dp,
+//                        ),
+//                    text = stringResource(R.string.button_login_with_google),
+//                    icon = painterResource(R.drawable.ic_google),
+//                    colors = ButtonColors(
+//                        containerColor = ShowpotColor.White,
+//                        contentColor = Color.Black,
+//                        disabledContainerColor = ShowpotColor.Gray600,
+//                        disabledContentColor = ShowpotColor.Gray400,
+//                    ),
+//                    onClick = {
+//                        /* 구글 로그인 */
+//                    }
+//                )
             }
         }
     )
