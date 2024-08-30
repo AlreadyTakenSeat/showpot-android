@@ -17,6 +17,7 @@ sealed interface ShowDetailEvent {
 }
 
 data class ShowDetailState(
+    val showId: String = "",
     val showDetail: ShowDetail? = null,
     val isSheetVisible: Boolean = false,
     val isFirstItemAvailable: Boolean = false,
@@ -37,6 +38,10 @@ class ShowDetailViewModel @Inject constructor(
 
     private val _event = MutableSharedFlow<ShowDetailEvent>()
     val event = _event
+
+    fun registerShowId(showId: String) {
+        _state.value = _state.value.copy(showId = showId)
+    }
 
     fun getShowDetail(showId: String) {
         viewModelScope.launch {
@@ -61,6 +66,7 @@ class ShowDetailViewModel @Inject constructor(
         viewModelScope.launch {
             val result = showRepository.registerTicketingAlert(showId, ticketingApiType, alertTimes)
             if (result.isSuccess) {
+                checkAlertAvailability()
                 _event.emit(ShowDetailEvent.AlertRegisterSuccess)
             } else {
                 println(result.exceptionOrNull())
@@ -87,6 +93,16 @@ class ShowDetailViewModel @Inject constructor(
             isThirdItemSelected =
             !state.value.isThirdItemSelected
         )
+    }
+
+    private fun checkAlertAvailability() {
+        viewModelScope.launch {
+            // TODO: not only for Third Item
+            val availabilitiesInfo = showRepository.checkAlertReservation(state.value.showId, "NORMAL")
+            _state.value = _state.value.copy(
+                isThirdItemSelected = availabilitiesInfo.alertReservationStatus.before1
+            )
+        }
     }
 
     // TODO: generate fun to change the availability of the first, second, and third item

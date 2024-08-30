@@ -56,8 +56,8 @@ fun ShowDetailScreen(
 
     val viewModel = hiltViewModel<ShowDetailViewModel>()
     val state = viewModel.state.collectAsState()
-
     val context = LocalContext.current
+
     LaunchedEffect(viewModel.event) {
         viewModel.event.collectLatest { event ->
             when (event) {
@@ -76,12 +76,11 @@ fun ShowDetailScreen(
             }
         }
     }
-    val event = viewModel.event
 
     LaunchedEffect(showId) {
         viewModel.getShowDetail(showId)
+        viewModel.registerShowId(showId)
     }
-
 
     ShowDetailScreenContent(
         state = state.value,

@@ -1,6 +1,7 @@
 package com.alreadyoccupiedseat.data.show
 
 import com.alreadyoccupiedseat.model.SearchedShow
+import com.alreadyoccupiedseat.model.alert.CheckAlertReservationResponse
 import com.alreadyoccupiedseat.model.show.Data
 import com.alreadyoccupiedseat.model.show.InterestedData
 import com.alreadyoccupiedseat.model.show.ShowDetail
@@ -32,5 +33,10 @@ interface ShowDataSource {
         ticketingApiType: String,
         alertTimes: List<String>,
     ): Result<Unit>
+
+    suspend fun checkAlertReservation(
+        showId: String,
+        alertId: String,
+    ): CheckAlertReservationResponse
 
 }
