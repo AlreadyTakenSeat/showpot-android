@@ -18,11 +18,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,17 +35,18 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.alreadyoccupiedseat.core.extension.isScrollingUp
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.RecommendedShow
-import com.alreadyoccupiedseat.designsystem.component.artistByPainter.ShowPotArtistByPainter
 import com.alreadyoccupiedseat.designsystem.component.ShowPotGenre
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMenu
 import com.alreadyoccupiedseat.designsystem.component.ShowPotSearchBar
 import com.alreadyoccupiedseat.designsystem.component.ShowPotTicket
+import com.alreadyoccupiedseat.designsystem.component.artistByPainter.ShowPotArtistByPainter
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B1_SemiBold
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 import kotlinx.coroutines.delay
@@ -59,7 +61,10 @@ fun HomeScreen(
     onEntireShowClicked: () -> Unit,
     onRecommendedShowClicked: (String) -> Unit,
 ) {
+    val viewModel = hiltViewModel<HomeViewModel>()
+    val state = viewModel.state.collectAsState()
     HomeScreenContent(
+        state = state.value,
         onSearchBarClicked = onSearchBarClicked,
         onSubscriptionGenreClicked = onSubscriptionGenreClicked,
         onSubscribeArtistClicked = onSubscribeArtistClicked,
@@ -70,6 +75,7 @@ fun HomeScreen(
 
 @Composable
 fun HomeScreenContent(
+    state: HomeScreenState,
     onSearchBarClicked: () -> Unit,
     onSubscriptionGenreClicked: () -> Unit,
     onSubscribeArtistClicked: () -> Unit,
@@ -79,12 +85,8 @@ fun HomeScreenContent(
 
     var isTopBarVisible by remember { mutableStateOf(true) }
     val scope = rememberCoroutineScope()
-
     val scrollState = rememberLazyListState()
-    val firstVisibleItemIndex =
-        remember { derivedStateOf { scrollState.firstVisibleItemIndex } }.value
-
-    val viewModel = viewModel<HomeViewModel>()
+    val firstVisibleItemIndex = remember { derivedStateOf { scrollState.firstVisibleItemIndex } }.value
 
     // 첫 번째 아이템이 보이면 무조건 상단바 노출
     if (firstVisibleItemIndex == 0) {
@@ -122,7 +124,6 @@ fun HomeScreenContent(
                     contentDescription = stringResource(com.alreadyoccupiedseat.home.R.string.showpot_logo_content_description)
                 )
             }
-
         }
     ) { innerPadding ->
         Box(
@@ -161,7 +162,9 @@ fun HomeScreenContent(
                         modifier = Modifier.padding(start = 16.dp, top = 8.dp),
                         horizontalArrangement = Arrangement.spacedBy(10.dp)
                     ) {
-                        items(viewModel.genreList) { (resId, _) ->
+                        val genreList = state.genreList
+                        items(genreList.size) {
+                            val resId = genreList[it].first
                             ShowPotGenre(icon = painterResource(id = resId))
                         }
                     }
@@ -204,36 +207,23 @@ fun HomeScreenContent(
                     )
                 }
 
-                item {
+                itemsIndexed(state.entireShowList.data) { _, show ->
+                    val textColor = if (show.isOpen) {
+                        ShowpotColor.MainBlue
+                    } else {
+                        ShowpotColor.MainYellow
+                    }
+                    val ticketingTime = show.ticketingAt
                     ShowPotTicket(
-                        modifier = Modifier
-                            .padding(top = 10.dp)
-                            .padding(horizontal = 16.dp),
-                        imageUrl = "https://images.pexels.com/photos/6865046/pexels-photo-6865046.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-                        showTime = "OPEN : 06.10(MON) AM 11:00",
-                        showTimeTextColor = ShowpotColor.MainYellow,
-                        showName = "Nothing But Thieves But Thieves ",
-                        showLocation = "KBS 아레나홀",
-                        hasTicketingOpen = false,
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        imageUrl = show.posterImageURL,
+                        showTime = ticketingTime,
+                        showTimeTextColor = textColor,
+                        showName = show.title,
+                        showLocation = show.location,
+                        hasTicketingOpen = show.isOpen,
                         onClick = {
-                            Log.d("ShowPotTicket", "onClick")
-                        }
-                    )
-                }
-
-                item {
-                    ShowPotTicket(
-                        modifier = Modifier
-                            .padding(top = 10.dp)
-                            .padding(horizontal = 16.dp),
-                        imageUrl = "https://images.pexels.com/photos/6865046/pexels-photo-6865046.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-                        showTime = "OPEN : 06.10(MON) AM 11:00",
-                        showTimeTextColor = ShowpotColor.MainBlue,
-                        showName = "Nothing But Thieves But Thieves ",
-                        showLocation = "KBS 아레나홀",
-                        hasTicketingOpen = true,
-                        onClick = {
-                            Log.d("ShowPotTicket", "onClick")
+                            onEntireShowClicked()
                         }
                     )
                 }

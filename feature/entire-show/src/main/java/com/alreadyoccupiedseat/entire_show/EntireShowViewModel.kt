@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alreadyoccupiedseat.data.show.ShowRepository
 import com.alreadyoccupiedseat.model.show.Shows
+import com.alreadyoccupiedseat.model.show.Shows.Companion.POPULAR
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -47,10 +48,6 @@ class EntireShowViewModel @Inject constructor(
                 )
             }
         }
-    }
-
-    companion object {
-        const val POPULAR = "POPULAR"
     }
 
 }
