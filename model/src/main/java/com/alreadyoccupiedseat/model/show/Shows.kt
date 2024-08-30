@@ -8,5 +8,9 @@ data class Shows(
     companion object {
         const val RECENT = "RECENT"
         const val POPULAR = "POPULAR"
+
+        // 공연 알림 목록 조회 타입
+        const val CONTINUE = "CONTINUED"
+        const val TERMINATE = "TERMINATE"
     }
 }
