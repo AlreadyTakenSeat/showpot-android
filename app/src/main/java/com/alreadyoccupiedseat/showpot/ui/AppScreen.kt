@@ -39,13 +39,15 @@ fun AppScreen(
     onPrivacyPolicyClicked: () -> Unit = { },
     onTermsOfServiceClicked: () -> Unit = { },
     onNotificationSettingClicked: () -> Unit = { },
-    versionName: String
+    versionName: String,
+    onLabelButtonClicked: (String) -> Unit = { }
 ) {
     AppScreenContent(
         onPrivacyPolicyClicked = onPrivacyPolicyClicked,
         onTermsOfServiceClicked = onTermsOfServiceClicked,
         onNotificationSettingClicked = onNotificationSettingClicked,
-        versionName = versionName
+        versionName = versionName,
+        onLabelButtonClicked = onLabelButtonClicked
     )
 }
 
@@ -54,7 +56,8 @@ fun AppScreenContent(
     onPrivacyPolicyClicked: () -> Unit = { },
     onTermsOfServiceClicked: () -> Unit = { },
     onNotificationSettingClicked: () -> Unit = { },
-    versionName: String
+    versionName: String,
+    onLabelButtonClicked: (String) -> Unit = { }
 ) {
     val navController = rememberNavController()
     Scaffold(
@@ -187,7 +190,9 @@ fun AppScreenContent(
                 ShowDetailScreen(
                     navController,
                     backStackEntry.arguments?.getString("showId") ?: String.EMPTY
-                )
+                ) {
+                    onLabelButtonClicked(it)
+                }
             }
 
             composable(Screen.MyAlarmSetting.route) {

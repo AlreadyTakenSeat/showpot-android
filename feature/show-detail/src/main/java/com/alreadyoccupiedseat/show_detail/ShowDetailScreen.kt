@@ -51,7 +51,8 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun ShowDetailScreen(
     navController: NavController,
-    showId: String
+    showId: String,
+    onTicketingButtonClicked: (String) -> Unit
 ) {
 
     val viewModel = hiltViewModel<ShowDetailViewModel>()
@@ -113,6 +114,9 @@ fun ShowDetailScreen(
                     emptyList()
                 }
             )
+        },
+        onTicketingButtonClicked = {
+            onTicketingButtonClicked(it)
         }
 
     )
@@ -128,6 +132,7 @@ fun ShowDetailScreenContent(
     onSecondItemClicked: () -> Unit,
     onThirdItemClicked: () -> Unit,
     onRegisterAlertButtonClicked: () -> Unit,
+    onTicketingButtonClicked: (String) -> Unit
 ) {
 
     val lazyColumnState = rememberLazyListState()
@@ -267,7 +272,9 @@ fun ShowDetailScreenContent(
                                 LabelButton(
                                     backgroundColor = it.name.getTicketSiteButtonColor(),
                                     text = it.name,
-                                )
+                                ) {
+                                    onTicketingButtonClicked(it.link)
+                                }
                             }
                         }
                     }
