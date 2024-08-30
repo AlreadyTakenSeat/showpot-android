@@ -287,7 +287,7 @@ fun ShowDetailScreenContent(
                     HorizontalTitleAndInfoText(
                         Modifier.padding(horizontal = 16.dp),
                         "일반예매 오픈",
-                        state.showDetail?.startDate?.replace("-", ".") ?: String.EMPTY
+                        state.showDetail?.ticketingTimes?.first()?.ticketingAt?.replace("-", ".") ?: String.EMPTY
                     )
                 }
 
