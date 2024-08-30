@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.SearchHistoryChip
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B1_Regular
+import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B1_SemiBold
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -44,20 +45,30 @@ fun RecentSearchHistorySection(
         )
     }
 
-    FlowRow(
-        Modifier.padding(horizontal = 16.dp)
-            .padding(top = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        searchHistories.forEach {
-            SearchHistoryChip(it,
-                onChipClicked = { chipText ->
-                    onChipClicked(chipText)
+    if (searchHistories.isEmpty()) {
+        ShowPotKoreanText_B1_SemiBold(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 44.dp)
+                .padding(horizontal = 138.dp), text = "검색 기록이 없어요", color = ShowpotColor.Gray400
+        )
+    } else {
+        FlowRow(
+            Modifier.padding(horizontal = 16.dp)
+                .padding(top = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            searchHistories.forEach {
+                SearchHistoryChip(it,
+                    onChipClicked = { chipText ->
+                        onChipClicked(chipText)
+                    }
+                ) { searchedText ->
+                    onDeleteHistoryClicked(searchedText)
                 }
-            ) { searchedText ->
-                onDeleteHistoryClicked(searchedText)
             }
         }
     }
+
 }
