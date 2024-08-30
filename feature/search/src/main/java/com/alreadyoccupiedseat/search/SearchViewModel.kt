@@ -102,23 +102,33 @@ class SearchViewModel @Inject constructor(
     }
 
     fun searchArtistsAndShows() {
+
         viewModelScope.launch {
-            // TODO: Changed to real data
+            searchArtists()
+            searchShows()
+            stateChangeToSearched()
+        }
+    }
+
+    private fun searchArtists() {
+        viewModelScope.launch {
             val searchedArtists = artistRepository.searchArtists(
                 size = 100,
                 search = _state.value.inputText,
             )
 
             _state.value = _state.value.copy(searchedArtists = searchedArtists)
+        }
+    }
 
+    private fun searchShows() {
+        viewModelScope.launch {
             val searchedShows = showRepository.searchShows(
                 size = 100,
                 search = _state.value.inputText,
             )
 
             _state.value = _state.value.copy(searchedShows = searchedShows)
-
-            stateChangeToSearched()
         }
     }
 }
