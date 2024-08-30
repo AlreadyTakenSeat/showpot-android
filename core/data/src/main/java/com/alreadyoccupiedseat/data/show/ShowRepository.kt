@@ -4,6 +4,7 @@ import com.alreadyoccupiedseat.model.SearchedShow
 import com.alreadyoccupiedseat.model.show.Data
 import com.alreadyoccupiedseat.model.show.InterestedData
 import com.alreadyoccupiedseat.model.show.ShowDetail
+import com.alreadyoccupiedseat.model.temp.AlarmReservedShow
 
 interface ShowRepository {
     suspend fun getEntireShow(
@@ -24,5 +25,8 @@ interface ShowRepository {
     suspend fun getShowDetail(showId: String): ShowDetail
 
     suspend fun registerShowInterest(showId: String): Boolean
+
+    /** 알림 설정한 공연 목록 조회 ***/
+    suspend fun getAlarmReservedShow(size: Int, type: String): List<AlarmReservedShow>
 
 }

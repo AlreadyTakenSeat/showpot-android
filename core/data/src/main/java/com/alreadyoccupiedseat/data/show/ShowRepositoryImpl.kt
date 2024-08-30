@@ -4,6 +4,7 @@ import com.alreadyoccupiedseat.model.SearchedShow
 import com.alreadyoccupiedseat.model.show.Data
 import com.alreadyoccupiedseat.model.show.InterestedData
 import com.alreadyoccupiedseat.model.show.ShowDetail
+import com.alreadyoccupiedseat.model.temp.AlarmReservedShow
 import javax.inject.Inject
 
 
@@ -46,6 +47,11 @@ class ShowRepositoryImpl @Inject constructor(
 
     override suspend fun registerShowInterest(showId: String): Boolean {
         return showDataSource.registerShowInterest(showId)
+    }
+
+    /** 알림 설정한 공연 목록 조회 ***/
+    override suspend fun getAlarmReservedShow(size: Int, type: String): List<AlarmReservedShow> {
+        return showDataSource.getAlarmReservedShow(size, type)
     }
 
 }
