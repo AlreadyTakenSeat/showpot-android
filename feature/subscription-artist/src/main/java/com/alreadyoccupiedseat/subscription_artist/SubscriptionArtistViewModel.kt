@@ -31,8 +31,10 @@ class SubscriptionArtistViewModel @Inject constructor(
     init {
         getUnsubscribedArtists()
         viewModelScope.launch {
-            accountDataStore.getAccessToken()?.let {
-                _state.value = _state.value.copy(isLoggedIn = true)
+            accountDataStore.getAccessTokenFlow().collect {
+                _state.value = _state.value.copy(
+                    isLoggedIn = it?.isNotEmpty() ?: false,
+                )
             }
         }
     }

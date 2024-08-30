@@ -76,7 +76,10 @@ fun SubscriptionArtistScreen(
                 checkIsSelected = {
                     viewModel.isSelected(it)
                 },
-                onLoginRequested = onLoginRequested
+                onLoginRequested = {
+                    viewModel.setSheetVisible(false)
+                    onLoginRequested()
+                }
             )
         }
 
