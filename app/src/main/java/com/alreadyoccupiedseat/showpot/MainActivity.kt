@@ -56,7 +56,10 @@ class MainActivity : ComponentActivity() {
                             versionName = packageManager.getPackageInfo(
                                 packageName,
                                 0
-                            ).versionName
+                            ).versionName,
+                            onLabelButtonClicked = {
+                                startActivity(getWebIntent(it))
+                            },
                         )
                     }
 
