@@ -3,6 +3,7 @@ package com.alreadyoccupiedseat.data.login.remote
 import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.datastore.AccountDataStore
 import com.alreadyoccupiedseat.model.login.LoginRequest
+import com.alreadyoccupiedseat.model.login.ProfileResponse
 import com.alreadyoccupiedseat.model.login.TokenReIssueRequest
 import com.alreadyoccupiedseat.network.LoginService
 import javax.inject.Inject
@@ -40,6 +41,12 @@ class RemoteLoginDataSourceImpl @Inject constructor(
 
             accountDataStore.updateAccessToken(result?.accessToken ?: String.EMPTY)
             accountDataStore.updateRefreshToken(result?.refreshToken ?: String.EMPTY)
+        }
+    }
+
+    override suspend fun getProfile(): Result<ProfileResponse> {
+        return runCatching {
+            loginService.getProfile().body() ?: throw Exception("Profile is null")
         }
     }
 }

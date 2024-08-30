@@ -2,6 +2,7 @@ package com.alreadyoccupiedseat.data.login
 
 import android.content.Context
 import com.alreadyoccupiedseat.data.login.remote.RemoteLoginDataSource
+import com.alreadyoccupiedseat.model.login.ProfileResponse
 import javax.inject.Inject
 
 class LoginRepositoryImpl @Inject constructor(
@@ -25,6 +26,10 @@ class LoginRepositoryImpl @Inject constructor(
 
     override suspend fun reIssueToken(): Result<Unit> {
         return remoteLoginDataSource.reIssueToken()
+    }
+
+    override suspend fun getProfile(): Result<ProfileResponse> {
+        return remoteLoginDataSource.getProfile()
     }
 
 }
