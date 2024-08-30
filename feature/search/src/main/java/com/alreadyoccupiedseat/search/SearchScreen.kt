@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -30,6 +32,9 @@ import androidx.navigation.NavController
 import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotSearchBar
+import com.alreadyoccupiedseat.designsystem.component.snackbar.CheckIconSnackbar
+import com.alreadyoccupiedseat.designsystem.component.snackbar.ShowPotSnackbar
+import com.alreadyoccupiedseat.model.SubscribedArtist
 import kotlinx.coroutines.launch
 
 @Composable
@@ -40,9 +45,28 @@ fun SearchScreen(
 
     val viewModel = hiltViewModel<SearchViewModel>()
     val state = viewModel.state.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
 
+    LaunchedEffect(true) {
+        viewModel.event.collect {
+            when (it) {
+                is SearchScreenEvent.Idle -> {
+
+                }
+
+                is SearchScreenEvent.SubscribeArtistSuccess -> {
+                    snackbarHostState.showSnackbar("구독 설정이 완료되었습니다")
+                }
+
+                is SearchScreenEvent.UnSubscribeArtistSuccess -> {
+                    snackbarHostState.showSnackbar("구독 해제가 완료되었습니다")
+                }
+            }
+        }
+    }
     SearchScreenContent(
         state = state.value,
+        snackbarHostState = snackbarHostState,
         onBackButtonClicked = {
             if (state.value.isSearchedScreen) {
                 viewModel.stateChangeToNotSearched()
@@ -83,6 +107,9 @@ fun SearchScreen(
         },
         onRequestSubscribeArtist = {
             viewModel.subscribeArtist(it)
+        },
+        onRequestUnSubscribeArtist = {
+            viewModel.unSubscribeArtist()
         }
     )
 }
@@ -90,6 +117,7 @@ fun SearchScreen(
 @Composable
 fun SearchScreenContent(
     state: SearchScreenState,
+    snackbarHostState: SnackbarHostState,
     onBackButtonClicked: () -> Unit = {},
     onTextChanged: (String) -> Unit = {},
     onCancelClicked: () -> Unit = {},
@@ -98,9 +126,10 @@ fun SearchScreenContent(
     onDeleteAllClicked: () -> Unit = {},
     onDeleteHistoryClicked: (String) -> Unit = {},
     onchangeArtistUnSubscriptionSheetVisibility: (Boolean) -> Unit = {},
-    onChangeUnSubscribeTargetArtist: (String) -> Unit = {},
+    onChangeUnSubscribeTargetArtist: (SubscribedArtist) -> Unit = {},
     onShowClicked: (String) -> Unit = {},
-    onRequestSubscribeArtist: (String) -> Unit = {}
+    onRequestSubscribeArtist: (String) -> Unit = {},
+    onRequestUnSubscribeArtist: () -> Unit = {},
 ) {
 
     val focusRequester = remember { FocusRequester() }
@@ -121,6 +150,21 @@ fun SearchScreenContent(
             .clickable {
                 focusManager.clearFocus()
             },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+            ) { snackbarData ->
+                ShowPotSnackbar(
+                    painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.ic_check_36),
+                    mainText = snackbarData.visuals.message,
+                    onIconClicked = {
+                        // onIconClicked()
+                    },
+                ) {
+                    // onActionClicked()
+                }
+            }
+        },
         containerColor = ShowpotColor.Gray700,
         topBar = {
             Row(
@@ -197,6 +241,9 @@ fun SearchScreenContent(
                     },
                     onSubscribeArtist = {
                         onRequestSubscribeArtist(it)
+                    },
+                    onUnSubscribeArtist = {
+                        onRequestUnSubscribeArtist()
                     }
                 )
             }

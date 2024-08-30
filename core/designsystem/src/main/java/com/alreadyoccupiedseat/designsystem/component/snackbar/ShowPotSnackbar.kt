@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B1_SemiBold
@@ -20,9 +21,9 @@ import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B1_Sem
 fun ShowPotSnackbar(
     iconPainter: Painter,
     mainText: String,
-    actionText: String,
+    actionText: String? = null,
     onIconClicked: () -> Unit,
-    onActionTextClicked: () -> Unit
+    onActionTextClicked: () -> Unit = {}
 ) {
     Row(
         modifier = Modifier
@@ -47,19 +48,25 @@ fun ShowPotSnackbar(
         ShowPotKoreanText_B1_SemiBold(
             modifier = Modifier.weight(1f),
             text = mainText,
-            color = Color.White
+            color = Color.White,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
 
-        ShowPotKoreanText_B1_SemiBold(
-            modifier = Modifier
-                .padding(
-                    start = 16.dp, end = 13.dp
-                )
-                .clickable {
-                    onActionTextClicked()
-                },
-            text = actionText,
-            color = ShowpotColor.MainOrange
-        )
+        actionText?.let {
+            ShowPotKoreanText_B1_SemiBold(
+                modifier = Modifier
+                    .padding(
+                        start = 16.dp, end = 13.dp
+                    )
+                    .clickable {
+                        onActionTextClicked()
+                    },
+                text = actionText,
+                color = ShowpotColor.MainOrange,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
     }
 }
