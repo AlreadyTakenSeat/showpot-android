@@ -29,6 +29,7 @@ import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 @Composable
 fun PreviewNotificationScreen(modifier: Modifier = Modifier) {
     NotificationScreen(
+        onShowClicked = {},
         onLoginRequested = {},
         onMyAlarmSettingClicked = {},
         onMyFavoriteShowsClicked = {},
@@ -38,6 +39,7 @@ fun PreviewNotificationScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun NotificationScreen(
+    onShowClicked: (String) -> Unit,
     onLoginRequested: () -> Unit,
     onMyAlarmSettingClicked: () -> Unit,
     onMyFavoriteShowsClicked: () -> Unit,
@@ -53,6 +55,9 @@ fun NotificationScreen(
 
     NotificationScreenContent(
         state = state.value,
+        onShowClicked = {
+            onShowClicked(it)
+        },
         onLoginRequested = {
             onLoginRequested()
         },
@@ -73,6 +78,7 @@ fun NotificationScreen(
 @Composable
 fun NotificationScreenContent(
     state: NotificationState,
+    onShowClicked: (String) -> Unit,
     onLoginRequested: () -> Unit,
     onMyAlarmSettingClicked: () -> Unit,
     onMyFavoriteShowsClicked: () -> Unit,
@@ -106,9 +112,10 @@ fun NotificationScreenContent(
             }
 
             if (state.isLoggedIn && state.upcomingTicketingShows.isNotEmpty()) {
+                val upcomingTicketShow = state.upcomingTicketingShows[pagerState.currentPage]
                 item {
                     ShowPotEnglishText_H0(
-                        text = state.upcomingTicketingShows[pagerState.currentPage].title,
+                        text = upcomingTicketShow.title,
                         modifier = Modifier.padding(horizontal = 16.dp),
                         color = ShowpotColor.Gray100,
                         maxLines = 1,
@@ -133,7 +140,13 @@ fun NotificationScreenContent(
                 }
 
                 item {
-                    TicketSlidePagerForAlarmReservedShow(pagerState, state.upcomingTicketingShows)
+                    TicketSlidePagerForAlarmReservedShow(
+                        pagerState = pagerState,
+                        alarmedShows = state.upcomingTicketingShows,
+                        onShowClicked = {
+                            onShowClicked(upcomingTicketShow.id)
+                        }
+                    )
                 }
             } else {
                 item {

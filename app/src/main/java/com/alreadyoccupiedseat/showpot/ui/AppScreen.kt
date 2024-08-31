@@ -126,6 +126,9 @@ fun AppScreenContent(
 
             composable(Screen.Notification.route) {
                 NotificationScreen(
+                    onShowClicked = {
+                        navController.navigate(Screen.ShowDetail.route.replace("{showId}", it))
+                    },
                     onLoginRequested = {
                         navController.navigate(Screen.Login.route)
                     },
