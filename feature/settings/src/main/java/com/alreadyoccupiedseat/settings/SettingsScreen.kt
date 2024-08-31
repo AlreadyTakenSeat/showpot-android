@@ -12,12 +12,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.IconMenuWithCount
@@ -32,9 +34,13 @@ fun SettingsScreen(
     onPrivacyPolicyClicked: () -> Unit = { },
     onTermsOfServiceClicked: () -> Unit = { },
     onNotificationSettingClicked: () -> Unit = { },
-
     ) {
+
+    val viewModel = hiltViewModel<SettingsViewModel>()
+    val state = viewModel.state.collectAsState()
+
     SettingsScreenContent(
+        state = state.value,
         versionName = versionName,
         onBackClicked = {
             navController.popBackStack()
@@ -50,6 +56,7 @@ fun SettingsScreen(
 
 @Composable
 fun SettingsScreenContent(
+    state: SettingsScreenState,
     versionName: String,
     onBackClicked: () -> Unit,
     onAccountClicked: () -> Unit,
@@ -85,13 +92,15 @@ fun SettingsScreenContent(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            IconMenuWithCount(
-                firstIcon = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.ic_profile_24),
-                title = stringResource(com.alreadyoccupiedseat.designsystem.R.string.account),
-                onClicked = {
-                    onAccountClicked()
-                }
-            )
+            if (state.isLoggedIn) {
+                IconMenuWithCount(
+                    firstIcon = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.ic_profile_24),
+                    title = stringResource(com.alreadyoccupiedseat.designsystem.R.string.account),
+                    onClicked = {
+                        onAccountClicked()
+                    }
+                )
+            }
 
             Spacer(modifier = Modifier.height(8.dp))
 
