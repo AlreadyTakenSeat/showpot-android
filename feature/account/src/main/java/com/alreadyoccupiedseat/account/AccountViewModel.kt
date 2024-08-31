@@ -9,6 +9,7 @@ import com.alreadyoccupiedseat.datastore.AccountDataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,6 +23,7 @@ sealed interface AccountScreenEvent {
 
 data class AccountScreenState(
     val nickName: String = String.EMPTY,
+    val isLoggedIn: Boolean = false
 )
 
 @HiltViewModel
@@ -39,6 +41,11 @@ class AccountViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             getFcmToken()
+            viewModelScope.launch {
+                accountDataStore.getAccessTokenFlow().collectLatest { token ->
+                    _state.value = _state.value.copy(isLoggedIn = token != null)
+                }
+            }
         }
     }
 

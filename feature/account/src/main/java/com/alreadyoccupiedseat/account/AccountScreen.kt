@@ -108,23 +108,25 @@ private fun AccountScreenContent(
                     .padding(it),
             ) {
 
-                item {
-                    Row(
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                    ) {
-                        ShowPotKoreanText_H2(
+                if (state.isLoggedIn) {
+                    item {
+                        Row(
                             modifier = Modifier
-                                .weight(1f),
-                            text = state.nickName,
-                            color = ShowpotColor.Gray100
-                        )
-                        ShowPotKoreanText_B1_Regular(
-                            text = stringResource(R.string.kakao_login),
-                            color = ShowpotColor.Gray100
-                        )
+                                .padding(horizontal = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                        ) {
+                            ShowPotKoreanText_H2(
+                                modifier = Modifier
+                                    .weight(1f),
+                                text = state.nickName,
+                                color = ShowpotColor.Gray100
+                            )
+                            ShowPotKoreanText_B1_Regular(
+                                text = stringResource(R.string.kakao_login),
+                                color = ShowpotColor.Gray100
+                            )
+                        }
                     }
                 }
 
