@@ -105,7 +105,6 @@ fun AppScreenContent(
 
             composable(Screen.Home.route) {
                 HomeScreen(
-                    navController = navController,
                     onSearchBarClicked = {
                         navController.navigate(Screen.Search.route)
                     },
@@ -114,6 +113,10 @@ fun AppScreenContent(
                     },
                     onSubscribeArtistClicked = {
                         navController.navigate(Screen.SubscriptionArtist.route)
+                    },
+                    onShowClicked = {
+                        navController.navigate(Screen.ShowDetail.route.replace("{showId}", it))
+
                     },
                     onEntireShowClicked = {
                         navController.navigate(Screen.EntireShowList.route)

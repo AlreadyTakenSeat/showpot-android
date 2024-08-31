@@ -35,7 +35,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.alreadyoccupiedseat.core.extension.isScrollingUp
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
@@ -52,10 +51,10 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
-    navController: NavController,
     onSearchBarClicked: () -> Unit,
     onSubscriptionGenreClicked: () -> Unit,
     onSubscribeArtistClicked: () -> Unit,
+    onShowClicked: (String) -> Unit,
     onEntireShowClicked: () -> Unit,
     onRecommendedShowClicked: (String) -> Unit,
 ) {
@@ -72,6 +71,7 @@ fun HomeScreen(
         onSearchBarClicked = onSearchBarClicked,
         onSubscriptionGenreClicked = onSubscriptionGenreClicked,
         onSubscribeArtistClicked = onSubscribeArtistClicked,
+        onShowClicked = onShowClicked,
         onEntireShowClicked = onEntireShowClicked,
         onRecommendedShowClicked = onRecommendedShowClicked
     )
@@ -83,6 +83,7 @@ fun HomeScreenContent(
     onSearchBarClicked: () -> Unit,
     onSubscriptionGenreClicked: () -> Unit,
     onSubscribeArtistClicked: () -> Unit,
+    onShowClicked: (String) -> Unit,
     onEntireShowClicked: () -> Unit,
     onRecommendedShowClicked: (String) -> Unit,
 ) {
@@ -233,7 +234,7 @@ fun HomeScreenContent(
                         showLocation = show.location,
                         hasTicketingOpen = show.isOpen,
                         onClick = {
-                            onEntireShowClicked()
+                            onShowClicked(show.id)
                         }
                     )
                 }
