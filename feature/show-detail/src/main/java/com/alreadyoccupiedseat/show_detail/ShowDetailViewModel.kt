@@ -3,10 +3,13 @@ package com.alreadyoccupiedseat.show_detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alreadyoccupiedseat.data.show.ShowRepository
+import com.alreadyoccupiedseat.datastore.AccountDataStore
 import com.alreadyoccupiedseat.model.show.ShowDetail
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,9 +20,11 @@ sealed interface ShowDetailEvent {
 }
 
 data class ShowDetailState(
+    val isLoggedIn: Boolean = false,
     val showId: String = "",
     val showDetail: ShowDetail? = null,
-    val isSheetVisible: Boolean = false,
+    val isAlertSheetVisible: Boolean = false,
+    val isLoginSheetVisible: Boolean = false,
     val isFirstItemAvailable: Boolean = false,
     val isSecondItemAvailable: Boolean = false,
     val isThirdItemAvailable: Boolean = true,
@@ -30,7 +35,8 @@ data class ShowDetailState(
 
 @HiltViewModel
 class ShowDetailViewModel @Inject constructor(
-    private val showRepository: ShowRepository
+    private val showRepository: ShowRepository,
+    private val accountDataStore: AccountDataStore
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ShowDetailState())
@@ -58,13 +64,22 @@ class ShowDetailViewModel @Inject constructor(
         }
     }
 
-    fun changeSheetVisibility(isVisible: Boolean) {
-        _state.value = _state.value.copy(isSheetVisible = isVisible)
+    fun changeAlertSheetVisibility(isVisible: Boolean) {
+        _state.value = _state.value.copy(isAlertSheetVisible = isVisible)
     }
 
-    fun registerTicketingAlert(showId: String, ticketingApiType: String, alertTimes: List<String>) {
+    fun changeLoginSheetVisibility(isVisible: Boolean) {
+        _state.value = _state.value.copy(isLoginSheetVisible = isVisible)
+    }
+
+    fun registerTicketingAlert(
+        showId: String,
+        ticketingApiType: String,
+        alertTimes: List<String>
+    ) {
         viewModelScope.launch {
-            val result = showRepository.registerTicketingAlert(showId, ticketingApiType, alertTimes)
+            val result =
+                showRepository.registerTicketingAlert(showId, ticketingApiType, alertTimes)
             if (result.isSuccess) {
 //                checkAlertAvailability()
                 _event.emit(ShowDetailEvent.AlertRegisterSuccess)
@@ -93,6 +108,15 @@ class ShowDetailViewModel @Inject constructor(
             isThirdItemSelected =
             !state.value.isThirdItemSelected
         )
+    }
+
+    fun checkLogin() {
+        viewModelScope.launch {
+            accountDataStore.getAccessTokenFlow().collectLatest {
+                delay(100)
+                _state.value = _state.value.copy(isLoggedIn = it?.isNotEmpty() ?: false)
+            }
+        }
     }
 
     // TODO: Bug
