@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.data.login.LoginRepository
+import com.alreadyoccupiedseat.datastore.AccountDataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,6 +23,7 @@ data class MyPageScreenState(
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
     private val loginRepository: LoginRepository,
+    private val accountDataStore: AccountDataStore
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(MyPageScreenState())
@@ -29,8 +31,12 @@ class MyPageViewModel @Inject constructor(
 
     fun getNickName() {
         viewModelScope.launch {
-            loginRepository.getProfile().onSuccess { profile ->
-                _state.value = state.value.copy(nickName = profile.nickname)
+            if (accountDataStore.getAccessToken().isNullOrEmpty().not()) {
+                loginRepository.getProfile().onSuccess { profile ->
+                    _state.value = state.value.copy(nickName = profile.nickname)
+                }
+            } else {
+                _state.value = state.value.copy(nickName = String.EMPTY)
             }
         }
     }
