@@ -38,7 +38,8 @@ fun MyFavoriteShowScreenPreview(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     MyFavoriteShowScreen(
         navController = navController,
-        onShowClicked = {}
+        onShowClicked = {},
+        onEntireShowClicked = {}
         )
 }
 
@@ -46,6 +47,7 @@ fun MyFavoriteShowScreenPreview(modifier: Modifier = Modifier) {
 fun MyFavoriteShowScreen(
     navController: NavController,
     onShowClicked: (String) -> Unit,
+    onEntireShowClicked: () -> Unit
 ) {
     val viewModel = hiltViewModel<MyFavoriteShowViewModel>()
     val state = viewModel.state.collectAsState()
@@ -57,6 +59,9 @@ fun MyFavoriteShowScreen(
         },
         onShowClicked = {
             onShowClicked(it)
+        },
+        onEntireShowClicked = {
+            onEntireShowClicked()
         },
         onDeletedMyFavoriteShow = {
             viewModel.deleteMyFavoriteShow(it)
@@ -74,6 +79,7 @@ private fun MyFavoriteShowScreenContent(
     onBackClicked: () -> Unit,
     onShowClicked: (String) -> Unit,
     onDeletedMyFavoriteShow: (showId) -> Unit,
+    onEntireShowClicked: () -> Unit
 ) {
 
     Scaffold(
@@ -90,7 +96,11 @@ private fun MyFavoriteShowScreenContent(
                     .padding(it),
             ) {
                 if (state.interestedShowList.isEmpty()) {
-                    item { MyFavoriteEmpty() }
+                    item { MyFavoriteEmpty(
+                        onEntireShowClicked = {
+                            onEntireShowClicked()
+                        }
+                    ) }
                 } else {
                     itemsIndexed(state.interestedShowList) { index, item ->
                         ShowInfo(
@@ -186,7 +196,9 @@ private fun MyFavoriteShowScreenContent(
 }
 
 @Composable
-fun MyFavoriteEmpty() {
+fun MyFavoriteEmpty(
+    onEntireShowClicked: () -> Unit
+) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -206,7 +218,7 @@ fun MyFavoriteEmpty() {
             modifier = Modifier.padding(horizontal = 16.dp),
             text = stringResource(id = R.string.action_show_info),
             onClicked = {
-                // TODO 공연 찾기 페이지 이동
+                onEntireShowClicked()
             }
         )
     }

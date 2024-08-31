@@ -3,12 +3,9 @@ package com.alreadyoccupiedseat.myfavorite_show
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alreadyoccupiedseat.data.show.ShowRepository
-import com.alreadyoccupiedseat.model.Artist
-import com.alreadyoccupiedseat.model.Genre
 import com.alreadyoccupiedseat.model.Show
 import com.alreadyoccupiedseat.model.show.InterestedData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
