@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,6 +33,11 @@ fun SubscribedArtistScreen(
 ) {
     val viewModel = hiltViewModel<SubscribedArtistViewModel>()
     val state = viewModel.state.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.getSubscribedArtist()
+    }
+
     SubscribedArtistContent(
         state = state.value,
         modifier = Modifier,
