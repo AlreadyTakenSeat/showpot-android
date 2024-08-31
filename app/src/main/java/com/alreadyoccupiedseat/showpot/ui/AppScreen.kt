@@ -247,6 +247,9 @@ fun AppScreenContent(
                     navController = navController,
                     onShowClicked = {
                         navController.navigate(Screen.ShowDetail.route.replace("{showId}", it))
+                    },
+                    onEntireShowClicked = {
+                        navController.navigate(Screen.EntireShowList.route)
                     }
                 )
             }
