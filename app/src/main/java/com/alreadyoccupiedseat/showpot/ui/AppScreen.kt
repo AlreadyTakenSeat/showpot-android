@@ -166,6 +166,9 @@ fun AppScreenContent(
                     onShowClicked = { navController.navigate("showDetail/$it") },
                     onLoginRequested = {
                         navController.navigate(Screen.Login.route)
+                    },
+                    onGoToSeeClicked = {
+                        navController.navigate(Screen.SubscriptionArtist.route)
                     })
             }
 
