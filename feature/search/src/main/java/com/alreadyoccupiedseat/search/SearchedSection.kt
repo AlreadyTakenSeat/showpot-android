@@ -31,10 +31,10 @@ import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
 import com.alreadyoccupiedseat.model.SearchedShow
 import com.alreadyoccupiedseat.model.SubscribedArtist
 
-// TODO: ShowInfo
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchedSection(
+    isLoggedIn: Boolean,
     isArtistUnSubscriptionSheetVisible: Boolean,
     searchedArtists: List<SubscribedArtist>,
     searchedShows: List<SearchedShow>,
@@ -44,6 +44,7 @@ fun SearchedSection(
     onArtistUnSubscriptionSheetVisibilityChanged: (Boolean) -> Unit = {},
     onSubscribeArtist: (String) -> Unit = {},
     onUnSubscribeArtist: () -> Unit = {},
+    onLoginRequested: () -> Unit = {},
 ) {
 
     if (isArtistUnSubscriptionSheetVisible) {
@@ -114,11 +115,15 @@ fun SearchedSection(
                         text = artist.englishName,
                         isSubscribed = artist.isSubscribed,
                     ) {
-                        if (artist.isSubscribed) {
-                            onUnSubscribeTargetArtistChanged(artist)
-                            onArtistUnSubscriptionSheetVisibilityChanged(true)
+                        if (isLoggedIn) {
+                            if (artist.isSubscribed) {
+                                onUnSubscribeTargetArtistChanged(artist)
+                                onArtistUnSubscriptionSheetVisibilityChanged(true)
+                            } else {
+                                onSubscribeArtist(artist.id)
+                            }
                         } else {
-                            onSubscribeArtist(artist.id)
+                            onLoginRequested()
                         }
                     }
                 }
