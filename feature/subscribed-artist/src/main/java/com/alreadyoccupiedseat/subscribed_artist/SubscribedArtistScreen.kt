@@ -28,6 +28,7 @@ import com.alreadyoccupiedseat.designsystem.component.button.ShowPotSubButton
 @Composable
 fun SubscribedArtistScreen(
     navController: NavController,
+    onGoToSubscriptionArtist: () -> Unit
 ) {
     val viewModel = hiltViewModel<SubscribedArtistViewModel>()
     val state = viewModel.state.collectAsState()
@@ -36,6 +37,9 @@ fun SubscribedArtistScreen(
         modifier = Modifier,
         onBackClicked = {
             navController.popBackStack()
+        },
+        onGoToSubscriptionArtist = {
+            onGoToSubscriptionArtist()
         },
         onDeletedSubscribedArtist = {
             viewModel.deleteSubscribedArtist(it)
@@ -50,6 +54,7 @@ private fun SubscribedArtistContent(
     state: SubscribedArtistState,
     modifier: Modifier,
     onBackClicked: () -> Unit,
+    onGoToSubscriptionArtist: () -> Unit,
     onDeletedSubscribedArtist: (artistId) -> Unit,
 ) {
 
@@ -65,7 +70,11 @@ private fun SubscribedArtistContent(
                     .padding(it),
             ) {
                 if (state.subscribedArtists.isEmpty()) {
-                    SubscribedArtistEmpty()
+                    SubscribedArtistEmpty(
+                        onGoToSubscriptionArtist = {
+                            onGoToSubscriptionArtist()
+                        }
+                    )
                 }
                 LazyVerticalGrid(
                     modifier = Modifier
@@ -79,6 +88,7 @@ private fun SubscribedArtistContent(
                     // TODO: Real Data
                     items(state.subscribedArtists) { artist ->
                         ShowPotArtistDelete(
+                            name = artist.englishName,
                             imageUrl = artist.imageURL,
                             onIconClick = {
                                 onDeletedSubscribedArtist(artist.id)
@@ -93,7 +103,9 @@ private fun SubscribedArtistContent(
 }
 
 @Composable
-private fun SubscribedArtistEmpty() {
+private fun SubscribedArtistEmpty(
+    onGoToSubscriptionArtist: () -> Unit,
+) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -113,7 +125,7 @@ private fun SubscribedArtistEmpty() {
             modifier = Modifier.padding(horizontal = 16.dp),
             text = stringResource(id = R.string.action_subscribe_artist),
             onClicked = {
-                // TODO 아티스트 구독 화면 이동
+                onGoToSubscriptionArtist()
             }
         )
     }
