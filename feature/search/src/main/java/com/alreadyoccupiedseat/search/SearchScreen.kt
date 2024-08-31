@@ -32,6 +32,7 @@ import androidx.navigation.NavController
 import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotSearchBar
+import com.alreadyoccupiedseat.designsystem.component.snackbar.CheckIconSnackbar
 import com.alreadyoccupiedseat.designsystem.component.snackbar.ShowPotSnackbar
 import com.alreadyoccupiedseat.model.SubscribedArtist
 import kotlinx.coroutines.launch
@@ -40,7 +41,8 @@ import kotlinx.coroutines.launch
 fun SearchScreen(
     navController: NavController,
     onLoginRequested: () -> Unit = {},
-    onShowClicked: (String) -> Unit = {}
+    onShowClicked: (String) -> Unit = {},
+    onGoToSeeClicked: () -> Unit = {}
 ) {
 
     val viewModel = hiltViewModel<SearchViewModel>()
@@ -116,6 +118,9 @@ fun SearchScreen(
         },
         onLoginRequested = {
             onLoginRequested()
+        },
+        onGoToSeeClicked = {
+            onGoToSeeClicked()
         }
     )
 }
@@ -137,7 +142,8 @@ fun SearchScreenContent(
     onShowClicked: (String) -> Unit = {},
     onRequestSubscribeArtist: (String) -> Unit = {},
     onRequestUnSubscribeArtist: () -> Unit = {},
-    onLoginRequested: () -> Unit = {}
+    onLoginRequested: () -> Unit = {},
+    onGoToSeeClicked: () -> Unit = {}
 ) {
 
     val focusRequester = remember { FocusRequester() }
@@ -164,14 +170,14 @@ fun SearchScreenContent(
             SnackbarHost(
                 hostState = snackbarHostState,
             ) { snackbarData ->
-                ShowPotSnackbar(
-                    painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.ic_check_36),
+                CheckIconSnackbar(
                     mainText = snackbarData.visuals.message,
+                    actionText = "보러가기",
                     onIconClicked = {
                         // onIconClicked()
                     },
                 ) {
-                    // onActionClicked()
+                    onGoToSeeClicked()
                 }
             }
         },
