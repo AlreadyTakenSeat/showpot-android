@@ -96,6 +96,9 @@ fun SearchScreen(
         onDeleteHistoryClicked = {
             viewModel.deleteSearchHistory(it)
         },
+        onchangeLoginSheetVisibility = {
+            viewModel.changeLoginSheetVisibility(it)
+        },
         onchangeArtistUnSubscriptionSheetVisibility = {
             viewModel.changeArtistUnSubscriptionSheetVisibility(it)
         },
@@ -130,6 +133,7 @@ fun SearchScreenContent(
     onDeleteHistoryClicked: (String) -> Unit = {},
     onchangeArtistUnSubscriptionSheetVisibility: (Boolean) -> Unit = {},
     onChangeUnSubscribeTargetArtist: (SubscribedArtist) -> Unit = {},
+    onchangeLoginSheetVisibility: (Boolean) -> Unit = {},
     onShowClicked: (String) -> Unit = {},
     onRequestSubscribeArtist: (String) -> Unit = {},
     onRequestUnSubscribeArtist: () -> Unit = {},
@@ -235,12 +239,16 @@ fun SearchScreenContent(
             } else {
                 SearchedSection(
                     isLoggedIn = state.isLoggedIn,
+                    isLoginSheetVisible = state.isLoginSheetVisible,
                     isArtistUnSubscriptionSheetVisible = state.isArtistUnSubscriptionSheetVisible,
                     searchedArtists = state.searchedArtists,
                     searchedShows = state.searchedShows,
                     unSubscribeTargetArtist = state.unSubscribeTargetArtist,
                     onUnSubscribeTargetArtistChanged = {
                         onChangeUnSubscribeTargetArtist(it)
+                    },
+                    onLoginSheetVisibilityChanged = {
+                        onchangeLoginSheetVisibility(it)
                     },
                     onShowClicked = onShowClicked,
                     onArtistUnSubscriptionSheetVisibilityChanged = {

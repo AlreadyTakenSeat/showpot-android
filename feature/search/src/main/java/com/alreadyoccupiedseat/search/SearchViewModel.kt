@@ -30,6 +30,7 @@ data class SearchScreenState(
     val searchedArtists: List<SubscribedArtist> = emptyList(),
     val searchedShows: List<SearchedShow> = emptyList(),
     val isArtistUnSubscriptionSheetVisible: Boolean = false,
+    val isLoginSheetVisible: Boolean = false,
     val unSubscribeTargetArtist: SubscribedArtist? = null,
     val isLoggedIn: Boolean = false
 )
@@ -66,7 +67,7 @@ class SearchViewModel @Inject constructor(
         _state.value = _state.value.copy(inputText = inputText)
     }
 
-    fun stateChangeToSearched() {
+    private fun stateChangeToSearched() {
         _state.value = _state.value.copy(
             inputText = _state.value.inputText,
             isSearchedScreen = true
@@ -103,6 +104,12 @@ class SearchViewModel @Inject constructor(
     fun changeArtistUnSubscriptionSheetVisibility(isVisible: Boolean) {
         _state.value = _state.value.copy(
             isArtistUnSubscriptionSheetVisible = isVisible
+        )
+    }
+
+    fun changeLoginSheetVisibility(isVisible: Boolean) {
+        _state.value = _state.value.copy(
+            isLoginSheetVisible = isVisible
         )
     }
 
