@@ -162,9 +162,11 @@ fun AppScreenContent(
             }
 
             composable(Screen.Search.route) {
-                SearchScreen(navController) {
-                    navController.navigate("showDetail/$it")
-                }
+                SearchScreen(navController,
+                    onShowClicked = { navController.navigate("showDetail/$it") },
+                    onLoginRequested = {
+                        navController.navigate(Screen.Login.route)
+                    })
             }
 
             composable(Screen.SubscriptionGenre.route) {
@@ -187,7 +189,12 @@ fun AppScreenContent(
             }
 
             composable(Screen.SubscribedArtist.route) {
-                SubscribedArtistScreen(navController)
+                SubscribedArtistScreen(
+                    navController = navController,
+                    onGoToSubscriptionArtist = {
+                        navController.navigate(Screen.SubscriptionArtist.route)
+                    }
+                )
             }
 
             composable(

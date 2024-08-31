@@ -31,19 +31,22 @@ import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
 import com.alreadyoccupiedseat.model.SearchedShow
 import com.alreadyoccupiedseat.model.SubscribedArtist
 
-// TODO: ShowInfo
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchedSection(
+    isLoggedIn: Boolean,
+    isLoginSheetVisible: Boolean,
     isArtistUnSubscriptionSheetVisible: Boolean,
     searchedArtists: List<SubscribedArtist>,
     searchedShows: List<SearchedShow>,
     unSubscribeTargetArtist: SubscribedArtist?,
+    onLoginSheetVisibilityChanged: (Boolean) -> Unit = {},
     onUnSubscribeTargetArtistChanged: (SubscribedArtist) -> Unit = {},
     onShowClicked: (String) -> Unit = {},
     onArtistUnSubscriptionSheetVisibilityChanged: (Boolean) -> Unit = {},
     onSubscribeArtist: (String) -> Unit = {},
     onUnSubscribeArtist: () -> Unit = {},
+    onLoginRequested: () -> Unit = {},
 ) {
 
     if (isArtistUnSubscriptionSheetVisible) {
@@ -91,6 +94,42 @@ fun SearchedSection(
 
     }
 
+    if (isLoginSheetVisible) {
+        ShowPotBottomSheet(
+            onDismissRequest = {
+                onLoginSheetVisibilityChanged(false)
+            },
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(horizontal = 15.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                SheetHandler()
+
+                ShowPotKoreanText_H1(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "로그인 후 좋아하는\n" +
+                            "아티스트 구독을 해보세요!",
+                    color = Color.White
+                )
+
+                Spacer(modifier = Modifier.height(19.dp))
+
+                ShowPotMainButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "3초만에 로그인하기"
+                ) {
+                    onLoginRequested()
+                    onLoginSheetVisibilityChanged(false)
+                }
+
+                Spacer(modifier = Modifier.height(54.dp))
+            }
+        }
+    }
+
     Column {
         Box(
             modifier = Modifier.padding(horizontal = 16.dp)
@@ -114,11 +153,15 @@ fun SearchedSection(
                         text = artist.englishName,
                         isSubscribed = artist.isSubscribed,
                     ) {
-                        if (artist.isSubscribed) {
-                            onUnSubscribeTargetArtistChanged(artist)
-                            onArtistUnSubscriptionSheetVisibilityChanged(true)
+                        if (isLoggedIn) {
+                            if (artist.isSubscribed) {
+                                onUnSubscribeTargetArtistChanged(artist)
+                                onArtistUnSubscriptionSheetVisibilityChanged(true)
+                            } else {
+                                onSubscribeArtist(artist.id)
+                            }
                         } else {
-                            onSubscribeArtist(artist.id)
+                            onLoginSheetVisibilityChanged(true)
                         }
                     }
                 }

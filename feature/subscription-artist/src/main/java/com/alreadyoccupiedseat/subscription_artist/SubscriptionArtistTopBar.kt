@@ -1,4 +1,4 @@
-package com.alreadyoccupiedseat.subscribed_artist
+package com.alreadyoccupiedseat.subscription_artist
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -14,7 +14,7 @@ import com.alreadyoccupiedseat.designsystem.component.ShowPotTopBar
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 
 @Composable
-internal fun SubscribedArtistTopBar(
+fun SubscriptionArtistTopBar(
     onBackClicked: () -> Unit,
 ) {
     ShowPotTopBar(
@@ -32,8 +32,8 @@ internal fun SubscribedArtistTopBar(
         },
         title = {
             ShowPotKoreanText_H1(
-                text = stringResource(id = R.string.subscribed_artists),
-                color = ShowpotColor.Gray300,
+                text = stringResource(com.alreadyoccupiedseat.subscription_artist.R.string.subscribe_artist),
+                color = ShowpotColor.Gray100,
                 modifier = Modifier
                     .padding(start = 4.dp)
                     .padding(vertical = 7.dp)

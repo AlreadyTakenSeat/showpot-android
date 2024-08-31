@@ -176,30 +176,12 @@ fun SubscriptionArtistScreenContent(
         },
         // TODO: To be a component
         topBar = {
-            Row(
-                modifier = Modifier
-                    .padding(top = 12.dp)
-                    .fillMaxWidth(),
-                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
-            ) {
-                Spacer(modifier = Modifier.width(6.dp))
-
-                Icon(
-                    painter = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.ic_arrow_36_left),
-                    contentDescription = "back",
-                    tint = Color.White,
-                    modifier = Modifier.clickable {
-                        onBackClicked()
-                    }
-                )
-
-                ShowPotKoreanText_H1(
-                    text = stringResource(R.string.subscribe_artist),
-                    color = ShowpotColor.Gray100,
-                )
-            }
+            SubscriptionArtistTopBar(
+                onBackClicked = {
+                    onBackClicked()
+                }
+            )
         }
-
     ) { innerPadding ->
 
         Column(

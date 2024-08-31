@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.alreadyoccupiedseat.data.artist.ArtistRepository
 import com.alreadyoccupiedseat.model.Artist
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,11 +31,7 @@ class SubscribedArtistViewModel @Inject constructor(
     private val _event = MutableStateFlow<SubscribedArtistEvent>(SubscribedArtistEvent.Idle)
     val event = _event
 
-    init {
-        loadSubscribedArtist()
-    }
-
-    private fun loadSubscribedArtist() {
+    fun getSubscribedArtist() {
         viewModelScope.launch {
             val result = aristRepository.getSubscribedArtists(
                 size = 100

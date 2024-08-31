@@ -17,10 +17,13 @@ import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 fun SubscriptionTopBar(onBackClicked: () -> Unit) {
     ShowPotTopBar(
         navigationIcon = {
-            IconButton(onClick = onBackClicked) {
+            IconButton(onClick = { onBackClicked() }) {
                 Icon(
-                    modifier = Modifier.padding(1.dp),
-                    painter = painterResource(R.drawable.ic_arrow_36_left),
+                    tint = ShowpotColor.White,
+                    modifier = Modifier
+                        .padding(vertical = 4.dp)
+                        .padding(start = 6.dp),
+                    painter = painterResource(id = R.drawable.ic_arrow_36_left),
                     contentDescription = "Back"
                 )
             }
