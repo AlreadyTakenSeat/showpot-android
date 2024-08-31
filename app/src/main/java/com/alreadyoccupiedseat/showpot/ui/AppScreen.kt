@@ -208,11 +208,14 @@ fun AppScreenContent(
                 Screen.ShowDetail.arguments
             ) { backStackEntry ->
                 ShowDetailScreen(
-                    navController,
-                    backStackEntry.arguments?.getString("showId") ?: String.EMPTY
-                ) {
-                    onLabelButtonClicked(it)
-                }
+                    navController = navController,
+                    showId = backStackEntry.arguments?.getString("showId") ?: String.EMPTY,
+                    onTicketingButtonClicked = {
+                        onLabelButtonClicked(it)
+                    },
+                    onLoginRequested = {
+                        navController.navigate(Screen.Login.route)
+                    })
             }
 
             composable(Screen.MyAlarmSetting.route) {

@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -37,7 +38,10 @@ import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.core.extension.isScrollingUp
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.GenreChip
+import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
 import com.alreadyoccupiedseat.designsystem.component.artist.ShowPotArtist
+import com.alreadyoccupiedseat.designsystem.component.bottomSheet.SheetHandler
+import com.alreadyoccupiedseat.designsystem.component.bottomSheet.ShowPotBottomSheet
 import com.alreadyoccupiedseat.designsystem.component.bottomSheet.TicketingNotificationBottomSheet
 import com.alreadyoccupiedseat.designsystem.component.button.LabelButton
 import com.alreadyoccupiedseat.designsystem.component.button.IconButtonWithShowPotMainButton
@@ -56,7 +60,8 @@ import java.util.Locale
 fun ShowDetailScreen(
     navController: NavController,
     showId: String,
-    onTicketingButtonClicked: (String) -> Unit
+    onTicketingButtonClicked: (String) -> Unit,
+    onLoginRequested: () -> Unit
 ) {
 
     val viewModel = hiltViewModel<ShowDetailViewModel>()
@@ -85,6 +90,7 @@ fun ShowDetailScreen(
     LaunchedEffect(showId) {
         viewModel.getShowDetail(showId)
         viewModel.registerShowId(showId)
+        viewModel.checkLogin()
     }
 
     ShowDetailScreenContent(
@@ -95,8 +101,11 @@ fun ShowDetailScreen(
         onIconButtonClicked = {
             viewModel.registerShowInterest(showId)
         },
-        onChangeSheetVisibility = {
-            viewModel.changeSheetVisibility(it)
+        onChangeAlertSheetVisibility = {
+            viewModel.changeAlertSheetVisibility(it)
+        },
+        onLoginSheetVisibilityChanged = {
+            viewModel.changeLoginSheetVisibility(it)
         },
         onFirstItemClicked = {
             viewModel.changeFirstItemSelection()
@@ -121,21 +130,26 @@ fun ShowDetailScreen(
         },
         onTicketingButtonClicked = {
             onTicketingButtonClicked(it)
+        },
+        onLoginRequested = {
+            onLoginRequested()
         }
-
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShowDetailScreenContent(
     state: ShowDetailState,
     onBackButtonClicked: () -> Unit,
     onIconButtonClicked: () -> Unit,
-    onChangeSheetVisibility: (Boolean) -> Unit,
+    onChangeAlertSheetVisibility: (Boolean) -> Unit,
     onFirstItemClicked: () -> Unit,
     onSecondItemClicked: () -> Unit,
     onThirdItemClicked: () -> Unit,
     onRegisterAlertButtonClicked: () -> Unit,
+    onLoginSheetVisibilityChanged: (Boolean) -> Unit = {},
+    onLoginRequested: () -> Unit = {},
     onTicketingButtonClicked: (String) -> Unit
 ) {
 
@@ -147,7 +161,7 @@ fun ShowDetailScreenContent(
         ) ShowpotColor.Gray700 else Color.Transparent
     )
 
-    if (state.isSheetVisible) {
+    if (state.isAlertSheetVisible) {
 
         TicketingNotificationBottomSheet(
             isFirstItemAvailable = state.isFirstItemAvailable,
@@ -167,12 +181,46 @@ fun ShowDetailScreenContent(
             },
             onMainButtonClicked = {
                 onRegisterAlertButtonClicked()
-                onChangeSheetVisibility(false)
+                onChangeAlertSheetVisibility(false)
             },
             onDismissRequested = {
-                onChangeSheetVisibility(false)
+                onChangeAlertSheetVisibility(false)
             })
 
+    } else if (state.isLoginSheetVisible) {
+        ShowPotBottomSheet(
+            onDismissRequest = {
+                onLoginSheetVisibilityChanged(false)
+            },
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(horizontal = 15.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                SheetHandler()
+
+                ShowPotKoreanText_H1(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "로그인 후 좋아하는\n" +
+                            "아티스트 구독을 해보세요!",
+                    color = Color.White
+                )
+
+                Spacer(modifier = Modifier.height(19.dp))
+
+                ShowPotMainButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "3초만에 로그인하기"
+                ) {
+                    onLoginRequested()
+                    onLoginSheetVisibilityChanged(false)
+                }
+
+                Spacer(modifier = Modifier.height(54.dp))
+            }
+        }
     }
 
     Scaffold(
@@ -478,13 +526,15 @@ fun ShowDetailScreenContent(
                     else painterResource(com.alreadyoccupiedseat.designsystem.R.drawable.ic_heart_36_off),
                     stringResource(R.string.set_notification),
                     onIconButtonClicked = {
-                        onIconButtonClicked()
+                        if (state.isLoggedIn) onIconButtonClicked()
+                        else onLoginSheetVisibilityChanged(true)
+
                     },
                     onMainButtonClicked = {
-                        onChangeSheetVisibility(true)
+                        if (state.isLoggedIn) onChangeAlertSheetVisibility(true)
+                        else onLoginSheetVisibilityChanged(true)
                     }
                 )
-
             }
         }
     }
