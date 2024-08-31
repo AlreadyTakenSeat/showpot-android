@@ -47,6 +47,10 @@ import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
 import com.alreadyoccupiedseat.enum.TicketingAlertTime
 import kotlinx.coroutines.flow.collectLatest
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
+import java.util.Locale
 
 @Composable
 fun ShowDetailScreen(
@@ -297,7 +301,7 @@ fun ShowDetailScreenContent(
                     HorizontalTitleAndInfoText(
                         Modifier.padding(horizontal = 16.dp),
                         "일반예매 오픈",
-                        state.showDetail?.ticketingTimes?.first()?.ticketingAt?.replace("-", ".")
+                        state.showDetail?.ticketingTimes?.first()?.ticketingAt?.formatToReservationDate()
                             ?: String.EMPTY
                     )
                 }
@@ -486,6 +490,18 @@ fun ShowDetailScreenContent(
     }
 }
 
-fun Int.toFormattedString(): String {
+internal fun Int.toFormattedString(): String {
     return "%,d".format(this)
+}
+
+internal fun String.formatToReservationDate(): String {
+    val inputFormatter = DateTimeFormatter.ofPattern("yyyy-M-d HH:mm")
+    val dateTime = LocalDateTime.parse(this, inputFormatter)
+
+    val outputFormatter = DateTimeFormatter.ofPattern("M월 d일 (E) HH:mm")
+
+    val dayOfWeek = dateTime.dayOfWeek
+    val koreanDayOfWeek = dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREAN)
+
+    return dateTime.format(outputFormatter).replace(dayOfWeek.name, koreanDayOfWeek)
 }
