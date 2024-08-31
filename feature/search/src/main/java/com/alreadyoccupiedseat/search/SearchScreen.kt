@@ -32,7 +32,6 @@ import androidx.navigation.NavController
 import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotSearchBar
-import com.alreadyoccupiedseat.designsystem.component.snackbar.CheckIconSnackbar
 import com.alreadyoccupiedseat.designsystem.component.snackbar.ShowPotSnackbar
 import com.alreadyoccupiedseat.model.SubscribedArtist
 import kotlinx.coroutines.launch
@@ -40,6 +39,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun SearchScreen(
     navController: NavController,
+    onLoginRequested: () -> Unit = {},
     onShowClicked: (String) -> Unit = {}
 ) {
 
@@ -96,6 +96,9 @@ fun SearchScreen(
         onDeleteHistoryClicked = {
             viewModel.deleteSearchHistory(it)
         },
+        onchangeLoginSheetVisibility = {
+            viewModel.changeLoginSheetVisibility(it)
+        },
         onchangeArtistUnSubscriptionSheetVisibility = {
             viewModel.changeArtistUnSubscriptionSheetVisibility(it)
         },
@@ -110,6 +113,9 @@ fun SearchScreen(
         },
         onRequestUnSubscribeArtist = {
             viewModel.unSubscribeArtist()
+        },
+        onLoginRequested = {
+            onLoginRequested()
         }
     )
 }
@@ -127,9 +133,11 @@ fun SearchScreenContent(
     onDeleteHistoryClicked: (String) -> Unit = {},
     onchangeArtistUnSubscriptionSheetVisibility: (Boolean) -> Unit = {},
     onChangeUnSubscribeTargetArtist: (SubscribedArtist) -> Unit = {},
+    onchangeLoginSheetVisibility: (Boolean) -> Unit = {},
     onShowClicked: (String) -> Unit = {},
     onRequestSubscribeArtist: (String) -> Unit = {},
     onRequestUnSubscribeArtist: () -> Unit = {},
+    onLoginRequested: () -> Unit = {}
 ) {
 
     val focusRequester = remember { FocusRequester() }
@@ -230,12 +238,17 @@ fun SearchScreenContent(
                 )
             } else {
                 SearchedSection(
+                    isLoggedIn = state.isLoggedIn,
+                    isLoginSheetVisible = state.isLoginSheetVisible,
                     isArtistUnSubscriptionSheetVisible = state.isArtistUnSubscriptionSheetVisible,
                     searchedArtists = state.searchedArtists,
                     searchedShows = state.searchedShows,
                     unSubscribeTargetArtist = state.unSubscribeTargetArtist,
                     onUnSubscribeTargetArtistChanged = {
                         onChangeUnSubscribeTargetArtist(it)
+                    },
+                    onLoginSheetVisibilityChanged = {
+                        onchangeLoginSheetVisibility(it)
                     },
                     onShowClicked = onShowClicked,
                     onArtistUnSubscriptionSheetVisibilityChanged = {
@@ -246,6 +259,9 @@ fun SearchScreenContent(
                     },
                     onUnSubscribeArtist = {
                         onRequestUnSubscribeArtist()
+                    },
+                    onLoginRequested = {
+                        onLoginRequested()
                     }
                 )
             }

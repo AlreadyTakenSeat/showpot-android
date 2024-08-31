@@ -4,13 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.data.artist.ArtistRepository
-import com.alreadyoccupiedseat.data.show.ShowDataSource
 import com.alreadyoccupiedseat.data.show.ShowRepository
+import com.alreadyoccupiedseat.datastore.AccountDataStore
 import com.alreadyoccupiedseat.datastore.SearchHistoryDataStore
-import com.alreadyoccupiedseat.model.Artist
-import com.alreadyoccupiedseat.model.Genre
 import com.alreadyoccupiedseat.model.SearchedShow
-import com.alreadyoccupiedseat.model.Show
 import com.alreadyoccupiedseat.model.SubscribedArtist
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -33,7 +30,9 @@ data class SearchScreenState(
     val searchedArtists: List<SubscribedArtist> = emptyList(),
     val searchedShows: List<SearchedShow> = emptyList(),
     val isArtistUnSubscriptionSheetVisible: Boolean = false,
+    val isLoginSheetVisible: Boolean = false,
     val unSubscribeTargetArtist: SubscribedArtist? = null,
+    val isLoggedIn: Boolean = false
 )
 
 
@@ -41,7 +40,8 @@ data class SearchScreenState(
 class SearchViewModel @Inject constructor(
     private val searchHistoryDataStore: SearchHistoryDataStore,
     private val artistRepository: ArtistRepository,
-    private val showRepository: ShowRepository
+    private val showRepository: ShowRepository,
+    private val accountDataStore: AccountDataStore
 ) : ViewModel() {
 
     private var _state = MutableStateFlow<SearchScreenState>(SearchScreenState())
@@ -55,13 +55,19 @@ class SearchViewModel @Inject constructor(
             val searchHistory = searchHistoryDataStore.getSearchedKeyword()
             _state.value = _state.value.copy(searchHistory = searchHistory.reversed())
         }
+
+        viewModelScope.launch {
+            accountDataStore.getAccessTokenFlow().collect {
+                _state.value = _state.value.copy(isLoggedIn = it?.isNotEmpty() ?: false)
+            }
+        }
     }
 
     fun updateInputText(inputText: String) {
         _state.value = _state.value.copy(inputText = inputText)
     }
 
-    fun stateChangeToSearched() {
+    private fun stateChangeToSearched() {
         _state.value = _state.value.copy(
             inputText = _state.value.inputText,
             isSearchedScreen = true
@@ -82,7 +88,8 @@ class SearchViewModel @Inject constructor(
 
     fun deleteSearchHistory(targetKeyword: String) {
         viewModelScope.launch {
-            val updatedSearchHistory = searchHistoryDataStore.deleteSearchedKeyword(targetKeyword)
+            val updatedSearchHistory =
+                searchHistoryDataStore.deleteSearchedKeyword(targetKeyword)
             _state.value = _state.value.copy(searchHistory = updatedSearchHistory.reversed())
         }
     }
@@ -97,6 +104,12 @@ class SearchViewModel @Inject constructor(
     fun changeArtistUnSubscriptionSheetVisibility(isVisible: Boolean) {
         _state.value = _state.value.copy(
             isArtistUnSubscriptionSheetVisible = isVisible
+        )
+    }
+
+    fun changeLoginSheetVisibility(isVisible: Boolean) {
+        _state.value = _state.value.copy(
+            isLoginSheetVisible = isVisible
         )
     }
 
