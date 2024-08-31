@@ -32,7 +32,7 @@ fun ShowPotTopBar(
         ) {
             Row(
                 Modifier
-                    .padding(0.dp)
+                    .padding(top = 12.dp)
                     .height(44.dp)
                     .align(Alignment.CenterStart),
                 verticalAlignment = Alignment.CenterVertically,

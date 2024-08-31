@@ -187,7 +187,12 @@ fun AppScreenContent(
             }
 
             composable(Screen.SubscribedArtist.route) {
-                SubscribedArtistScreen(navController)
+                SubscribedArtistScreen(
+                    navController = navController,
+                    onGoToSubscriptionArtist = {
+                        navController.navigate(Screen.SubscriptionArtist.route)
+                    }
+                )
             }
 
             composable(
