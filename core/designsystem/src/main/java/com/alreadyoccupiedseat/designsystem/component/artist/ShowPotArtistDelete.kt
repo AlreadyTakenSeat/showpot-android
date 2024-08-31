@@ -11,12 +11,13 @@ import com.alreadyoccupiedseat.designsystem.R
 @Composable
 fun ShowPotArtistDelete(
     modifier: Modifier = Modifier,
+    name: String,
     imageUrl: String,
     onIconClick: () -> Unit,
 ) {
     ShowPotArtist(
         imageUrl = imageUrl,
-        text = "High Flying Birds",
+        text = name,
         content = {
             Image(
                 painter = painterResource(id = R.drawable.ic_circle_delete_40), // Genre 브런치와 합쳐지면 변경 필요
