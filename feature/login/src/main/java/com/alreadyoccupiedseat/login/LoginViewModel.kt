@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alreadyoccupiedseat.data.login.LoginRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,7 +21,7 @@ class LoginViewModel @Inject constructor(
     private val loginRepository: LoginRepository
 ) : ViewModel() {
 
-    private var _event = MutableStateFlow<LoginScreenEvent>(LoginScreenEvent.Idle)
+    private var _event = MutableSharedFlow<LoginScreenEvent>()
     val event = _event
 
     fun tryKakaoLogin(activityContext: Context) {

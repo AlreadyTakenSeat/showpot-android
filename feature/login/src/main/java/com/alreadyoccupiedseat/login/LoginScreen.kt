@@ -32,8 +32,7 @@ import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotButtonWithIcon
 import com.alreadyoccupiedseat.designsystem.component.ShowPotTopBar
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun LoginScreen(
@@ -42,29 +41,26 @@ fun LoginScreen(
 
     val context = LocalContext.current
     val viewModel = hiltViewModel<LoginViewModel>()
-    val event = viewModel.event.collectAsState()
 
-    val coroutineScope = rememberCoroutineScope()
-    when (event.value) {
-        is LoginScreenEvent.Idle -> {
+    LaunchedEffect(true) {
+        viewModel.event.collectLatest { event ->
+            when (event) {
+                is LoginScreenEvent.Idle -> {
 
-        }
+                }
 
-        is LoginScreenEvent.LoginRequested -> {
+                is LoginScreenEvent.LoginRequested -> {
 
-        }
+                }
 
-        is LoginScreenEvent.LoginCompleted -> {
-            LaunchedEffect(true) {
-                coroutineScope.launch {
-                    delay(500)
+                is LoginScreenEvent.LoginCompleted -> {
                     navController.popBackStack()
                 }
+
+                is LoginScreenEvent.LoginError -> {
+
+                }
             }
-        }
-
-        is LoginScreenEvent.LoginError -> {
-
         }
     }
 
