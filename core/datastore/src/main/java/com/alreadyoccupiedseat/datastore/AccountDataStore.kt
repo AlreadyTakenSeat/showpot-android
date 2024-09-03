@@ -33,9 +33,10 @@ class AccountDataStore @Inject constructor(@ApplicationContext private val conte
     }
 
     /** 로그 아웃 - 임시 ***/
-    suspend fun clearAccessToken() {
+    suspend fun clearAccessAndRefreshToken() {
         context.accountDataStore.edit { preferences ->
             preferences.remove(accessTokenKey)
+            preferences.remove(refreshTokenKey)
         }
     }
 

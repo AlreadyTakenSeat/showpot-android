@@ -58,7 +58,7 @@ class AccountViewModel @Inject constructor(
 
     fun clear() {
         viewModelScope.launch {
-            accountDataStore.clearAccessToken()
+            accountDataStore.clearAccessAndRefreshToken()
         }
     }
     fun logout() {
