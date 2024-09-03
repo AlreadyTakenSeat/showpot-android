@@ -94,8 +94,8 @@ fun MyAlarmSettingScreen(
         onSelectedShowId = { id ->
             viewModel.setSelectedShowId(id)
         },
-        onRemoveClicked = {
-            viewModel.removeClicked()
+        onClearAlertClicked = {
+            viewModel.clearNotification()
         },
         onFirstItemClicked = {
             viewModel.changeFirstItemSelection()
@@ -135,7 +135,7 @@ fun MyAlarmSettingScreenContent(
     onTicketSheetVisible: (Boolean) -> Unit,
     onAlarmOptionSheetVisible: (Boolean) -> Unit,
     onSelectedShowId: (String) -> Unit,
-    onRemoveClicked: () -> Unit,
+    onClearAlertClicked: () -> Unit,
     onFirstItemClicked: () -> Unit,
     onSecondItemClicked: () -> Unit,
     onThirdItemClicked: () -> Unit,
@@ -153,8 +153,8 @@ fun MyAlarmSettingScreenContent(
             onDismissRequest = {
                 onAlarmOptionSheetVisible(false)
             },
-            onRemoveClicked = {
-                onRemoveClicked()
+            onClearAlertClicked = {
+                onClearAlertClicked()
             }
         )
     }

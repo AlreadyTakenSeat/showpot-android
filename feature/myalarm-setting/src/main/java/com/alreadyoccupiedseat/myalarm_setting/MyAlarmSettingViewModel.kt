@@ -1,10 +1,8 @@
 package com.alreadyoccupiedseat.myalarm_setting
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alreadyoccupiedseat.data.show.ShowRepository
-import com.alreadyoccupiedseat.enum.TicketingAlertTime
 import com.alreadyoccupiedseat.model.show.Shows
 import com.alreadyoccupiedseat.model.show.Shows.Companion.NORMAL
 import com.alreadyoccupiedseat.model.temp.AlarmReservedShow
@@ -127,15 +125,15 @@ class MyAlarmSettingViewModel @Inject constructor(
         }
     }
 
-    fun removeClicked() {
+    fun clearNotification() {
         viewModelScope.launch {
             val showId = _state.value.selectedShowId ?: String()
-            val isSuccess = showRepository.registerTicketingAlert(
+            val result = showRepository.registerTicketingAlert(
                 showId = showId,
                 ticketingApiType = NORMAL,
                 alertTimes = emptyList()
-            ).isSuccess
-            if (isSuccess) {
+            )
+            if (result.isSuccess) {
                 _state.value = _state.value.copy(
                     alarmReservedShow = _state.value.alarmReservedShow.filter { it.id != showId },
                     isAlarmOptionSheetVisible = false,

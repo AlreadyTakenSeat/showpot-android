@@ -25,7 +25,7 @@ fun PreviewAlarmOptionsBottomSheet(modifier: Modifier = Modifier) {
     AlarmOptionsBottomSheet(
         onTicketSheetVisible = {},
         onDismissRequest = {},
-        onRemoveClicked = {}
+        onClearAlertClicked = {}
     )
 }
 
@@ -34,7 +34,7 @@ fun PreviewAlarmOptionsBottomSheet(modifier: Modifier = Modifier) {
 fun AlarmOptionsBottomSheet(
     onTicketSheetVisible: () -> Unit,
     onDismissRequest: () -> Unit,
-    onRemoveClicked: () -> Unit,
+    onClearAlertClicked: () -> Unit,
 ) {
     ShowPotBottomSheet(
         onDismissRequest = onDismissRequest
@@ -71,7 +71,7 @@ fun AlarmOptionsBottomSheet(
                     .padding(top = 12.dp),
                 text = stringResource(id = R.string.action_turn_off),
                 onClicked = {
-                    onRemoveClicked()
+                    onClearAlertClicked()
                 }
             )
 
