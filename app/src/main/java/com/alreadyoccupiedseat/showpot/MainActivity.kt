@@ -45,10 +45,10 @@ class MainActivity : ComponentActivity() {
                     OnboardingCheckState.OnBoardingDone -> {
                         AppScreen(
                             onPrivacyPolicyClicked = {
-                                startActivity(getWebIntent("https://luxuriant-neighbor-e45.notion.site/d332eb11da37456b818eb596d05015db"))
+                                startActivity(getWebIntent("https://brassy-client-c0a.notion.site/7ba6c9faa3b547e0adaa26bc5379c686"))
                             },
                             onTermsOfServiceClicked = {
-                                startActivity(getWebIntent("https://luxuriant-neighbor-e45.notion.site/c9a47093644a49299cfbabe81d8dc66a?pvs=4"))
+                                startActivity(getWebIntent("https://brassy-client-c0a.notion.site/235b826c2d0b4698bedbdb88b2bc0679"))
                             },
                             onNotificationSettingClicked = {
                                 navigateToNotificationSetting(this)
