@@ -56,7 +56,7 @@ interface ShowService {
         @Body alertTimes: TicketingAlertRequest
     ): Response<Unit>
 
-    @POST("api/v1/shows/{showId}/alert/reservations")
+    @GET("api/v1/shows/{showId}/alert/reservations")
     suspend fun checkAlertReservation(
         @Path("showId") showId: String,
         @Query("ticketingApiType") ticketingApiType: String,
