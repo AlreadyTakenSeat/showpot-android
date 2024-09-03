@@ -25,8 +25,6 @@ data class MainActivityState(
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    private val accountDataStore: AccountDataStore,
-    private val reIssueTokenUseCase: ReIssueTokenUseCase,
     private val onboardingDataStore: OnboardingDataStore,
 ) : ViewModel() {
 
@@ -53,21 +51,11 @@ class MainActivityViewModel @Inject constructor(
 
         }
 
-        refreshTokens()
-
     }
 
     fun onboardingCompleted() {
         _state.value =
             state.value.copy(isOnboardingCompleted = OnboardingCheckState.OnBoardingDone)
-    }
-
-    private fun refreshTokens() {
-        viewModelScope.launch {
-            accountDataStore.getRefreshToken()?.let {
-                reIssueTokenUseCase()
-            }
-        }
     }
 
 }
