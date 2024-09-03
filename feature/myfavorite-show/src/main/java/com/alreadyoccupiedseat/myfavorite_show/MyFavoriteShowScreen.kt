@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,6 +52,11 @@ fun MyFavoriteShowScreen(
 ) {
     val viewModel = hiltViewModel<MyFavoriteShowViewModel>()
     val state = viewModel.state.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.getInterestedShow()
+    }
+
     MyFavoriteShowScreenContent(
         state = state.value,
         modifier = Modifier,
@@ -95,6 +101,7 @@ private fun MyFavoriteShowScreenContent(
                     .padding(top = 12.dp)
                     .padding(it),
             ) {
+
                 if (state.interestedShowList.isEmpty()) {
                     item {
                         MyFavoriteEmpty(
@@ -104,24 +111,24 @@ private fun MyFavoriteShowScreenContent(
                         )
                     }
                 } else {
-                    itemsIndexed(state.interestedShowList) { index, item ->
+                    itemsIndexed(state.interestedShowList) { index, show ->
                         ShowInfo(
                             modifier = Modifier
                                 .padding(horizontal = 16.dp)
                                 .clickable {
-                                    onShowClicked(item.id)
+                                    onShowClicked(show.id)
                                 },
-                            imageUrl = item.posterImageURL,
-                            showTitle = item.title,
-                            dateInfo = item.startAt,
-                            locationInfo = item.location,
+                            imageUrl = show.posterImageURL,
+                            showTitle = show.title,
+                            dateInfo = show.startAt.replace("-", "."),
+                            locationInfo = show.location,
                             icon = {
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.Center,
                                     modifier = Modifier
                                         .clickable {
-                                            onDeletedMyFavoriteShow(item.id)
+                                            onDeletedMyFavoriteShow(show.id)
                                         }
                                         .background(ShowpotColor.Gray500)
 
