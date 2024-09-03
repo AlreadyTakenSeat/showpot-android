@@ -14,6 +14,7 @@ interface ShowRepository {
         size: Int
     ): List<Data>
 
+    /** 관심 공연 목록 조회***/
     suspend fun getInterestedShowList(
         size: Int
     ): List<InterestedData>
