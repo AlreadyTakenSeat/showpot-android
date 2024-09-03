@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
@@ -17,6 +18,16 @@ import com.alreadyoccupiedseat.designsystem.component.bottomSheet.SheetHandler
 import com.alreadyoccupiedseat.designsystem.component.bottomSheet.ShowPotBottomSheet
 import com.alreadyoccupiedseat.designsystem.component.button.ShowPotSubButton
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
+
+@Preview
+@Composable
+fun PreviewAlarmOptionsBottomSheet(modifier: Modifier = Modifier) {
+    AlarmOptionsBottomSheet(
+        onTicketSheetVisible = {},
+        onDismissRequest = {},
+        onRemoveClicked = {}
+    )
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
