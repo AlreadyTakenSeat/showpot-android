@@ -6,6 +6,7 @@ import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.data.artist.ArtistRepository
 import com.alreadyoccupiedseat.data.login.LoginRepository
 import com.alreadyoccupiedseat.data.show.ShowRepository
+import com.alreadyoccupiedseat.datastore.AccountDataStore
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.model.Artist
 import com.alreadyoccupiedseat.model.show.Shows
@@ -57,7 +58,8 @@ data class HomeScreenState(
 class HomeViewModel@Inject constructor(
     private val showRepository: ShowRepository,
     private val artistRepository: ArtistRepository,
-    private val loginRepository: LoginRepository
+    private val loginRepository: LoginRepository,
+    private val accountDataStore: AccountDataStore,
 ) : ViewModel(){
 
     private val _state = MutableStateFlow(HomeScreenState())
@@ -121,6 +123,14 @@ class HomeViewModel@Inject constructor(
         viewModelScope.launch {
             loginRepository.getProfile().onSuccess { profile ->
                 _state.value = state.value.copy(nickName = profile.nickname)
+            }
+        }
+    }
+
+    fun refreshTokens() {
+        viewModelScope.launch {
+            accountDataStore.getRefreshToken()?.let {
+                loginRepository.reIssueToken()
             }
         }
     }
