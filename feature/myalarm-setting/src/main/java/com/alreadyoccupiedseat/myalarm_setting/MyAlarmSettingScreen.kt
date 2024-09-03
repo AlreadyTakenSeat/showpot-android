@@ -70,7 +70,7 @@ fun MyAlarmSettingScreen(
             viewModel.setSelectedShowId(id)
         },
         onRemoveClicked = {
-              viewModel.removeClicked()
+            viewModel.removeClicked()
         },
         onFirstItemClicked = {
             viewModel.changeFirstItemSelection()
@@ -175,7 +175,7 @@ fun MyAlarmSettingScreenContent(
                                 },
                             imageUrl = show.imageURL,
                             showTitle = show.title,
-                            dateInfo = show.cursorValue,
+                            dateInfo = show.startAt.replace("-", "."),
                             locationInfo = show.location,
                             icon = {
                                 Row(
