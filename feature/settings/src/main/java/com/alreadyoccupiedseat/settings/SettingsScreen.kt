@@ -34,7 +34,7 @@ fun SettingsScreen(
     onPrivacyPolicyClicked: () -> Unit = { },
     onTermsOfServiceClicked: () -> Unit = { },
     onNotificationSettingClicked: () -> Unit = { },
-    ) {
+) {
 
     val viewModel = hiltViewModel<SettingsViewModel>()
     val state = viewModel.state.collectAsState()
@@ -85,14 +85,16 @@ fun SettingsScreenContent(
             IconMenuWithText(
                 firstIcon = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.ic_info_24),
                 title = "버전 $versionName",
-                // TODO: after MVP
                 text = "최신 버전입니다",
-                onClicked = {}
+                onClicked = {
+
+                }
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
-
             if (state.isLoggedIn) {
+
+                Spacer(modifier = Modifier.height(8.dp))
+
                 IconMenuWithCount(
                     firstIcon = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.ic_profile_24),
                     title = stringResource(com.alreadyoccupiedseat.designsystem.R.string.account),
