@@ -91,6 +91,7 @@ fun ShowDetailScreen(
         viewModel.getShowDetail(showId)
         viewModel.registerShowId(showId)
         viewModel.checkLogin()
+        viewModel.checkAlertAvailability()
     }
 
     ShowDetailScreenContent(
@@ -120,11 +121,12 @@ fun ShowDetailScreen(
             viewModel.registerTicketingAlert(
                 showId,
                 "NORMAL",
-                // TODO: request the actual alert times after MVP
-                if (state.value.isThirdItemSelected) {
-                    listOf(TicketingAlertTime.BEFORE_1.name)
-                } else {
-                    emptyList()
+                mutableListOf<String>().apply {
+                    with(state.value) {
+                        if (isFirstItemSelected) this@apply.add(TicketingAlertTime.BEFORE_24.name)
+                        if (isSecondItemSelected) this@apply.add(TicketingAlertTime.BEFORE_6.name)
+                        if (isThirdItemSelected) this@apply.add(TicketingAlertTime.BEFORE_1.name)
+                    }
                 }
             )
         },

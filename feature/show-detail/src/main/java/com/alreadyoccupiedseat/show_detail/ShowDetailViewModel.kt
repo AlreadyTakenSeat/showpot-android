@@ -27,7 +27,7 @@ data class ShowDetailState(
     val isLoginSheetVisible: Boolean = false,
     val isFirstItemAvailable: Boolean = false,
     val isSecondItemAvailable: Boolean = false,
-    val isThirdItemAvailable: Boolean = true,
+    val isThirdItemAvailable: Boolean = false,
     val isFirstItemSelected: Boolean = false,
     val isSecondItemSelected: Boolean = false,
     val isThirdItemSelected: Boolean = false,
@@ -81,7 +81,6 @@ class ShowDetailViewModel @Inject constructor(
             val result =
                 showRepository.registerTicketingAlert(showId, ticketingApiType, alertTimes)
             if (result.isSuccess) {
-//                checkAlertAvailability()
                 _event.emit(ShowDetailEvent.AlertRegisterSuccess)
             } else {
                 println(result.exceptionOrNull())
@@ -119,16 +118,18 @@ class ShowDetailViewModel @Inject constructor(
         }
     }
 
-    // TODO: Bug
-//    private fun checkAlertAvailability() {
-//        viewModelScope.launch {
-//            // TODO: not only for Third Item
-//            val availabilitiesInfo = showRepository.checkAlertReservation(state.value.showId, "NORMAL")
-//            _state.value = _state.value.copy(
-//                isThirdItemSelected = availabilitiesInfo.alertReservationStatus.before1
-//            )
-//        }
-//    }
+    fun checkAlertAvailability() {
+        viewModelScope.launch {
+            val availabilitiesInfo = showRepository.checkAlertReservation(state.value.showId, "NORMAL")
+            _state.value = _state.value.copy(
+                isFirstItemSelected = availabilitiesInfo.alertReservationStatus.before24,
+                isSecondItemSelected = availabilitiesInfo.alertReservationStatus.before6,
+                isThirdItemSelected = availabilitiesInfo.alertReservationStatus.before1,
+                isFirstItemAvailable = availabilitiesInfo.alertReservationAvailability.canReserve24,
+                isSecondItemAvailable = availabilitiesInfo.alertReservationAvailability.canReserve6,
+                isThirdItemAvailable = availabilitiesInfo.alertReservationAvailability.canReserve1
+            )
+        }
+    }
 
-    // TODO: generate fun to change the availability of the first, second, and third item
 }
