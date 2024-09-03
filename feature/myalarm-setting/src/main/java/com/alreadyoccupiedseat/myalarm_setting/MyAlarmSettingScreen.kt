@@ -1,5 +1,7 @@
 package com.alreadyoccupiedseat.myalarm_setting
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +20,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -29,6 +32,9 @@ import com.alreadyoccupiedseat.designsystem.component.DefaultScreenWhenEmpty
 import com.alreadyoccupiedseat.designsystem.component.ShowInfo
 import com.alreadyoccupiedseat.designsystem.component.bottomSheet.TicketingNotificationBottomSheet
 import com.alreadyoccupiedseat.designsystem.component.button.ShowPotSubButton
+import com.alreadyoccupiedseat.enum.TicketingAlertTime
+import com.alreadyoccupiedseat.model.show.Shows.Companion.NORMAL
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun MyAlarmSettingScreen(
@@ -37,8 +43,27 @@ fun MyAlarmSettingScreen(
     onEntireShowClicked: () -> Unit
 ) {
 
+    val context = LocalContext.current
     val viewModel = hiltViewModel<MyAlarmSettingViewModel>()
     val state = viewModel.state.collectAsState()
+    val alertSuccess = stringResource(id = R.string.my_alert_success)
+
+    LaunchedEffect(viewModel.event) {
+        viewModel.event.collectLatest { event ->
+            when (event) {
+                is MyAlarmSettingEvent.Idle -> {
+                    Log.d("MyAlarmSettingScreen", "Idle")
+                }
+                is MyAlarmSettingEvent.AlertRegisterSuccess -> {
+                    Toast.makeText(
+                        context,
+                        alertSuccess,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+    }
 
     LaunchedEffect(Unit) {
         viewModel.getAlarmReservedShow()
@@ -81,8 +106,20 @@ fun MyAlarmSettingScreen(
         onThirdItemClicked = {
             viewModel.changeThirdItemSelection()
         },
+        onCheckAlertAvailability = {
+            viewModel.checkAlertAvailability()
+        },
         onRegisterAlertButtonClicked = {
-            viewModel.registerTicketingAlert()
+            viewModel.registerTicketingAlert(
+                NORMAL,
+                mutableListOf<String>().apply {
+                    with(state.value) {
+                        if (isFirstItemSelected) this@apply.add(TicketingAlertTime.BEFORE_24.name)
+                        if (isSecondItemSelected) this@apply.add(TicketingAlertTime.BEFORE_6.name)
+                        if (isThirdItemSelected) this@apply.add(TicketingAlertTime.BEFORE_1.name)
+                    }
+                }
+            )
         }
     )
 }
@@ -102,6 +139,7 @@ fun MyAlarmSettingScreenContent(
     onFirstItemClicked: () -> Unit,
     onSecondItemClicked: () -> Unit,
     onThirdItemClicked: () -> Unit,
+    onCheckAlertAvailability: () -> Unit,
     onRegisterAlertButtonClicked: () -> Unit,
 ) {
 
@@ -110,6 +148,7 @@ fun MyAlarmSettingScreenContent(
         AlarmOptionsBottomSheet(
             onTicketSheetVisible = {
                 onTicketSheetVisible(true)
+                onCheckAlertAvailability()
             },
             onDismissRequest = {
                 onAlarmOptionSheetVisible(false)
@@ -166,7 +205,7 @@ fun MyAlarmSettingScreenContent(
                         MyAlarmEmpty(onEntireShowClicked = onEntireShowClicked)
                     }
                 } else {
-                    itemsIndexed(alarmReservedShow) { index, show ->
+                    itemsIndexed(alarmReservedShow) { _, show ->
                         ShowInfo(
                             modifier = Modifier
                                 .padding(horizontal = 16.dp)
