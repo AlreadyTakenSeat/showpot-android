@@ -1,5 +1,6 @@
 package com.alreadyoccupiedseat.myalarm_setting
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alreadyoccupiedseat.data.show.ShowRepository
@@ -8,18 +9,23 @@ import com.alreadyoccupiedseat.model.show.Shows
 import com.alreadyoccupiedseat.model.show.Shows.Companion.NORMAL
 import com.alreadyoccupiedseat.model.temp.AlarmReservedShow
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-//getAlertReservedShow
+sealed interface MyAlarmSettingEvent {
+    data object Idle : MyAlarmSettingEvent
+
+    data object AlertRegisterSuccess : MyAlarmSettingEvent
+}
 data class MyAlarmSettingState(
     val alarmReservedShow: List<AlarmReservedShow> = emptyList(),
     val isAlarmOptionSheetVisible: Boolean = false,
     val isTicketSheetVisible: Boolean = false,
     val selectedShowId: String? = null,
-    val isFirstItemAvailable: Boolean = false,
-    val isSecondItemAvailable: Boolean = false,
+    val isFirstItemAvailable: Boolean = true,
+    val isSecondItemAvailable: Boolean = true,
     val isThirdItemAvailable: Boolean = true,
     val isFirstItemSelected: Boolean = false,
     val isSecondItemSelected: Boolean = false,
@@ -33,6 +39,9 @@ class MyAlarmSettingViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(MyAlarmSettingState())
     val state = _state
+
+    private val _event = MutableSharedFlow<MyAlarmSettingEvent>()
+    val event = _event
 
     init {
         getAlarmReservedShow()
@@ -99,22 +108,19 @@ class MyAlarmSettingViewModel @Inject constructor(
         }
     }
 
-    fun registerTicketingAlert() {
+    fun registerTicketingAlert(
+        ticketingApiType: String,
+        alertTimes: List<String>
+    ) {
         viewModelScope.launch {
             val showId = _state.value.selectedShowId ?: String()
-            val alertTimes = if (state.value.isThirdItemSelected) {
-                listOf(TicketingAlertTime.BEFORE_1.name)
-            } else {
-                emptyList()
-            }
-            alertTimes.ifEmpty {
-                _state.value = _state.value.copy(
-                    alarmReservedShow = _state.value.alarmReservedShow.filter { it.id != showId }
+            val result = showRepository.registerTicketingAlert(
+                    showId = showId,
+                    ticketingApiType = ticketingApiType,
+                    alertTimes = alertTimes
                 )
-            }
-            val result = showRepository.registerTicketingAlert(showId, NORMAL, alertTimes)
             if (result.isSuccess) {
-                println("Alert registered successfully")
+                _event.emit(MyAlarmSettingEvent.AlertRegisterSuccess)
             } else {
                 println(result.exceptionOrNull())
             }
@@ -138,6 +144,20 @@ class MyAlarmSettingViewModel @Inject constructor(
             } else {
                 println("Failed to remove alert")
             }
+        }
+    }
+
+    fun checkAlertAvailability() {
+        viewModelScope.launch {
+            val availabilitiesInfo = showRepository.checkAlertReservation(state.value.selectedShowId ?: String(), NORMAL)
+            _state.value = _state.value.copy(
+                isFirstItemSelected = availabilitiesInfo.alertReservationStatus.before24,
+                isSecondItemSelected = availabilitiesInfo.alertReservationStatus.before6,
+                isThirdItemSelected = availabilitiesInfo.alertReservationStatus.before1,
+                isFirstItemAvailable = availabilitiesInfo.alertReservationAvailability.canReserve24,
+                isSecondItemAvailable = availabilitiesInfo.alertReservationAvailability.canReserve6,
+                isThirdItemAvailable = availabilitiesInfo.alertReservationAvailability.canReserve1
+            )
         }
     }
 
