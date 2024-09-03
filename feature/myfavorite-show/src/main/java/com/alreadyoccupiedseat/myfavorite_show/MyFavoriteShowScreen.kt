@@ -40,14 +40,14 @@ fun MyFavoriteShowScreenPreview(modifier: Modifier = Modifier) {
         navController = navController,
         onShowClicked = {},
         onEntireShowClicked = {}
-        )
+    )
 }
 
 @Composable
 fun MyFavoriteShowScreen(
     navController: NavController,
     onShowClicked: (String) -> Unit,
-    onEntireShowClicked: () -> Unit
+    onEntireShowClicked: () -> Unit,
 ) {
     val viewModel = hiltViewModel<MyFavoriteShowViewModel>()
     val state = viewModel.state.collectAsState()
@@ -79,7 +79,7 @@ private fun MyFavoriteShowScreenContent(
     onBackClicked: () -> Unit,
     onShowClicked: (String) -> Unit,
     onDeletedMyFavoriteShow: (showId) -> Unit,
-    onEntireShowClicked: () -> Unit
+    onEntireShowClicked: () -> Unit,
 ) {
 
     Scaffold(
@@ -96,11 +96,13 @@ private fun MyFavoriteShowScreenContent(
                     .padding(it),
             ) {
                 if (state.interestedShowList.isEmpty()) {
-                    item { MyFavoriteEmpty(
-                        onEntireShowClicked = {
-                            onEntireShowClicked()
-                        }
-                    ) }
+                    item {
+                        MyFavoriteEmpty(
+                            onEntireShowClicked = {
+                                onEntireShowClicked()
+                            }
+                        )
+                    }
                 } else {
                     itemsIndexed(state.interestedShowList) { index, item ->
                         ShowInfo(
@@ -111,7 +113,7 @@ private fun MyFavoriteShowScreenContent(
                                 },
                             imageUrl = item.posterImageURL,
                             showTitle = item.title,
-                            dateInfo =item.startAt,
+                            dateInfo = item.startAt,
                             locationInfo = item.location,
                             icon = {
                                 Row(
@@ -144,50 +146,6 @@ private fun MyFavoriteShowScreenContent(
                             }
                         )
                     }
-
-                    itemsIndexed(state.showList) { index, show ->
-                        ShowInfo(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .clickable {
-                                    // TODO 공연 상세 페이지 이동
-                                },
-                            imageUrl = show.posterImageURL,
-                            showTitle = show.name,
-                            dateInfo = "2024.12.$index (수) 오후 $index 시",
-                            locationInfo = "KBS 아레나홀",
-                            icon = {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.Center,
-                                    modifier = Modifier
-                                        .clickable {
-                                            onDeletedMyFavoriteShow(show.id)
-                                        }
-                                        .background(ShowpotColor.Gray500)
-
-                                ) {
-
-                                    Icon(
-                                        modifier = Modifier
-                                            .padding(start = 5.dp)
-                                            .padding(vertical = 8.dp),
-                                        painter = painterResource(R.drawable.ic_delete_24),
-                                        contentDescription = null,
-                                        tint = ShowpotColor.Gray300
-                                    )
-
-                                    ShowPotKoreanText_B2_Regular(
-                                        modifier = Modifier
-                                            .padding(vertical = 6.5.dp)
-                                            .padding(end = 10.dp),
-                                        text = stringResource(R.string.delete),
-                                        color = ShowpotColor.White,
-                                    )
-                                }
-                            }
-                        )
-                    }
                 }
             }
         }
@@ -197,7 +155,7 @@ private fun MyFavoriteShowScreenContent(
 
 @Composable
 fun MyFavoriteEmpty(
-    onEntireShowClicked: () -> Unit
+    onEntireShowClicked: () -> Unit,
 ) {
     Column(
         verticalArrangement = Arrangement.Center,
