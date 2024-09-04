@@ -32,10 +32,6 @@ class ShowDataSourceImpl @Inject constructor(
         ).body()?.data ?: emptyList()
     }
 
-    override suspend fun getInterestedShowList(size: Int): List<InterestedData> {
-        return showService.getInterestedShowList(size).body()?.data ?: emptyList()
-    }
-
     override suspend fun searchShows(
         cursorId: String?,
         size: Int,
@@ -48,6 +44,11 @@ class ShowDataSourceImpl @Inject constructor(
         ).body()?.data ?: emptyList()
     }
 
+    /** 관심 공연 목록 조회 ***/
+    override suspend fun getInterestedShowList(size: Int): List<InterestedData> {
+        return showService.getInterestedShowList(size).body()?.data ?: emptyList()
+    }
+
     @SuppressLint("HardwareIds")
     override suspend fun getShowDetail(showId: String): ShowDetail {
         val viewIdentifier =
@@ -56,6 +57,7 @@ class ShowDataSourceImpl @Inject constructor(
             ?: throw Exception("Show not found")
     }
 
+    /** 관심 공연 등록, 취소 ***/
     override suspend fun registerShowInterest(showId: String): Boolean {
         return showService.registerShowInterest(showId).body()?.hasInterest ?: false
     }

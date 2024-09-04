@@ -25,6 +25,7 @@ class ShowRepositoryImpl @Inject constructor(
         )
     }
 
+    /** 관심 공연 목록 조회 ***/
     override suspend fun getInterestedShowList(size: Int): List<InterestedData> {
         return showDataSource.getInterestedShowList(size)
     }

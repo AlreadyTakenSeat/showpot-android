@@ -1,5 +1,6 @@
 package com.alreadyoccupiedseat.myfavorite_show
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alreadyoccupiedseat.data.show.ShowRepository
@@ -23,12 +24,8 @@ class MyFavoriteShowViewModel @Inject constructor(
     private val _state = MutableStateFlow(MyFavoriteShowState())
     val state = _state
 
-    init {
-        getInterestedShow()
-    }
-
-    /** 관심 공연 ***/
-    private fun getInterestedShow() {
+    /** 관심 공연 목록 조회 ***/
+    fun getInterestedShow() {
         viewModelScope.launch {
             showRepository.getInterestedShowList(
                 size = 100
@@ -40,13 +37,17 @@ class MyFavoriteShowViewModel @Inject constructor(
         }
     }
 
-    fun deleteMyFavoriteShow(id: String) {
+    /** 관심 공연 삭제 ***/
+    fun deleteMyFavoriteShow(showId: String) {
         viewModelScope.launch {
-            _state.emit(
-                _state.value.copy(
-                    showList = _state.value.showList.filter { it.id != id }
+            val notInterest = !showRepository.registerShowInterest(showId = showId)
+            if (notInterest) {
+                _state.value = _state.value.copy(
+                    interestedShowList = _state.value.interestedShowList.filter { it.id != showId }
                 )
-            )
+            } else {
+                Log.e("MyFavoriteShowViewModel", "deleteMyFavoriteShow failed")
+            }
         }
     }
 
