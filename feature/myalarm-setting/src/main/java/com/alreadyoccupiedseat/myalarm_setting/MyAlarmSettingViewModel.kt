@@ -119,6 +119,9 @@ class MyAlarmSettingViewModel @Inject constructor(
                 )
             if (result.isSuccess) {
                 _event.emit(MyAlarmSettingEvent.AlertRegisterSuccess)
+                alertTimes.ifEmpty {
+                    removeSelectedShowFromAlert(showId = showId)
+                }
             } else {
                 println(result.exceptionOrNull())
             }
@@ -134,15 +137,19 @@ class MyAlarmSettingViewModel @Inject constructor(
                 alertTimes = emptyList()
             )
             if (result.isSuccess) {
-                _state.value = _state.value.copy(
-                    alarmReservedShow = _state.value.alarmReservedShow.filter { it.id != showId },
-                    isAlarmOptionSheetVisible = false,
-                    selectedShowId = null,
-                )
+                removeSelectedShowFromAlert(showId = showId)
             } else {
                 println("Failed to remove alert")
             }
         }
+    }
+
+    private fun removeSelectedShowFromAlert(showId: String) {
+        _state.value = _state.value.copy(
+            alarmReservedShow = _state.value.alarmReservedShow.filter { it.id != showId },
+            isAlarmOptionSheetVisible = false,
+            selectedShowId = null,
+        )
     }
 
     fun checkAlertAvailability() {
