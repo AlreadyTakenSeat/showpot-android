@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,17 +41,22 @@ fun MyFavoriteShowScreenPreview(modifier: Modifier = Modifier) {
         navController = navController,
         onShowClicked = {},
         onEntireShowClicked = {}
-        )
+    )
 }
 
 @Composable
 fun MyFavoriteShowScreen(
     navController: NavController,
     onShowClicked: (String) -> Unit,
-    onEntireShowClicked: () -> Unit
+    onEntireShowClicked: () -> Unit,
 ) {
     val viewModel = hiltViewModel<MyFavoriteShowViewModel>()
     val state = viewModel.state.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.getInterestedShow()
+    }
+
     MyFavoriteShowScreenContent(
         state = state.value,
         modifier = Modifier,
@@ -79,7 +85,7 @@ private fun MyFavoriteShowScreenContent(
     onBackClicked: () -> Unit,
     onShowClicked: (String) -> Unit,
     onDeletedMyFavoriteShow: (showId) -> Unit,
-    onEntireShowClicked: () -> Unit
+    onEntireShowClicked: () -> Unit,
 ) {
 
     Scaffold(
@@ -95,67 +101,27 @@ private fun MyFavoriteShowScreenContent(
                     .padding(top = 12.dp)
                     .padding(it),
             ) {
+
                 if (state.interestedShowList.isEmpty()) {
-                    item { MyFavoriteEmpty(
-                        onEntireShowClicked = {
-                            onEntireShowClicked()
-                        }
-                    ) }
-                } else {
-                    itemsIndexed(state.interestedShowList) { index, item ->
-                        ShowInfo(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .clickable {
-                                    onShowClicked(item.id)
-                                },
-                            imageUrl = item.posterImageURL,
-                            showTitle = item.title,
-                            dateInfo =item.startAt,
-                            locationInfo = item.location,
-                            icon = {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.Center,
-                                    modifier = Modifier
-                                        .clickable {
-                                            onDeletedMyFavoriteShow(item.id)
-                                        }
-                                        .background(ShowpotColor.Gray500)
-
-                                ) {
-                                    Icon(
-                                        modifier = Modifier
-                                            .padding(start = 5.dp)
-                                            .padding(vertical = 8.dp),
-                                        painter = painterResource(R.drawable.ic_delete_24),
-                                        contentDescription = null,
-                                        tint = ShowpotColor.Gray300
-                                    )
-
-                                    ShowPotKoreanText_B2_Regular(
-                                        modifier = Modifier
-                                            .padding(vertical = 6.5.dp)
-                                            .padding(end = 10.dp),
-                                        text = stringResource(R.string.delete),
-                                        color = ShowpotColor.White,
-                                    )
-                                }
+                    item {
+                        MyFavoriteEmpty(
+                            onEntireShowClicked = {
+                                onEntireShowClicked()
                             }
                         )
                     }
-
-                    itemsIndexed(state.showList) { index, show ->
+                } else {
+                    itemsIndexed(state.interestedShowList) { index, show ->
                         ShowInfo(
                             modifier = Modifier
                                 .padding(horizontal = 16.dp)
                                 .clickable {
-                                    // TODO 공연 상세 페이지 이동
+                                    onShowClicked(show.id)
                                 },
                             imageUrl = show.posterImageURL,
-                            showTitle = show.name,
-                            dateInfo = "2024.12.$index (수) 오후 $index 시",
-                            locationInfo = "KBS 아레나홀",
+                            showTitle = show.title,
+                            dateInfo = show.startAt.replace("-", "."),
+                            locationInfo = show.location,
                             icon = {
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
@@ -167,7 +133,6 @@ private fun MyFavoriteShowScreenContent(
                                         .background(ShowpotColor.Gray500)
 
                                 ) {
-
                                     Icon(
                                         modifier = Modifier
                                             .padding(start = 5.dp)
@@ -197,7 +162,7 @@ private fun MyFavoriteShowScreenContent(
 
 @Composable
 fun MyFavoriteEmpty(
-    onEntireShowClicked: () -> Unit
+    onEntireShowClicked: () -> Unit,
 ) {
     Column(
         verticalArrangement = Arrangement.Center,
