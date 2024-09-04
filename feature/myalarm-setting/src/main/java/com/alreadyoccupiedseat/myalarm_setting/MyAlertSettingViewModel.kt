@@ -5,21 +5,21 @@ import androidx.lifecycle.viewModelScope
 import com.alreadyoccupiedseat.data.show.ShowRepository
 import com.alreadyoccupiedseat.model.show.Shows
 import com.alreadyoccupiedseat.model.show.Shows.Companion.NORMAL
-import com.alreadyoccupiedseat.model.temp.AlarmReservedShow
+import com.alreadyoccupiedseat.model.temp.AlertReservedShow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-sealed interface MyAlarmSettingEvent {
-    data object Idle : MyAlarmSettingEvent
+sealed interface MyAlertSettingEvent {
+    data object Idle : MyAlertSettingEvent
 
-    data object AlertRegisterSuccess : MyAlarmSettingEvent
+    data object AlertRegisterSuccess : MyAlertSettingEvent
 }
-data class MyAlarmSettingState(
-    val alarmReservedShow: List<AlarmReservedShow> = emptyList(),
-    val isAlarmOptionSheetVisible: Boolean = false,
+data class MyAlertSettingState(
+    val alertReservedShowList: List<AlertReservedShow> = emptyList(),
+    val isAlertOptionSheetVisible: Boolean = false,
     val isTicketSheetVisible: Boolean = false,
     val selectedShowId: String? = null,
     val isFirstItemAvailable: Boolean = true,
@@ -31,37 +31,37 @@ data class MyAlarmSettingState(
 )
 
 @HiltViewModel
-class MyAlarmSettingViewModel @Inject constructor(
+class MyAlertSettingViewModel @Inject constructor(
     private val showRepository: ShowRepository
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(MyAlarmSettingState())
+    private val _state = MutableStateFlow(MyAlertSettingState())
     val state = _state
 
-    private val _event = MutableSharedFlow<MyAlarmSettingEvent>()
+    private val _event = MutableSharedFlow<MyAlertSettingEvent>()
     val event = _event
 
     init {
-        getAlarmReservedShow()
+        getAlertReservedShow()
     }
 
-    fun getAlarmReservedShow() {
+    fun getAlertReservedShow() {
         viewModelScope.launch {
-            showRepository.getAlarmReservedShow(
+            showRepository.getAlertReservedShow(
                 size = 100,
                 type = Shows.CONTINUE
             ).let {
                 _state.value = _state.value.copy(
-                    alarmReservedShow = it
+                    alertReservedShowList = it
                 )
             }
         }
     }
 
-    fun setAlarmOptionSheetVisible(isVisible: Boolean) {
+    fun setAlertOptionSheetVisible(isVisible: Boolean) {
         viewModelScope.launch {
             _state.value = _state.value.copy(
-                isAlarmOptionSheetVisible = isVisible
+                isAlertOptionSheetVisible = isVisible
             )
         }
     }
@@ -118,7 +118,7 @@ class MyAlarmSettingViewModel @Inject constructor(
                     alertTimes = alertTimes
                 )
             if (result.isSuccess) {
-                _event.emit(MyAlarmSettingEvent.AlertRegisterSuccess)
+                _event.emit(MyAlertSettingEvent.AlertRegisterSuccess)
                 alertTimes.ifEmpty {
                     removeSelectedShowFromAlert(showId = showId)
                 }
@@ -146,8 +146,8 @@ class MyAlarmSettingViewModel @Inject constructor(
 
     private fun removeSelectedShowFromAlert(showId: String) {
         _state.value = _state.value.copy(
-            alarmReservedShow = _state.value.alarmReservedShow.filter { it.id != showId },
-            isAlarmOptionSheetVisible = false,
+            alertReservedShowList = _state.value.alertReservedShowList.filter { it.id != showId },
+            isAlertOptionSheetVisible = false,
             selectedShowId = null,
         )
     }

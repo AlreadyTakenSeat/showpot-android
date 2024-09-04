@@ -37,24 +37,24 @@ import com.alreadyoccupiedseat.model.show.Shows.Companion.NORMAL
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun MyAlarmSettingScreen(
+fun MyAlertSettingScreen(
     navController: NavController,
     onShowClicked: (String) -> Unit,
     onEntireShowClicked: () -> Unit
 ) {
 
     val context = LocalContext.current
-    val viewModel = hiltViewModel<MyAlarmSettingViewModel>()
+    val viewModel = hiltViewModel<MyAlertSettingViewModel>()
     val state = viewModel.state.collectAsState()
     val alertSuccess = stringResource(id = R.string.my_alert_success)
 
     LaunchedEffect(viewModel.event) {
         viewModel.event.collectLatest { event ->
             when (event) {
-                is MyAlarmSettingEvent.Idle -> {
+                is MyAlertSettingEvent.Idle -> {
                     Log.d("MyAlarmSettingScreen", "Idle")
                 }
-                is MyAlarmSettingEvent.AlertRegisterSuccess -> {
+                is MyAlertSettingEvent.AlertRegisterSuccess -> {
                     Toast.makeText(
                         context,
                         alertSuccess,
@@ -66,17 +66,17 @@ fun MyAlarmSettingScreen(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.getAlarmReservedShow()
+        viewModel.getAlertReservedShow()
     }
 
-    MyAlarmSettingScreenContent(
+    MyAlertSettingScreenContent(
         modifier = Modifier,
         state = state.value,
         onBackClicked = {
             navController.popBackStack()
         },
         onDismissRequested = {
-            viewModel.setAlarmOptionSheetVisible(false)
+            viewModel.setAlertOptionSheetVisible(false)
             viewModel.setTicketSheetVisible(false)
         },
         onShowClicked = { id ->
@@ -88,8 +88,8 @@ fun MyAlarmSettingScreen(
         onTicketSheetVisible = { isVisible ->
             viewModel.setTicketSheetVisible(isVisible)
         },
-        onAlarmOptionSheetVisible = { isVisible ->
-            viewModel.setAlarmOptionSheetVisible(isVisible)
+        onAlertOptionSheetVisible = { isVisible ->
+            viewModel.setAlertOptionSheetVisible(isVisible)
         },
         onSelectedShowId = { id ->
             viewModel.setSelectedShowId(id)
@@ -125,15 +125,15 @@ fun MyAlarmSettingScreen(
 }
 
 @Composable
-fun MyAlarmSettingScreenContent(
+fun MyAlertSettingScreenContent(
     modifier: Modifier,
-    state: MyAlarmSettingState,
+    state: MyAlertSettingState,
     onBackClicked: () -> Unit,
     onDismissRequested: () -> Unit,
     onShowClicked: (String) -> Unit,
     onEntireShowClicked: () -> Unit,
     onTicketSheetVisible: (Boolean) -> Unit,
-    onAlarmOptionSheetVisible: (Boolean) -> Unit,
+    onAlertOptionSheetVisible: (Boolean) -> Unit,
     onSelectedShowId: (String) -> Unit,
     onClearAlertClicked: () -> Unit,
     onFirstItemClicked: () -> Unit,
@@ -144,14 +144,14 @@ fun MyAlarmSettingScreenContent(
 ) {
 
 
-    if (state.isAlarmOptionSheetVisible) {
+    if (state.isAlertOptionSheetVisible) {
         AlarmOptionsBottomSheet(
             onTicketSheetVisible = {
                 onTicketSheetVisible(true)
                 onCheckAlertAvailability()
             },
             onDismissRequest = {
-                onAlarmOptionSheetVisible(false)
+                onAlertOptionSheetVisible(false)
             },
             onClearAlertClicked = {
                 onClearAlertClicked()
@@ -199,7 +199,7 @@ fun MyAlarmSettingScreenContent(
                     .padding(top = 12.dp)
                     .padding(it),
             ) {
-                val alarmReservedShow = state.alarmReservedShow
+                val alarmReservedShow = state.alertReservedShowList
                 if (alarmReservedShow.isEmpty()) {
                     item {
                         MyAlarmEmpty(onEntireShowClicked = onEntireShowClicked)
@@ -224,7 +224,7 @@ fun MyAlarmSettingScreenContent(
                                         .background(ShowpotColor.Gray500)
                                         .clickable {
                                             onSelectedShowId(show.id)
-                                            onAlarmOptionSheetVisible(true)
+                                            onAlertOptionSheetVisible(true)
                                         }
                                 ) {
                                     Icon(
