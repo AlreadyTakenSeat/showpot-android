@@ -1,5 +1,7 @@
 package com.alreadyoccupiedseat.myalarm_setting
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +20,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -29,29 +32,51 @@ import com.alreadyoccupiedseat.designsystem.component.DefaultScreenWhenEmpty
 import com.alreadyoccupiedseat.designsystem.component.ShowInfo
 import com.alreadyoccupiedseat.designsystem.component.bottomSheet.TicketingNotificationBottomSheet
 import com.alreadyoccupiedseat.designsystem.component.button.ShowPotSubButton
+import com.alreadyoccupiedseat.enum.TicketingAlertTime
+import com.alreadyoccupiedseat.model.show.Shows.Companion.NORMAL
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun MyAlarmSettingScreen(
+fun MyAlertSettingScreen(
     navController: NavController,
     onShowClicked: (String) -> Unit,
     onEntireShowClicked: () -> Unit
 ) {
 
-    val viewModel = hiltViewModel<MyAlarmSettingViewModel>()
+    val context = LocalContext.current
+    val viewModel = hiltViewModel<MyAlertSettingViewModel>()
     val state = viewModel.state.collectAsState()
+    val alertSuccess = stringResource(id = R.string.my_alert_success)
 
-    LaunchedEffect(Unit) {
-        viewModel.getAlarmReservedShow()
+    LaunchedEffect(viewModel.event) {
+        viewModel.event.collectLatest { event ->
+            when (event) {
+                is MyAlertSettingEvent.Idle -> {
+                    Log.d("MyAlarmSettingScreen", "Idle")
+                }
+                is MyAlertSettingEvent.AlertRegisterSuccess -> {
+                    Toast.makeText(
+                        context,
+                        alertSuccess,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
     }
 
-    MyAlarmSettingScreenContent(
+    LaunchedEffect(Unit) {
+        viewModel.getAlertReservedShow()
+    }
+
+    MyAlertSettingScreenContent(
         modifier = Modifier,
         state = state.value,
         onBackClicked = {
             navController.popBackStack()
         },
         onDismissRequested = {
-            viewModel.setAlarmOptionSheetVisible(false)
+            viewModel.setAlertOptionSheetVisible(false)
             viewModel.setTicketSheetVisible(false)
         },
         onShowClicked = { id ->
@@ -63,14 +88,14 @@ fun MyAlarmSettingScreen(
         onTicketSheetVisible = { isVisible ->
             viewModel.setTicketSheetVisible(isVisible)
         },
-        onAlarmOptionSheetVisible = { isVisible ->
-            viewModel.setAlarmOptionSheetVisible(isVisible)
+        onAlertOptionSheetVisible = { isVisible ->
+            viewModel.setAlertOptionSheetVisible(isVisible)
         },
         onSelectedShowId = { id ->
             viewModel.setSelectedShowId(id)
         },
-        onRemoveClicked = {
-            viewModel.removeClicked()
+        onClearAlertClicked = {
+            viewModel.clearNotification()
         },
         onFirstItemClicked = {
             viewModel.changeFirstItemSelection()
@@ -81,41 +106,55 @@ fun MyAlarmSettingScreen(
         onThirdItemClicked = {
             viewModel.changeThirdItemSelection()
         },
+        onCheckAlertAvailability = {
+            viewModel.checkAlertAvailability()
+        },
         onRegisterAlertButtonClicked = {
-            viewModel.registerTicketingAlert()
+            viewModel.registerTicketingAlert(
+                NORMAL,
+                mutableListOf<String>().apply {
+                    with(state.value) {
+                        if (isFirstItemSelected) this@apply.add(TicketingAlertTime.BEFORE_24.name)
+                        if (isSecondItemSelected) this@apply.add(TicketingAlertTime.BEFORE_6.name)
+                        if (isThirdItemSelected) this@apply.add(TicketingAlertTime.BEFORE_1.name)
+                    }
+                }
+            )
         }
     )
 }
 
 @Composable
-fun MyAlarmSettingScreenContent(
+fun MyAlertSettingScreenContent(
     modifier: Modifier,
-    state: MyAlarmSettingState,
+    state: MyAlertSettingState,
     onBackClicked: () -> Unit,
     onDismissRequested: () -> Unit,
     onShowClicked: (String) -> Unit,
     onEntireShowClicked: () -> Unit,
     onTicketSheetVisible: (Boolean) -> Unit,
-    onAlarmOptionSheetVisible: (Boolean) -> Unit,
+    onAlertOptionSheetVisible: (Boolean) -> Unit,
     onSelectedShowId: (String) -> Unit,
-    onRemoveClicked: () -> Unit,
+    onClearAlertClicked: () -> Unit,
     onFirstItemClicked: () -> Unit,
     onSecondItemClicked: () -> Unit,
     onThirdItemClicked: () -> Unit,
+    onCheckAlertAvailability: () -> Unit,
     onRegisterAlertButtonClicked: () -> Unit,
 ) {
 
 
-    if (state.isAlarmOptionSheetVisible) {
+    if (state.isAlertOptionSheetVisible) {
         AlarmOptionsBottomSheet(
             onTicketSheetVisible = {
                 onTicketSheetVisible(true)
+                onCheckAlertAvailability()
             },
             onDismissRequest = {
-                onAlarmOptionSheetVisible(false)
+                onAlertOptionSheetVisible(false)
             },
-            onRemoveClicked = {
-                onRemoveClicked()
+            onClearAlertClicked = {
+                onClearAlertClicked()
             }
         )
     }
@@ -160,13 +199,13 @@ fun MyAlarmSettingScreenContent(
                     .padding(top = 12.dp)
                     .padding(it),
             ) {
-                val alarmReservedShow = state.alarmReservedShow
+                val alarmReservedShow = state.alertReservedShowList
                 if (alarmReservedShow.isEmpty()) {
                     item {
                         MyAlarmEmpty(onEntireShowClicked = onEntireShowClicked)
                     }
                 } else {
-                    itemsIndexed(alarmReservedShow) { index, show ->
+                    itemsIndexed(alarmReservedShow) { _, show ->
                         ShowInfo(
                             modifier = Modifier
                                 .padding(horizontal = 16.dp)
@@ -185,7 +224,7 @@ fun MyAlarmSettingScreenContent(
                                         .background(ShowpotColor.Gray500)
                                         .clickable {
                                             onSelectedShowId(show.id)
-                                            onAlarmOptionSheetVisible(true)
+                                            onAlertOptionSheetVisible(true)
                                         }
                                 ) {
                                     Icon(

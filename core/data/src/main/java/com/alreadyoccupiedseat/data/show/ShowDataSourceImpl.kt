@@ -9,7 +9,7 @@ import com.alreadyoccupiedseat.model.alert.TicketingAlertRequest
 import com.alreadyoccupiedseat.model.show.Data
 import com.alreadyoccupiedseat.model.show.InterestedData
 import com.alreadyoccupiedseat.model.show.ShowDetail
-import com.alreadyoccupiedseat.model.temp.AlarmReservedShow
+import com.alreadyoccupiedseat.model.temp.AlertReservedShow
 import com.alreadyoccupiedseat.network.ShowService
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -85,8 +85,8 @@ class ShowDataSourceImpl @Inject constructor(
     }
 
     /** 알림 설정한 공연 목록 조회 ***/
-    override suspend fun getAlarmReservedShow(size: Int, type: String): List<AlarmReservedShow> {
-        return showService.getAlarmReservedShow(size, type).body()?.data ?: emptyList()
+    override suspend fun getAlertReservedShow(size: Int, type: String): List<AlertReservedShow> {
+        return showService.getAlertReservedShow(size, type).body()?.data ?: emptyList()
     }
 
 }

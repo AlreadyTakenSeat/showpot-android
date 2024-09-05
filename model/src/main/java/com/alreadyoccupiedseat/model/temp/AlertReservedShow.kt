@@ -1,6 +1,6 @@
 package com.alreadyoccupiedseat.model.temp
 
-data class AlarmReservedShow(
+data class AlertReservedShow(
     val cursorId: String,
     val cursorValue: String,
     val endAt: String,

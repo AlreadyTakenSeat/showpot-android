@@ -33,7 +33,7 @@ import com.alreadyoccupiedseat.designsystem.typo.english.ShowPotEnglishText_H0
 import com.alreadyoccupiedseat.designsystem.typo.english.ShowPotEnglishText_H1
 import com.alreadyoccupiedseat.designsystem.typo.english.ShowPotEnglishText_H5
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B2_Regular
-import com.alreadyoccupiedseat.model.temp.AlarmReservedShow
+import com.alreadyoccupiedseat.model.temp.AlertReservedShow
 import java.time.DayOfWeek
 import java.time.Duration
 import java.time.LocalDateTime
@@ -45,7 +45,7 @@ import kotlin.math.absoluteValue
 @Composable
 fun TicketSlidePagerForAlarmReservedShow(
     pagerState: PagerState,
-    alarmedShows: List<AlarmReservedShow>,
+    alarmedShows: List<AlertReservedShow>,
     onShowClicked: () -> Unit,
 ) {
 
