@@ -21,7 +21,7 @@ sealed interface ShowDetailEvent {
 
 data class ShowDetailState(
     val isLoggedIn: Boolean = false,
-    val showId: String = "",
+    val showId: String = "", // TODO: 아마 삭제
     val showDetail: ShowDetail? = null,
     val isAlertSheetVisible: Boolean = false,
     val isLoginSheetVisible: Boolean = false,
@@ -118,9 +118,9 @@ class ShowDetailViewModel @Inject constructor(
         }
     }
 
-    fun checkAlertAvailability() {
+    fun checkAlertAvailability(showId: String) {
         viewModelScope.launch {
-            val availabilitiesInfo = showRepository.checkAlertReservation(state.value.showId, "NORMAL")
+            val availabilitiesInfo = showRepository.checkAlertReservation(showId, "NORMAL")
             _state.value = _state.value.copy(
                 isFirstItemSelected = availabilitiesInfo.alertReservationStatus.before24,
                 isSecondItemSelected = availabilitiesInfo.alertReservationStatus.before6,
