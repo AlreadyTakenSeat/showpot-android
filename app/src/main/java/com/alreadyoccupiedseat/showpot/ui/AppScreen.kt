@@ -19,7 +19,7 @@ import com.alreadyoccupiedseat.designsystem.component.ShowPotBottomNavigation
 import com.alreadyoccupiedseat.entire_show.EntireShowScreen
 import com.alreadyoccupiedseat.home.HomeScreen
 import com.alreadyoccupiedseat.login.LoginScreen
-import com.alreadyoccupiedseat.myalarm_setting.MyAlarmSettingScreen
+import com.alreadyoccupiedseat.myalarm_setting.MyAlertSettingScreen
 import com.alreadyoccupiedseat.myfavorite_show.MyFavoriteShowScreen
 import com.alreadyoccupiedseat.myfinished_show.MyFinishedShowScreen
 import com.alreadyoccupiedseat.mypage.MyPageScreen
@@ -219,7 +219,7 @@ fun AppScreenContent(
             }
 
             composable(Screen.MyAlarmSetting.route) {
-                MyAlarmSettingScreen(
+                MyAlertSettingScreen(
                     navController = navController,
                     onShowClicked = {
                         navController.navigate(Screen.ShowDetail.route.replace("{showId}", it))
