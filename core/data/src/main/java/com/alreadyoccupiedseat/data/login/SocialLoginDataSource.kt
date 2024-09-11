@@ -4,6 +4,6 @@ import android.content.Context
 
 interface SocialLoginDataSource {
 
-    suspend fun login(activityContext: Context): String
+    suspend fun login(activityContext: Context): Result<String>
 
 }
