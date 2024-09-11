@@ -31,6 +31,12 @@ class SubscriptionArtistViewModel @Inject constructor(
     private val accountDataStore: AccountDataStore
 ) : ViewModel() {
 
+    private var _state = MutableStateFlow(SubscriptionArtistScreenState())
+    val state = _state
+
+    private val _event = MutableSharedFlow<SubscriptionArtistScreenEvent>()
+    val event = _event
+
     init {
         getUnsubscribedArtists()
         viewModelScope.launch {
@@ -41,12 +47,6 @@ class SubscriptionArtistViewModel @Inject constructor(
             }
         }
     }
-
-    private var _state = MutableStateFlow(SubscriptionArtistScreenState())
-    val state = _state
-
-    private val _event = MutableSharedFlow<SubscriptionArtistScreenEvent>()
-    val event = _event
 
     fun subscribeArtists() {
         viewModelScope.launch {
