@@ -14,8 +14,13 @@ class LoginRepositoryImpl @Inject constructor(
     private val SOCIAL_TYPE_GOOGLE = "GOOGLE"
 
     override suspend fun kakaoLogin(activityContext: Context): Result<Unit> {
-        val kakaoIdentifier = kaKaoLoginDataSource.login(activityContext)
-        return remoteLoginDataSource.login(kakaoIdentifier, SOCIAL_TYPE_KAKAO)
+        return runCatching {
+            kaKaoLoginDataSource.login(activityContext).onSuccess {
+                remoteLoginDataSource.login(it, SOCIAL_TYPE_KAKAO)
+            }.onFailure {
+                throw Exception("카카오 로그인 실패")
+            }
+        }
     }
 
     override suspend fun googleLogin(): Result<Unit> {
