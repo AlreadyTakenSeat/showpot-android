@@ -7,6 +7,7 @@ import com.alreadyoccupiedseat.model.login.TokenReIssueRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface LoginService {
@@ -18,7 +19,7 @@ interface LoginService {
 
     @POST("api/v1/users/reissue")
     suspend fun reIssueToken(
-        @Body tokenReIssueRequest: TokenReIssueRequest
+        @Header("Refresh") refreshToken: String
     ): Response<LoginResponse>
 
     @GET("api/v1/users/profile")

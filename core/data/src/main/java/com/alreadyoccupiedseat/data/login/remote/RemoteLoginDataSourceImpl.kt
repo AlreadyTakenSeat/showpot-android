@@ -33,10 +33,9 @@ class RemoteLoginDataSourceImpl @Inject constructor(
 
             val refreshToken = accountDataStore.getRefreshToken()
                 ?: return Result.failure(Exception("Refresh token is null"))
+
             val result = loginService.reIssueToken(
-                TokenReIssueRequest(
-                    refreshToken
-                )
+                refreshToken
             ).body()
 
             accountDataStore.updateAccessToken(result?.accessToken ?: String.EMPTY)
