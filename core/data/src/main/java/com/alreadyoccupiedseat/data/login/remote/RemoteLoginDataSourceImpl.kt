@@ -5,7 +5,6 @@ import com.alreadyoccupiedseat.datastore.AccountDataStore
 import com.alreadyoccupiedseat.model.login.LoginRequest
 import com.alreadyoccupiedseat.model.login.ProfileResponse
 import com.alreadyoccupiedseat.model.login.TokenReIssueRequest
-import com.alreadyoccupiedseat.model.temp.LogOutAndWithDrawRequest
 import com.alreadyoccupiedseat.network.LoginService
 import javax.inject.Inject
 
@@ -53,9 +52,9 @@ class RemoteLoginDataSourceImpl @Inject constructor(
 
     override suspend fun requestWithDraw(): Result<Unit> {
         return runCatching {
-            loginService.requestWithDraw(
-                LogOutAndWithDrawRequest(accountDataStore.getAccessToken() ?: String.EMPTY)
-            ).body()
+            if (loginService.requestWithDraw().isSuccessful.not()) {
+                throw Exception("Request withdrawal failed")
+            }
         }
     }
 }
