@@ -24,6 +24,7 @@ fun ShowPotTheme(
             val window = (view.context as Activity).window
 
             window.statusBarColor = statusBarColor
+            window.navigationBarColor = statusBarColor
             // status bar icon color(light or dark)
             // if false, status bar icon color is dark
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
