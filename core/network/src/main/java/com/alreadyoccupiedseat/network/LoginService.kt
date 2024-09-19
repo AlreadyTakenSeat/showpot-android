@@ -4,10 +4,10 @@ import com.alreadyoccupiedseat.model.login.LoginResponse
 import com.alreadyoccupiedseat.model.login.LoginRequest
 import com.alreadyoccupiedseat.model.login.ProfileResponse
 import com.alreadyoccupiedseat.model.login.TokenReIssueRequest
-import com.alreadyoccupiedseat.model.temp.LogOutAndWithDrawRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface LoginService {
@@ -19,7 +19,7 @@ interface LoginService {
 
     @POST("api/v1/users/reissue")
     suspend fun reIssueToken(
-        @Body tokenReIssueRequest: TokenReIssueRequest
+        @Header("Refresh") refreshToken: String
     ): Response<LoginResponse>
 
     @GET("api/v1/users/profile")
@@ -27,6 +27,5 @@ interface LoginService {
 
     @POST("/api/v1/users/withdrawal")
     suspend fun requestWithDraw(
-        @Body withDrawRequest: LogOutAndWithDrawRequest
     ): Response<Unit>
 }
