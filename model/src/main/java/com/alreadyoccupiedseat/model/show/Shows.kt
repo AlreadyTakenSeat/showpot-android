@@ -1,5 +1,8 @@
 package com.alreadyoccupiedseat.model.show
 
+import androidx.annotation.Keep
+
+@Keep
 data class Shows(
     val data: List<Data>,
     val hasNext: Boolean,

@@ -1,9 +1,11 @@
 package com.alreadyoccupiedseat.enum
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.Keep
 import com.alreadyoccupiedseat.designsystem.R
 
 /** Genre Drawable Res ***/
+@Keep
 enum class GenreType(
     val id: String,
     val genreName: String,

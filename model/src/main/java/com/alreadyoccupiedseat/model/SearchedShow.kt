@@ -1,5 +1,8 @@
 package com.alreadyoccupiedseat.model
 
+import androidx.annotation.Keep
+
+@Keep
 data class SearchedShow(
     val endAt: String,
     val id: String,

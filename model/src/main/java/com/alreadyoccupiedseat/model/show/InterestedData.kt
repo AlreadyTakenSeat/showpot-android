@@ -1,5 +1,8 @@
 package com.alreadyoccupiedseat.model.show
 
+import androidx.annotation.Keep
+
+@Keep
 data class InterestedData (
     val id: String,
     val title: String,

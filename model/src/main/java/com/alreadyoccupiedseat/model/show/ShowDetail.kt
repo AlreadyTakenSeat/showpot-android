@@ -1,8 +1,9 @@
 package com.alreadyoccupiedseat.model.show
 
+import androidx.annotation.Keep
 import com.alreadyoccupiedseat.model.Artist
 import com.alreadyoccupiedseat.model.Genre
-
+@Keep
 data class ShowDetail(
     val artists: List<Artist>,
     val endDate: String,
