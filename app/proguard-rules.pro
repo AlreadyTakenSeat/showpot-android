@@ -27,3 +27,7 @@
 -dontwarn org.bouncycastle.jsse.**
 -dontwarn org.conscrypt.*
 -dontwarn org.openjsse.**
+
+-keep class com.kakao.sdk.**.model.* { <fields>; }
+-keep class com.google.android.gms.** { *; }
+-keepattributes *Annotation*
