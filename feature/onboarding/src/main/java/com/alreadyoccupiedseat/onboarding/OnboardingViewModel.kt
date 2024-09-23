@@ -18,15 +18,15 @@ class OnboardingViewModel @Inject constructor(
     private val onboardingDataStore: OnboardingDataStore
 ) : ViewModel() {
 
+    private var _event = MutableSharedFlow<OnboardingScreenEvent>()
+    val event = _event
+
     init {
         viewModelScope.launch {
             val isOnboardingFinished = isOnboardingFinished()
             _event.emit(if (isOnboardingFinished) OnboardingScreenEvent.OnboardingCompleted else OnboardingScreenEvent.Idle)
         }
     }
-
-    private var _event = MutableSharedFlow<OnboardingScreenEvent>()
-    val event = _event
 
     fun completeOnboarding() {
         viewModelScope.launch {
