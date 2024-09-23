@@ -32,7 +32,7 @@ class NetworkModule {
                     .writeTimeout(30, TimeUnit.SECONDS)
                     .addInterceptor(
                         HttpLoggingInterceptor().apply {
-                            level = HttpLoggingInterceptor.Level.BODY
+                            level = HttpLoggingInterceptor.Level.BASIC
                         }
                     )
                     .addInterceptor(AuthInterceptor(accessDataStore))
