@@ -1,5 +1,8 @@
 package com.alreadyoccupiedseat.model.temp
 
+import androidx.annotation.Keep
+
+@Keep
 data class AlertReservedShow(
     val cursorId: String,
     val cursorValue: String,
