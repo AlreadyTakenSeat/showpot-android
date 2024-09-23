@@ -127,12 +127,4 @@ class HomeViewModel@Inject constructor(
         }
     }
 
-    fun refreshTokens() {
-        viewModelScope.launch {
-            accountDataStore.getRefreshToken()?.let {
-                loginRepository.reIssueToken()
-            }
-        }
-    }
-
 }

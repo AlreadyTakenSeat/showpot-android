@@ -26,6 +26,7 @@ data class MainActivityState(
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
     private val onboardingDataStore: OnboardingDataStore,
+    val reIssueTokenUseCase: ReIssueTokenUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(MainActivityState())

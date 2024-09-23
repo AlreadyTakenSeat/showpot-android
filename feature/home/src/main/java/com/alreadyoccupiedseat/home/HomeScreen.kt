@@ -64,7 +64,6 @@ fun HomeScreen(
     LaunchedEffect(true) {
         viewModel.getUbSubscribedArtists()
         viewModel.getNickName()
-        viewModel.refreshTokens()
     }
 
     HomeScreenContent(
