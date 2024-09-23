@@ -4,7 +4,6 @@ import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.datastore.AccountDataStore
 import com.alreadyoccupiedseat.model.login.LoginRequest
 import com.alreadyoccupiedseat.model.login.ProfileResponse
-import com.alreadyoccupiedseat.model.login.TokenReIssueRequest
 import com.alreadyoccupiedseat.network.LoginService
 import javax.inject.Inject
 
@@ -33,6 +32,8 @@ class RemoteLoginDataSourceImpl @Inject constructor(
 
             val refreshToken = accountDataStore.getRefreshToken()
                 ?: return Result.failure(Exception("Refresh token is null"))
+
+            if (refreshToken.isEmpty()) return Result.failure(Exception("Refresh token is empty"))
 
             val result = loginService.reIssueToken(
                 refreshToken
