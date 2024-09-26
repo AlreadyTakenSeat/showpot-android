@@ -16,8 +16,7 @@ interface ArtistService {
 
     @GET("api/v1/artists/search")
     suspend fun searchArtists(
-        @Query("sortedStandard") sortedStandard: String? = null,
-        @Query("cursor") cursor: String? = null,
+        @Query("cursorId") cursorId: Int?,
         @Query("size") size: Int,
         @Query("search") search: String,
     ): Response<PagingData<SubscribedArtist>>
@@ -28,7 +27,7 @@ interface ArtistService {
         @Query("artistGenderApiTypes") artistGenderApiTypes: List<String>? = null,
         @Query("artistApiTypes") artistApiTypes: List<String>? = null,
         @Query("genreIds") genreIds: List<String>? = null,
-        @Query("cursor") cursor: String? = null,
+        @Query("cursorId") cursorId: Int?,
         @Query("size") size: Int,
     ): Response<PagingData<Artist>>
 
@@ -36,7 +35,7 @@ interface ArtistService {
     @GET("api/v1/artists/subscriptions")
     suspend fun getSubscribedArtists(
         @Query("sort") sort: String? = null,
-        @Query("cursor") cursor: String? = null,
+        @Query("cursorId") cursorId: Int?,
         @Query("size") size: Int,
     ): Response<PagingData<Artist>>
 

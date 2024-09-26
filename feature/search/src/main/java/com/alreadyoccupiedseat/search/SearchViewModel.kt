@@ -169,7 +169,7 @@ class SearchViewModel @Inject constructor(
     private fun searchArtists() {
         viewModelScope.launch {
             val searchedArtists = artistRepository.searchArtists(
-                size = 100,
+                size = 30,
                 search = _state.value.inputText,
             )
 
@@ -180,7 +180,7 @@ class SearchViewModel @Inject constructor(
     private fun searchShows() {
         viewModelScope.launch {
             val searchedShows = showRepository.searchShows(
-                size = 100,
+                size = 30,
                 search = _state.value.inputText,
             )
 

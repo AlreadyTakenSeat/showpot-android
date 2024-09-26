@@ -66,7 +66,7 @@ fun SearchedSection(
 
                 ShowPotEnglishText_H1(
                     modifier = Modifier.fillMaxWidth(),
-                    text = unSubscribeTargetArtist?.englishName ?: String.EMPTY,
+                    text = unSubscribeTargetArtist?.name ?: String.EMPTY,
                     color = Color.White
                 )
 
@@ -150,7 +150,7 @@ fun SearchedSection(
                 item {
                     ShowPotArtistAlarm(
                         imageUrl = artist.imageURL,
-                        text = artist.englishName,
+                        text = artist.name,
                         isSubscribed = artist.isSubscribed,
                     ) {
                         if (isLoggedIn) {
@@ -158,6 +158,7 @@ fun SearchedSection(
                                 onUnSubscribeTargetArtistChanged(artist)
                                 onArtistUnSubscriptionSheetVisibilityChanged(true)
                             } else {
+                                // TODO: current it's null
                                 onSubscribeArtist(artist.id)
                             }
                         } else {

@@ -11,14 +11,12 @@ class ArtistDataSourceImpl @Inject constructor(
     private val artistService: ArtistService
 ) : ArtistDataSource {
     override suspend fun searchArtists(
-        sortedStandard: String?,
-        cursor: String?,
+        cursorId: Int?,
         size: Int,
         search: String,
     ): List<SubscribedArtist> {
         return artistService.searchArtists(
-            sortedStandard,
-            cursor,
+            cursorId,
             size,
             search,
         ).body()?.data ?: emptyList()
@@ -29,7 +27,7 @@ class ArtistDataSourceImpl @Inject constructor(
         artistGenderApiTypes: List<String>?,
         artistApiTypes: List<String>?,
         genreIds: List<String>?,
-        cursor: String?,
+        cursorId: Int?,
         size: Int,
     ): List<Artist> {
         return artistService.getUnsubscribedArtists(
@@ -37,19 +35,19 @@ class ArtistDataSourceImpl @Inject constructor(
             artistGenderApiTypes,
             artistApiTypes,
             genreIds,
-            cursor,
+            cursorId,
             size,
         ).body()?.data ?: emptyList()
     }
 
     override suspend fun getSubscribedArtists(
         sort: String?,
-        cursor: String?,
+        cursorId: Int?,
         size: Int
     ): List<Artist> {
         return artistService.getSubscribedArtists(
             sort,
-            cursor,
+            cursorId,
             size,
         ).body()?.data ?: emptyList()
     }
