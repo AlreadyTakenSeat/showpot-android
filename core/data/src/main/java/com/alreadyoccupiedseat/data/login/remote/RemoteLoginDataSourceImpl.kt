@@ -35,12 +35,18 @@ class RemoteLoginDataSourceImpl @Inject constructor(
 
             if (refreshToken.isEmpty()) return Result.failure(Exception("Refresh token is empty"))
 
-            val result = loginService.reIssueToken(
+            val refreshResult = loginService.reIssueToken(
                 refreshToken
-            ).body()
+            )
 
-            accountDataStore.updateAccessToken(result?.accessToken ?: String.EMPTY)
-            accountDataStore.updateRefreshToken(result?.refreshToken ?: String.EMPTY)
+            if (refreshResult.isSuccessful.not()) {
+                return Result.failure(Exception("Refresh token failed on Server"))
+            }
+
+            val result = refreshResult.body() ?: return Result.failure(Exception("Received refresh token body is null"))
+
+            accountDataStore.updateAccessToken(result.accessToken)
+            accountDataStore.updateRefreshToken(result.refreshToken)
         }
     }
 
