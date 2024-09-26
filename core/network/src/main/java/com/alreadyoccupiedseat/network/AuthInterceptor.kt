@@ -31,6 +31,10 @@ class AuthInterceptor @Inject constructor(
 
     override suspend fun interceptSuspend(chain: Interceptor.Chain): Response {
 
+        if (chain.request().headers["Refresh"] != null) {
+            return chain.proceed(chain.request().newBuilder().build())
+        }
+
         val accessToken = dataStore.getAccessToken()
 
         val token = if (accessToken != null) "Bearer $accessToken"

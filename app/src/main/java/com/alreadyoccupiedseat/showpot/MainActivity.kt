@@ -1,6 +1,5 @@
 package com.alreadyoccupiedseat.showpot
 
-import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -10,8 +9,12 @@ import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import com.alreadyoccupiedseat.designsystem.ShowPotTheme
 import com.alreadyoccupiedseat.onboarding.OnboardingScreen
 import com.alreadyoccupiedseat.showpot.ui.AppScreen
@@ -35,6 +38,20 @@ class MainActivity : ComponentActivity() {
                 val viewModel = hiltViewModel<MainActivityViewModel>()
                 val state = viewModel.state.collectAsState()
 
+                val lifecycleOwner = LocalLifecycleOwner.current
+                val lifecycleState by lifecycleOwner.lifecycle.currentStateFlow.collectAsState()
+
+                LaunchedEffect(lifecycleState) {
+                    when (lifecycleState) {
+                        Lifecycle.State.DESTROYED -> {}
+                        Lifecycle.State.INITIALIZED -> {}
+                        Lifecycle.State.CREATED -> {}
+                        Lifecycle.State.STARTED -> {}
+                        Lifecycle.State.RESUMED -> {
+                            viewModel.reIssueTokenUseCase()
+                        }
+                    }
+                }
 
                 when (state.value.isOnboardingCompleted) {
 
