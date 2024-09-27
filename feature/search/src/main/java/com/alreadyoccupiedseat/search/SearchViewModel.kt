@@ -1,7 +1,6 @@
 package com.alreadyoccupiedseat.search
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.data.artist.ArtistRepository
 import com.alreadyoccupiedseat.data.show.ShowRepository
@@ -10,9 +9,9 @@ import com.alreadyoccupiedseat.datastore.SearchHistoryDataStore
 import com.alreadyoccupiedseat.model.SearchedShow
 import com.alreadyoccupiedseat.model.SubscribedArtist
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
+import org.orbitmvi.orbit.Container
+import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 sealed interface SearchScreenEvent {
@@ -42,98 +41,114 @@ class SearchViewModel @Inject constructor(
     private val artistRepository: ArtistRepository,
     private val showRepository: ShowRepository,
     private val accountDataStore: AccountDataStore
-) : ViewModel() {
+) : ViewModel(), ContainerHost<SearchScreenState, SearchScreenEvent> {
 
-    private var _state = MutableStateFlow<SearchScreenState>(SearchScreenState())
-    val state = _state
-
-    private var _event = MutableSharedFlow<SearchScreenEvent>()
-    val event = _event
+    override val container: Container<SearchScreenState, SearchScreenEvent> =
+        container(SearchScreenState())
 
     init {
-        viewModelScope.launch {
+
+        intent {
             val searchHistory = searchHistoryDataStore.getSearchedKeyword()
-            _state.value = _state.value.copy(searchHistory = searchHistory.reversed())
+            reduce {
+                state.copy(searchHistory = searchHistory.reversed())
+            }
         }
 
-        viewModelScope.launch {
+        intent {
             accountDataStore.getAccessTokenFlow().collect {
-                _state.value = _state.value.copy(isLoggedIn = it?.isNotEmpty() ?: false)
+                reduce {
+                    state.copy(isLoggedIn = it?.isNotEmpty() ?: false)
+                }
             }
         }
     }
 
-    fun updateInputText(inputText: String) {
-        _state.value = _state.value.copy(inputText = inputText)
-    }
-
-    private fun stateChangeToSearched() {
-        _state.value = _state.value.copy(
-            inputText = _state.value.inputText,
-            isSearchedScreen = true
-        )
-    }
-
-    fun stateChangeToNotSearched() {
-        _state.value = _state.value.copy(isSearchedScreen = false)
-    }
-
-    fun updateSearchHistories() {
-        viewModelScope.launch {
-            val newKeyword = _state.value.inputText
-            val updatedSearchHistory = searchHistoryDataStore.updateSearchedKeyword(newKeyword)
-            _state.value = _state.value.copy(searchHistory = updatedSearchHistory.reversed())
+    fun updateInputText(inputText: String) = intent {
+        reduce {
+            state.copy(inputText = inputText)
         }
     }
 
-    fun deleteSearchHistory(targetKeyword: String) {
-        viewModelScope.launch {
-            val updatedSearchHistory =
-                searchHistoryDataStore.deleteSearchedKeyword(targetKeyword)
-            _state.value = _state.value.copy(searchHistory = updatedSearchHistory.reversed())
+    private fun stateChangeToSearched() = intent {
+        reduce {
+            state.copy(
+                inputText = state.inputText,
+                isSearchedScreen = true
+            )
         }
     }
 
-    fun deleteAllSearchHistory() {
-        viewModelScope.launch {
-            val updatedSearchHistory = searchHistoryDataStore.initSearchedKeyword()
-            _state.value = _state.value.copy(searchHistory = updatedSearchHistory.reversed())
+    fun stateChangeToNotSearched() = intent {
+        reduce {
+            state.copy(
+                isSearchedScreen = false,
+                searchedArtists = emptyList(),
+                searchedShows = emptyList()
+            )
         }
     }
 
-    fun changeArtistUnSubscriptionSheetVisibility(isVisible: Boolean) {
-        _state.value = _state.value.copy(
-            isArtistUnSubscriptionSheetVisible = isVisible
-        )
-    }
-
-    fun changeLoginSheetVisibility(isVisible: Boolean) {
-        _state.value = _state.value.copy(
-            isLoginSheetVisible = isVisible
-        )
-    }
-
-    fun changeUnSubscribeTargetArtist(subscribedArtist: SubscribedArtist) {
-        _state.value = _state.value.copy(
-            unSubscribeTargetArtist = subscribedArtist
-        )
-    }
-
-    fun searchArtistsAndShows() {
-
-        viewModelScope.launch {
-            searchArtists()
-            searchShows()
-            stateChangeToSearched()
+    fun updateSearchHistories() = intent {
+        val newKeyword = state.inputText
+        val updatedSearchHistory = searchHistoryDataStore.updateSearchedKeyword(newKeyword)
+        reduce {
+            state.copy(searchHistory = updatedSearchHistory.reversed())
         }
     }
 
-    fun subscribeArtist(artistId: String) {
-        viewModelScope.launch {
-            val result = artistRepository.subscribeArtists(listOf(artistId))
+    fun deleteSearchHistory(targetKeyword: String) = intent {
+        val updatedSearchHistory =
+            searchHistoryDataStore.deleteSearchedKeyword(targetKeyword)
+        reduce {
+            state.copy(searchHistory = updatedSearchHistory.reversed())
+        }
+    }
 
-            _state.value = _state.value.copy(
-                searchedArtists = _state.value.searchedArtists.map {
+    fun deleteAllSearchHistory() = intent {
+        val updatedSearchHistory = searchHistoryDataStore.initSearchedKeyword()
+        reduce {
+            state.copy(searchHistory = updatedSearchHistory.reversed())
+        }
+    }
+
+    fun changeArtistUnSubscriptionSheetVisibility(isVisible: Boolean) = intent {
+        reduce {
+            state.copy(
+                isArtistUnSubscriptionSheetVisible = isVisible
+            )
+        }
+    }
+
+    fun changeLoginSheetVisibility(isVisible: Boolean) = intent {
+        reduce {
+            state.copy(
+                isLoginSheetVisible = isVisible
+            )
+        }
+    }
+
+    fun changeUnSubscribeTargetArtist(subscribedArtist: SubscribedArtist) = intent {
+        reduce {
+            state.copy(
+                unSubscribeTargetArtist = subscribedArtist
+            )
+        }
+    }
+
+    fun searchArtistsAndShows() = intent {
+        searchArtists()
+        searchShows()
+        stateChangeToSearched()
+    }
+
+    fun subscribeArtist(artistId: String) = intent {
+
+        val result = artistRepository.subscribeArtists(listOf(artistId))
+
+        reduce {
+            state.copy(
+                searchedArtists = state.searchedArtists.map {
                     if (it.id == result.first()) {
                         it.copy(isSubscribed = true)
                     } else {
@@ -141,18 +156,20 @@ class SearchViewModel @Inject constructor(
                     }
                 }
             )
-
-            _event.emit(SearchScreenEvent.SubscribeArtistSuccess)
         }
+
+        postSideEffect(SearchScreenEvent.SubscribeArtistSuccess)
     }
 
-    fun unSubscribeArtist() {
-        viewModelScope.launch {
-            state.value.unSubscribeTargetArtist?.let { targetArtist ->
-                val result = artistRepository.unSubscribeArtists(listOf(targetArtist.id))
+    fun unSubscribeArtist() = intent {
 
-                _state.value = _state.value.copy(
-                    searchedArtists = _state.value.searchedArtists.map {
+        state.unSubscribeTargetArtist?.let { targetArtist ->
+
+            val result = artistRepository.unSubscribeArtists(listOf(targetArtist.id))
+
+            reduce {
+                state.copy(
+                    searchedArtists = state.searchedArtists.map {
                         if (it.id == result.first()) {
                             it.copy(isSubscribed = false)
                         } else {
@@ -160,31 +177,33 @@ class SearchViewModel @Inject constructor(
                         }
                     }
                 )
-
-                _event.emit(SearchScreenEvent.UnSubscribeArtistSuccess)
             }
+
+            postSideEffect(SearchScreenEvent.UnSubscribeArtistSuccess)
+        }
+
+    }
+
+    private fun searchArtists() = intent {
+
+        val searchedArtists = artistRepository.searchArtists(
+            size = 30,
+            search = state.inputText,
+        )
+
+        reduce {
+            state.copy(searchedArtists = searchedArtists)
         }
     }
 
-    private fun searchArtists() {
-        viewModelScope.launch {
-            val searchedArtists = artistRepository.searchArtists(
-                size = 30,
-                search = _state.value.inputText,
-            )
+    private fun searchShows() = intent {
 
-            _state.value = _state.value.copy(searchedArtists = searchedArtists)
-        }
-    }
-
-    private fun searchShows() {
-        viewModelScope.launch {
-            val searchedShows = showRepository.searchShows(
-                size = 30,
-                search = _state.value.inputText,
-            )
-
-            _state.value = _state.value.copy(searchedShows = searchedShows)
+        val searchedShows = showRepository.searchShows(
+            size = 30,
+            search = state.inputText,
+        )
+        reduce {
+            state.copy(searchedShows = searchedShows)
         }
     }
 }

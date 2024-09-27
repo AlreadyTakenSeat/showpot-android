@@ -16,7 +16,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -33,9 +33,10 @@ import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotSearchBar
 import com.alreadyoccupiedseat.designsystem.component.snackbar.CheckIconSnackbar
-import com.alreadyoccupiedseat.designsystem.component.snackbar.ShowPotSnackbar
 import com.alreadyoccupiedseat.model.SubscribedArtist
 import kotlinx.coroutines.launch
+import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun SearchScreen(
@@ -46,31 +47,29 @@ fun SearchScreen(
 ) {
 
     val viewModel = hiltViewModel<SearchViewModel>()
-    val state = viewModel.state.collectAsState()
+    val state by viewModel.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(true) {
-        viewModel.event.collect {
-            when (it) {
-                is SearchScreenEvent.Idle -> {
+    viewModel.collectSideEffect {
+        when (it) {
+            is SearchScreenEvent.Idle -> {
 
-                }
+            }
 
-                is SearchScreenEvent.SubscribeArtistSuccess -> {
-                    snackbarHostState.showSnackbar("구독 설정이 완료되었습니다")
-                }
+            is SearchScreenEvent.SubscribeArtistSuccess -> {
+                snackbarHostState.showSnackbar("구독 설정이 완료되었습니다")
+            }
 
-                is SearchScreenEvent.UnSubscribeArtistSuccess -> {
-                    snackbarHostState.showSnackbar("구독 해제가 완료되었습니다")
-                }
+            is SearchScreenEvent.UnSubscribeArtistSuccess -> {
+                snackbarHostState.showSnackbar("구독 해제가 완료되었습니다")
             }
         }
     }
     SearchScreenContent(
-        state = state.value,
+        state = state,
         snackbarHostState = snackbarHostState,
         onBackButtonClicked = {
-            if (state.value.isSearchedScreen) {
+            if (state.isSearchedScreen) {
                 viewModel.stateChangeToNotSearched()
             } else {
                 navController.popBackStack()
