@@ -9,7 +9,7 @@ coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
-lifecycleRuntimeKtx = "2.8.0"
+lifecycleRuntimeKtx = "2.8.6"
 activityCompose = "1.9.0"
 hilt = "2.51.1"
 hiltNavigationCompose = "1.2.0"
@@ -38,6 +38,7 @@ navigationCompose = "2.7.7"
 retrofit = "2.11.0"
 okhttp = "4.10.0"
 kakao = "2.20.3"
+orbit = "9.0.0"
 ##
 androidx-annotation = "1.5.0"
 
@@ -122,6 +123,10 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 
 # Kakao
 kakao = { group = "com.kakao.sdk", name = "v2-all", version.ref = "kakao" }
+
+# Orbit
+orbit-viewmodel = { group = "org.orbit-mvi", name = "orbit-viewmodel", version.ref = "orbit" }
+orbit-compose = { group = "org.orbit-mvi", name = "orbit-compose", version.ref = "orbit" }
 
 
 [bundles]
