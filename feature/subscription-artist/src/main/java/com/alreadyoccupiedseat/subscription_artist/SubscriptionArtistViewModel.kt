@@ -87,7 +87,7 @@ class SubscriptionArtistViewModel @Inject constructor(
     private fun getUnsubscribedArtists() {
         viewModelScope.launch {
             val result = artistRepository.getUnsubscribedArtists(
-                size = 100,
+                size = 30,
             )
 
             _state.value = _state.value.copy(

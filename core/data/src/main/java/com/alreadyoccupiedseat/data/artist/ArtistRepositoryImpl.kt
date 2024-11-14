@@ -9,14 +9,12 @@ class ArtistRepositoryImpl @Inject constructor(
 ) : ArtistRepository {
 
     override suspend fun searchArtists(
-        sortedStandard: String?,
-        cursor: String?,
+        cursorId: Int?,
         size: Int,
         search: String,
     ): List<SubscribedArtist> {
         return artistDataSource.searchArtists(
-            sortedStandard,
-            cursor,
+            cursorId,
             size,
             search,
         )
@@ -27,7 +25,7 @@ class ArtistRepositoryImpl @Inject constructor(
         artistGenderApiTypes: List<String>?,
         artistApiTypes: List<String>?,
         genreIds: List<String>?,
-        cursor: String?,
+        cursorId: Int?,
         size: Int,
     ): List<Artist> {
         return artistDataSource.getUnsubscribedArtists(
@@ -35,19 +33,19 @@ class ArtistRepositoryImpl @Inject constructor(
             artistGenderApiTypes,
             artistApiTypes,
             genreIds,
-            cursor,
+            cursorId,
             size,
         )
     }
 
     override suspend fun getSubscribedArtists(
         sort: String?,
-        cursor: String?,
+        cursorId: Int?,
         size: Int
     ): List<Artist> {
         return artistDataSource.getSubscribedArtists(
             sort,
-            cursor,
+            cursorId,
             size,
         )
     }

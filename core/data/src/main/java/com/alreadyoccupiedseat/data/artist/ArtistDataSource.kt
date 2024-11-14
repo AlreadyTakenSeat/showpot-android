@@ -6,8 +6,7 @@ import com.alreadyoccupiedseat.model.SubscribedArtist
 interface ArtistDataSource {
 
     suspend fun searchArtists(
-        sortedStandard: String? = null,
-        cursor: String? = null,
+        cursorId: Int?,
         size: Int,
         search: String,
     ): List<SubscribedArtist>
@@ -17,13 +16,13 @@ interface ArtistDataSource {
         artistGenderApiTypes: List<String>? = null,
         artistApiTypes: List<String>? = null,
         genreIds: List<String>? = null,
-        cursor: String? = null,
+        cursorId: Int?,
         size: Int,
     ): List<Artist>
 
     suspend fun getSubscribedArtists(
         sort: String? = null,
-        cursor: String? = null,
+        cursorId: Int?,
         size: Int,
     ): List<Artist>
 
