@@ -1,5 +1,6 @@
 package com.alreadyoccupiedseat.network
 
+import com.alreadyoccupiedseat.model.ApiResult
 import com.alreadyoccupiedseat.model.Artist
 import com.alreadyoccupiedseat.model.PagingData
 import com.alreadyoccupiedseat.model.SubscribedArtist
@@ -19,7 +20,7 @@ interface ArtistService {
         @Query("cursorId") cursorId: Int?,
         @Query("size") size: Int,
         @Query("search") search: String,
-    ): Response<PagingData<SubscribedArtist>>
+    ): Response<ApiResult<PagingData<SubscribedArtist>>>
 
     @GET("api/v1/artists/unsubscriptions")
     suspend fun getUnsubscribedArtists(
@@ -29,7 +30,7 @@ interface ArtistService {
         @Query("genreIds") genreIds: List<String>? = null,
         @Query("cursorId") cursorId: Int?,
         @Query("size") size: Int,
-    ): Response<PagingData<Artist>>
+    ): Response<ApiResult<PagingData<Artist>>>
 
     // TODO: Make sort to enum class
     @GET("api/v1/artists/subscriptions")
@@ -37,17 +38,17 @@ interface ArtistService {
         @Query("sort") sort: String? = null,
         @Query("cursorId") cursorId: Int?,
         @Query("size") size: Int,
-    ): Response<PagingData<Artist>>
+    ): Response<ApiResult<PagingData<Artist>>>
 
 
     @POST("api/v1/artists/subscribe")
     suspend fun subscribeArtists(
         @Body artistIds: SubscribeArtistsRequest,
-    ): Response<SubscribeArtistsResponse>
+    ): Response<ApiResult<SubscribeArtistsResponse>>
 
     // TODO: check request and response model's name
     @POST("api/v1/artists/unsubscribe")
     suspend fun unSubscribeArtists(
         @Body artistIds: SubscribeArtistsRequest,
-    ): Response<UnSubscribeArtistsResponse>
+    ): Response<ApiResult<UnSubscribeArtistsResponse>>
 }

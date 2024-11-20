@@ -19,7 +19,7 @@ class ArtistDataSourceImpl @Inject constructor(
             cursorId,
             size,
             search,
-        ).body()?.data ?: emptyList()
+        ).body()?.data?.data ?: emptyList()
     }
 
     override suspend fun getUnsubscribedArtists(
@@ -37,7 +37,7 @@ class ArtistDataSourceImpl @Inject constructor(
             genreIds,
             cursorId,
             size,
-        ).body()?.data ?: emptyList()
+        ).body()?.data?.data ?: emptyList()
     }
 
     override suspend fun getSubscribedArtists(
@@ -49,16 +49,16 @@ class ArtistDataSourceImpl @Inject constructor(
             sort,
             cursorId,
             size,
-        ).body()?.data ?: emptyList()
+        ).body()?.data?.data ?: emptyList()
     }
 
     override suspend fun subscribeArtists(artistIds: List<String>): List<String> {
         return artistService.subscribeArtists(SubscribeArtistsRequest(artistIds))
-            .body()?.successSubscriptionArtistIds ?: emptyList()
+            .body()?.data?.successSubscriptionArtistIds ?: emptyList()
     }
 
     override suspend fun unSubscribeArtists(artistIds: List<String>): List<String> {
         return artistService.unSubscribeArtists(SubscribeArtistsRequest(artistIds))
-            .body()?.successUnsubscriptionArtistIds ?: emptyList()
+            .body()?.data?.successUnsubscriptionArtistIds ?: emptyList()
     }
 }

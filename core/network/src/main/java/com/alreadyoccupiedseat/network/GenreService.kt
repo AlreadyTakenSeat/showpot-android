@@ -1,5 +1,6 @@
 package com.alreadyoccupiedseat.network
 
+import com.alreadyoccupiedseat.model.ApiResult
 import com.alreadyoccupiedseat.model.Genre
 import com.alreadyoccupiedseat.model.PagingData
 import com.alreadyoccupiedseat.model.genre.SubscribeGenreRequest
@@ -14,16 +15,16 @@ interface GenreService {
     @GET("/api/v1/genres")
     suspend fun getGenres(
         @Query("size") size: Int = 20
-    ): Response<PagingData<Genre>>
+    ): Response<ApiResult<PagingData<Genre>>>
 
     @POST("/api/v1/genres/unsubscribe")
     suspend fun unsubscribeGenres(
         @Body genreIds: SubscribeGenreRequest
-    ): Response<SubscribeGenreResponse>
+    ): Response<ApiResult<SubscribeGenreResponse>>
 
     @POST("/api/v1/genres/subscribe")
     suspend fun subscribeGenres(
         @Body genreIds: SubscribeGenreRequest
-    ): Response<SubscribeGenreResponse>
+    ): Response<ApiResult<SubscribeGenreResponse>>
 
 }
