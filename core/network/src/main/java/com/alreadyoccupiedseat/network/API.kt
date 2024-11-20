@@ -2,6 +2,6 @@ package com.alreadyoccupiedseat.network
 
 object API {
 
-    const val BASE_URL = "https://api-dev.showpot.org/"
+    const val BASE_URL = "https://dev.showpot.net/"
 
 }
