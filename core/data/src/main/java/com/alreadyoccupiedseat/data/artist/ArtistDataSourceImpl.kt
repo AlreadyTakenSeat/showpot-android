@@ -1,5 +1,6 @@
 package com.alreadyoccupiedseat.data.artist
 
+import com.alreadyoccupiedseat.data.getResult
 import com.alreadyoccupiedseat.model.Artist
 import com.alreadyoccupiedseat.model.SubscribedArtist
 import com.alreadyoccupiedseat.model.artist.SubscribeArtistsRequest
@@ -14,12 +15,17 @@ class ArtistDataSourceImpl @Inject constructor(
         cursorId: Int?,
         size: Int,
         search: String,
-    ): List<SubscribedArtist> {
-        return artistService.searchArtists(
-            cursorId,
-            size,
-            search,
-        ).body()?.data?.data ?: emptyList()
+    ): Result<List<SubscribedArtist>> {
+
+        return runCatching {
+            artistService.searchArtists(
+                cursorId,
+                size,
+                search,
+            ).getResult {
+                it.data.data
+            }
+        }
     }
 
     override suspend fun getUnsubscribedArtists(
