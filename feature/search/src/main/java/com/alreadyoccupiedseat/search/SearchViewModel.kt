@@ -151,11 +151,11 @@ class SearchViewModel @Inject constructor(
 
         reduce {
             state.copy(
-                searchedArtists = state.searchedArtists.map {
-                    if (it.id == result.first()) {
-                        it.copy(isSubscribed = true)
+                searchedArtists = state.searchedArtists.map {subscribedArtist ->
+                    if (subscribedArtist.artistSpotifyId == result.first()) {
+                        subscribedArtist.copy(isSubscribed = true)
                     } else {
-                        it
+                        subscribedArtist
                     }
                 }
             )

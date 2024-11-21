@@ -159,7 +159,7 @@ fun SearchedSection(
                                 onArtistUnSubscriptionSheetVisibilityChanged(true)
                             } else {
                                 // TODO: current it's null
-                                onSubscribeArtist(artist.id)
+                                onSubscribeArtist(artist.artistSpotifyId)
                             }
                         } else {
                             onLoginSheetVisibilityChanged(true)
@@ -169,37 +169,39 @@ fun SearchedSection(
             }
         }
 
-        Box(
-            modifier = Modifier.padding(horizontal = 16.dp)
-                .padding(top = 36.dp)
-                .fillMaxWidth(),
-            contentAlignment = Alignment.CenterStart,
-        ) {
-            ShowPotKoreanText_H2(
-                modifier = Modifier.padding(vertical = 8.dp),
-                text = stringResource(R.string.show_information), color = ShowpotColor.Gray100
-            )
-        }
+        if (searchedShows.isNotEmpty()) {
+            Box(
+                modifier = Modifier.padding(horizontal = 16.dp)
+                    .padding(top = 36.dp)
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.CenterStart,
+            ) {
+                ShowPotKoreanText_H2(
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    text = stringResource(R.string.show_information), color = ShowpotColor.Gray100
+                )
+            }
 
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            item { Spacer(modifier = Modifier.height(6.dp)) }
-            searchedShows.forEach { show ->
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                item { Spacer(modifier = Modifier.height(6.dp)) }
+                searchedShows.forEach { show ->
 
-                item {
-                    ShowInfo(
-                        modifier = Modifier.padding(horizontal = 16.dp)
-                            .clickable {
-                                onShowClicked(show.id)
-                            },
-                        imageUrl = show.imageURL,
-                        show.title,
-                        show.startAt.replace("-", "."),
-                        show.location
-                    )
+                    item {
+                        ShowInfo(
+                            modifier = Modifier.padding(horizontal = 16.dp)
+                                .clickable {
+                                    onShowClicked(show.id)
+                                },
+                            imageUrl = show.imageURL,
+                            show.title,
+                            show.startAt.replace("-", "."),
+                            show.location
+                        )
+                    }
+
                 }
-
             }
         }
 
