@@ -29,7 +29,7 @@ class ShowDataSourceImpl @Inject constructor(
             sort = sort,
             onlyOpenSchedule = onlyOpenSchedule,
             size = size
-        ).body()?.data ?: emptyList()
+        ).body()?.data?.data ?: emptyList()
     }
 
     override suspend fun searchShows(
@@ -41,25 +41,25 @@ class ShowDataSourceImpl @Inject constructor(
             cursorId = cursorId,
             size = size,
             search = search,
-        ).body()?.data ?: emptyList()
+        ).body()?.data?.data ?: emptyList()
     }
 
     /** 관심 공연 목록 조회 ***/
     override suspend fun getInterestedShowList(size: Int): List<InterestedData> {
-        return showService.getInterestedShowList(size).body()?.data ?: emptyList()
+        return showService.getInterestedShowList(size).body()?.data?.data ?: emptyList()
     }
 
     @SuppressLint("HardwareIds")
     override suspend fun getShowDetail(showId: String): ShowDetail {
         val viewIdentifier =
             Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
-        return showService.getShowDetail(showId, viewIdentifier).body()
+        return showService.getShowDetail(showId, viewIdentifier).body()?.data
             ?: throw Exception("Show not found")
     }
 
     /** 관심 공연 등록, 취소 ***/
     override suspend fun registerShowInterest(showId: String): Boolean {
-        return showService.registerShowInterest(showId).body()?.hasInterest ?: false
+        return showService.registerShowInterest(showId).body()?.data?.hasInterest ?: false
     }
 
     override suspend fun registerTicketingAlert(
@@ -80,13 +80,13 @@ class ShowDataSourceImpl @Inject constructor(
         showId: String,
         ticketingApiType: String
     ): CheckAlertReservationResponse {
-        return showService.checkAlertReservation(showId, ticketingApiType).body()
+        return showService.checkAlertReservation(showId, ticketingApiType).body()?.data
             ?: throw Exception("Check Alert Reservation failed")
     }
 
     /** 알림 설정한 공연 목록 조회 ***/
     override suspend fun getAlertReservedShow(size: Int, type: String): List<AlertReservedShow> {
-        return showService.getAlertReservedShow(size, type).body()?.data ?: emptyList()
+        return showService.getAlertReservedShow(size, type).body()?.data?.data ?: emptyList()
     }
 
 }

@@ -12,7 +12,7 @@ class ArtistRepositoryImpl @Inject constructor(
         cursorId: Int?,
         size: Int,
         search: String,
-    ): List<SubscribedArtist> {
+    ): Result<List<SubscribedArtist>> {
         return artistDataSource.searchArtists(
             cursorId,
             size,

@@ -21,8 +21,8 @@ class RemoteLoginDataSourceImpl @Inject constructor(
                 )
             ).body()
 
-            accountDataStore.updateAccessToken(result?.accessToken ?: String.EMPTY)
-            accountDataStore.updateRefreshToken(result?.refreshToken ?: String.EMPTY)
+            accountDataStore.updateAccessToken(result?.data?.accessToken ?: String.EMPTY)
+            accountDataStore.updateRefreshToken(result?.data?.refreshToken ?: String.EMPTY)
         }
 
     }
@@ -43,7 +43,7 @@ class RemoteLoginDataSourceImpl @Inject constructor(
                 return Result.failure(Exception("Refresh token failed on Server"))
             }
 
-            val result = refreshResult.body() ?: return Result.failure(Exception("Received refresh token body is null"))
+            val result = refreshResult.body()?.data ?: return Result.failure(Exception("Received refresh token body is null"))
 
             accountDataStore.updateAccessToken(result.accessToken)
             accountDataStore.updateRefreshToken(result.refreshToken)
@@ -52,7 +52,7 @@ class RemoteLoginDataSourceImpl @Inject constructor(
 
     override suspend fun getProfile(): Result<ProfileResponse> {
         return runCatching {
-            loginService.getProfile().body() ?: throw Exception("Profile is null")
+            loginService.getProfile().body()?.data ?: throw Exception("Profile is null")
         }
     }
 

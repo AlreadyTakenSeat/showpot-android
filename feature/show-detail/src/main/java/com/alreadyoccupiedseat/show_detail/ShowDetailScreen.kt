@@ -95,7 +95,7 @@ fun ShowDetailScreen(
 
     LaunchedEffect(state.value.isLoggedIn) {
         if (state.value.isLoggedIn) {
-            viewModel.checkAlertAvailability(showId)
+            // viewModel.checkAlertAvailability(showId)
         }
     }
 

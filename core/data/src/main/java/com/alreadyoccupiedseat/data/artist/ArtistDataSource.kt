@@ -9,7 +9,7 @@ interface ArtistDataSource {
         cursorId: Int?,
         size: Int,
         search: String,
-    ): List<SubscribedArtist>
+    ): Result<List<SubscribedArtist>>
 
     suspend fun getUnsubscribedArtists(
         sortedStandard: String? = null,

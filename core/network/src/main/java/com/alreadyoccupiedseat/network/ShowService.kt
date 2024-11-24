@@ -1,5 +1,6 @@
 package com.alreadyoccupiedseat.network
 
+import com.alreadyoccupiedseat.model.ApiResult
 import com.alreadyoccupiedseat.model.PagingData
 import com.alreadyoccupiedseat.model.SearchedShow
 import com.alreadyoccupiedseat.model.alert.CheckAlertReservationResponse
@@ -24,47 +25,47 @@ interface ShowService {
         @Query("sort") sort: String,
         @Query("onlyOpenSchedule") onlyOpenSchedule: Boolean,
         @Query("size") size: Int,
-    ): Response<Shows>
+    ): Response<ApiResult<Shows>>
 
     @GET("api/v1/shows/interests")
     suspend fun getInterestedShowList(
         @Query("size") size: Int
-    ): Response<PagingData<InterestedData>>
+    ): Response<ApiResult<PagingData<InterestedData>>>
 
     @GET("api/v1/shows/search")
     suspend fun searchShows(
         @Query("cursorId") cursorId: String? = null,
         @Query("size") size: Int,
         @Query("search") search: String
-    ): Response<PagingData<SearchedShow>>
+    ): Response<ApiResult<PagingData<SearchedShow>>>
 
     @GET("api/v1/shows/{showId}")
     suspend fun getShowDetail(
         @Path("showId") showId: String,
-        @Header("viewIdentifier") viewIdentifier: String
-    ): Response<ShowDetail>
+        @Header("Device-Token") deviceToken: String
+    ): Response<ApiResult<ShowDetail>>
 
     @POST("api/v1/shows/{showId}/interests")
     suspend fun registerShowInterest(
         @Path("showId") showId: String
-    ): Response<RegisterInterestResponse>
+    ): Response<ApiResult<RegisterInterestResponse>>
 
     @POST("/api/v1/shows/{showId}/alert")
     suspend fun registerTicketingAlert(
         @Path("showId") showId: String,
         @Query("ticketingApiType") ticketingApiType: String,
         @Body alertTimes: TicketingAlertRequest
-    ): Response<Unit>
+    ): Response<ApiResult<Unit>>
 
     @GET("api/v1/shows/{showId}/alert/reservations")
     suspend fun checkAlertReservation(
         @Path("showId") showId: String,
         @Query("ticketingApiType") ticketingApiType: String,
-    ): Response<CheckAlertReservationResponse>
+    ): Response<ApiResult<CheckAlertReservationResponse>>
     @GET("api/v1/shows/alerts")
     suspend fun getAlertReservedShow(
         @Query("size") size: Int,
         @Query("type") type: String
-    ): Response<PagingData<AlertReservedShow>>
+    ): Response<ApiResult<PagingData<AlertReservedShow>>>
 
 }

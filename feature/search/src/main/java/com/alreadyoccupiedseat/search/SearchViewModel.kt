@@ -1,9 +1,12 @@
 package com.alreadyoccupiedseat.search
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.alreadyoccupiedseat.common.utiils.errorLog
 import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.data.artist.ArtistRepository
 import com.alreadyoccupiedseat.data.show.ShowRepository
+import com.alreadyoccupiedseat.data.toApiErrorResult
 import com.alreadyoccupiedseat.datastore.AccountDataStore
 import com.alreadyoccupiedseat.datastore.SearchHistoryDataStore
 import com.alreadyoccupiedseat.model.SearchedShow
@@ -148,11 +151,11 @@ class SearchViewModel @Inject constructor(
 
         reduce {
             state.copy(
-                searchedArtists = state.searchedArtists.map {
-                    if (it.id == result.first()) {
-                        it.copy(isSubscribed = true)
+                searchedArtists = state.searchedArtists.map {subscribedArtist ->
+                    if (subscribedArtist.artistSpotifyId == result.first()) {
+                        subscribedArtist.copy(isSubscribed = true)
                     } else {
-                        it
+                        subscribedArtist
                     }
                 }
             )
@@ -191,9 +194,14 @@ class SearchViewModel @Inject constructor(
             search = state.inputText,
         )
 
-        reduce {
-            state.copy(searchedArtists = searchedArtists)
+        searchedArtists.onSuccess { result ->
+            reduce {
+                state.copy(searchedArtists = result)
+            }
+        }.onFailure {
+            errorLog(it.toApiErrorResult())
         }
+
     }
 
     private fun searchShows() = intent {

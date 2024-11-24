@@ -1,5 +1,6 @@
 package com.alreadyoccupiedseat.network
 
+import com.alreadyoccupiedseat.model.ApiResult
 import com.alreadyoccupiedseat.model.login.LoginResponse
 import com.alreadyoccupiedseat.model.login.LoginRequest
 import com.alreadyoccupiedseat.model.login.ProfileResponse
@@ -15,17 +16,17 @@ interface LoginService {
     @POST("api/v1/users/login")
     suspend fun tryLogin(
         @Body loginRequest: LoginRequest
-    ): Response<LoginResponse>
+    ): Response<ApiResult<LoginResponse>>
 
     @POST("api/v1/users/reissue")
     suspend fun reIssueToken(
         @Header("Refresh") refreshToken: String
-    ): Response<LoginResponse>
+    ): Response<ApiResult<LoginResponse>>
 
     @GET("api/v1/users/profile")
-    suspend fun getProfile(): Response<ProfileResponse>
+    suspend fun getProfile(): Response<ApiResult<ProfileResponse>>
 
     @POST("/api/v1/users/withdrawal")
     suspend fun requestWithDraw(
-    ): Response<Unit>
+    ): Response<ApiResult<Unit>>
 }

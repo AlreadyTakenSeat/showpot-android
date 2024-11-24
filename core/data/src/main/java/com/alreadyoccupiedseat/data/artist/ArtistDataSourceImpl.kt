@@ -1,5 +1,6 @@
 package com.alreadyoccupiedseat.data.artist
 
+import com.alreadyoccupiedseat.data.getResult
 import com.alreadyoccupiedseat.model.Artist
 import com.alreadyoccupiedseat.model.SubscribedArtist
 import com.alreadyoccupiedseat.model.artist.SubscribeArtistsRequest
@@ -14,12 +15,17 @@ class ArtistDataSourceImpl @Inject constructor(
         cursorId: Int?,
         size: Int,
         search: String,
-    ): List<SubscribedArtist> {
-        return artistService.searchArtists(
-            cursorId,
-            size,
-            search,
-        ).body()?.data ?: emptyList()
+    ): Result<List<SubscribedArtist>> {
+
+        return runCatching {
+            artistService.searchArtists(
+                cursorId,
+                size,
+                search,
+            ).getResult {
+                it.data.data
+            }
+        }
     }
 
     override suspend fun getUnsubscribedArtists(
@@ -37,7 +43,7 @@ class ArtistDataSourceImpl @Inject constructor(
             genreIds,
             cursorId,
             size,
-        ).body()?.data ?: emptyList()
+        ).body()?.data?.data ?: emptyList()
     }
 
     override suspend fun getSubscribedArtists(
@@ -49,16 +55,16 @@ class ArtistDataSourceImpl @Inject constructor(
             sort,
             cursorId,
             size,
-        ).body()?.data ?: emptyList()
+        ).body()?.data?.data ?: emptyList()
     }
 
     override suspend fun subscribeArtists(artistIds: List<String>): List<String> {
         return artistService.subscribeArtists(SubscribeArtistsRequest(artistIds))
-            .body()?.successSubscriptionArtistIds ?: emptyList()
+            .body()?.data?.successSubscriptionArtistIds ?: emptyList()
     }
 
     override suspend fun unSubscribeArtists(artistIds: List<String>): List<String> {
         return artistService.unSubscribeArtists(SubscribeArtistsRequest(artistIds))
-            .body()?.successUnsubscriptionArtistIds ?: emptyList()
+            .body()?.data?.successUnsubscriptionArtistIds ?: emptyList()
     }
 }
