@@ -6,6 +6,5 @@ import androidx.annotation.Keep
 data class Artist(
     val id: String,
     val imageURL: String,
-    val koreanName: String,
-    val englishName: String,
+    val name: String,
 )

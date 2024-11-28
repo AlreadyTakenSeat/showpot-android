@@ -209,7 +209,7 @@ fun SubscriptionArtistScreenContent(
                     items(state.unsubscribedArtists.size) { index ->
                         val curArtist = state.unsubscribedArtists[index]
                         ShowPotArtistSubscription(
-                            text = curArtist.englishName,
+                            text = curArtist.name,
                             imageUrl = curArtist.imageURL,
                             isSelected = checkIsSelected(curArtist),
                         ) {

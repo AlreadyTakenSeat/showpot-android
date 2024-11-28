@@ -34,7 +34,7 @@ class SubscribedArtistViewModel @Inject constructor(
     fun getSubscribedArtist() {
         viewModelScope.launch {
             val result = aristRepository.getSubscribedArtists(
-                size = 100
+                size = 30
             )
             _state.value = _state.value.copy(subscribedArtists = result)
         }
