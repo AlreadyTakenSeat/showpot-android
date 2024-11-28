@@ -4,7 +4,7 @@ import androidx.annotation.Keep
 
 @Keep
 data class SubscribedArtist(
-    val id: String,
+    val id: String?,
     val imageURL: String,
     val name: String,
     val artistSpotifyId: String,

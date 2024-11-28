@@ -2,6 +2,7 @@ package com.alreadyoccupiedseat.data.artist
 
 import com.alreadyoccupiedseat.model.Artist
 import com.alreadyoccupiedseat.model.SubscribedArtist
+import com.alreadyoccupiedseat.model.artist.SubscriptionArtistId
 
 interface ArtistDataSource {
 
@@ -28,7 +29,7 @@ interface ArtistDataSource {
 
     suspend fun subscribeArtists(
         artistIds: List<String>,
-    ): List<String>
+    ): List<SubscriptionArtistId>
 
     suspend fun unSubscribeArtists(
         artistIds: List<String>,

@@ -46,7 +46,6 @@ interface ArtistService {
         @Body artistIds: SubscribeArtistsRequest,
     ): Response<ApiResult<SubscribeArtistsResponse>>
 
-    // TODO: check request and response model's name
     @POST("api/v1/artists/unsubscribe")
     suspend fun unSubscribeArtists(
         @Body artistIds: SubscribeArtistsRequest,

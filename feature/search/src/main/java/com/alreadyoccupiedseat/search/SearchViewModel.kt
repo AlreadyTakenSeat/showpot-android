@@ -151,8 +151,8 @@ class SearchViewModel @Inject constructor(
 
         reduce {
             state.copy(
-                searchedArtists = state.searchedArtists.map {subscribedArtist ->
-                    if (subscribedArtist.artistSpotifyId == result.first()) {
+                searchedArtists = state.searchedArtists.map { subscribedArtist ->
+                    if (subscribedArtist.artistSpotifyId == result.first().artistSpotifyId) {
                         subscribedArtist.copy(isSubscribed = true)
                     } else {
                         subscribedArtist
@@ -164,25 +164,29 @@ class SearchViewModel @Inject constructor(
         postSideEffect(SearchScreenEvent.SubscribeArtistSuccess)
     }
 
+    // TODO: id -> artistSpotifyId
     fun unSubscribeArtist() = intent {
 
         state.unSubscribeTargetArtist?.let { targetArtist ->
 
-            val result = artistRepository.unSubscribeArtists(listOf(targetArtist.id))
+            if (targetArtist.id != null) {
+                val result = artistRepository.unSubscribeArtists(listOf(targetArtist.id!!))
 
-            reduce {
-                state.copy(
-                    searchedArtists = state.searchedArtists.map {
-                        if (it.id == result.first()) {
-                            it.copy(isSubscribed = false)
-                        } else {
-                            it
+                reduce {
+                    state.copy(
+                        searchedArtists = state.searchedArtists.map {
+                            if (it.id == result.first()) {
+                                it.copy(isSubscribed = false)
+                            } else {
+                                it
+                            }
                         }
-                    }
-                )
+                    )
+                }
+
+                postSideEffect(SearchScreenEvent.UnSubscribeArtistSuccess)
             }
 
-            postSideEffect(SearchScreenEvent.UnSubscribeArtistSuccess)
         }
 
     }

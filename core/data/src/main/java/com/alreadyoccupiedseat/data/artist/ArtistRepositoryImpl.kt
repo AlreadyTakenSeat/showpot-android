@@ -2,6 +2,7 @@ package com.alreadyoccupiedseat.data.artist
 
 import com.alreadyoccupiedseat.model.Artist
 import com.alreadyoccupiedseat.model.SubscribedArtist
+import com.alreadyoccupiedseat.model.artist.SubscriptionArtistId
 import javax.inject.Inject
 
 class ArtistRepositoryImpl @Inject constructor(
@@ -50,7 +51,7 @@ class ArtistRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun subscribeArtists(artistIds: List<String>): List<String> {
+    override suspend fun subscribeArtists(artistIds: List<String>): List<SubscriptionArtistId> {
         return artistDataSource.subscribeArtists(artistIds)
     }
 
