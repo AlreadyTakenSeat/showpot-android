@@ -2,7 +2,7 @@ package com.alreadyoccupiedseat.data.artist
 
 import com.alreadyoccupiedseat.data.getResult
 import com.alreadyoccupiedseat.model.Artist
-import com.alreadyoccupiedseat.model.SubscribedArtist
+import com.alreadyoccupiedseat.model.SearchedArtist
 import com.alreadyoccupiedseat.model.artist.SubscribeArtistsRequest
 import com.alreadyoccupiedseat.model.artist.SubscriptionArtistId
 import com.alreadyoccupiedseat.network.ArtistService
@@ -16,7 +16,7 @@ class ArtistDataSourceImpl @Inject constructor(
         cursorId: Int?,
         size: Int,
         search: String,
-    ): Result<List<SubscribedArtist>> {
+    ): Result<List<SearchedArtist>> {
 
         return runCatching {
             artistService.searchArtists(

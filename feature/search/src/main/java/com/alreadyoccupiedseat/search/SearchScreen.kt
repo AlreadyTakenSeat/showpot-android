@@ -33,7 +33,7 @@ import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotSearchBar
 import com.alreadyoccupiedseat.designsystem.component.snackbar.CheckIconSnackbar
-import com.alreadyoccupiedseat.model.SubscribedArtist
+import com.alreadyoccupiedseat.model.SearchedArtist
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
@@ -136,7 +136,7 @@ fun SearchScreenContent(
     onDeleteAllClicked: () -> Unit = {},
     onDeleteHistoryClicked: (String) -> Unit = {},
     onchangeArtistUnSubscriptionSheetVisibility: (Boolean) -> Unit = {},
-    onChangeUnSubscribeTargetArtist: (SubscribedArtist) -> Unit = {},
+    onChangeUnSubscribeTargetArtist: (SearchedArtist) -> Unit = {},
     onchangeLoginSheetVisibility: (Boolean) -> Unit = {},
     onShowClicked: (String) -> Unit = {},
     onRequestSubscribeArtist: (String) -> Unit = {},

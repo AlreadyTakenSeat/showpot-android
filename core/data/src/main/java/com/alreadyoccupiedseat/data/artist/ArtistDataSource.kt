@@ -1,7 +1,7 @@
 package com.alreadyoccupiedseat.data.artist
 
 import com.alreadyoccupiedseat.model.Artist
-import com.alreadyoccupiedseat.model.SubscribedArtist
+import com.alreadyoccupiedseat.model.SearchedArtist
 import com.alreadyoccupiedseat.model.artist.SubscriptionArtistId
 
 interface ArtistDataSource {
@@ -10,7 +10,7 @@ interface ArtistDataSource {
         cursorId: Int?,
         size: Int,
         search: String,
-    ): Result<List<SubscribedArtist>>
+    ): Result<List<SearchedArtist>>
 
     suspend fun getUnsubscribedArtists(
         sortedStandard: String? = null,

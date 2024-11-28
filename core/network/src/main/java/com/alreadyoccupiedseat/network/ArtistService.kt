@@ -3,7 +3,7 @@ package com.alreadyoccupiedseat.network
 import com.alreadyoccupiedseat.model.ApiResult
 import com.alreadyoccupiedseat.model.Artist
 import com.alreadyoccupiedseat.model.PagingData
-import com.alreadyoccupiedseat.model.SubscribedArtist
+import com.alreadyoccupiedseat.model.SearchedArtist
 import com.alreadyoccupiedseat.model.artist.SubscribeArtistsRequest
 import com.alreadyoccupiedseat.model.artist.SubscribeArtistsResponse
 import com.alreadyoccupiedseat.model.artist.UnSubscribeArtistsResponse
@@ -20,7 +20,7 @@ interface ArtistService {
         @Query("cursorId") cursorId: Int?,
         @Query("size") size: Int,
         @Query("search") search: String,
-    ): Response<ApiResult<PagingData<SubscribedArtist>>>
+    ): Response<ApiResult<PagingData<SearchedArtist>>>
 
     @GET("api/v1/artists/unsubscriptions")
     suspend fun getUnsubscribedArtists(
