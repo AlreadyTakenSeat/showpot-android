@@ -163,7 +163,6 @@ class SearchViewModel @Inject constructor(
         postSideEffect(SearchScreenEvent.SubscribeArtistSuccess)
     }
 
-    // TODO: id -> artistSpotifyId
     fun unSubscribeArtist() = intent {
 
         state.unSubscribeTargetArtist?.let { targetArtist ->

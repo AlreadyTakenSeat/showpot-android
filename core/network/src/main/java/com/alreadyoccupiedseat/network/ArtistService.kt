@@ -6,6 +6,7 @@ import com.alreadyoccupiedseat.model.PagingData
 import com.alreadyoccupiedseat.model.SearchedArtist
 import com.alreadyoccupiedseat.model.artist.SubscribeArtistsRequest
 import com.alreadyoccupiedseat.model.artist.SubscribeArtistsResponse
+import com.alreadyoccupiedseat.model.artist.UnSubscribeArtistsRequest
 import com.alreadyoccupiedseat.model.artist.UnSubscribeArtistsResponse
 import retrofit2.Response
 import retrofit2.http.Body
@@ -48,6 +49,6 @@ interface ArtistService {
 
     @POST("api/v1/artists/unsubscribe")
     suspend fun unSubscribeArtists(
-        @Body artistIds: SubscribeArtistsRequest,
+        @Body artistIds: UnSubscribeArtistsRequest,
     ): Response<ApiResult<UnSubscribeArtistsResponse>>
 }

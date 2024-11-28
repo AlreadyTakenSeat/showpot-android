@@ -5,6 +5,7 @@ import com.alreadyoccupiedseat.model.Artist
 import com.alreadyoccupiedseat.model.SearchedArtist
 import com.alreadyoccupiedseat.model.artist.SubscribeArtistsRequest
 import com.alreadyoccupiedseat.model.artist.SubscriptionArtistId
+import com.alreadyoccupiedseat.model.artist.UnSubscribeArtistsRequest
 import com.alreadyoccupiedseat.network.ArtistService
 import javax.inject.Inject
 
@@ -65,7 +66,7 @@ class ArtistDataSourceImpl @Inject constructor(
     }
 
     override suspend fun unSubscribeArtists(artistIds: List<String>): List<String> {
-        return artistService.unSubscribeArtists(SubscribeArtistsRequest(artistIds))
+        return artistService.unSubscribeArtists(UnSubscribeArtistsRequest(artistIds))
             .body()?.data?.successUnsubscriptionArtistIds ?: emptyList()
     }
 }
