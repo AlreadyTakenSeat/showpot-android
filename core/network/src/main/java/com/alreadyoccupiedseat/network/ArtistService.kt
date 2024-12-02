@@ -3,9 +3,10 @@ package com.alreadyoccupiedseat.network
 import com.alreadyoccupiedseat.model.ApiResult
 import com.alreadyoccupiedseat.model.Artist
 import com.alreadyoccupiedseat.model.PagingData
-import com.alreadyoccupiedseat.model.SubscribedArtist
+import com.alreadyoccupiedseat.model.SearchedArtist
 import com.alreadyoccupiedseat.model.artist.SubscribeArtistsRequest
 import com.alreadyoccupiedseat.model.artist.SubscribeArtistsResponse
+import com.alreadyoccupiedseat.model.artist.UnSubscribeArtistsRequest
 import com.alreadyoccupiedseat.model.artist.UnSubscribeArtistsResponse
 import retrofit2.Response
 import retrofit2.http.Body
@@ -20,7 +21,7 @@ interface ArtistService {
         @Query("cursorId") cursorId: Int?,
         @Query("size") size: Int,
         @Query("search") search: String,
-    ): Response<ApiResult<PagingData<SubscribedArtist>>>
+    ): Response<ApiResult<PagingData<SearchedArtist>>>
 
     @GET("api/v1/artists/unsubscriptions")
     suspend fun getUnsubscribedArtists(
@@ -46,9 +47,8 @@ interface ArtistService {
         @Body artistIds: SubscribeArtistsRequest,
     ): Response<ApiResult<SubscribeArtistsResponse>>
 
-    // TODO: check request and response model's name
     @POST("api/v1/artists/unsubscribe")
     suspend fun unSubscribeArtists(
-        @Body artistIds: SubscribeArtistsRequest,
+        @Body artistIds: UnSubscribeArtistsRequest,
     ): Response<ApiResult<UnSubscribeArtistsResponse>>
 }

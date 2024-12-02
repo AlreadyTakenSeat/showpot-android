@@ -51,10 +51,15 @@ class SubscriptionArtistViewModel @Inject constructor(
     fun subscribeArtists() {
         viewModelScope.launch {
             val artistIds = state.value.selectedArtists.map { it.id }
-            val subscribedArtistsIds = artistRepository.subscribeArtists(artistIds)
+            val subscribedArtistsIds = artistRepository.subscribeArtists(artistIds).map {
+                it.id
+            }
+
             _state.value = _state.value.copy(
                 selectedArtists = emptyList(),
-                unsubscribedArtists = state.value.unsubscribedArtists.filter { it.id !in subscribedArtistsIds },
+                unsubscribedArtists = state.value.unsubscribedArtists.filter {
+                    it.id !in subscribedArtistsIds
+                },
             )
             event.emit(SubscriptionArtistScreenEvent.SubscribeArtistsSuccess)
         }

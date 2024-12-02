@@ -2,8 +2,10 @@ package com.alreadyoccupiedseat.data.artist
 
 import com.alreadyoccupiedseat.data.getResult
 import com.alreadyoccupiedseat.model.Artist
-import com.alreadyoccupiedseat.model.SubscribedArtist
+import com.alreadyoccupiedseat.model.SearchedArtist
 import com.alreadyoccupiedseat.model.artist.SubscribeArtistsRequest
+import com.alreadyoccupiedseat.model.artist.SubscriptionArtistId
+import com.alreadyoccupiedseat.model.artist.UnSubscribeArtistsRequest
 import com.alreadyoccupiedseat.network.ArtistService
 import javax.inject.Inject
 
@@ -15,7 +17,7 @@ class ArtistDataSourceImpl @Inject constructor(
         cursorId: Int?,
         size: Int,
         search: String,
-    ): Result<List<SubscribedArtist>> {
+    ): Result<List<SearchedArtist>> {
 
         return runCatching {
             artistService.searchArtists(
@@ -58,13 +60,13 @@ class ArtistDataSourceImpl @Inject constructor(
         ).body()?.data?.data ?: emptyList()
     }
 
-    override suspend fun subscribeArtists(artistIds: List<String>): List<String> {
+    override suspend fun subscribeArtists(artistIds: List<String>): List<SubscriptionArtistId> {
         return artistService.subscribeArtists(SubscribeArtistsRequest(artistIds))
-            .body()?.data?.successSubscriptionArtistIds ?: emptyList()
+            .body()?.data?.subscriptionArtistIds ?: emptyList()
     }
 
     override suspend fun unSubscribeArtists(artistIds: List<String>): List<String> {
-        return artistService.unSubscribeArtists(SubscribeArtistsRequest(artistIds))
+        return artistService.unSubscribeArtists(UnSubscribeArtistsRequest(artistIds))
             .body()?.data?.successUnsubscriptionArtistIds ?: emptyList()
     }
 }

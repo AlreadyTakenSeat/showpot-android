@@ -29,7 +29,7 @@ import com.alreadyoccupiedseat.designsystem.typo.english.ShowPotEnglishText_H1
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
 import com.alreadyoccupiedseat.model.SearchedShow
-import com.alreadyoccupiedseat.model.SubscribedArtist
+import com.alreadyoccupiedseat.model.SearchedArtist
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,11 +37,11 @@ fun SearchedSection(
     isLoggedIn: Boolean,
     isLoginSheetVisible: Boolean,
     isArtistUnSubscriptionSheetVisible: Boolean,
-    searchedArtists: List<SubscribedArtist>,
+    searchedArtists: List<SearchedArtist>,
     searchedShows: List<SearchedShow>,
-    unSubscribeTargetArtist: SubscribedArtist?,
+    unSubscribeTargetArtist: SearchedArtist?,
     onLoginSheetVisibilityChanged: (Boolean) -> Unit = {},
-    onUnSubscribeTargetArtistChanged: (SubscribedArtist) -> Unit = {},
+    onUnSubscribeTargetArtistChanged: (SearchedArtist) -> Unit = {},
     onShowClicked: (String) -> Unit = {},
     onArtistUnSubscriptionSheetVisibilityChanged: (Boolean) -> Unit = {},
     onSubscribeArtist: (String) -> Unit = {},

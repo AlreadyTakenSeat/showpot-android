@@ -40,7 +40,6 @@ fun SubscribedArtistScreen(
 
     SubscribedArtistContent(
         state = state.value,
-        modifier = Modifier,
         onBackClicked = {
             navController.popBackStack()
         },
@@ -48,7 +47,7 @@ fun SubscribedArtistScreen(
             onGoToSubscriptionArtist()
         },
         onDeletedSubscribedArtist = {
-            viewModel.deleteSubscribedArtist(it)
+            viewModel.unSubscribedArtist(it)
         }
     )
 }
@@ -58,7 +57,6 @@ typealias artistId = String
 @Composable
 private fun SubscribedArtistContent(
     state: SubscribedArtistState,
-    modifier: Modifier,
     onBackClicked: () -> Unit,
     onGoToSubscriptionArtist: () -> Unit,
     onDeletedSubscribedArtist: (artistId) -> Unit,
@@ -91,10 +89,9 @@ private fun SubscribedArtistContent(
                     horizontalArrangement = Arrangement.spacedBy(20.dp),
                     verticalArrangement = Arrangement.spacedBy(24.dp)
                 ) {
-                    // TODO: Real Data
                     items(state.subscribedArtists) { artist ->
                         ShowPotArtistDelete(
-                            name = artist.englishName,
+                            name = artist.name,
                             imageUrl = artist.imageURL,
                             onIconClick = {
                                 onDeletedSubscribedArtist(artist.id)

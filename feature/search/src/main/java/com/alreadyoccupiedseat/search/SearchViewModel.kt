@@ -1,6 +1,5 @@
 package com.alreadyoccupiedseat.search
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.alreadyoccupiedseat.common.utiils.errorLog
 import com.alreadyoccupiedseat.core.extension.EMPTY
@@ -10,7 +9,7 @@ import com.alreadyoccupiedseat.data.toApiErrorResult
 import com.alreadyoccupiedseat.datastore.AccountDataStore
 import com.alreadyoccupiedseat.datastore.SearchHistoryDataStore
 import com.alreadyoccupiedseat.model.SearchedShow
-import com.alreadyoccupiedseat.model.SubscribedArtist
+import com.alreadyoccupiedseat.model.SearchedArtist
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
@@ -29,11 +28,11 @@ data class SearchScreenState(
     val searchHistory: List<String> = emptyList(),
     val inputText: String = String.EMPTY,
     val isSearchedScreen: Boolean = false,
-    val searchedArtists: List<SubscribedArtist> = emptyList(),
+    val searchedArtists: List<SearchedArtist> = emptyList(),
     val searchedShows: List<SearchedShow> = emptyList(),
     val isArtistUnSubscriptionSheetVisible: Boolean = false,
     val isLoginSheetVisible: Boolean = false,
-    val unSubscribeTargetArtist: SubscribedArtist? = null,
+    val unSubscribeTargetArtist: SearchedArtist? = null,
     val isLoggedIn: Boolean = false
 )
 
@@ -131,7 +130,7 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    fun changeUnSubscribeTargetArtist(subscribedArtist: SubscribedArtist) = intent {
+    fun changeUnSubscribeTargetArtist(subscribedArtist: SearchedArtist) = intent {
         reduce {
             state.copy(
                 unSubscribeTargetArtist = subscribedArtist
@@ -151,8 +150,8 @@ class SearchViewModel @Inject constructor(
 
         reduce {
             state.copy(
-                searchedArtists = state.searchedArtists.map {subscribedArtist ->
-                    if (subscribedArtist.artistSpotifyId == result.first()) {
+                searchedArtists = state.searchedArtists.map { subscribedArtist ->
+                    if (subscribedArtist.artistSpotifyId == result.first().artistSpotifyId) {
                         subscribedArtist.copy(isSubscribed = true)
                     } else {
                         subscribedArtist
@@ -168,21 +167,24 @@ class SearchViewModel @Inject constructor(
 
         state.unSubscribeTargetArtist?.let { targetArtist ->
 
-            val result = artistRepository.unSubscribeArtists(listOf(targetArtist.id))
+            if (targetArtist.id != null) {
+                val result = artistRepository.unSubscribeArtists(listOf(targetArtist.id!!))
 
-            reduce {
-                state.copy(
-                    searchedArtists = state.searchedArtists.map {
-                        if (it.id == result.first()) {
-                            it.copy(isSubscribed = false)
-                        } else {
-                            it
+                reduce {
+                    state.copy(
+                        searchedArtists = state.searchedArtists.map {
+                            if (it.id == result.first()) {
+                                it.copy(isSubscribed = false)
+                            } else {
+                                it
+                            }
                         }
-                    }
-                )
+                    )
+                }
+
+                postSideEffect(SearchScreenEvent.UnSubscribeArtistSuccess)
             }
 
-            postSideEffect(SearchScreenEvent.UnSubscribeArtistSuccess)
         }
 
     }

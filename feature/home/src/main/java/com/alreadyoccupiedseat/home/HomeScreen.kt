@@ -194,7 +194,7 @@ fun HomeScreenContent(
                         state.unSubscribedArtists.forEach { curArtist ->
                             item {
                                 ShowPotArtist(
-                                    text = curArtist.englishName,
+                                    text = curArtist.name,
                                     imageUrl = curArtist.imageURL,
                                 )
                             }

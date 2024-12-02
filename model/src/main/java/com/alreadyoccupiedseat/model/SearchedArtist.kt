@@ -3,8 +3,8 @@ package com.alreadyoccupiedseat.model
 import androidx.annotation.Keep
 
 @Keep
-data class SubscribedArtist(
-    val id: String,
+data class SearchedArtist(
+    val id: String?,
     val imageURL: String,
     val name: String,
     val artistSpotifyId: String,

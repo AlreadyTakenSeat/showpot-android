@@ -13,7 +13,7 @@ import javax.inject.Inject
 sealed interface SubscribedArtistEvent {
 
     data object Idle : SubscribedArtistEvent
-    data class DeleteSubscribedArtist(val id: String) : SubscribedArtistEvent
+    data class UnSubscribedArtist(val id: String) : SubscribedArtistEvent
 }
 
 data class SubscribedArtistState(
@@ -34,17 +34,18 @@ class SubscribedArtistViewModel @Inject constructor(
     fun getSubscribedArtist() {
         viewModelScope.launch {
             val result = aristRepository.getSubscribedArtists(
-                size = 100
+                size = 30
             )
             _state.value = _state.value.copy(subscribedArtists = result)
         }
     }
 
-    fun deleteSubscribedArtist(id: String) {
+    fun unSubscribedArtist(id: String) {
         viewModelScope.launch {
             val unSubscribedArtists = aristRepository.unSubscribeArtists(
                 artistIds = listOf(id)
             )
+
 
             _state.value =
                 _state.value.copy(subscribedArtists = _state.value.subscribedArtists.filter { it.id !in unSubscribedArtists.first() })

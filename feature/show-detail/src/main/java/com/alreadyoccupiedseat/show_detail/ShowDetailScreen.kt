@@ -392,7 +392,7 @@ fun ShowDetailScreenContent(
                         state.showDetail?.artists?.forEach { artist ->
                             item {
                                 ShowPotArtist(
-                                    text = artist.englishName,
+                                    text = artist.name,
                                     imageUrl = artist.imageURL,
                                 )
                             }

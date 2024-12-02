@@ -53,8 +53,7 @@ class MyFinishedViewModel @Inject constructor() : ViewModel() {
                     artist = Artist(
                         id = index.toString(),
                         imageURL = "https://example.com/artist$index.jpg",
-                        koreanName = "Artist $index",
-                        englishName = "Artist $index"
+                        name = "Artist $index",
                     ),
                     genre = Genre(
                         id = index.toString(),
