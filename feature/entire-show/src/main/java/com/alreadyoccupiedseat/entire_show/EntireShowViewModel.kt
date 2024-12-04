@@ -33,7 +33,7 @@ class EntireShowViewModel @Inject constructor(
     /** 전체 공연 목록 가져오기 ***/
     private fun getEntireShow() {
         viewModelScope.launch {
-            val tempRequestSize = 100
+            val tempRequestSize = 30
             showRepository.getEntireShow(
                 sort = POPULAR,
                 onlyOpenSchedule = false,
