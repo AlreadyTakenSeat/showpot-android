@@ -6,7 +6,7 @@ import android.provider.Settings
 import com.alreadyoccupiedseat.model.SearchedShow
 import com.alreadyoccupiedseat.model.alert.CheckAlertReservationResponse
 import com.alreadyoccupiedseat.model.alert.TicketingAlertRequest
-import com.alreadyoccupiedseat.model.show.Data
+import com.alreadyoccupiedseat.model.show.ShowPreview
 import com.alreadyoccupiedseat.model.show.InterestedData
 import com.alreadyoccupiedseat.model.show.ShowDetail
 import com.alreadyoccupiedseat.model.temp.AlertReservedShow
@@ -24,7 +24,7 @@ class ShowDataSourceImpl @Inject constructor(
         sort: String,
         onlyOpenSchedule: Boolean,
         size: Int,
-    ): List<Data> {
+    ): List<ShowPreview> {
         return showService.getEntireShow(
             sort = sort,
             onlyOpenSchedule = onlyOpenSchedule,

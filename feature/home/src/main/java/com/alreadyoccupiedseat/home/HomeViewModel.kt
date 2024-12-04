@@ -6,10 +6,10 @@ import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.data.artist.ArtistRepository
 import com.alreadyoccupiedseat.data.login.LoginRepository
 import com.alreadyoccupiedseat.data.show.ShowRepository
-import com.alreadyoccupiedseat.datastore.AccountDataStore
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.model.Artist
-import com.alreadyoccupiedseat.model.show.Shows
+import com.alreadyoccupiedseat.model.show.ShowPreview
+import com.alreadyoccupiedseat.model.show.ShowType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -49,7 +49,7 @@ val performances = listOf(
 
 data class HomeScreenState(
     val genreList: List<Pair<Int, Int>> = emptyList(),
-    val entireShowList: Shows = Shows(data = emptyList(), hasNext = false, size = 0),
+    val entireShowList: List<ShowPreview> = emptyList(),
     val unSubscribedArtists: List<Artist> = emptyList(),
     val nickName: String = String.EMPTY
 )
@@ -59,7 +59,6 @@ class HomeViewModel@Inject constructor(
     private val showRepository: ShowRepository,
     private val artistRepository: ArtistRepository,
     private val loginRepository: LoginRepository,
-    private val accountDataStore: AccountDataStore,
 ) : ViewModel(){
 
     private val _state = MutableStateFlow(HomeScreenState())
@@ -90,20 +89,16 @@ class HomeViewModel@Inject constructor(
     /** 전체 공연 목록 가져오기 ***/
     private fun getEntireShow() {
         viewModelScope.launch {
-            val tempRequestSize = 2
-            showRepository.getEntireShow(
-                sort = Shows.RECENT,
+            val tempRequestSize = 30
+            val shows = showRepository.getEntireShow(
+                sort = ShowType.RECENT.name,
                 onlyOpenSchedule = false,
                 size = tempRequestSize,
-            ).let { result ->
-                _state.value = _state.value.copy(
-                    entireShowList = Shows(
-                        data = result,
-                        hasNext = true,
-                        size = result.size
-                    )
-                )
-            }
+            )
+
+            _state.value = _state.value.copy(
+                entireShowList = shows
+            )
         }
     }
 

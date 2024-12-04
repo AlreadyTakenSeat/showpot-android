@@ -3,7 +3,7 @@ package com.alreadyoccupiedseat.entire_show
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alreadyoccupiedseat.data.show.ShowRepository
-import com.alreadyoccupiedseat.model.show.Shows
+import com.alreadyoccupiedseat.model.show.ShowPreview
 import com.alreadyoccupiedseat.model.show.Shows.Companion.POPULAR
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +15,7 @@ sealed interface EntireShowEvent {
 }
 
 data class EntireShowState(
-    val entireShowList: Shows = Shows(data = emptyList(), hasNext = false, size = 0),
+    val entireShowList: List<ShowPreview> = emptyList(),
 )
 
 @HiltViewModel
@@ -39,12 +39,9 @@ class EntireShowViewModel @Inject constructor(
                 onlyOpenSchedule = false,
                 size = tempRequestSize,
             ).let { result ->
+
                 _state.value = _state.value.copy(
-                    entireShowList = Shows(
-                        data = result,
-                        hasNext = true,
-                        size = result.size
-                    )
+                    entireShowList = result
                 )
             }
         }

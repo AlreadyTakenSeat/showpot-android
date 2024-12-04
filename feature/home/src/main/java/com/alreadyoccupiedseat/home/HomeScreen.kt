@@ -215,7 +215,7 @@ fun HomeScreenContent(
                     )
                 }
 
-                itemsIndexed(state.entireShowList.data) { index, show ->
+                itemsIndexed(state.entireShowList) { index, show ->
                     val textColor = if (show.isOpen) {
                         ShowpotColor.MainBlue
                     } else {
@@ -238,6 +238,7 @@ fun HomeScreenContent(
                         }
                     )
                 }
+
 
                 item {
                     Spacer(modifier = Modifier.height(10.dp))

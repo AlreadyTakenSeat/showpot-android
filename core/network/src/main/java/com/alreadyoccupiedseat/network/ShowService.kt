@@ -3,12 +3,13 @@ package com.alreadyoccupiedseat.network
 import com.alreadyoccupiedseat.model.ApiResult
 import com.alreadyoccupiedseat.model.PagingData
 import com.alreadyoccupiedseat.model.SearchedShow
+import com.alreadyoccupiedseat.model.Show
 import com.alreadyoccupiedseat.model.alert.CheckAlertReservationResponse
 import com.alreadyoccupiedseat.model.alert.TicketingAlertRequest
 import com.alreadyoccupiedseat.model.show.InterestedData
 import com.alreadyoccupiedseat.model.show.RegisterInterestResponse
 import com.alreadyoccupiedseat.model.show.ShowDetail
-import com.alreadyoccupiedseat.model.show.Shows
+import com.alreadyoccupiedseat.model.show.ShowPreview
 import com.alreadyoccupiedseat.model.temp.AlertReservedShow
 import retrofit2.Response
 import retrofit2.http.Body
@@ -25,7 +26,7 @@ interface ShowService {
         @Query("sort") sort: String,
         @Query("onlyOpenSchedule") onlyOpenSchedule: Boolean,
         @Query("size") size: Int,
-    ): Response<ApiResult<Shows>>
+    ): Response<ApiResult<PagingData<ShowPreview>>>
 
     @GET("api/v1/shows/interests")
     suspend fun getInterestedShowList(
