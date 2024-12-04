@@ -288,13 +288,12 @@ fun HomeScreenContent(
                         horizontalArrangement = Arrangement.spacedBy(18.dp)
                     ) {
 
-                        items(performances.size) { index ->
-                            val performance = performances[index]
+                        items(state.recommendedShowList.size) { index ->
                             RecommendedShow(
-                                imageUrl = performance.recommendedPerformanceThumbnailURL,
-                                text = performance.recommendedPerformanceTitle,
+                                imageUrl = state.recommendedShowList[index].posterImageURL,
+                                text = state.recommendedShowList[index].title,
                                 onClick = {
-                                    onRecommendedShowClicked(performance.showID)
+                                    onRecommendedShowClicked(state.recommendedShowList[index].id)
                                 }
                             )
                         }

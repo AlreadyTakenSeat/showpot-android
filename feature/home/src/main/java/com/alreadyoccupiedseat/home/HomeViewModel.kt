@@ -15,41 +15,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-// TODO 삭제
-// Define a data class for performances
-data class Performance(
-    val showID: String,
-    val recommendedPerformanceThumbnailURL: String,
-    val recommendedPerformanceTitle: String
-)
-
-// Define your performance data
-val performances = listOf(
-    Performance(
-        showID = "0191948f-0ba0-2a3b-9b19-bd42694ecf58",
-        recommendedPerformanceThumbnailURL = "https://ticketimage.interpark.com/Play/image/large/24/24006288_p.gif",
-        recommendedPerformanceTitle = "Conan Gray - Found Heaven On Tour in Seoul"
-    ),
-    Performance(
-        showID = "01919906-7fb9-6552-3819-91a5295bb3e6",
-        recommendedPerformanceThumbnailURL = "https://ticketimage.interpark.com/Play/image/large/24/24006714_p.gif",
-        recommendedPerformanceTitle = "Olivia Rodrigo - GUTS world tour"
-    ),
-    Performance(
-        showID = " 01919901-105d-b5b2-cbaf-912f20281ce8",
-        recommendedPerformanceThumbnailURL = "https://ticketimage.interpark.com/Play/image/large/24/24011642_p.gif",
-        recommendedPerformanceTitle = "OFFICIAL HIGE DANDISM REJOICE ASIA TOUR 2024"
-    ),
-    Performance(
-        showID = "019194a4-e4ba-f2d1-79d6-23088c9c3112",
-        recommendedPerformanceThumbnailURL = "https://ticketimage.interpark.com/Play/image/large/24/24007623_p.gif",
-        recommendedPerformanceTitle = "Dua Lipa - Radical Optimism Tour"
-    )
-)
-
 data class HomeScreenState(
     val genreList: List<Pair<Int, Int>> = emptyList(),
     val entireShowList: List<ShowPreview> = emptyList(),
+    val recommendedShowList: List<ShowPreview> = emptyList(),
     val unSubscribedArtists: List<Artist> = emptyList(),
     val nickName: String = String.EMPTY
 )
@@ -81,12 +50,14 @@ class HomeViewModel@Inject constructor(
 
     init {
         getEntireShow()
+        getRecommendedShow()
         _state.value = _state.value.copy(
             genreList = genreList
         )
     }
 
     /** 전체 공연 목록 가져오기 ***/
+    // 이름 변경
     private fun getEntireShow() {
         viewModelScope.launch {
             val tempRequestSize = 30
@@ -97,7 +68,22 @@ class HomeViewModel@Inject constructor(
             )
 
             _state.value = _state.value.copy(
-                entireShowList = shows
+                entireShowList = shows.take(2),
+            )
+        }
+    }
+
+    private fun getRecommendedShow() {
+        viewModelScope.launch {
+            val tempRequestSize = 30
+            val shows = showRepository.getEntireShow(
+                sort = ShowType.POPULAR.name,
+                onlyOpenSchedule = false,
+                size = tempRequestSize,
+            )
+
+            _state.value = _state.value.copy(
+                recommendedShowList = shows
             )
         }
     }
