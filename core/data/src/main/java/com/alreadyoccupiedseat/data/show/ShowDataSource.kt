@@ -2,7 +2,7 @@ package com.alreadyoccupiedseat.data.show
 
 import com.alreadyoccupiedseat.model.SearchedShow
 import com.alreadyoccupiedseat.model.alert.CheckAlertReservationResponse
-import com.alreadyoccupiedseat.model.show.Data
+import com.alreadyoccupiedseat.model.show.ShowPreview
 import com.alreadyoccupiedseat.model.show.InterestedData
 import com.alreadyoccupiedseat.model.show.ShowDetail
 import com.alreadyoccupiedseat.model.temp.AlertReservedShow
@@ -13,7 +13,7 @@ interface ShowDataSource {
         sort: String,
         onlyOpenSchedule: Boolean,
         size: Int
-    ): List<Data>
+    ): List<ShowPreview>
 
     /** 관심 공연 목록 조회 ***/
     suspend fun getInterestedShowList(

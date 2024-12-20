@@ -33,7 +33,7 @@ import com.alreadyoccupiedseat.designsystem.component.ShowInfo
 import com.alreadyoccupiedseat.designsystem.component.bottomSheet.TicketingNotificationBottomSheet
 import com.alreadyoccupiedseat.designsystem.component.button.ShowPotSubButton
 import com.alreadyoccupiedseat.enum.TicketingAlertTime
-import com.alreadyoccupiedseat.model.show.Shows.Companion.NORMAL
+import com.alreadyoccupiedseat.model.show.ShowType
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -111,7 +111,7 @@ fun MyAlertSettingScreen(
         },
         onRegisterAlertButtonClicked = {
             viewModel.registerTicketingAlert(
-                NORMAL,
+                ShowType.NORMAL.name,
                 mutableListOf<String>().apply {
                     with(state.value) {
                         if (isFirstItemSelected) this@apply.add(TicketingAlertTime.BEFORE_24.name)

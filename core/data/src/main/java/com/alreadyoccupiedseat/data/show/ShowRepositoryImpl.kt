@@ -2,7 +2,7 @@ package com.alreadyoccupiedseat.data.show
 
 import com.alreadyoccupiedseat.model.SearchedShow
 import com.alreadyoccupiedseat.model.alert.CheckAlertReservationResponse
-import com.alreadyoccupiedseat.model.show.Data
+import com.alreadyoccupiedseat.model.show.ShowPreview
 import com.alreadyoccupiedseat.model.show.InterestedData
 import com.alreadyoccupiedseat.model.show.ShowDetail
 import com.alreadyoccupiedseat.model.temp.AlertReservedShow
@@ -17,7 +17,7 @@ class ShowRepositoryImpl @Inject constructor(
         sort: String,
         onlyOpenSchedule: Boolean,
         size: Int,
-    ): List<Data> {
+    ): List<ShowPreview> {
         return showDataSource.getEntireShow(
             sort = sort,
             onlyOpenSchedule = onlyOpenSchedule,

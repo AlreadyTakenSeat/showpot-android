@@ -3,7 +3,7 @@ package com.alreadyoccupiedseat.model.show
 import androidx.annotation.Keep
 
 @Keep
-data class Data(
+data class ShowPreview(
     val id: String,
     val isOpen: Boolean,
     val location: String,

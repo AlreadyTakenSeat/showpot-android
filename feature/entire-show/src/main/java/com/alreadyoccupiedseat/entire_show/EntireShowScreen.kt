@@ -69,10 +69,10 @@ private fun EntireShowScreenContent(
                     .padding(top = 12.dp)
                     .padding(it),
             ) {
-                if (state.entireShowList.data.isEmpty()) {
+                if (state.entireShowList.isEmpty()) {
                     // TODO 전체 공연 데이터 없을 경우
                 } else {
-                    itemsIndexed(state.entireShowList.data) { index, show ->
+                    itemsIndexed(state.entireShowList) { index, show ->
                         // TODO index로 수정 필요
                         val textColor = if (show.isOpen) {
                             ShowpotColor.MainBlue

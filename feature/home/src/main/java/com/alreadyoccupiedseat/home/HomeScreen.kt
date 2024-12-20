@@ -215,7 +215,7 @@ fun HomeScreenContent(
                     )
                 }
 
-                itemsIndexed(state.entireShowList.data) { index, show ->
+                itemsIndexed(state.entireShowList) { index, show ->
                     val textColor = if (show.isOpen) {
                         ShowpotColor.MainBlue
                     } else {
@@ -238,6 +238,7 @@ fun HomeScreenContent(
                         }
                     )
                 }
+
 
                 item {
                     Spacer(modifier = Modifier.height(10.dp))
@@ -287,13 +288,12 @@ fun HomeScreenContent(
                         horizontalArrangement = Arrangement.spacedBy(18.dp)
                     ) {
 
-                        items(performances.size) { index ->
-                            val performance = performances[index]
+                        items(state.recommendedShowList.size) { index ->
                             RecommendedShow(
-                                imageUrl = performance.recommendedPerformanceThumbnailURL,
-                                text = performance.recommendedPerformanceTitle,
+                                imageUrl = state.recommendedShowList[index].posterImageURL,
+                                text = state.recommendedShowList[index].title,
                                 onClick = {
-                                    onRecommendedShowClicked(performance.showID)
+                                    onRecommendedShowClicked(state.recommendedShowList[index].id)
                                 }
                             )
                         }

@@ -3,8 +3,7 @@ package com.alreadyoccupiedseat.myalarm_setting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alreadyoccupiedseat.data.show.ShowRepository
-import com.alreadyoccupiedseat.model.show.Shows
-import com.alreadyoccupiedseat.model.show.Shows.Companion.NORMAL
+import com.alreadyoccupiedseat.model.show.ShowType
 import com.alreadyoccupiedseat.model.temp.AlertReservedShow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -49,7 +48,7 @@ class MyAlertSettingViewModel @Inject constructor(
         viewModelScope.launch {
             showRepository.getAlertReservedShow(
                 size = 100,
-                type = Shows.CONTINUE
+                type = ShowType.NORMAL.name
             ).let {
                 _state.value = _state.value.copy(
                     alertReservedShowList = it
@@ -133,7 +132,7 @@ class MyAlertSettingViewModel @Inject constructor(
             val showId = _state.value.selectedShowId ?: String()
             val result = showRepository.registerTicketingAlert(
                 showId = showId,
-                ticketingApiType = NORMAL,
+                ticketingApiType = ShowType.NORMAL.name,
                 alertTimes = emptyList()
             )
             if (result.isSuccess) {
@@ -154,7 +153,7 @@ class MyAlertSettingViewModel @Inject constructor(
 
     fun checkAlertAvailability() {
         viewModelScope.launch {
-            val availabilitiesInfo = showRepository.checkAlertReservation(state.value.selectedShowId ?: String(), NORMAL)
+            val availabilitiesInfo = showRepository.checkAlertReservation(state.value.selectedShowId ?: String(), ShowType.NORMAL.name)
             _state.value = _state.value.copy(
                 isFirstItemSelected = availabilitiesInfo.alertReservationStatus.before24,
                 isSecondItemSelected = availabilitiesInfo.alertReservationStatus.before6,
