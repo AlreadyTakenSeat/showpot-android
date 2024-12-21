@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alreadyoccupiedseat.data.show.ShowRepository
 import com.alreadyoccupiedseat.model.show.ShowPreview
-import com.alreadyoccupiedseat.model.show.Shows.Companion.POPULAR
+import com.alreadyoccupiedseat.model.show.ShowType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -35,7 +35,7 @@ class EntireShowViewModel @Inject constructor(
         viewModelScope.launch {
             val tempRequestSize = 30
             showRepository.getEntireShow(
-                sort = POPULAR,
+                sort = ShowType.POPULAR.text,
                 onlyOpenSchedule = false,
                 size = tempRequestSize,
             ).let { result ->
