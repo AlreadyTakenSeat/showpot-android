@@ -1,5 +1,8 @@
 package com.alreadyoccupiedseat.model.show
 
+import androidx.annotation.Keep
+
+@Keep
 enum class ShowType(val text: String) {
     RECENT("RECENT"),
     POPULAR("POPULAR"),
