@@ -105,6 +105,9 @@ fun AppScreenContent(
 
             composable(Screen.Home.route) {
                 HomeScreen(
+                    onAlarmLClicked = {
+                        navController.navigate(Screen.MyAlarmList.route)
+                    },
                     onSearchBarClicked = {
                         navController.navigate(Screen.Search.route)
                     },

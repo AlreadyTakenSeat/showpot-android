@@ -74,6 +74,11 @@ sealed class Screen(
         ),
     )
 
+    data object MyAlarmList: Screen(
+        route = "myAlarmList",
+        title = "알림 목록"
+    )
+
     data object MyAlarmSetting: Screen(
         route = "myAlarmSetting",
         title = "알림 설정"

@@ -58,7 +58,7 @@ android {
     applicationVariants.configureEach {
         val dateFormat = SimpleDateFormat("yyyyMMdd")
         val today = dateFormat.format(Date())
-        val appName = "showPot"
+        val appName = "showpot"
         val versionName = defaultConfig.versionName.orEmpty()
         this.outputs.configureEach {
             val flavorName = if (flavorName.isNullOrBlank()) "" else flavorName

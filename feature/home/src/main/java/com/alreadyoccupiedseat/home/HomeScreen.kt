@@ -29,6 +29,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
@@ -51,6 +52,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
+    onAlarmLClicked: () -> Unit,
     onSearchBarClicked: () -> Unit,
     onSubscriptionGenreClicked: () -> Unit,
     onSubscribeArtistClicked: () -> Unit,
@@ -68,6 +70,7 @@ fun HomeScreen(
 
     HomeScreenContent(
         state = state.value,
+        onAlarmLClicked = onAlarmLClicked,
         onSearchBarClicked = onSearchBarClicked,
         onSubscriptionGenreClicked = onSubscriptionGenreClicked,
         onSubscribeArtistClicked = onSubscribeArtistClicked,
@@ -80,6 +83,7 @@ fun HomeScreen(
 @Composable
 fun HomeScreenContent(
     state: HomeScreenState,
+    onAlarmLClicked: () -> Unit,
     onSearchBarClicked: () -> Unit,
     onSubscriptionGenreClicked: () -> Unit,
     onSubscribeArtistClicked: () -> Unit,
@@ -125,9 +129,22 @@ fun HomeScreenContent(
                     .background(ShowpotColor.Gray700),
             ) {
                 Image(
-                    modifier = Modifier.padding(horizontal = 17.dp, vertical = 13.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 17.dp, vertical = 13.dp)
+                        .align(Alignment.TopStart)
+                    ,
                     painter = painterResource(id = R.drawable.img_logo),
                     contentDescription = stringResource(com.alreadyoccupiedseat.home.R.string.showpot_logo_content_description)
+                )
+                Image(
+                    modifier = Modifier
+                        .clickable { onAlarmLClicked() }
+                        .padding(horizontal = 17.dp, vertical = 13.dp)
+                        .align(Alignment.TopEnd)
+                    ,
+                    painter = painterResource(id = R.drawable.ic_alarm_navigation_24),
+                    contentDescription = stringResource(com.alreadyoccupiedseat.home.R.string.showpot_alarm_list_content_description),
+                    colorFilter = ColorFilter.tint(ShowpotColor.White)
                 )
             }
         }
