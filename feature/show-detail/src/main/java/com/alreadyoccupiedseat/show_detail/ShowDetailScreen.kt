@@ -21,7 +21,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,8 +48,8 @@ import com.alreadyoccupiedseat.designsystem.getTicketSiteButtonColor
 import com.alreadyoccupiedseat.designsystem.typo.english.ShowPotEnglishText_H0
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
-import com.alreadyoccupiedseat.enum.TicketingAlertTime
-import kotlinx.coroutines.flow.collectLatest
+import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
@@ -65,24 +64,21 @@ fun ShowDetailScreen(
 ) {
 
     val viewModel = hiltViewModel<ShowDetailViewModel>()
-    val state = viewModel.state.collectAsState()
+    val state by viewModel.collectAsState()
     val context = LocalContext.current
 
-    LaunchedEffect(viewModel.event) {
-        viewModel.event.collectLatest { event ->
-            when (event) {
-                is ShowDetailEvent.Idle -> {
+    viewModel.collectSideEffect {
+        when (it) {
+            is ShowDetailEvent.Idle -> {
 
+            }
 
-                }
-
-                is ShowDetailEvent.AlertRegisterSuccess -> {
-                    Toast.makeText(
-                        context,
-                        "알림 요청에 성공하였습니다.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+            is ShowDetailEvent.AlertRegisterSuccess -> {
+                Toast.makeText(
+                    context,
+                    "알림 요청에 성공하였습니다.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -90,17 +86,11 @@ fun ShowDetailScreen(
     LaunchedEffect(showId) {
         viewModel.getShowDetail(showId)
         viewModel.registerShowId(showId)
-        viewModel.checkLogin()
-    }
-
-    LaunchedEffect(state.value.isLoggedIn) {
-        if (state.value.isLoggedIn) {
-            // viewModel.checkAlertAvailability(showId)
-        }
+        viewModel.checkAlertReservation(showId, "NORMAL")
     }
 
     ShowDetailScreenContent(
-        state = state.value,
+        state = state,
         onBackButtonClicked = {
             navController.popBackStack()
         },
@@ -113,26 +103,9 @@ fun ShowDetailScreen(
         onLoginSheetVisibilityChanged = {
             viewModel.changeLoginSheetVisibility(it)
         },
-        onFirstItemClicked = {
-            viewModel.changeFirstItemSelection()
-        },
-        onSecondItemClicked = {
-            viewModel.changeSecondItemSelection()
-        },
-        onThirdItemClicked = {
-            viewModel.changeThirdItemSelection()
-        },
         onRegisterAlertButtonClicked = {
             viewModel.registerTicketingAlert(
-                showId,
-                "NORMAL",
-                mutableListOf<String>().apply {
-                    with(state.value) {
-                        if (isFirstItemSelected) this@apply.add(TicketingAlertTime.BEFORE_24.name)
-                        if (isSecondItemSelected) this@apply.add(TicketingAlertTime.BEFORE_6.name)
-                        if (isThirdItemSelected) this@apply.add(TicketingAlertTime.BEFORE_1.name)
-                    }
-                }
+                "NORMAL"
             )
         },
         onTicketingButtonClicked = {
@@ -140,6 +113,9 @@ fun ShowDetailScreen(
         },
         onLoginRequested = {
             onLoginRequested()
+        },
+        onTicketingSelectionBoxClicked = {
+            viewModel.changeTicketingSelectionBoxState(it)
         }
     )
 }
@@ -151,13 +127,11 @@ fun ShowDetailScreenContent(
     onBackButtonClicked: () -> Unit,
     onIconButtonClicked: () -> Unit,
     onChangeAlertSheetVisibility: (Boolean) -> Unit,
-    onFirstItemClicked: () -> Unit,
-    onSecondItemClicked: () -> Unit,
-    onThirdItemClicked: () -> Unit,
     onRegisterAlertButtonClicked: () -> Unit,
     onLoginSheetVisibilityChanged: (Boolean) -> Unit = {},
     onLoginRequested: () -> Unit = {},
-    onTicketingButtonClicked: (String) -> Unit
+    onTicketingButtonClicked: (String) -> Unit,
+    onTicketingSelectionBoxClicked: (Int) -> Unit = {},
 ) {
 
     val lazyColumnState = rememberLazyListState()
@@ -171,20 +145,9 @@ fun ShowDetailScreenContent(
     if (state.isAlertSheetVisible) {
 
         TicketingNotificationBottomSheet(
-            isFirstItemAvailable = state.isFirstItemAvailable,
-            isSecondItemAvailable = state.isSecondItemAvailable,
-            isThirdItemAvailable = state.isThirdItemAvailable,
-            firstItemSelected = state.isFirstItemSelected,
-            secondItemSelected = state.isSecondItemSelected,
-            thirdItemSelected = state.isThirdItemSelected,
-            onFirstItemClicked = {
-                onFirstItemClicked()
-            },
-            onSecondItemClicked = {
-                onSecondItemClicked()
-            },
-            onThirdItemClicked = {
-                onThirdItemClicked()
+            ticketingBoxSelectionState = state.ticketingBoxSelectionState,
+            onSelectionBoxClicked = {
+                onTicketingSelectionBoxClicked(it)
             },
             onMainButtonClicked = {
                 onRegisterAlertButtonClicked()
@@ -194,7 +157,7 @@ fun ShowDetailScreenContent(
                 onChangeAlertSheetVisibility(false)
             })
 
-    } else if (state.isLoginSheetVisible) {
+    } else if (state.isLoginSheetVisible && state.isLoggedIn.not()) {
         ShowPotBottomSheet(
             onDismissRequest = {
                 onLoginSheetVisibilityChanged(false)
@@ -237,7 +200,7 @@ fun ShowDetailScreenContent(
     ) { innerPadding ->
         Box(
             modifier = Modifier.padding(innerPadding),
-            contentAlignment = androidx.compose.ui.Alignment.TopStart
+            contentAlignment = Alignment.TopStart
         ) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize()
@@ -501,7 +464,7 @@ fun ShowDetailScreenContent(
                         .fillMaxWidth()
                         .background(backgroundColor)
                         .padding(top = 12.dp),
-                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
                         modifier = Modifier.padding(start = 6.dp, top = 4.dp, bottom = 4.dp)

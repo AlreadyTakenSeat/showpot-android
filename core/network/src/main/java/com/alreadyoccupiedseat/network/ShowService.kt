@@ -3,9 +3,8 @@ package com.alreadyoccupiedseat.network
 import com.alreadyoccupiedseat.model.ApiResult
 import com.alreadyoccupiedseat.model.PagingData
 import com.alreadyoccupiedseat.model.SearchedShow
-import com.alreadyoccupiedseat.model.Show
-import com.alreadyoccupiedseat.model.alert.CheckAlertReservationResponse
 import com.alreadyoccupiedseat.model.alert.TicketingAlertRequest
+import com.alreadyoccupiedseat.model.alert.Times
 import com.alreadyoccupiedseat.model.show.InterestedData
 import com.alreadyoccupiedseat.model.show.RegisterInterestResponse
 import com.alreadyoccupiedseat.model.show.ShowDetail
@@ -62,7 +61,7 @@ interface ShowService {
     suspend fun checkAlertReservation(
         @Path("showId") showId: String,
         @Query("ticketingApiType") ticketingApiType: String,
-    ): Response<ApiResult<CheckAlertReservationResponse>>
+    ): Response<ApiResult<Times>>
     @GET("api/v1/shows/alerts")
     suspend fun getAlertReservedShow(
         @Query("size") size: Int,

@@ -1,7 +1,7 @@
 package com.alreadyoccupiedseat.data.show
 
 import com.alreadyoccupiedseat.model.SearchedShow
-import com.alreadyoccupiedseat.model.alert.CheckAlertReservationResponse
+import com.alreadyoccupiedseat.model.alert.Times
 import com.alreadyoccupiedseat.model.show.ShowPreview
 import com.alreadyoccupiedseat.model.show.InterestedData
 import com.alreadyoccupiedseat.model.show.ShowDetail
@@ -62,7 +62,7 @@ class ShowRepositoryImpl @Inject constructor(
     override suspend fun checkAlertReservation(
         showId: String,
         ticketingApiType: String,
-    ): CheckAlertReservationResponse {
+    ): Times {
         return showDataSource.checkAlertReservation(showId, ticketingApiType)
     }
 

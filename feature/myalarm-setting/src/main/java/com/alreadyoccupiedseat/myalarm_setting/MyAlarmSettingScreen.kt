@@ -114,9 +114,9 @@ fun MyAlertSettingScreen(
                 ShowType.NORMAL.name,
                 mutableListOf<String>().apply {
                     with(state.value) {
-                        if (isFirstItemSelected) this@apply.add(TicketingAlertTime.BEFORE_24.name)
-                        if (isSecondItemSelected) this@apply.add(TicketingAlertTime.BEFORE_6.name)
-                        if (isThirdItemSelected) this@apply.add(TicketingAlertTime.BEFORE_1.name)
+//                        if (isFirstItemSelected) this@apply.add(TicketingAlertTime.BEFORE_24.name)
+//                        if (isSecondItemSelected) this@apply.add(TicketingAlertTime.BEFORE_6.name)
+//                        if (isThirdItemSelected) this@apply.add(TicketingAlertTime.BEFORE_1.name)
                     }
                 }
             )
@@ -161,29 +161,29 @@ fun MyAlertSettingScreenContent(
 
     if (state.isTicketSheetVisible) {
 
-        TicketingNotificationBottomSheet(
-            isFirstItemAvailable = state.isFirstItemAvailable,
-            isSecondItemAvailable = state.isSecondItemAvailable,
-            isThirdItemAvailable = state.isThirdItemAvailable,
-            firstItemSelected = state.isFirstItemSelected,
-            secondItemSelected = state.isSecondItemSelected,
-            thirdItemSelected = state.isThirdItemSelected,
-            onFirstItemClicked = {
-                onFirstItemClicked()
-            },
-            onSecondItemClicked = {
-                onSecondItemClicked()
-            },
-            onThirdItemClicked = {
-                onThirdItemClicked()
-            },
-            onMainButtonClicked = {
-                onRegisterAlertButtonClicked()
-                onTicketSheetVisible(false)
-            },
-            onDismissRequested = {
-                onDismissRequested()
-            })
+//        TicketingNotificationBottomSheet(
+//            isFirstItemAvailable = state.isFirstItemAvailable,
+//            isSecondItemAvailable = state.isSecondItemAvailable,
+//            isThirdItemAvailable = state.isThirdItemAvailable,
+//            firstItemSelected = state.isFirstItemSelected,
+//            secondItemSelected = state.isSecondItemSelected,
+//            thirdItemSelected = state.isThirdItemSelected,
+//            onFirstItemClicked = {
+//                onFirstItemClicked()
+//            },
+//            onSecondItemClicked = {
+//                onSecondItemClicked()
+//            },
+//            onThirdItemClicked = {
+//                onThirdItemClicked()
+//            },
+//            onMainButtonClicked = {
+//                onRegisterAlertButtonClicked()
+//                onTicketSheetVisible(false)
+//            },
+//            onDismissRequested = {
+//                onDismissRequested()
+//            })
     }
 
     Scaffold(
