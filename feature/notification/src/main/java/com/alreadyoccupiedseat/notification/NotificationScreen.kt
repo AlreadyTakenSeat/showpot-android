@@ -133,7 +133,7 @@ fun NotificationScreenContent(
 
                         ShowPotKoreanText_H0(
                             modifier = Modifier.padding(start = 8.dp),
-                            text = "D-" + daysUntil(state.upcomingTicketingShows[pagerState.currentPage].cursorValue),
+                            text = "D-" + daysUntil(state.upcomingTicketingShows[pagerState.currentPage].startAt),
                             color = ShowpotColor.MainOrange,
                         )
                     }
