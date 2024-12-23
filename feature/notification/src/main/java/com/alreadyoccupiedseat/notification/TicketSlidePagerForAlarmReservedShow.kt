@@ -161,7 +161,7 @@ fun TicketSlidePagerForAlarmReservedShow(
                             modifier = Modifier
                                 .padding(horizontal = 14.dp)
                                 .fillMaxWidth(),
-                            text = formatDateTime(alarmedShows[page].cursorValue),
+                            text = formatDateTime(alarmedShows[page].startAt),
                             textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                             color = ShowpotColor.Gray700,
                         )
