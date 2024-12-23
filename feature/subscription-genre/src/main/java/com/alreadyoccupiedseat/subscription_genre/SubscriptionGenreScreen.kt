@@ -32,13 +32,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.alreadyoccupiedseat.designsystem.GenreType
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotGenre
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
 import com.alreadyoccupiedseat.designsystem.component.snackbar.CheckIconSnackbar
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
-import com.alreadyoccupiedseat.enum.GenreType
 import com.alreadyoccupiedseat.model.Genre
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

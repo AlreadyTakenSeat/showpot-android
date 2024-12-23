@@ -4,8 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.Settings
 import com.alreadyoccupiedseat.model.SearchedShow
-import com.alreadyoccupiedseat.model.alert.CheckAlertReservationResponse
+import com.alreadyoccupiedseat.model.alert.Time
 import com.alreadyoccupiedseat.model.alert.TicketingAlertRequest
+import com.alreadyoccupiedseat.model.alert.Times
 import com.alreadyoccupiedseat.model.show.ShowPreview
 import com.alreadyoccupiedseat.model.show.InterestedData
 import com.alreadyoccupiedseat.model.show.ShowDetail
@@ -79,7 +80,7 @@ class ShowDataSourceImpl @Inject constructor(
     override suspend fun checkAlertReservation(
         showId: String,
         ticketingApiType: String
-    ): CheckAlertReservationResponse {
+    ): Times {
         return showService.checkAlertReservation(showId, ticketingApiType).body()?.data
             ?: throw Exception("Check Alert Reservation failed")
     }
