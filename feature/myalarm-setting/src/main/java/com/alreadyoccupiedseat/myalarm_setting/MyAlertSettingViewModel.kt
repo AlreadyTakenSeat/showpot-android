@@ -47,7 +47,7 @@ class MyAlertSettingViewModel @Inject constructor(
     fun getAlertReservedShow() {
         viewModelScope.launch {
             showRepository.getAlertReservedShow(
-                size = 100,
+                size = 30,
                 type = ShowType.NORMAL.name
             ).let {
                 _state.value = _state.value.copy(
