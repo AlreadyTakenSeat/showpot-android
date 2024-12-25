@@ -12,11 +12,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.typo.english.ShowPotEnglishText_H2
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B3_Regular
+
+@Preview
+@Composable
+fun PreviewShowInfo() {
+    ShowInfo(
+        imageUrl = "https://cdn.electimes.com/news/photo/202003/195245_108558.jpg",
+        showTitle = "Show Title",
+        dateInfo = "2022.12.31",
+        locationInfo = "Seoul",
+    )
+}
 
 @Composable
 fun ShowInfo(
