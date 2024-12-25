@@ -33,6 +33,7 @@ import com.alreadyoccupiedseat.subscribed_artist.SubscribedArtistScreen
 import com.alreadyoccupiedseat.subscription_artist.SubscriptionArtistScreen
 import com.alreadyoccupiedseat.subscription_genre.SubscriptionGenreScreen
 import com.alreadyoccupiedseat.withdraw.WithDrawScreen
+import com.lguplus.myalamrs.MyAlertsScreen
 
 @Composable
 fun AppScreen(
@@ -106,7 +107,7 @@ fun AppScreenContent(
             composable(Screen.Home.route) {
                 HomeScreen(
                     onAlarmLClicked = {
-                        navController.navigate(Screen.MyAlarmList.route)
+                        navController.navigate(Screen.MyAlerts.route)
                     },
                     onSearchBarClicked = {
                         navController.navigate(Screen.Search.route)
@@ -277,6 +278,10 @@ fun AppScreenContent(
 
             composable(Screen.WithDraw.route) {
                 WithDrawScreen(navController)
+            }
+
+            composable(Screen.MyAlerts.route) {
+                MyAlertsScreen(navController = navController)
             }
 
         }
