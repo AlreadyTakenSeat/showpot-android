@@ -2,15 +2,17 @@ package com.alreadyoccupiedseat.show_detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alreadyoccupiedseat.common.utiils.getCurrentDateTime
+import com.alreadyoccupiedseat.common.utiils.subtractMinutesFromDateTime
 import com.alreadyoccupiedseat.data.show.ShowRepository
 import com.alreadyoccupiedseat.datastore.AccountDataStore
+import com.alreadyoccupiedseat.enum.TicketingAlertTime
+import com.alreadyoccupiedseat.model.TicketingBoxSelectionState
 import com.alreadyoccupiedseat.model.show.ShowDetail
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import org.orbitmvi.orbit.Container
+import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 sealed interface ShowDetailEvent {
@@ -25,109 +27,132 @@ data class ShowDetailState(
     val showDetail: ShowDetail? = null,
     val isAlertSheetVisible: Boolean = false,
     val isLoginSheetVisible: Boolean = false,
-    val isFirstItemAvailable: Boolean = false,
-    val isSecondItemAvailable: Boolean = false,
-    val isThirdItemAvailable: Boolean = false,
-    val isFirstItemSelected: Boolean = false,
-    val isSecondItemSelected: Boolean = false,
-    val isThirdItemSelected: Boolean = false,
+    val ticketingBoxSelectionState: List<TicketingBoxSelectionState> =
+        TicketingAlertTime
+            .entries
+            .map {
+                TicketingBoxSelectionState(
+                    isAvailable = true, isSelected = false,
+                    minute = it.minute
+                )
+            }
 )
 
 @HiltViewModel
 class ShowDetailViewModel @Inject constructor(
     private val showRepository: ShowRepository,
     private val accountDataStore: AccountDataStore
-) : ViewModel() {
+) : ViewModel(), ContainerHost<ShowDetailState, ShowDetailEvent> {
 
-    private val _state = MutableStateFlow(ShowDetailState())
-    val state = _state
+    override val container: Container<ShowDetailState, ShowDetailEvent> =
+        container(ShowDetailState())
 
-    private val _event = MutableSharedFlow<ShowDetailEvent>()
-    val event = _event
-
-    fun registerShowId(showId: String) {
-        _state.value = _state.value.copy(showId = showId)
-    }
-
-    fun getShowDetail(showId: String) {
-        viewModelScope.launch {
-            val result = showRepository.getShowDetail(showId)
-            _state.value = ShowDetailState(showDetail = result)
+    init {
+        intent {
+            accountDataStore.getAccessTokenFlow().collect {
+                reduce {
+                    state.copy(isLoggedIn = it?.isNotEmpty() ?: false)
+                }
+            }
         }
     }
 
-    fun registerShowInterest(showId: String) {
-        viewModelScope.launch {
-            val isInterested = showRepository.registerShowInterest(showId)
-            _state.value =
-                _state.value.copy(showDetail = _state.value.showDetail?.copy(isInterested = isInterested))
+    fun registerShowId(showId: String) = intent {
+        reduce {
+            state.copy(showId = showId)
         }
     }
 
-    fun changeAlertSheetVisibility(isVisible: Boolean) {
-        _state.value = _state.value.copy(isAlertSheetVisible = isVisible)
+    fun getShowDetail(showId: String) = intent {
+        val result = showRepository.getShowDetail(showId)
+        reduce {
+            state.copy(showDetail = result)
+        }
     }
 
-    fun changeLoginSheetVisibility(isVisible: Boolean) {
-        _state.value = _state.value.copy(isLoginSheetVisible = isVisible)
+    fun registerShowInterest(showId: String) = intent {
+        val isInterested = showRepository.registerShowInterest(showId)
+        reduce {
+            state.copy(showDetail = state.showDetail?.copy(isInterested = isInterested))
+        }
+    }
+
+    fun changeAlertSheetVisibility(isVisible: Boolean) = intent {
+        reduce {
+            state.copy(isAlertSheetVisible = isVisible)
+        }
+    }
+
+    fun changeLoginSheetVisibility(isVisible: Boolean) = intent {
+        reduce {
+            state.copy(isLoginSheetVisible = isVisible)
+        }
     }
 
     fun registerTicketingAlert(
-        showId: String,
         ticketingApiType: String,
-        alertTimes: List<String>
-    ) {
-        viewModelScope.launch {
+    ) = intent {
+
+        val timeList = state.ticketingBoxSelectionState.withIndex()
+            .filter { it.value.isSelected }
+            .map {
+                subtractMinutesFromDateTime(
+                    // TODO: 여러 티켓팅 시간이 있을 경우 대응
+                    state.showDetail?.ticketingTimes?.first()?.ticketingAt ?: getCurrentDateTime(),
+                    TicketingAlertTime.entries[it.index].minute.toLong()
+                )
+            }
+
+        if (timeList.isNotEmpty()) {
             val result =
-                showRepository.registerTicketingAlert(showId, ticketingApiType, alertTimes)
-            if (result.isSuccess) {
-                _event.emit(ShowDetailEvent.AlertRegisterSuccess)
-            } else {
+                showRepository.registerTicketingAlert(
+                    state.showId, ticketingApiType,
+                    timeList
+                )
+
+            result.onSuccess {
+                postSideEffect(ShowDetailEvent.AlertRegisterSuccess)
+            }.onFailure {
                 println(result.exceptionOrNull())
             }
         }
     }
 
-    fun changeFirstItemSelection() {
-        _state.value = _state.value.copy(
-            isFirstItemSelected =
-            !state.value.isFirstItemSelected
-        )
-    }
-
-    fun changeSecondItemSelection() {
-        _state.value = _state.value.copy(
-            isSecondItemSelected =
-            !state.value.isSecondItemSelected
-        )
-    }
-
-    fun changeThirdItemSelection() {
-        _state.value = _state.value.copy(
-            isThirdItemSelected =
-            !state.value.isThirdItemSelected
-        )
-    }
-
-    fun checkLogin() {
-        viewModelScope.launch {
-            accountDataStore.getAccessTokenFlow().collectLatest {
-                delay(100)
-                _state.value = _state.value.copy(isLoggedIn = it?.isNotEmpty() ?: false)
-            }
+    fun changeTicketingSelectionBoxState(index: Int) = intent {
+        reduce {
+            state.copy(
+                ticketingBoxSelectionState = state.ticketingBoxSelectionState
+                    .mapIndexed { i, ticketingBoxSelectionState ->
+                        if (i == index) {
+                            ticketingBoxSelectionState.copy(isSelected = !ticketingBoxSelectionState.isSelected)
+                        } else {
+                            ticketingBoxSelectionState
+                        }
+                    }
+            )
         }
     }
 
-    fun checkAlertAvailability(showId: String) {
-        viewModelScope.launch {
-            val availabilitiesInfo = showRepository.checkAlertReservation(showId, "NORMAL")
-            _state.value = _state.value.copy(
-                isFirstItemSelected = availabilitiesInfo.alertReservationStatus.before24,
-                isSecondItemSelected = availabilitiesInfo.alertReservationStatus.before6,
-                isThirdItemSelected = availabilitiesInfo.alertReservationStatus.before1,
-                isFirstItemAvailable = availabilitiesInfo.alertReservationAvailability.canReserve24,
-                isSecondItemAvailable = availabilitiesInfo.alertReservationAvailability.canReserve6,
-                isThirdItemAvailable = availabilitiesInfo.alertReservationAvailability.canReserve1
+    fun checkAlertReservation(showId: String, ticketingApiType: String) = intent {
+
+        val result = showRepository.checkAlertReservation(showId, ticketingApiType)
+        // TODO: 고도화?
+        val alreadySelectedTimeList = result.times.map {
+            it.beforeMinutes
+        }
+
+        reduce {
+            state.copy(
+                ticketingBoxSelectionState = state.ticketingBoxSelectionState
+                    .map { ticketingBoxSelectionState ->
+                        if (alreadySelectedTimeList
+                                .contains(ticketingBoxSelectionState.minute)
+                        ) {
+                            ticketingBoxSelectionState.copy(isSelected = true)
+                        } else {
+                            ticketingBoxSelectionState
+                        }
+                    }
             )
         }
     }

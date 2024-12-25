@@ -153,15 +153,15 @@ class MyAlertSettingViewModel @Inject constructor(
 
     fun checkAlertAvailability() {
         viewModelScope.launch {
-            val availabilitiesInfo = showRepository.checkAlertReservation(state.value.selectedShowId ?: String(), ShowType.NORMAL.name)
-            _state.value = _state.value.copy(
-                isFirstItemSelected = availabilitiesInfo.alertReservationStatus.before24,
-                isSecondItemSelected = availabilitiesInfo.alertReservationStatus.before6,
-                isThirdItemSelected = availabilitiesInfo.alertReservationStatus.before1,
-                isFirstItemAvailable = availabilitiesInfo.alertReservationAvailability.canReserve24,
-                isSecondItemAvailable = availabilitiesInfo.alertReservationAvailability.canReserve6,
-                isThirdItemAvailable = availabilitiesInfo.alertReservationAvailability.canReserve1
-            )
+//            val availabilitiesInfo = showRepository.checkAlertReservation(state.value.selectedShowId ?: String(), ShowType.NORMAL.name)
+//            _state.value = _state.value.copy(
+//                isFirstItemSelected = availabilitiesInfo.alertReservationStatus.before24,
+//                isSecondItemSelected = availabilitiesInfo.alertReservationStatus.before6,
+//                isThirdItemSelected = availabilitiesInfo.alertReservationStatus.before1,
+//                isFirstItemAvailable = availabilitiesInfo.alertReservationAvailability.canReserve24,
+//                isSecondItemAvailable = availabilitiesInfo.alertReservationAvailability.canReserve6,
+//                isThirdItemAvailable = availabilitiesInfo.alertReservationAvailability.canReserve1
+//            )
         }
     }
 

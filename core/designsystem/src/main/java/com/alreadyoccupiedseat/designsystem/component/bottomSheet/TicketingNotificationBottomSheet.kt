@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -27,19 +28,14 @@ import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B3_SemiBold
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
+import com.alreadyoccupiedseat.enum.TicketingAlertTime
+import com.alreadyoccupiedseat.model.TicketingBoxSelectionState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TicketingNotificationBottomSheet(
-    isFirstItemAvailable: Boolean = true,
-    isSecondItemAvailable: Boolean = true,
-    isThirdItemAvailable: Boolean = true,
-    firstItemSelected: Boolean,
-    secondItemSelected: Boolean,
-    thirdItemSelected: Boolean,
-    onFirstItemClicked: () -> Unit,
-    onSecondItemClicked: () -> Unit,
-    onThirdItemClicked: () -> Unit,
+    ticketingBoxSelectionState: List<TicketingBoxSelectionState>,
+    onSelectionBoxClicked: (Int) -> Unit,
     onMainButtonClicked: () -> Unit,
     onDismissRequested: () -> Unit,
 ) {
@@ -48,155 +44,55 @@ fun TicketingNotificationBottomSheet(
             onDismissRequested()
         },
     ) {
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 15.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            SheetHandler()
-
-            ShowPotKoreanText_H1(
-                modifier = Modifier.fillMaxWidth(),
-                text = "티켓팅 알림을 언제 받으실건가요?",
-                color = Color.White,
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(ShowpotColor.Gray500, RoundedCornerShape(2.dp))
-                    .conditional(firstItemSelected) {
-                        border(1.dp, ShowpotColor.MainOrange, RoundedCornerShape(2.dp))
-                    }
-                    .conditional(isFirstItemAvailable) {
-                        clickable {
-                            onFirstItemClicked()
-                        }
-                    }
-                    .padding(
-                        horizontal = 24.dp,
-                        vertical = 14.dp
-                    ),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                ShowPotKoreanText_H2(
-                    text = "티켓팅 24시간 전",
-                    color = if (isFirstItemAvailable) Color.White else ShowpotColor.Gray400
-                )
-
-                if (isFirstItemAvailable) {
-                    Image(
-                        modifier = Modifier.size(24.dp),
-                        painter = if (firstItemSelected) painterResource(id = R.drawable.ic_checked_checkbox_24) else
-                            painterResource(id = R.drawable.ic_checkbox_24),
-                        contentDescription = "first check box",
-                    )
-                } else {
-                    ShowPotKoreanText_B3_SemiBold(
-                        text = "해당 시간 선택은 불가능해요",
-                        color = ShowpotColor.MainOrange
-                    )
-                }
-
+            item {
+                SheetHandler()
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(ShowpotColor.Gray500, RoundedCornerShape(2.dp))
-                    .conditional(secondItemSelected) {
-                        border(1.dp, ShowpotColor.MainOrange, RoundedCornerShape(2.dp))
-                    }
-                    .conditional(isSecondItemAvailable) {
-                        clickable {
-                            onSecondItemClicked()
-                        }
-                    }
-                    .padding(
-                        horizontal = 24.dp,
-                        vertical = 14.dp
-                    ),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                ShowPotKoreanText_H2(
-                    text = "티켓팅 6시간 전",
-                    color = if (isSecondItemAvailable) Color.White else ShowpotColor.Gray400
+            item {
+                ShowPotKoreanText_H1(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "티켓팅 알림을 언제 받으실건가요?",
+                    color = Color.White,
                 )
+            }
 
-                if (isSecondItemAvailable) {
-                    Image(
-                        modifier = Modifier.size(24.dp),
-                        painter = if (secondItemSelected) painterResource(id = R.drawable.ic_checked_checkbox_24) else
-                            painterResource(id = R.drawable.ic_checkbox_24),
-                        contentDescription = "second check box",
-                    )
-                } else {
-                    ShowPotKoreanText_B3_SemiBold(
-                        text = "해당 시간 선택은 불가능해요",
-                        color = ShowpotColor.MainOrange
-                    )
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
+            TicketingAlertTime.entries.forEachIndexed { index, curItem ->
+                item {
+                    TicketingNotificationSelectBox(
+                        ticketingBoxSelectionState[index].isSelected,
+                        ticketingBoxSelectionState[index].isAvailable,
+                        curItem.beforeText,
+                    ) {
+                        onSelectionBoxClicked(index)
+                    }
+
+                    Spacer(modifier = Modifier.height(12.dp))
                 }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(ShowpotColor.Gray500, RoundedCornerShape(2.dp))
-                    .conditional(thirdItemSelected) {
-                        border(1.dp, ShowpotColor.MainOrange, RoundedCornerShape(2.dp))
-                    }
-                    .conditional(isThirdItemAvailable) {
-                        clickable {
-                            onThirdItemClicked()
-                        }
-                    }
-                    .padding(
-                        horizontal = 24.dp,
-                        vertical = 14.dp
-                    ),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                ShowPotKoreanText_H2(
-                    text = "티켓팅 1시간 전",
-                    color = if (isThirdItemAvailable) Color.White else ShowpotColor.Gray400
-                )
-
-                if (isThirdItemAvailable) {
-                    Image(
-                        modifier = Modifier.size(24.dp),
-                        painter = if (thirdItemSelected) painterResource(id = R.drawable.ic_checked_checkbox_24) else
-                            painterResource(id = R.drawable.ic_checkbox_24),
-                        contentDescription = "second check box",
-                    )
-                } else {
-                    ShowPotKoreanText_B3_SemiBold(
-                        text = "해당 시간 선택은 불가능해요",
-                        color = ShowpotColor.MainOrange
-                    )
+            item {
+                ShowPotMainButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "알림 설정하기"
+                ) {
+                    onMainButtonClicked()
                 }
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
-
-            ShowPotMainButton(
-                modifier = Modifier.fillMaxWidth(),
-                text = "알림 설정하기"
-            ) {
-                onMainButtonClicked()
+            item {
+                Spacer(modifier = Modifier.height(54.dp))
             }
-
-            Spacer(modifier = Modifier.height(54.dp))
         }
     }
 }

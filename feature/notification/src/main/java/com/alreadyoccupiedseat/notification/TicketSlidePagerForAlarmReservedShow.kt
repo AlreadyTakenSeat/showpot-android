@@ -176,7 +176,9 @@ fun TicketSlidePagerForAlarmReservedShow(
 
 internal fun formatDateTime(inputDateTimeStr: String): String {
 
-    val inputDateTime = LocalDateTime.parse(inputDateTimeStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+    // 입력 형식 지정
+    val inputFormatter = DateTimeFormatter.ofPattern("yyyy-M-d HH:mm")
+    val inputDateTime = LocalDateTime.parse(inputDateTimeStr, inputFormatter)
 
     val dayOfWeekAbbreviation = when (inputDateTime.dayOfWeek) {
         DayOfWeek.MONDAY -> "MON"
@@ -189,7 +191,6 @@ internal fun formatDateTime(inputDateTimeStr: String): String {
     }
 
     val outputFormatter = DateTimeFormatter.ofPattern("MM.dd")
-
     val formattedDate = inputDateTime.format(outputFormatter)
     val formattedTime = inputDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
 
@@ -200,8 +201,9 @@ internal fun daysUntil(inputDateTimeStr: String): Long {
     // 현재 날짜와 시간
     val now = LocalDateTime.now()
 
-    // 입력 문자열을 LocalDateTime 객체로 변환
-    val inputDateTime = LocalDateTime.parse(inputDateTimeStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+    // 입력 형식 지정
+    val inputFormatter = DateTimeFormatter.ofPattern("yyyy-M-d HH:mm")
+    val inputDateTime = LocalDateTime.parse(inputDateTimeStr, inputFormatter)
 
     // 현재 날짜와 입력된 날짜 사이의 차이를 계산
     val duration = Duration.between(now, inputDateTime)

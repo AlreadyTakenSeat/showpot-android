@@ -1,10 +1,8 @@
-package com.alreadyoccupiedseat.enum
+package com.alreadyoccupiedseat.designsystem
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.Keep
-import com.alreadyoccupiedseat.designsystem.R
 
-/** Genre Drawable Res ***/
 @Keep
 enum class GenreType(
     val id: String,
@@ -108,23 +106,23 @@ enum class GenreType(
     companion object {
         /** 기본 리소스 전체 반환 ***/
         fun getAllGenreNormalRes(): List<Int> {
-            return entries.map { it.normalRes }
+            return GenreType.entries.map { it.normalRes }
         }
         /** 기본 리소스 반환 ***/
         fun getNormalRes(id: String): Int {
-            return entries.firstOrNull { it.id == id }?.normalRes
+            return GenreType.entries.firstOrNull { it.id == id }?.normalRes
                 ?: throw IllegalArgumentException("Invalid Genre ID: $id")
         }
 
         /** 선택된 리소스 반환 ***/
         fun getSelectedRes(id: String): Int {
-            return entries.firstOrNull { it.id == id }?.selectedRes
+            return GenreType.entries.firstOrNull { it.id == id }?.selectedRes
                 ?: throw IllegalArgumentException("Invalid Genre ID: $id")
         }
 
         /** 구독된 리소스 반환 ***/
         fun getSubscribedRes(id: String): Int {
-            return entries.firstOrNull { it.id == id }?.subscribedRes
+            return GenreType.entries.firstOrNull { it.id == id }?.subscribedRes
                 ?: throw IllegalArgumentException("Invalid Genre ID: $id")
         }
     }
