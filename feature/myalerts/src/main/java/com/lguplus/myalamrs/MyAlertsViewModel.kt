@@ -28,10 +28,10 @@ class MyAlertsViewModel @Inject constructor(
 
     init {
         intent {
-//            val isExist = alertRepository.getAlertsExist()
-//            val myAlerts = alertRepository.getAlerts(null, 30)
-//            Log.d("MyAlertsViewModel", "isExist: $isExist")
-//            Log.d("MyAlertsViewModel", "myAlerts: $myAlerts")
+            val isExist = alertRepository.getAlertsExist()
+            val myAlerts = alertRepository.getAlerts(null, 30)
+            Log.d("MyAlertsViewModel", "isExist: $isExist")
+            Log.d("MyAlertsViewModel", "myAlerts: $myAlerts")
         }
     }
 
