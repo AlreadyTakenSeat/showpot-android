@@ -1,4 +1,4 @@
-package com.lguplus.myalamrs
+package com.alreadyoccupiedseat.myalamrs
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

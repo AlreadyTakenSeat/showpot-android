@@ -1,4 +1,4 @@
-package com.lguplus.myalamrs
+package com.alreadyoccupiedseat.myalamrs
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding

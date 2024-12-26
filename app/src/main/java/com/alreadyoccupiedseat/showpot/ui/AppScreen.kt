@@ -33,7 +33,7 @@ import com.alreadyoccupiedseat.subscribed_artist.SubscribedArtistScreen
 import com.alreadyoccupiedseat.subscription_artist.SubscriptionArtistScreen
 import com.alreadyoccupiedseat.subscription_genre.SubscriptionGenreScreen
 import com.alreadyoccupiedseat.withdraw.WithDrawScreen
-import com.lguplus.myalamrs.MyAlertsScreen
+import com.alreadyoccupiedseat.myalamrs.MyAlertsScreen
 
 @Composable
 fun AppScreen(
