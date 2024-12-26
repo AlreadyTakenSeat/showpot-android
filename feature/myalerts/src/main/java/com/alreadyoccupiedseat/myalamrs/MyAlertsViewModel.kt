@@ -1,8 +1,10 @@
 package com.alreadyoccupiedseat.myalamrs
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.alreadyoccupiedseat.common.utiils.errorLog
 import com.alreadyoccupiedseat.data.alert.AlertRepository
+import com.alreadyoccupiedseat.data.toApiErrorResult
+import com.alreadyoccupiedseat.model.Alert
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
@@ -14,7 +16,8 @@ sealed interface MyAlertsSettingEvent {
 }
 
 data class MyAlertsState(
-    val test: Boolean = false,
+    val isExist: Boolean = false,
+    val alerts: List<Alert> = emptyList(),
 )
 
 @HiltViewModel
@@ -27,11 +30,29 @@ class MyAlertsViewModel @Inject constructor(
         container(MyAlertsState())
 
     init {
+        getAlertsExist()
+        getAlerts()
+    }
+
+    private fun getAlertsExist() {
         intent {
             val isExist = alertRepository.getAlertsExist()
-            val myAlerts = alertRepository.getAlerts(null, 30)
-            Log.d("MyAlertsViewModel", "isExist: $isExist")
-            Log.d("MyAlertsViewModel", "myAlerts: $myAlerts")
+            reduce {
+                state.copy(isExist = isExist)
+            }
+        }
+    }
+
+    private fun getAlerts() {
+        intent {
+            val alerts = alertRepository.getAlerts(null, 30)
+            alerts.onSuccess {
+                reduce {
+                    state.copy(alerts = it)
+                }
+            }.onFailure {
+                errorLog(it.toApiErrorResult())
+            }
         }
     }
 
