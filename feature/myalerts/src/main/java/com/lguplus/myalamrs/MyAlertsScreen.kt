@@ -49,11 +49,10 @@ private fun MyAlertsContentScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = modifier
                     .padding(horizontal = 16.dp)
-                    .padding(it)
-                ,
+                    .padding(it),
             ) {
-                item {
-                    repeat(10) {
+                repeat(10) {
+                    item {
                         ShowPotAlert(
                             imageUrl = "https://images.pexels.com/photos/6865046/pexels-photo-6865046.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
                             title = "Show Alert Title",
