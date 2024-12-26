@@ -18,6 +18,12 @@ class ServiceModule {
 
     @Provides
     @Singleton
+    fun provideUserService(retrofit: Retrofit): AlertService {
+        return retrofit.create(AlertService::class.java)
+    }
+
+    @Provides
+    @Singleton
     fun provideLoginService(retrofit: Retrofit): LoginService {
         return retrofit.create(LoginService::class.java)
     }
