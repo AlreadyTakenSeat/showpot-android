@@ -28,7 +28,7 @@ class MyFavoriteShowViewModel @Inject constructor(
     fun getInterestedShow() {
         viewModelScope.launch {
             showRepository.getInterestedShowList(
-                size = 100
+                size = 30
             ).let {
                 _state.value = _state.value.copy(
                     interestedShowList = it
