@@ -63,4 +63,7 @@ dependencies {
     implementation(libs.material)
 
     implementation(libs.coil.kt.compose)
+
+    implementation(libs.orbit.viewmodel)
+    implementation(libs.orbit.compose)
 }
