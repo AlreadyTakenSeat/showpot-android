@@ -86,8 +86,9 @@ fun ShowDetailScreen(
     LaunchedEffect(showId) {
         viewModel.getShowDetail(showId)
         viewModel.registerShowId(showId)
-        viewModel.checkAlertReservation(showId, "NORMAL")
     }
+
+    if (state.isLoggedIn) viewModel.checkAlertReservation(showId, "NORMAL")
 
     ShowDetailScreenContent(
         state = state,
