@@ -1,8 +1,12 @@
 package com.alreadyoccupiedseat.myalamrs
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,13 +21,11 @@ import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun MyAlertsScreen(
-    modifier: Modifier = Modifier,
     navController: NavController,
 ) {
     val viewModel = hiltViewModel<MyAlertsViewModel>()
     val state by viewModel.collectAsState()
     MyAlertsContentScreen(
-        navController = navController,
         state = state,
         onBackClicked = {
             navController.popBackStack()
@@ -35,7 +37,6 @@ fun MyAlertsScreen(
 private fun MyAlertsContentScreen(
     state: MyAlertsState,
     modifier: Modifier = Modifier,
-    navController: NavController,
     onBackClicked: () -> Unit,
 ) {
     Scaffold(
@@ -44,24 +45,50 @@ private fun MyAlertsContentScreen(
             MyAlertsTopBar { onBackClicked() }
         },
         content = {
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
+            Box(
                 modifier = modifier
-                    .padding(horizontal = 16.dp)
-                    .padding(it),
+                    .fillMaxSize()
+                    .padding(it)
+                    .padding(horizontal = 16.dp),
+                contentAlignment = Alignment.Center
             ) {
-                repeat(10) {
-                    item {
-                        ShowPotAlert(
-                            imageUrl = "https://images.pexels.com/photos/6865046/pexels-photo-6865046.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-                            title = "Show Alert Title",
-                            content = "Show Alert Content",
-                            timeAt = "2024.12.25"
-                        )
+                if (state.alerts.isEmpty()) {
+                    TestProgress()
+                } else {
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .fillMaxSize()
+                    ) {
+                        items(state.alerts) { alert ->
+                            ShowPotAlert(
+                                imageUrl = alert.showImageURL,
+                                title = alert.title,
+                                content = alert.message,
+                                timeAt = alert.notifiedAt
+                            )
+                        }
                     }
                 }
             }
         }
     )
+}
+
+
+@Composable
+fun TestProgress(
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(
+            color = ShowpotColor.MainOrange,
+            strokeWidth = 4.dp
+        )
+    }
 }
