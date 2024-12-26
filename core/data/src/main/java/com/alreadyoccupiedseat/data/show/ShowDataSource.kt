@@ -13,7 +13,7 @@ interface ShowDataSource {
         sort: String,
         onlyOpenSchedule: Boolean,
         size: Int
-    ): List<ShowPreview>
+    ): Result<List<ShowPreview>>
 
     /** 관심 공연 목록 조회 ***/
     suspend fun getInterestedShowList(

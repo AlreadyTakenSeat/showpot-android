@@ -1,10 +1,12 @@
 package com.alreadyoccupiedseat.home
 
 import androidx.lifecycle.ViewModel
+import com.alreadyoccupiedseat.common.utiils.errorLog
 import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.data.artist.ArtistRepository
 import com.alreadyoccupiedseat.data.login.LoginRepository
 import com.alreadyoccupiedseat.data.show.ShowRepository
+import com.alreadyoccupiedseat.data.toApiErrorResult
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.model.Artist
 import com.alreadyoccupiedseat.model.show.ShowPreview
@@ -64,31 +66,39 @@ class HomeViewModel @Inject constructor(
     // 이름 변경
     private fun getEntireShow() = intent {
         val tempRequestSize = 30
-        val shows = showRepository.getEntireShow(
+        val result = showRepository.getEntireShow(
             sort = ShowType.RECENT.name,
             onlyOpenSchedule = false,
             size = tempRequestSize,
         )
 
-        reduce {
-            state.copy(
-                entireShowList = shows.take(2),
-            )
+        result.onSuccess {
+            reduce {
+                state.copy(
+                    entireShowList = it.take(2),
+                )
+            }
+        }.onFailure {
+            errorLog(it.toApiErrorResult().message)
         }
     }
 
     private fun getRecommendedShow() = intent {
         val tempRequestSize = 30
-        val shows = showRepository.getEntireShow(
+        val result = showRepository.getEntireShow(
             sort = ShowType.POPULAR.name,
             onlyOpenSchedule = false,
             size = tempRequestSize,
         )
 
-        reduce {
-            state.copy(
-                recommendedShowList = shows
-            )
+        result.onSuccess {
+            reduce {
+                state.copy(
+                    recommendedShowList = it.take(2),
+                )
+            }
+        }.onFailure {
+            errorLog(it.toApiErrorResult().message)
         }
     }
 

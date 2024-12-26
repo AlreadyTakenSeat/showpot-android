@@ -1,17 +1,18 @@
 package com.alreadyoccupiedseat.entire_show
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.alreadyoccupiedseat.common.utiils.errorLog
 import com.alreadyoccupiedseat.data.show.ShowRepository
+import com.alreadyoccupiedseat.data.toApiErrorResult
 import com.alreadyoccupiedseat.model.show.ShowPreview
 import com.alreadyoccupiedseat.model.show.ShowType
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
+import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 sealed interface EntireShowEvent {
-    data object Error: EntireShowEvent
+    data object Error : EntireShowEvent
 }
 
 data class EntireShowState(
@@ -21,29 +22,30 @@ data class EntireShowState(
 @HiltViewModel
 class EntireShowViewModel @Inject constructor(
     private val showRepository: ShowRepository
-): ViewModel() {
+) : ViewModel(), ContainerHost<EntireShowState, EntireShowEvent> {
 
-    private val _state = MutableStateFlow(EntireShowState())
-    val state = _state
-
+    override val container = container<EntireShowState, EntireShowEvent>(EntireShowState())
     init {
         getEntireShow()
     }
 
     /** 전체 공연 목록 가져오기 ***/
-    private fun getEntireShow() {
-        viewModelScope.launch {
-            val tempRequestSize = 30
-            showRepository.getEntireShow(
-                sort = ShowType.POPULAR.text,
-                onlyOpenSchedule = false,
-                size = tempRequestSize,
-            ).let { result ->
+    private fun getEntireShow() = intent {
+        val tempRequestSize = 30
+        val result = showRepository.getEntireShow(
+            sort = ShowType.POPULAR.text,
+            onlyOpenSchedule = false,
+            size = tempRequestSize,
+        )
 
-                _state.value = _state.value.copy(
-                    entireShowList = result
+        result.onSuccess {
+            reduce {
+                state.copy(
+                    entireShowList = it
                 )
             }
+        }.onFailure {
+            errorLog(it.toApiErrorResult().message)
         }
     }
 
