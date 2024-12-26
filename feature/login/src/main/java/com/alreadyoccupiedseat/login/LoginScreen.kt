@@ -1,5 +1,6 @@
 package com.alreadyoccupiedseat.login
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -33,6 +34,7 @@ import com.alreadyoccupiedseat.designsystem.component.ShowPotButtonWithIcon
 import com.alreadyoccupiedseat.designsystem.component.ShowPotTopBar
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
 import kotlinx.coroutines.flow.collectLatest
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun LoginScreen(
@@ -42,24 +44,22 @@ fun LoginScreen(
     val context = LocalContext.current
     val viewModel = hiltViewModel<LoginViewModel>()
 
-    LaunchedEffect(true) {
-        viewModel.event.collectLatest { event ->
-            when (event) {
-                is LoginScreenEvent.Idle -> {
+    viewModel.collectSideEffect { event ->
+        when (event) {
+            is LoginScreenEvent.Idle -> {
 
-                }
+            }
 
-                is LoginScreenEvent.LoginRequested -> {
+            is LoginScreenEvent.LoginRequested -> {
 
-                }
+            }
 
-                is LoginScreenEvent.LoginCompleted -> {
-                    navController.popBackStack()
-                }
+            is LoginScreenEvent.LoginCompleted -> {
+                navController.popBackStack()
+            }
 
-                is LoginScreenEvent.LoginError -> {
-
-                }
+            is LoginScreenEvent.LoginError -> {
+                Toast.makeText(context, event.errorMessage, Toast.LENGTH_SHORT).show()
             }
         }
     }
