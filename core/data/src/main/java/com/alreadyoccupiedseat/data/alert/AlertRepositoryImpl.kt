@@ -7,7 +7,7 @@ class AlertRepositoryImpl @Inject constructor(
     private val alertDataSource: AlertDataSource
 ) : AlertRepository {
 
-    override suspend fun getAlerts(cursorId: String?, size: Int): List<Alert> {
+    override suspend fun getAlerts(cursorId: String?, size: Int): Result<List<Alert>> {
         return alertDataSource.getAlerts(cursorId, size)
     }
 
