@@ -17,7 +17,7 @@ class ShowRepositoryImpl @Inject constructor(
         sort: String,
         onlyOpenSchedule: Boolean,
         size: Int,
-    ): List<ShowPreview> {
+    ): Result<List<ShowPreview>> {
         return showDataSource.getEntireShow(
             sort = sort,
             onlyOpenSchedule = onlyOpenSchedule,

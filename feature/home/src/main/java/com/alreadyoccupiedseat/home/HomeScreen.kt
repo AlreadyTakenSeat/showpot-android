@@ -22,7 +22,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,6 +48,7 @@ import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B1_Sem
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
 fun HomeScreen(
@@ -61,7 +61,7 @@ fun HomeScreen(
     onRecommendedShowClicked: (String) -> Unit,
 ) {
     val viewModel = hiltViewModel<HomeViewModel>()
-    val state = viewModel.state.collectAsState()
+    val state = viewModel.collectAsState()
 
     LaunchedEffect(true) {
         viewModel.getUbSubscribedArtists()

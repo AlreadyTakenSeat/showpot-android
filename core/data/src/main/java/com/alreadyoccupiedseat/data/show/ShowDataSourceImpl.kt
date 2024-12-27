@@ -3,6 +3,7 @@ package com.alreadyoccupiedseat.data.show
 import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.Settings
+import com.alreadyoccupiedseat.data.getResult
 import com.alreadyoccupiedseat.model.SearchedShow
 import com.alreadyoccupiedseat.model.alert.Time
 import com.alreadyoccupiedseat.model.alert.TicketingAlertRequest
@@ -25,12 +26,17 @@ class ShowDataSourceImpl @Inject constructor(
         sort: String,
         onlyOpenSchedule: Boolean,
         size: Int,
-    ): List<ShowPreview> {
-        return showService.getEntireShow(
-            sort = sort,
-            onlyOpenSchedule = onlyOpenSchedule,
-            size = size
-        ).body()?.data?.data ?: emptyList()
+    ): Result<List<ShowPreview>> {
+
+        return runCatching {
+            showService.getEntireShow(
+                sort = sort,
+                onlyOpenSchedule = onlyOpenSchedule,
+                size = size
+            ).getResult {
+                it.data.data
+            }
+        }
     }
 
     override suspend fun searchShows(
