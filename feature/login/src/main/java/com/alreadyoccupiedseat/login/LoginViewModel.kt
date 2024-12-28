@@ -42,7 +42,7 @@ class LoginViewModel @Inject constructor(
             postSideEffect(LoginScreenEvent.LoginCompleted)
         }.onFailure {
             postSideEffect(LoginScreenEvent.LoginError("카카오 로그인 실패"))
-            this@LoginViewModel.errorLog("카카오 로그인 실패")
+            this@LoginViewModel.errorLog(it)
         }
 
     }
