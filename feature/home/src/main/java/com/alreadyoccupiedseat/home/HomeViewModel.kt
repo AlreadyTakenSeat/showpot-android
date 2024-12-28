@@ -9,6 +9,7 @@ import com.alreadyoccupiedseat.data.show.ShowRepository
 import com.alreadyoccupiedseat.data.toApiErrorResult
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.model.Artist
+import com.alreadyoccupiedseat.model.artist.UnSubscribedArtist
 import com.alreadyoccupiedseat.model.show.ShowPreview
 import com.alreadyoccupiedseat.model.show.ShowType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +25,7 @@ data class HomeScreenState(
     val genreList: List<Pair<Int, Int>> = emptyList(),
     val entireShowList: List<ShowPreview> = emptyList(),
     val recommendedShowList: List<ShowPreview> = emptyList(),
-    val unSubscribedArtists: List<Artist> = emptyList(),
+    val unSubscribedArtists: List<UnSubscribedArtist> = emptyList(),
     val nickName: String = String.EMPTY
 )
 

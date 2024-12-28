@@ -3,6 +3,7 @@ package com.alreadyoccupiedseat.data.artist
 import com.alreadyoccupiedseat.model.Artist
 import com.alreadyoccupiedseat.model.SearchedArtist
 import com.alreadyoccupiedseat.model.artist.SubscriptionArtistId
+import com.alreadyoccupiedseat.model.artist.UnSubscribedArtist
 
 interface ArtistRepository {
 
@@ -19,7 +20,7 @@ interface ArtistRepository {
         genreIds: List<String>? = null,
         cursorId: Int? = null,
         size: Int,
-    ): List<Artist>
+    ): List<UnSubscribedArtist>
 
     suspend fun getSubscribedArtists(
         sort: String? = null,
