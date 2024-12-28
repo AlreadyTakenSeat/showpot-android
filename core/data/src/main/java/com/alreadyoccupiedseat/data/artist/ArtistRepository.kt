@@ -30,7 +30,7 @@ interface ArtistRepository {
 
     suspend fun subscribeArtists(
         artistIds: List<String>,
-    ): List<SubscriptionArtistId>
+    ): Result<List<SubscriptionArtistId>>
 
     suspend fun unSubscribeArtists(
         artistIds: List<String>,

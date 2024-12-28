@@ -2,7 +2,9 @@ package com.alreadyoccupiedseat.subscription_artist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alreadyoccupiedseat.common.utiils.errorLog
 import com.alreadyoccupiedseat.data.artist.ArtistRepository
+import com.alreadyoccupiedseat.data.toApiErrorResult
 import com.alreadyoccupiedseat.datastore.AccountDataStore
 import com.alreadyoccupiedseat.model.Artist
 import com.alreadyoccupiedseat.model.artist.UnSubscribedArtist
@@ -52,20 +54,26 @@ class SubscriptionArtistViewModel @Inject constructor(
     fun subscribeArtists() = intent {
 
         val artistIds = state.selectedArtists.map { it.spotifyId }
-        val subscribedArtistsIds = artistRepository.subscribeArtists(artistIds).map {
-            it.id
-        }
+        val result = artistRepository.subscribeArtists(artistIds)
 
-        reduce {
-            state.copy(
-                selectedArtists = emptyList(),
-                unsubscribedArtists = state.unsubscribedArtists.filter {
-                    it.id !in subscribedArtistsIds
-                },
-            )
-        }
+        result.onSuccess { subscribedArtistsInfo ->
+            val subscribedIds = subscribedArtistsInfo.map {
+                it.id
+            }
 
-        postSideEffect(SubscriptionArtistScreenEvent.SubscribeArtistsSuccess)
+            reduce {
+                state.copy(
+                    selectedArtists = emptyList(),
+                    unsubscribedArtists = state.unsubscribedArtists.filter {
+                        it.id !in subscribedIds
+                    },
+                )
+            }
+
+            postSideEffect(SubscriptionArtistScreenEvent.SubscribeArtistsSuccess)
+        }.onFailure {
+            errorLog(it.toApiErrorResult().message)
+        }
 
     }
 

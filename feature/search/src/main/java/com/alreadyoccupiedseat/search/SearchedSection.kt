@@ -158,8 +158,7 @@ fun SearchedSection(
                                 onUnSubscribeTargetArtistChanged(artist)
                                 onArtistUnSubscriptionSheetVisibilityChanged(true)
                             } else {
-                                // TODO: current it's null
-                                onSubscribeArtist(artist.artistSpotifyId)
+                                onSubscribeArtist(artist.spotifyId)
                             }
                         } else {
                             onLoginSheetVisibilityChanged(true)

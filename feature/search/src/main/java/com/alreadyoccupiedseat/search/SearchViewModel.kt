@@ -148,19 +148,25 @@ class SearchViewModel @Inject constructor(
 
         val result = artistRepository.subscribeArtists(listOf(artistId))
 
-        reduce {
-            state.copy(
-                searchedArtists = state.searchedArtists.map { subscribedArtist ->
-                    if (subscribedArtist.artistSpotifyId == result.first().artistSpotifyId) {
-                        subscribedArtist.copy(isSubscribed = true)
-                    } else {
-                        subscribedArtist
+        result.onSuccess {
+
+            reduce {
+                state.copy(
+                    searchedArtists = state.searchedArtists.map { subscribedArtist ->
+                        if (subscribedArtist.spotifyId == it.first().spotifyId) {
+                            subscribedArtist.copy(isSubscribed = true)
+                        } else {
+                            subscribedArtist
+                        }
                     }
-                }
-            )
+                )
+            }
+
+            postSideEffect(SearchScreenEvent.SubscribeArtistSuccess)
+        }.onFailure {
+            errorLog(it.toApiErrorResult().message)
         }
 
-        postSideEffect(SearchScreenEvent.SubscribeArtistSuccess)
     }
 
     fun unSubscribeArtist() = intent {

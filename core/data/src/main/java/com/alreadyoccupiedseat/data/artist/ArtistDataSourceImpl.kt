@@ -61,9 +61,12 @@ class ArtistDataSourceImpl @Inject constructor(
         ).body()?.data?.data ?: emptyList()
     }
 
-    override suspend fun subscribeArtists(artistIds: List<String>): List<SubscriptionArtistId> {
-        return artistService.subscribeArtists(SubscribeArtistsRequest(artistIds))
-            .body()?.data?.subscriptionArtistIds ?: emptyList()
+    override suspend fun subscribeArtists(artistIds: List<String>): Result<List<SubscriptionArtistId>> {
+        return runCatching {
+            artistService.subscribeArtists(SubscribeArtistsRequest(artistIds)).getResult {
+                it.data.subscriptionArtistIds
+            }
+        }
     }
 
     override suspend fun unSubscribeArtists(artistIds: List<String>): List<String> {
