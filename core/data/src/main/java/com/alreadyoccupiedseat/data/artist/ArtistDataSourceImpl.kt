@@ -6,6 +6,7 @@ import com.alreadyoccupiedseat.model.SearchedArtist
 import com.alreadyoccupiedseat.model.artist.SubscribeArtistsRequest
 import com.alreadyoccupiedseat.model.artist.SubscriptionArtistId
 import com.alreadyoccupiedseat.model.artist.UnSubscribeArtistsRequest
+import com.alreadyoccupiedseat.model.artist.UnSubscribedArtist
 import com.alreadyoccupiedseat.network.ArtistService
 import javax.inject.Inject
 
@@ -37,7 +38,7 @@ class ArtistDataSourceImpl @Inject constructor(
         genreIds: List<String>?,
         cursorId: Int?,
         size: Int,
-    ): List<Artist> {
+    ): List<UnSubscribedArtist> {
         return artistService.getUnsubscribedArtists(
             sortedStandard,
             artistGenderApiTypes,
@@ -60,9 +61,12 @@ class ArtistDataSourceImpl @Inject constructor(
         ).body()?.data?.data ?: emptyList()
     }
 
-    override suspend fun subscribeArtists(artistIds: List<String>): List<SubscriptionArtistId> {
-        return artistService.subscribeArtists(SubscribeArtistsRequest(artistIds))
-            .body()?.data?.subscriptionArtistIds ?: emptyList()
+    override suspend fun subscribeArtists(artistIds: List<String>): Result<List<SubscriptionArtistId>> {
+        return runCatching {
+            artistService.subscribeArtists(SubscribeArtistsRequest(artistIds)).getResult {
+                it.data.subscriptionArtistIds
+            }
+        }
     }
 
     override suspend fun unSubscribeArtists(artistIds: List<String>): List<String> {

@@ -2,13 +2,17 @@ package com.alreadyoccupiedseat.subscription_artist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alreadyoccupiedseat.common.utiils.errorLog
 import com.alreadyoccupiedseat.data.artist.ArtistRepository
+import com.alreadyoccupiedseat.data.toApiErrorResult
 import com.alreadyoccupiedseat.datastore.AccountDataStore
 import com.alreadyoccupiedseat.model.Artist
+import com.alreadyoccupiedseat.model.artist.UnSubscribedArtist
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import org.orbitmvi.orbit.Container
+import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 sealed interface SubscriptionArtistScreenEvent {
@@ -18,8 +22,8 @@ sealed interface SubscriptionArtistScreenEvent {
 }
 
 data class SubscriptionArtistScreenState(
-    val selectedArtists: List<Artist> = emptyList(),
-    val unsubscribedArtists: List<Artist> = emptyList(),
+    val selectedArtists: List<UnSubscribedArtist> = emptyList(),
+    val unsubscribedArtists: List<UnSubscribedArtist> = emptyList(),
     val isLoggedIn: Boolean = false,
     val isSheetVisible: Boolean = false,
 )
@@ -29,73 +33,87 @@ data class SubscriptionArtistScreenState(
 class SubscriptionArtistViewModel @Inject constructor(
     private val artistRepository: ArtistRepository,
     private val accountDataStore: AccountDataStore
-) : ViewModel() {
+) : ViewModel(), ContainerHost<SubscriptionArtistScreenState, SubscriptionArtistScreenEvent> {
 
-    private var _state = MutableStateFlow(SubscriptionArtistScreenState())
-    val state = _state
-
-    private val _event = MutableSharedFlow<SubscriptionArtistScreenEvent>()
-    val event = _event
+    override val container: Container<SubscriptionArtistScreenState, SubscriptionArtistScreenEvent> =
+        container(SubscriptionArtistScreenState())
 
     init {
         getUnsubscribedArtists()
-        viewModelScope.launch {
+        intent {
             accountDataStore.getAccessTokenFlow().collect {
-                _state.value = _state.value.copy(
-                    isLoggedIn = it?.isNotEmpty() ?: false,
-                )
+                reduce {
+                    state.copy(
+                        isLoggedIn = it?.isNotEmpty() ?: false,
+                    )
+                }
             }
         }
     }
 
-    fun subscribeArtists() {
-        viewModelScope.launch {
-            val artistIds = state.value.selectedArtists.map { it.id }
-            val subscribedArtistsIds = artistRepository.subscribeArtists(artistIds).map {
+    fun subscribeArtists() = intent {
+
+        val artistIds = state.selectedArtists.map { it.spotifyId }
+        val result = artistRepository.subscribeArtists(artistIds)
+
+        result.onSuccess { subscribedArtistsInfo ->
+            val subscribedIds = subscribedArtistsInfo.map {
                 it.id
             }
 
-            _state.value = _state.value.copy(
-                selectedArtists = emptyList(),
-                unsubscribedArtists = state.value.unsubscribedArtists.filter {
-                    it.id !in subscribedArtistsIds
-                },
-            )
-            event.emit(SubscriptionArtistScreenEvent.SubscribeArtistsSuccess)
+            reduce {
+                state.copy(
+                    selectedArtists = emptyList(),
+                    unsubscribedArtists = state.unsubscribedArtists.filter {
+                        it.id !in subscribedIds
+                    },
+                )
+            }
+
+            postSideEffect(SubscriptionArtistScreenEvent.SubscribeArtistsSuccess)
+        }.onFailure {
+            errorLog(it.toApiErrorResult().message)
         }
+
     }
 
-    fun selectArtist(artist: Artist) {
+    fun selectArtist(artist: UnSubscribedArtist) = intent {
 
-        if (state.value.selectedArtists.contains(artist)) {
-            _state.value = _state.value.copy(
-                selectedArtists = _state.value.selectedArtists - artist,
-            )
+        if (state.selectedArtists.contains(artist)) {
+            reduce {
+                state.copy(
+                    selectedArtists = state.selectedArtists - artist,
+                )
+            }
         } else {
-            _state.value = _state.value.copy(
-                selectedArtists = _state.value.selectedArtists + artist,
-            )
+            reduce {
+                state.copy(
+                    selectedArtists = state.selectedArtists + artist,
+                )
+            }
         }
 
     }
 
-    fun isSelected(artist: Artist): Boolean {
-        return state.value.selectedArtists.contains(artist)
+    fun isSelected(artist: UnSubscribedArtist): Boolean {
+        return container.stateFlow.value.selectedArtists.contains(artist)
     }
 
-    fun setSheetVisible(isVisible: Boolean) {
-        _state.value = _state.value.copy(
-            isSheetVisible = isVisible,
-        )
-    }
-
-    private fun getUnsubscribedArtists() {
-        viewModelScope.launch {
-            val result = artistRepository.getUnsubscribedArtists(
-                size = 30,
+    fun setSheetVisible(isVisible: Boolean) = intent {
+        reduce {
+            state.copy(
+                isSheetVisible = isVisible,
             )
+        }
+    }
 
-            _state.value = _state.value.copy(
+    private fun getUnsubscribedArtists() = intent {
+        val result = artistRepository.getUnsubscribedArtists(
+            size = 30,
+        )
+
+        reduce {
+            state.copy(
                 unsubscribedArtists = result,
             )
         }

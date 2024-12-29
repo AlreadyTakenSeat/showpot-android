@@ -3,6 +3,7 @@ package com.alreadyoccupiedseat.data.artist
 import com.alreadyoccupiedseat.model.Artist
 import com.alreadyoccupiedseat.model.SearchedArtist
 import com.alreadyoccupiedseat.model.artist.SubscriptionArtistId
+import com.alreadyoccupiedseat.model.artist.UnSubscribedArtist
 import javax.inject.Inject
 
 class ArtistRepositoryImpl @Inject constructor(
@@ -28,7 +29,7 @@ class ArtistRepositoryImpl @Inject constructor(
         genreIds: List<String>?,
         cursorId: Int?,
         size: Int,
-    ): List<Artist> {
+    ): List<UnSubscribedArtist> {
         return artistDataSource.getUnsubscribedArtists(
             sortedStandard,
             artistGenderApiTypes,
@@ -51,7 +52,7 @@ class ArtistRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun subscribeArtists(artistIds: List<String>): List<SubscriptionArtistId> {
+    override suspend fun subscribeArtists(artistIds: List<String>): Result<List<SubscriptionArtistId>> {
         return artistDataSource.subscribeArtists(artistIds)
     }
 

@@ -43,7 +43,10 @@ import com.alreadyoccupiedseat.designsystem.component.snackbar.CheckIconSnackbar
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
 import com.alreadyoccupiedseat.model.Artist
+import com.alreadyoccupiedseat.model.artist.UnSubscribedArtist
 import kotlinx.coroutines.launch
+import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun SubscriptionArtistScreen(
@@ -53,19 +56,18 @@ fun SubscriptionArtistScreen(
 ) {
 
     val viewModel = hiltViewModel<SubscriptionArtistViewModel>()
-    val state = viewModel.state.collectAsState()
+    val state = viewModel.collectAsState()
 
     val snackbarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(true) {
-        viewModel.event.collect {
-            when (it) {
-                SubscriptionArtistScreenEvent.Idle -> {
+    viewModel.collectSideEffect {
+        when (it) {
+            SubscriptionArtistScreenEvent.Idle -> {
 
-                }
-                SubscriptionArtistScreenEvent.SubscribeArtistsSuccess -> {
-                    snackbarHostState.showSnackbar("구독 설정이 완료되었습니다")
-                }
+            }
+
+            SubscriptionArtistScreenEvent.SubscribeArtistsSuccess -> {
+                snackbarHostState.showSnackbar("구독 설정이 완료되었습니다")
             }
         }
     }
@@ -107,8 +109,8 @@ fun SubscriptionArtistScreenContent(
     onBackClicked: () -> Unit,
     onSheetStateChanged: (Boolean) -> Unit = {},
     onSubscribeButtonClicked: () -> Unit = {},
-    onArtistClicked: (Artist) -> Unit = {},
-    checkIsSelected: (Artist) -> Boolean,
+    onArtistClicked: (UnSubscribedArtist) -> Unit = {},
+    checkIsSelected: (UnSubscribedArtist) -> Boolean,
     onLoginRequested: () -> Unit = {},
     onGoToSeeClicked: () -> Unit = {},
 ) {

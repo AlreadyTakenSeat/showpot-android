@@ -7,7 +7,7 @@ data class SearchedArtist(
     val id: String?,
     val imageURL: String,
     val name: String,
-    val artistSpotifyId: String,
+    val spotifyId: String,
     val isSubscribed: Boolean,
 )
 

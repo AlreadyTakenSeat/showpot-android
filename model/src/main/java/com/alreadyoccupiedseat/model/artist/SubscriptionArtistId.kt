@@ -4,6 +4,6 @@ import androidx.annotation.Keep
 
 @Keep
 data class SubscriptionArtistId(
-    val artistSpotifyId: String,
+    val spotifyId: String,
     val id: String?
 )

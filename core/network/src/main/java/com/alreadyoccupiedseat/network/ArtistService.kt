@@ -8,6 +8,7 @@ import com.alreadyoccupiedseat.model.artist.SubscribeArtistsRequest
 import com.alreadyoccupiedseat.model.artist.SubscribeArtistsResponse
 import com.alreadyoccupiedseat.model.artist.UnSubscribeArtistsRequest
 import com.alreadyoccupiedseat.model.artist.UnSubscribeArtistsResponse
+import com.alreadyoccupiedseat.model.artist.UnSubscribedArtist
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -31,7 +32,7 @@ interface ArtistService {
         @Query("genreIds") genreIds: List<String>? = null,
         @Query("cursorId") cursorId: Int?,
         @Query("size") size: Int,
-    ): Response<ApiResult<PagingData<Artist>>>
+    ): Response<ApiResult<PagingData<UnSubscribedArtist>>>
 
     // TODO: Make sort to enum class
     @GET("api/v1/artists/subscriptions")
