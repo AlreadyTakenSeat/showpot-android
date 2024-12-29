@@ -25,6 +25,7 @@ interface ShowService {
         @Query("sort") sort: String,
         @Query("onlyOpenSchedule") onlyOpenSchedule: Boolean,
         @Query("size") size: Int,
+        @Query("cursorId") cursorId: String?
     ): Response<ApiResult<PagingData<ShowPreview>>>
 
     @GET("api/v1/shows/interests")
