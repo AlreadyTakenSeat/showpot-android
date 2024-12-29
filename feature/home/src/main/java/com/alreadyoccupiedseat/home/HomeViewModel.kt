@@ -76,7 +76,7 @@ class HomeViewModel @Inject constructor(
         result.onSuccess {
             reduce {
                 state.copy(
-                    entireShowList = it.take(2),
+                    entireShowList = it.data.take(2),
                 )
             }
         }.onFailure {
@@ -95,7 +95,7 @@ class HomeViewModel @Inject constructor(
         result.onSuccess {
             reduce {
                 state.copy(
-                    recommendedShowList = it.take(2),
+                    recommendedShowList = it.data,
                 )
             }
         }.onFailure {

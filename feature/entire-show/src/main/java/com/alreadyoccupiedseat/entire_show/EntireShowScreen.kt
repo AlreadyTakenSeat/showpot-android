@@ -2,7 +2,6 @@ package com.alreadyoccupiedseat.entire_show
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -13,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.alreadyoccupiedseat.common.infinitescroll.InfinityLazyColumn
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotTicket
 import org.orbitmvi.orbit.compose.collectAsState
@@ -42,6 +42,9 @@ fun EntireShowScreen(
         },
         onShowClicked = {
             onShowClicked(it)
+        },
+        loadMore = {
+            viewModel.loadNextPage()
         }
     )
 
@@ -52,6 +55,7 @@ private fun EntireShowScreenContent(
     state: EntireShowState,
     onBackClicked: () -> Unit,
     onShowClicked: (String) -> Unit,
+    loadMore: () -> Unit = {},
 ) {
 
     Scaffold(
@@ -62,12 +66,15 @@ private fun EntireShowScreenContent(
             })
         },
         content = {
-            LazyColumn(
+            InfinityLazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .padding(top = 12.dp)
                     .padding(it),
+                loadMore = {
+                    loadMore()
+                },
             ) {
                 if (state.entireShowList.isEmpty()) {
                     // TODO 전체 공연 데이터 없을 경우
@@ -100,3 +107,5 @@ private fun EntireShowScreenContent(
         }
     )
 }
+
+

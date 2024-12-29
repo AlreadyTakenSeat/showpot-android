@@ -1,5 +1,6 @@
 package com.alreadyoccupiedseat.data.show
 
+import com.alreadyoccupiedseat.model.PagingData
 import com.alreadyoccupiedseat.model.SearchedShow
 import com.alreadyoccupiedseat.model.alert.Times
 import com.alreadyoccupiedseat.model.show.ShowPreview
@@ -17,11 +18,13 @@ class ShowRepositoryImpl @Inject constructor(
         sort: String,
         onlyOpenSchedule: Boolean,
         size: Int,
-    ): Result<List<ShowPreview>> {
+        cursorId: String?,
+    ): Result<PagingData<ShowPreview>> {
         return showDataSource.getEntireShow(
             sort = sort,
             onlyOpenSchedule = onlyOpenSchedule,
-            size = size
+            size = size,
+            cursorId = cursorId,
         )
     }
 

@@ -1,5 +1,6 @@
 package com.alreadyoccupiedseat.data.show
 
+import com.alreadyoccupiedseat.model.PagingData
 import com.alreadyoccupiedseat.model.SearchedShow
 import com.alreadyoccupiedseat.model.alert.Times
 import com.alreadyoccupiedseat.model.show.ShowPreview
@@ -11,8 +12,9 @@ interface ShowRepository {
     suspend fun getEntireShow(
         sort: String,
         onlyOpenSchedule: Boolean,
-        size: Int
-    ): Result<List<ShowPreview>>
+        size: Int,
+        cursorId: String? = null,
+    ): Result<PagingData<ShowPreview>>
 
     /** 관심 공연 목록 조회***/
     suspend fun getInterestedShowList(

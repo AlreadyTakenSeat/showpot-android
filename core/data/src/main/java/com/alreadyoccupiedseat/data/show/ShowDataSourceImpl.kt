@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.Settings
 import com.alreadyoccupiedseat.data.getResult
+import com.alreadyoccupiedseat.model.PagingData
 import com.alreadyoccupiedseat.model.SearchedShow
 import com.alreadyoccupiedseat.model.alert.Time
 import com.alreadyoccupiedseat.model.alert.TicketingAlertRequest
@@ -26,15 +27,17 @@ class ShowDataSourceImpl @Inject constructor(
         sort: String,
         onlyOpenSchedule: Boolean,
         size: Int,
-    ): Result<List<ShowPreview>> {
+        cursorId: String?
+    ): Result<PagingData<ShowPreview>> {
 
         return runCatching {
             showService.getEntireShow(
                 sort = sort,
                 onlyOpenSchedule = onlyOpenSchedule,
-                size = size
+                size = size,
+                cursorId = cursorId
             ).getResult {
-                it.data.data
+                it.data
             }
         }
     }
