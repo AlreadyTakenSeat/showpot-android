@@ -26,6 +26,8 @@ data class SubscriptionArtistScreenState(
     val unsubscribedArtists: List<UnSubscribedArtist> = emptyList(),
     val isLoggedIn: Boolean = false,
     val isSheetVisible: Boolean = false,
+    val cursorId: String? = null,
+    val hasNext: Boolean = false
 )
 
 
@@ -112,10 +114,42 @@ class SubscriptionArtistViewModel @Inject constructor(
             size = 30,
         )
 
-        reduce {
-            state.copy(
-                unsubscribedArtists = result,
-            )
+        result.onSuccess { pagingData ->
+
+            reduce {
+                state.copy(
+                    unsubscribedArtists = pagingData.data,
+                    cursorId = pagingData.cursor.id,
+                    hasNext = pagingData.hasNext
+                )
+            }
+
+        }.onFailure {
+            errorLog(it.toApiErrorResult().message)
         }
     }
+
+    fun loadNextPage() = intent {
+        val cursorId = state.cursorId ?: return@intent
+
+        val result = artistRepository.getUnsubscribedArtists(
+            cursorId = cursorId,
+            size = 30,
+        )
+
+        result.onSuccess { pagingData ->
+
+            reduce {
+                state.copy(
+                    unsubscribedArtists = state.unsubscribedArtists + pagingData.data,
+                    cursorId = pagingData.cursor.id,
+                    hasNext = pagingData.hasNext
+                )
+            }
+
+        }.onFailure {
+            errorLog(it.toApiErrorResult().message)
+        }
+    }
+
 }

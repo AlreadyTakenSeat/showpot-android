@@ -1,6 +1,7 @@
 package com.alreadyoccupiedseat.data.artist
 
 import com.alreadyoccupiedseat.model.Artist
+import com.alreadyoccupiedseat.model.PagingData
 import com.alreadyoccupiedseat.model.SearchedArtist
 import com.alreadyoccupiedseat.model.artist.SubscriptionArtistId
 import com.alreadyoccupiedseat.model.artist.UnSubscribedArtist
@@ -27,9 +28,9 @@ class ArtistRepositoryImpl @Inject constructor(
         artistGenderApiTypes: List<String>?,
         artistApiTypes: List<String>?,
         genreIds: List<String>?,
-        cursorId: Int?,
+        cursorId: String?,
         size: Int,
-    ): List<UnSubscribedArtist> {
+    ): Result<PagingData<UnSubscribedArtist>> {
         return artistDataSource.getUnsubscribedArtists(
             sortedStandard,
             artistGenderApiTypes,

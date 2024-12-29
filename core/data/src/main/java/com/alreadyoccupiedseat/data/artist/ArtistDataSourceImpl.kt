@@ -2,6 +2,7 @@ package com.alreadyoccupiedseat.data.artist
 
 import com.alreadyoccupiedseat.data.getResult
 import com.alreadyoccupiedseat.model.Artist
+import com.alreadyoccupiedseat.model.PagingData
 import com.alreadyoccupiedseat.model.SearchedArtist
 import com.alreadyoccupiedseat.model.artist.SubscribeArtistsRequest
 import com.alreadyoccupiedseat.model.artist.SubscriptionArtistId
@@ -36,17 +37,21 @@ class ArtistDataSourceImpl @Inject constructor(
         artistGenderApiTypes: List<String>?,
         artistApiTypes: List<String>?,
         genreIds: List<String>?,
-        cursorId: Int?,
+        cursorId: String?,
         size: Int,
-    ): List<UnSubscribedArtist> {
-        return artistService.getUnsubscribedArtists(
-            sortedStandard,
-            artistGenderApiTypes,
-            artistApiTypes,
-            genreIds,
-            cursorId,
-            size,
-        ).body()?.data?.data ?: emptyList()
+    ): Result<PagingData<UnSubscribedArtist>> {
+        return runCatching {
+            artistService.getUnsubscribedArtists(
+                sortedStandard,
+                artistGenderApiTypes,
+                artistApiTypes,
+                genreIds,
+                cursorId,
+                size,
+            ).getResult {
+                it.data
+            }
+        }
     }
 
     override suspend fun getSubscribedArtists(

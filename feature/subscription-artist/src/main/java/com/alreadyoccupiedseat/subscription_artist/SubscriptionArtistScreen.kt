@@ -34,6 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.alreadyoccupiedseat.common.infinitescroll.InfinityLazyVerticalGrid
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
 import com.alreadyoccupiedseat.designsystem.component.artist.ShowPotArtistSubscription
@@ -42,7 +43,6 @@ import com.alreadyoccupiedseat.designsystem.component.bottomSheet.ShowPotBottomS
 import com.alreadyoccupiedseat.designsystem.component.snackbar.CheckIconSnackbar
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
-import com.alreadyoccupiedseat.model.Artist
 import com.alreadyoccupiedseat.model.artist.UnSubscribedArtist
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
@@ -76,6 +76,9 @@ fun SubscriptionArtistScreen(
     SubscriptionArtistScreenContent(
         state = state.value,
         snackbarHostState = snackbarHostState,
+        loadMore = {
+            viewModel.loadNextPage()
+        },
         onBackClicked = {
             navController.popBackStack()
         },
@@ -105,6 +108,7 @@ fun SubscriptionArtistScreen(
 @Composable
 fun SubscriptionArtistScreenContent(
     state: SubscriptionArtistScreenState,
+    loadMore: () -> Unit,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     onBackClicked: () -> Unit,
     onSheetStateChanged: (Boolean) -> Unit = {},
@@ -198,12 +202,16 @@ fun SubscriptionArtistScreenContent(
             Box(
                 contentAlignment = Alignment.BottomCenter
             ) {
-                LazyVerticalGrid(
+                InfinityLazyVerticalGrid(
                     modifier = Modifier
                         .padding(horizontal = 27.dp)
                         .fillMaxSize()
                         .padding(top = 20.dp),
                     columns = GridCells.Fixed(3),
+                    loadMore = {
+                        loadMore()
+                    },
+                    loadMoreLimitCount = 10,
                     horizontalArrangement = Arrangement.spacedBy(18.dp),
                     verticalArrangement = Arrangement.spacedBy(20.dp)
                 ) {

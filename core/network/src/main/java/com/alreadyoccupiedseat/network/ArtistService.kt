@@ -30,7 +30,7 @@ interface ArtistService {
         @Query("artistGenderApiTypes") artistGenderApiTypes: List<String>? = null,
         @Query("artistApiTypes") artistApiTypes: List<String>? = null,
         @Query("genreIds") genreIds: List<String>? = null,
-        @Query("cursorId") cursorId: Int?,
+        @Query("cursorId") cursorId: String?,
         @Query("size") size: Int,
     ): Response<ApiResult<PagingData<UnSubscribedArtist>>>
 
