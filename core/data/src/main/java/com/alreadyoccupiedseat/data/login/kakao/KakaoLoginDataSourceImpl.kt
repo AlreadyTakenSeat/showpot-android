@@ -16,24 +16,41 @@ class KakaoLoginDataSourceImpl @Inject constructor() : SocialLoginDataSource {
     @OptIn(ExperimentalCoroutinesApi::class)
     override suspend fun login(activityContext: Context): Result<String> {
         return suspendCancellableCoroutine { continuation ->
-            // 카카오 로그인 콜백
-            val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
-                if (error != null) {
-                    continuation.resumeWithException(Exception(error.message))
-                } else if (token != null) {
-                    continuation.resume(Result.success(token.idToken ?: String.EMPTY)) {
-                        // onCancellation
+            val handleLoginResult: (OAuthToken?, Throwable?) -> Unit = { token, error ->
+                when {
+                    error != null -> {
+                        // 카카오톡 로그인은 가능하나, 카카오톡 계정 연결이 안되어있는 경우
+                        if (error.toString().contains("302")){
+                            UserApiClient.instance.loginWithKakaoAccount(activityContext) { token, error ->
+                                if (error != null) {
+                                    continuation.resumeWithException(Exception(error.message))
+                                } else {
+                                    continuation.resume(Result.success(token?.idToken ?: String.EMPTY)) {
+
+                                    }
+                                }
+
+                            }
+                        } else {
+                            continuation.resumeWithException(Exception(error.message))
+                        }
+
                     }
-                } else {
-                    continuation.resumeWithException(Exception("카카오 소셜 로그인 실패"))
+                    token != null -> {
+                        continuation.resume(Result.success(token.idToken ?: String.EMPTY)) {
+
+                        }
+                    }
+                    else -> {
+                        continuation.resumeWithException(Exception("카카오 소셜 로그인 실패"))
+                    }
                 }
             }
 
-            // 카카오 로그인 시작
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(activityContext)) {
-                UserApiClient.instance.loginWithKakaoTalk(activityContext, callback = callback)
+                UserApiClient.instance.loginWithKakaoTalk(activityContext, callback = handleLoginResult)
             } else {
-                UserApiClient.instance.loginWithKakaoAccount(activityContext, callback = callback)
+                UserApiClient.instance.loginWithKakaoAccount(activityContext, callback = handleLoginResult)
             }
         }
     }
