@@ -211,7 +211,7 @@ fun SubscriptionArtistScreenContent(
                     loadMore = {
                         loadMore()
                     },
-                    loadMoreLimitCount = 10,
+                    loadMoreLimitCount = 15,
                     horizontalArrangement = Arrangement.spacedBy(18.dp),
                     verticalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
