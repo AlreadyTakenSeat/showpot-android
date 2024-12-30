@@ -51,6 +51,11 @@ interface ShowService {
         @Path("showId") showId: String
     ): Response<ApiResult<RegisterInterestResponse>>
 
+    @POST("/api/v1/shows/{showId}/uninterested")
+    suspend fun registerShowUnInterest(
+        @Path("showId") showId: String
+    ): Response<ApiResult<Unit>>
+
     @POST("/api/v1/shows/{showId}/alert")
     suspend fun registerTicketingAlert(
         @Path("showId") showId: String,

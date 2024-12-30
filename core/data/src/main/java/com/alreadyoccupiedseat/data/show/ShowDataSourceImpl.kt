@@ -76,6 +76,14 @@ class ShowDataSourceImpl @Inject constructor(
         }
     }
 
+    override suspend fun registerShowUnInterest(showId: String): Result<Boolean> {
+        return runCatching {
+            showService.registerShowUnInterest(showId).getResult {
+                it.code == 200
+            }
+        }
+    }
+
     override suspend fun registerTicketingAlert(
         showId: String,
         ticketingApiType: String,

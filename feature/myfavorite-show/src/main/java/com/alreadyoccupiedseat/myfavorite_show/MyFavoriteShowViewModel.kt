@@ -3,7 +3,9 @@ package com.alreadyoccupiedseat.myfavorite_show
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alreadyoccupiedseat.common.utiils.errorLog
 import com.alreadyoccupiedseat.data.show.ShowRepository
+import com.alreadyoccupiedseat.data.toApiErrorResult
 import com.alreadyoccupiedseat.model.Show
 import com.alreadyoccupiedseat.model.show.InterestedData
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,13 +42,14 @@ class MyFavoriteShowViewModel @Inject constructor(
     /** 관심 공연 삭제 ***/
     fun deleteMyFavoriteShow(showId: String) {
         viewModelScope.launch {
-            val isSuccess = !showRepository.registerShowInterest(showId = showId).isSuccess
-            if (isSuccess) {
+            val result = showRepository.registerShowUnInterest(showId = showId)
+
+            result.onSuccess {
                 _state.value = _state.value.copy(
                     interestedShowList = _state.value.interestedShowList.filter { it.id != showId }
                 )
-            } else {
-                Log.e("MyFavoriteShowViewModel", "deleteMyFavoriteShow failed")
+            }.onFailure {
+                errorLog(it.toApiErrorResult().message)
             }
         }
     }
