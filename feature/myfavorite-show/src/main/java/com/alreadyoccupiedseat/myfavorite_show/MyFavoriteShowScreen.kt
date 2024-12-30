@@ -32,6 +32,7 @@ import com.alreadyoccupiedseat.designsystem.component.DefaultScreenWhenEmpty
 import com.alreadyoccupiedseat.designsystem.component.ShowInfo
 import com.alreadyoccupiedseat.designsystem.component.button.ShowPotSubButton
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B2_Regular
+import org.orbitmvi.orbit.compose.collectAsState
 
 @Preview
 @Composable
@@ -51,7 +52,7 @@ fun MyFavoriteShowScreen(
     onEntireShowClicked: () -> Unit,
 ) {
     val viewModel = hiltViewModel<MyFavoriteShowViewModel>()
-    val state = viewModel.state.collectAsState()
+    val state = viewModel.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.getInterestedShow()
@@ -77,7 +78,6 @@ fun MyFavoriteShowScreen(
 
 typealias showId = String
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun MyFavoriteShowScreenContent(
     state: MyFavoriteShowState,
