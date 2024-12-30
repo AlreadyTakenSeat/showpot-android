@@ -68,8 +68,12 @@ class ShowDataSourceImpl @Inject constructor(
     }
 
     /** 관심 공연 등록, 취소 ***/
-    override suspend fun registerShowInterest(showId: String): Boolean {
-        return showService.registerShowInterest(showId).body()?.data?.hasInterest ?: false
+    override suspend fun registerShowInterest(showId: String): Result<Boolean> {
+        return runCatching {
+            showService.registerShowInterest(showId).getResult {
+                it.code == 200
+            }
+        }
     }
 
     override suspend fun registerTicketingAlert(

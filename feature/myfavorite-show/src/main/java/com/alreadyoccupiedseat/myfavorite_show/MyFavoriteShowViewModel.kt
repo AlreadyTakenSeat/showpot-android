@@ -40,8 +40,8 @@ class MyFavoriteShowViewModel @Inject constructor(
     /** 관심 공연 삭제 ***/
     fun deleteMyFavoriteShow(showId: String) {
         viewModelScope.launch {
-            val notInterest = !showRepository.registerShowInterest(showId = showId)
-            if (notInterest) {
+            val isSuccess = !showRepository.registerShowInterest(showId = showId).isSuccess
+            if (isSuccess) {
                 _state.value = _state.value.copy(
                     interestedShowList = _state.value.interestedShowList.filter { it.id != showId }
                 )

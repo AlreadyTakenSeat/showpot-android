@@ -2,9 +2,11 @@ package com.alreadyoccupiedseat.show_detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alreadyoccupiedseat.common.utiils.errorLog
 import com.alreadyoccupiedseat.common.utiils.getCurrentDateTime
 import com.alreadyoccupiedseat.common.utiils.subtractMinutesFromDateTime
 import com.alreadyoccupiedseat.data.show.ShowRepository
+import com.alreadyoccupiedseat.data.toApiErrorResult
 import com.alreadyoccupiedseat.datastore.AccountDataStore
 import com.alreadyoccupiedseat.enum.TicketingAlertTime
 import com.alreadyoccupiedseat.model.TicketingBoxSelectionState
@@ -71,10 +73,16 @@ class ShowDetailViewModel @Inject constructor(
     }
 
     fun registerShowInterest(showId: String) = intent {
-        val isInterested = showRepository.registerShowInterest(showId)
-        reduce {
-            state.copy(showDetail = state.showDetail?.copy(isInterested = isInterested))
+        val result = showRepository.registerShowInterest(showId)
+
+        result.onSuccess {
+            reduce {
+                state.copy(showDetail = state.showDetail?.copy(isInterested = it))
+            }
+        }.onFailure {
+            errorLog(it.toApiErrorResult().message)
         }
+
     }
 
     fun changeAlertSheetVisibility(isVisible: Boolean) = intent {
