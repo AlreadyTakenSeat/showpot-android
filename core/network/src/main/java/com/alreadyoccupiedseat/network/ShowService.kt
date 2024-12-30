@@ -30,7 +30,8 @@ interface ShowService {
 
     @GET("api/v1/shows/interests")
     suspend fun getInterestedShowList(
-        @Query("size") size: Int
+        @Query("size") size: Int,
+        @Query("cursorId") cursorId: String? = null,
     ): Response<ApiResult<PagingData<InterestedData>>>
 
     @GET("api/v1/shows/search")

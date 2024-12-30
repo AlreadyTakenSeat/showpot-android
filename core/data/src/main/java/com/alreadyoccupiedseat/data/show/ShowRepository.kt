@@ -18,8 +18,9 @@ interface ShowRepository {
 
     /** 관심 공연 목록 조회***/
     suspend fun getInterestedShowList(
-        size: Int
-    ): List<InterestedData>
+        size: Int,
+        cursorId: String? = null,
+    ): Result<PagingData<InterestedData>>
 
     suspend fun searchShows(
         cursorId: String? = null,

@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.alreadyoccupiedseat.common.infinitescroll.InfinityLazyColumn
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.DefaultScreenWhenEmpty
@@ -61,6 +62,9 @@ fun MyFavoriteShowScreen(
     MyFavoriteShowScreenContent(
         state = state.value,
         modifier = Modifier,
+        onLoadMore = {
+            viewModel.loadMore()
+        },
         onBackClicked = {
             navController.popBackStack()
         },
@@ -82,6 +86,7 @@ typealias showId = String
 private fun MyFavoriteShowScreenContent(
     state: MyFavoriteShowState,
     modifier: Modifier,
+    onLoadMore: () -> Unit,
     onBackClicked: () -> Unit,
     onShowClicked: (String) -> Unit,
     onDeletedMyFavoriteShow: (showId) -> Unit,
@@ -94,12 +99,16 @@ private fun MyFavoriteShowScreenContent(
             MyFavoriteShowTopBar(onBackClicked = onBackClicked)
         },
         content = {
-            LazyColumn(
+            InfinityLazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = modifier
                     .padding(top = 12.dp)
                     .padding(it),
+                loadMore = {
+                    onLoadMore()
+                },
+                loadMoreLimitCount = 10,
             ) {
 
                 if (state.interestedShowList.isEmpty()) {

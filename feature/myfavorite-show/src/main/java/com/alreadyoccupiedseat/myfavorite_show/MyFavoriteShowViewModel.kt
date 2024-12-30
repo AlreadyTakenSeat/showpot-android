@@ -18,7 +18,9 @@ sealed interface MyFavoriteShowEvent {
 
 data class MyFavoriteShowState(
     val showList: List<Show> = emptyList(),
-    val interestedShowList: List<InterestedData> = emptyList()
+    val interestedShowList: List<InterestedData> = emptyList(),
+    val cursorId : String? = null,
+    val hasNext: Boolean = false
 )
 
 @HiltViewModel
@@ -36,11 +38,18 @@ class MyFavoriteShowViewModel @Inject constructor(
             size = 30
         )
 
-        reduce {
-            state.copy(
-                interestedShowList = result
-            )
+        result.onSuccess {
+            reduce {
+                state.copy(
+                    interestedShowList = it.data,
+                    hasNext = it.hasNext,
+                    cursorId = it.cursor.id
+                )
+            }
+        }.onFailure {
+            errorLog(it.toApiErrorResult().message)
         }
+
     }
 
     /** 관심 공연 삭제 ***/
@@ -58,6 +67,28 @@ class MyFavoriteShowViewModel @Inject constructor(
             errorLog(it.toApiErrorResult().message)
         }
 
+    }
+
+    fun loadMore() = intent {
+
+        if (!state.hasNext) return@intent
+
+        val result = showRepository.getInterestedShowList(
+            size = 30,
+            cursorId = state.cursorId
+        )
+
+        result.onSuccess {
+            reduce {
+                state.copy(
+                    interestedShowList = it.data,
+                    hasNext = it.hasNext,
+                    cursorId = it.cursor.id
+                )
+            }
+        }.onFailure {
+            errorLog(it.toApiErrorResult().message)
+        }
     }
 
 }
