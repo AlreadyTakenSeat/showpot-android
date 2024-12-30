@@ -50,7 +50,7 @@ class ShowRepositoryImpl @Inject constructor(
         return showDataSource.getShowDetail(showId)
     }
 
-    override suspend fun registerShowInterest(showId: String): Boolean {
+    override suspend fun registerShowInterest(showId: String): Result<Boolean> {
         return showDataSource.registerShowInterest(showId)
     }
 

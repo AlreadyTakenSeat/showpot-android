@@ -30,7 +30,7 @@ interface ShowDataSource {
 
     suspend fun getShowDetail(showId: String): ShowDetail
 
-    suspend fun registerShowInterest(showId: String): Boolean
+    suspend fun registerShowInterest(showId: String): Result<Boolean>
 
     suspend fun registerTicketingAlert(
         showId: String,
