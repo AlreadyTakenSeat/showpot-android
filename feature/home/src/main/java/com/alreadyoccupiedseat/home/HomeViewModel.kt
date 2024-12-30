@@ -104,15 +104,21 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getUbSubscribedArtists() = intent {
-        val unSubscribedArtists = artistRepository.getUnsubscribedArtists(
+        val result = artistRepository.getUnsubscribedArtists(
             size = 10
         )
 
-        reduce {
-            state.copy(
-                unSubscribedArtists = unSubscribedArtists
-            )
+        result.onSuccess {
+            reduce {
+                state.copy(
+                    unSubscribedArtists = it.data
+                )
+            }
+        }.onFailure {
+            errorLog(it.toApiErrorResult().message)
         }
+
+
     }
 
     fun getNickName() = intent {
