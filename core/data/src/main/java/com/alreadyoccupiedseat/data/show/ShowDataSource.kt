@@ -19,8 +19,9 @@ interface ShowDataSource {
 
     /** 관심 공연 목록 조회 ***/
     suspend fun getInterestedShowList(
-        size: Int
-    ): List<InterestedData>
+        size: Int,
+        cursorId: String? = null,
+    ): Result<PagingData<InterestedData>>
 
     suspend fun searchShows(
         cursorId: String? = null,
@@ -31,6 +32,8 @@ interface ShowDataSource {
     suspend fun getShowDetail(showId: String): ShowDetail
 
     suspend fun registerShowInterest(showId: String): Result<Boolean>
+
+    suspend fun registerShowUnInterest(showId: String): Result<Boolean>
 
     suspend fun registerTicketingAlert(
         showId: String,

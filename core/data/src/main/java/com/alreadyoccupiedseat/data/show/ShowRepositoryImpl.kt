@@ -29,8 +29,8 @@ class ShowRepositoryImpl @Inject constructor(
     }
 
     /** 관심 공연 목록 조회 ***/
-    override suspend fun getInterestedShowList(size: Int): List<InterestedData> {
-        return showDataSource.getInterestedShowList(size)
+    override suspend fun getInterestedShowList(size: Int, cursorId: String?): Result<PagingData<InterestedData>> {
+        return showDataSource.getInterestedShowList(size, cursorId)
     }
 
     override suspend fun searchShows(
@@ -52,6 +52,9 @@ class ShowRepositoryImpl @Inject constructor(
 
     override suspend fun registerShowInterest(showId: String): Result<Boolean> {
         return showDataSource.registerShowInterest(showId)
+    }
+    override suspend fun registerShowUnInterest(showId: String): Result<Boolean> {
+        return showDataSource.registerShowUnInterest(showId)
     }
 
     override suspend fun registerTicketingAlert(

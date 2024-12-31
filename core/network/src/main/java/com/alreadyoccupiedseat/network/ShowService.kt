@@ -30,7 +30,8 @@ interface ShowService {
 
     @GET("api/v1/shows/interests")
     suspend fun getInterestedShowList(
-        @Query("size") size: Int
+        @Query("size") size: Int,
+        @Query("cursorId") cursorId: String? = null,
     ): Response<ApiResult<PagingData<InterestedData>>>
 
     @GET("api/v1/shows/search")
@@ -50,6 +51,11 @@ interface ShowService {
     suspend fun registerShowInterest(
         @Path("showId") showId: String
     ): Response<ApiResult<RegisterInterestResponse>>
+
+    @POST("/api/v1/shows/{showId}/uninterested")
+    suspend fun registerShowUnInterest(
+        @Path("showId") showId: String
+    ): Response<ApiResult<Unit>>
 
     @POST("/api/v1/shows/{showId}/alert")
     suspend fun registerTicketingAlert(

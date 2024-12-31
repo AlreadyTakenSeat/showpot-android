@@ -55,8 +55,12 @@ class ShowDataSourceImpl @Inject constructor(
     }
 
     /** 관심 공연 목록 조회 ***/
-    override suspend fun getInterestedShowList(size: Int): List<InterestedData> {
-        return showService.getInterestedShowList(size).body()?.data?.data ?: emptyList()
+    override suspend fun getInterestedShowList(size: Int, cursorId: String?): Result<PagingData<InterestedData>> {
+        return runCatching {
+            showService.getInterestedShowList(size, cursorId).getResult {
+                it.data
+            }
+        }
     }
 
     @SuppressLint("HardwareIds")
@@ -71,6 +75,14 @@ class ShowDataSourceImpl @Inject constructor(
     override suspend fun registerShowInterest(showId: String): Result<Boolean> {
         return runCatching {
             showService.registerShowInterest(showId).getResult {
+                it.code == 200
+            }
+        }
+    }
+
+    override suspend fun registerShowUnInterest(showId: String): Result<Boolean> {
+        return runCatching {
+            showService.registerShowUnInterest(showId).getResult {
                 it.code == 200
             }
         }

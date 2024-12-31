@@ -1,53 +1,93 @@
 package com.alreadyoccupiedseat.myfavorite_show
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.alreadyoccupiedseat.common.utiils.errorLog
 import com.alreadyoccupiedseat.data.show.ShowRepository
+import com.alreadyoccupiedseat.data.toApiErrorResult
 import com.alreadyoccupiedseat.model.Show
 import com.alreadyoccupiedseat.model.show.InterestedData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
+import org.orbitmvi.orbit.Container
+import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
+
+sealed interface MyFavoriteShowEvent {
+    data object Idle : MyFavoriteShowEvent
+}
 
 data class MyFavoriteShowState(
     val showList: List<Show> = emptyList(),
-    val interestedShowList: List<InterestedData> = emptyList()
+    val interestedShowList: List<InterestedData> = emptyList(),
+    val cursorId : String? = null,
+    val hasNext: Boolean = false
 )
 
 @HiltViewModel
 class MyFavoriteShowViewModel @Inject constructor(
     private val showRepository: ShowRepository
-) : ViewModel() {
+) : ViewModel(), ContainerHost<MyFavoriteShowState, MyFavoriteShowEvent> {
 
-    private val _state = MutableStateFlow(MyFavoriteShowState())
-    val state = _state
+    override val container: Container<MyFavoriteShowState, MyFavoriteShowEvent> =
+        container(MyFavoriteShowState())
 
     /** 관심 공연 목록 조회 ***/
-    fun getInterestedShow() {
-        viewModelScope.launch {
-            showRepository.getInterestedShowList(
-                size = 30
-            ).let {
-                _state.value = _state.value.copy(
-                    interestedShowList = it
+    fun getInterestedShow() = intent {
+
+        val result = showRepository.getInterestedShowList(
+            size = 30
+        )
+
+        result.onSuccess {
+            reduce {
+                state.copy(
+                    interestedShowList = it.data,
+                    hasNext = it.hasNext,
+                    cursorId = it.cursor.id
                 )
             }
+        }.onFailure {
+            errorLog(it.toApiErrorResult().message)
         }
+
     }
 
     /** 관심 공연 삭제 ***/
-    fun deleteMyFavoriteShow(showId: String) {
-        viewModelScope.launch {
-            val isSuccess = !showRepository.registerShowInterest(showId = showId).isSuccess
-            if (isSuccess) {
-                _state.value = _state.value.copy(
-                    interestedShowList = _state.value.interestedShowList.filter { it.id != showId }
+    fun deleteMyFavoriteShow(showId: String) = intent {
+
+        val result = showRepository.registerShowUnInterest(showId = showId)
+
+        result.onSuccess {
+            reduce {
+                state.copy(
+                    interestedShowList = state.interestedShowList.filter { it.id != showId }
                 )
-            } else {
-                Log.e("MyFavoriteShowViewModel", "deleteMyFavoriteShow failed")
             }
+        }.onFailure {
+            errorLog(it.toApiErrorResult().message)
+        }
+
+    }
+
+    fun loadMore() = intent {
+
+        if (!state.hasNext) return@intent
+
+        val result = showRepository.getInterestedShowList(
+            size = 30,
+            cursorId = state.cursorId
+        )
+
+        result.onSuccess {
+            reduce {
+                state.copy(
+                    interestedShowList = it.data,
+                    hasNext = it.hasNext,
+                    cursorId = it.cursor.id
+                )
+            }
+        }.onFailure {
+            errorLog(it.toApiErrorResult().message)
         }
     }
 
