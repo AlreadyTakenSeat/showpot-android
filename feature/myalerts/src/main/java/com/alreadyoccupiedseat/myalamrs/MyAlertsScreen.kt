@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.alreadyoccupiedseat.common.infinitescroll.InfinityLazyColumn
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotAlert
 import org.orbitmvi.orbit.compose.collectAsState
@@ -29,6 +30,9 @@ fun MyAlertsScreen(
         state = state,
         onBackClicked = {
             navController.popBackStack()
+        },
+        loadMore = {
+            viewModel.loadNextPage()
         }
     )
 }
@@ -38,6 +42,7 @@ private fun MyAlertsContentScreen(
     state: MyAlertsState,
     modifier: Modifier = Modifier,
     onBackClicked: () -> Unit,
+    loadMore: () -> Unit = {},
 ) {
     Scaffold(
         containerColor = ShowpotColor.Gray700,
@@ -55,11 +60,15 @@ private fun MyAlertsContentScreen(
                 if (state.alerts.isEmpty()) {
                     TestProgress()
                 } else {
-                    LazyColumn(
+                    InfinityLazyColumn(
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
-                            .fillMaxSize()
+                            .fillMaxSize(),
+                        loadMore = {
+                            loadMore()
+                        },
+                        loadMoreLimitCount = 7
                     ) {
                         items(state.alerts) { alert ->
                             ShowPotAlert(

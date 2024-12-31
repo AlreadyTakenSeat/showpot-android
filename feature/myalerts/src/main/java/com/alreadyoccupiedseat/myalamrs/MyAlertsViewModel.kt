@@ -18,6 +18,8 @@ sealed interface MyAlertsSettingEvent {
 data class MyAlertsState(
     val isExist: Boolean = false,
     val alerts: List<Alert> = emptyList(),
+    val cursorId: String? = null,
+    val hasNext: Boolean = false
 )
 
 @HiltViewModel
@@ -43,17 +45,39 @@ class MyAlertsViewModel @Inject constructor(
         }
     }
 
-    private fun getAlerts() {
-        intent {
-            val alerts = alertRepository.getAlerts(null, 30)
-            alerts.onSuccess {
-                reduce {
-                    state.copy(alerts = it)
-                }
-            }.onFailure {
-                errorLog(it.toApiErrorResult())
+    private fun getAlerts() = intent {
+
+        val result = alertRepository.getAlerts(null, 30)
+
+        result.onSuccess {
+            reduce {
+                state.copy(
+                    alerts = it.data,
+                    cursorId = it.cursor.id,
+                    hasNext = it.hasNext
+                )
             }
+        }.onFailure {
+            errorLog(it.toApiErrorResult())
         }
     }
 
+    fun loadNextPage() = intent {
+
+        if (!state.hasNext) return@intent
+
+        val result = alertRepository.getAlerts(state.cursorId, 30)
+
+        result.onSuccess {
+            reduce {
+                state.copy(
+                    alerts = state.alerts + it.data,
+                    cursorId = it.cursor.id,
+                    hasNext = it.hasNext
+                )
+            }
+        }.onFailure {
+            errorLog(it.toApiErrorResult())
+        }
+    }
 }
