@@ -2,9 +2,9 @@ package com.alreadyoccupiedseat.myalamrs
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
@@ -12,11 +12,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.alreadyoccupiedseat.common.infinitescroll.InfinityLazyColumn
+import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
+import com.alreadyoccupiedseat.designsystem.component.DefaultScreenWhenEmpty
 import com.alreadyoccupiedseat.designsystem.component.ShowPotAlert
 import org.orbitmvi.orbit.compose.collectAsState
 
@@ -57,8 +60,9 @@ private fun MyAlertsContentScreen(
                     .padding(horizontal = 16.dp),
                 contentAlignment = Alignment.Center
             ) {
+                if (state.isLoading) TestProgress()
                 if (state.alerts.isEmpty()) {
-                    TestProgress()
+                    EmptyAlert()
                 } else {
                     InfinityLazyColumn(
                         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -101,3 +105,19 @@ fun TestProgress(
         )
     }
 }
+
+@Composable
+fun EmptyAlert() {
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        DefaultScreenWhenEmpty(
+            text = stringResource(id = R.string.no_alerts),
+            imageResId = R.drawable.img_empty_alert
+        )
+    }
+}
+

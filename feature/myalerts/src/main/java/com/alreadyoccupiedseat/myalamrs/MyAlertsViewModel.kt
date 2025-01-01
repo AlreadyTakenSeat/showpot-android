@@ -16,6 +16,7 @@ sealed interface MyAlertsSettingEvent {
 }
 
 data class MyAlertsState(
+    val isLoading: Boolean = false,
     val isExist: Boolean = false,
     val alerts: List<Alert> = emptyList(),
     val cursorId: String? = null,
@@ -45,10 +46,16 @@ class MyAlertsViewModel @Inject constructor(
         }
     }
 
+    private fun setIsLoading(isLoading: Boolean) = intent {
+        reduce {
+            state.copy(isLoading = isLoading)
+        }
+    }
+
     private fun getAlerts() = intent {
-
+        setIsLoading(isLoading = true)
         val result = alertRepository.getAlerts(null, 30)
-
+        setIsLoading(isLoading = false)
         result.onSuccess {
             reduce {
                 state.copy(

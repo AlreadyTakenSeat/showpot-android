@@ -26,9 +26,8 @@ fun DefaultScreenWhenEmpty(
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 70.dp)
     ) {
         Image(painter = painterResource(id = imageResId), contentDescription = "Empty Image")
 
