@@ -216,10 +216,6 @@ fun SubscriptionArtistScreenContent(
                     verticalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
 
-                    item {
-                        Spacer(modifier = Modifier.height(20.dp))
-                    }
-
                     items(state.unsubscribedArtists.size) { index ->
                         val curArtist = state.unsubscribedArtists[index]
                         ShowPotArtistSubscription(
