@@ -1,5 +1,6 @@
 package com.alreadyoccupiedseat.myalarm_setting
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.alreadyoccupiedseat.common.utiils.errorLog
 import com.alreadyoccupiedseat.common.utiils.getCurrentDateTime
@@ -136,11 +137,12 @@ class MyAlertSettingViewModel @Inject constructor(
     fun registerTicketingAlert(
         ticketingApiType: String = ShowType.NORMAL.text
     ) = intent {
+        val ticketTimeAt = state.alertReservedShowList.find { it.id == state.selectedShowId }?.ticketingAt
         val timeList = state.ticketingBoxSelectionState.withIndex()
             .filter { it.value.isSelected }
             .map {
                 subtractMinutesFromDateTime(
-                    getCurrentDateTime(),
+                    ticketTimeAt ?: getCurrentDateTime(),
                     TicketingAlertTime.entries[it.index].minute.toLong()
                 )
             }
