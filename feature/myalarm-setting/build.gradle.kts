@@ -37,6 +37,7 @@ android {
 dependencies {
     //
     implementation(project(":core:designsystem"))
+    implementation(project(":core:datastore"))
     implementation(project(":core:common"))
     implementation(project(":core:data"))
     implementation(project(":model"))
