@@ -206,7 +206,7 @@ fun SubscriptionArtistScreenContent(
                     modifier = Modifier
                         .padding(horizontal = 27.dp)
                         .fillMaxSize()
-                        .padding(top = 20.dp),
+                    ,
                     columns = GridCells.Fixed(3),
                     loadMore = {
                         loadMore()
@@ -215,6 +215,10 @@ fun SubscriptionArtistScreenContent(
                     horizontalArrangement = Arrangement.spacedBy(18.dp),
                     verticalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
+
+                    item {
+                        Spacer(modifier = Modifier.height(20.dp))
+                    }
 
                     items(state.unsubscribedArtists.size) { index ->
                         val curArtist = state.unsubscribedArtists[index]
