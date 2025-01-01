@@ -3,6 +3,7 @@ package com.alreadyoccupiedseat.notification
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alreadyoccupiedseat.data.show.ShowRepository
+import com.alreadyoccupiedseat.data.toApiErrorResult
 import com.alreadyoccupiedseat.datastore.AccountDataStore
 import com.alreadyoccupiedseat.model.temp.AlertReservedShow
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,8 +36,12 @@ class NotificationViewModel @Inject constructor(
     fun getUpcomingTicketingShows() {
         viewModelScope.launch {
             _state.value = _state.value.copy(upcomingTicketingShows = emptyList())
-            val upcomingTicketingShows = showRepository.getAlertReservedShow(type = "CONTINUED", size = 30)
-            _state.value = _state.value.copy(upcomingTicketingShows = upcomingTicketingShows)
+            val result = showRepository.getAlertReservedShow(cursorId = null, type = "CONTINUED", size = 30)
+            result.onSuccess {
+                _state.value = _state.value.copy(upcomingTicketingShows = it.data)
+            }.onFailure {
+                error(it.toApiErrorResult())
+            }
         }
     }
 }

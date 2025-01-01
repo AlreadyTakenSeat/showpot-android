@@ -72,11 +72,6 @@ class ShowRepositoryImpl @Inject constructor(
         return showDataSource.checkAlertReservation(showId, ticketingApiType)
     }
 
-    /** 알림 설정한 공연 목록 조회 ***/
-    override suspend fun getAlertReservedShow(type: String, size: Int): List<AlertReservedShow> {
-        return showDataSource.getAlertReservedShow(type = type, size = size)
-    }
-
     override suspend fun getAlertReservedShow(
         cursorId: String?,
         type: String,
