@@ -35,7 +35,7 @@ class NotificationViewModel @Inject constructor(
     fun getUpcomingTicketingShows() {
         viewModelScope.launch {
             _state.value = _state.value.copy(upcomingTicketingShows = emptyList())
-            val upcomingTicketingShows = showRepository.getAlertReservedShow(30, "CONTINUED")
+            val upcomingTicketingShows = showRepository.getAlertReservedShow(type = "CONTINUED", size = 30)
             _state.value = _state.value.copy(upcomingTicketingShows = upcomingTicketingShows)
         }
     }
