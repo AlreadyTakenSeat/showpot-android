@@ -89,7 +89,7 @@ fun ShowDetailScreen(
     }
 
     LaunchedEffect(state.isLoggedIn) {
-        viewModel.checkAlertReservation(showId, "NORMAL")
+        if (state.isLoggedIn) viewModel.checkAlertReservation(showId, "NORMAL")
     }
 
 
