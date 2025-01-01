@@ -47,6 +47,8 @@ interface ShowDataSource {
     ): Times
 
     /** 알림 설정한 공연 목록 조회 ***/
-    suspend fun getAlertReservedShow(size: Int, type: String): List<AlertReservedShow>
+    suspend fun getAlertReservedShow(type: String, size: Int): List<AlertReservedShow>
+
+    suspend fun getAlertReservedShow(cursorId: String?, type: String, size: Int): Result<PagingData<AlertReservedShow>>
 
 }

@@ -69,8 +69,16 @@ interface ShowService {
         @Path("showId") showId: String,
         @Query("ticketingApiType") ticketingApiType: String,
     ): Response<ApiResult<Times>>
+
     @GET("api/v1/shows/alerts")
     suspend fun getAlertReservedShow(
+        @Query("size") size: Int,
+        @Query("type") type: String
+    ): Response<ApiResult<PagingData<AlertReservedShow>>>
+
+    @GET("api/v1/shows/alerts")
+    suspend fun getAlertReservedShow(
+        @Query("cursorId") cursorId: String? = null,
         @Query("size") size: Int,
         @Query("type") type: String
     ): Response<ApiResult<PagingData<AlertReservedShow>>>

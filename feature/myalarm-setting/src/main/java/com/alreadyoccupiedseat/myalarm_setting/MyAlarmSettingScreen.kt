@@ -5,19 +5,18 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -26,41 +25,41 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.alreadyoccupiedseat.common.infinitescroll.InfinityLazyColumn
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.DefaultScreenWhenEmpty
 import com.alreadyoccupiedseat.designsystem.component.ShowInfo
 import com.alreadyoccupiedseat.designsystem.component.bottomSheet.TicketingNotificationBottomSheet
 import com.alreadyoccupiedseat.designsystem.component.button.ShowPotSubButton
-import com.alreadyoccupiedseat.enum.TicketingAlertTime
 import com.alreadyoccupiedseat.model.show.ShowType
-import kotlinx.coroutines.flow.collectLatest
+import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun MyAlertSettingScreen(
     navController: NavController,
     onShowClicked: (String) -> Unit,
-    onEntireShowClicked: () -> Unit
+    onEntireShowClicked: () -> Unit,
 ) {
 
     val context = LocalContext.current
     val viewModel = hiltViewModel<MyAlertSettingViewModel>()
-    val state = viewModel.state.collectAsState()
+    val state = viewModel.collectAsState()
     val alertSuccess = stringResource(id = R.string.my_alert_success)
 
-    LaunchedEffect(viewModel.event) {
-        viewModel.event.collectLatest { event ->
-            when (event) {
-                is MyAlertSettingEvent.Idle -> {
-                    Log.d("MyAlarmSettingScreen", "Idle")
-                }
-                is MyAlertSettingEvent.AlertRegisterSuccess -> {
-                    Toast.makeText(
-                        context,
-                        alertSuccess,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+    viewModel.collectSideEffect {
+        when (it) {
+            is MyAlertSettingEvent.Idle -> {
+                Log.d("MyAlarmSettingScreen", "Idle")
+            }
+
+            is MyAlertSettingEvent.AlertRegisterSuccess -> {
+                Toast.makeText(
+                    context,
+                    alertSuccess,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -69,15 +68,27 @@ fun MyAlertSettingScreen(
         viewModel.getAlertReservedShow()
     }
 
+    LaunchedEffect(state.value.isLoggedIn) {
+        if (state.value.isLoggedIn) viewModel.getAlertReservedShow()
+    }
+
+    LaunchedEffect(state.value.selectedShowId) {
+        if (state.value.isLoggedIn) {
+            viewModel.checkAlertReservation(
+                state.value.selectedShowId ?: "",
+                ShowType.NORMAL.name
+            )
+        }
+    }
+
     MyAlertSettingScreenContent(
         modifier = Modifier,
         state = state.value,
         onBackClicked = {
             navController.popBackStack()
         },
-        onDismissRequested = {
-            viewModel.setAlertOptionSheetVisible(false)
-            viewModel.setTicketSheetVisible(false)
+        loadMore = {
+            viewModel.loadNextPage()
         },
         onShowClicked = { id ->
             onShowClicked(id)
@@ -86,7 +97,7 @@ fun MyAlertSettingScreen(
             onEntireShowClicked()
         },
         onTicketSheetVisible = { isVisible ->
-            viewModel.setTicketSheetVisible(isVisible)
+            viewModel.setAlertSheetVisible(isVisible)
         },
         onAlertOptionSheetVisible = { isVisible ->
             viewModel.setAlertOptionSheetVisible(isVisible)
@@ -97,29 +108,14 @@ fun MyAlertSettingScreen(
         onClearAlertClicked = {
             viewModel.clearNotification()
         },
-        onFirstItemClicked = {
-            viewModel.changeFirstItemSelection()
+        onChangeAlertSheetVisibility = { isVisible ->
+            viewModel.setAlertSheetVisible(isVisible)
         },
-        onSecondItemClicked = {
-            viewModel.changeSecondItemSelection()
-        },
-        onThirdItemClicked = {
-            viewModel.changeThirdItemSelection()
-        },
-        onCheckAlertAvailability = {
-            viewModel.checkAlertAvailability()
+        onTicketingSelectionBoxClicked = {
+            viewModel.changeTicketingSelectionBoxState(it)
         },
         onRegisterAlertButtonClicked = {
-            viewModel.registerTicketingAlert(
-                ShowType.NORMAL.name,
-                mutableListOf<String>().apply {
-                    with(state.value) {
-//                        if (isFirstItemSelected) this@apply.add(TicketingAlertTime.BEFORE_24.name)
-//                        if (isSecondItemSelected) this@apply.add(TicketingAlertTime.BEFORE_6.name)
-//                        if (isThirdItemSelected) this@apply.add(TicketingAlertTime.BEFORE_1.name)
-                    }
-                }
-            )
+            viewModel.registerTicketingAlert()
         }
     )
 }
@@ -129,26 +125,22 @@ fun MyAlertSettingScreenContent(
     modifier: Modifier,
     state: MyAlertSettingState,
     onBackClicked: () -> Unit,
-    onDismissRequested: () -> Unit,
     onShowClicked: (String) -> Unit,
     onEntireShowClicked: () -> Unit,
     onTicketSheetVisible: (Boolean) -> Unit,
     onAlertOptionSheetVisible: (Boolean) -> Unit,
     onSelectedShowId: (String) -> Unit,
     onClearAlertClicked: () -> Unit,
-    onFirstItemClicked: () -> Unit,
-    onSecondItemClicked: () -> Unit,
-    onThirdItemClicked: () -> Unit,
-    onCheckAlertAvailability: () -> Unit,
+    onChangeAlertSheetVisibility: (Boolean) -> Unit,
+    onTicketingSelectionBoxClicked: (Int) -> Unit = {},
     onRegisterAlertButtonClicked: () -> Unit,
+    loadMore: () -> Unit = {},
 ) {
-
 
     if (state.isAlertOptionSheetVisible) {
         AlarmOptionsBottomSheet(
             onTicketSheetVisible = {
                 onTicketSheetVisible(true)
-                onCheckAlertAvailability()
             },
             onDismissRequest = {
                 onAlertOptionSheetVisible(false)
@@ -159,31 +151,19 @@ fun MyAlertSettingScreenContent(
         )
     }
 
-    if (state.isTicketSheetVisible) {
-
-//        TicketingNotificationBottomSheet(
-//            isFirstItemAvailable = state.isFirstItemAvailable,
-//            isSecondItemAvailable = state.isSecondItemAvailable,
-//            isThirdItemAvailable = state.isThirdItemAvailable,
-//            firstItemSelected = state.isFirstItemSelected,
-//            secondItemSelected = state.isSecondItemSelected,
-//            thirdItemSelected = state.isThirdItemSelected,
-//            onFirstItemClicked = {
-//                onFirstItemClicked()
-//            },
-//            onSecondItemClicked = {
-//                onSecondItemClicked()
-//            },
-//            onThirdItemClicked = {
-//                onThirdItemClicked()
-//            },
-//            onMainButtonClicked = {
-//                onRegisterAlertButtonClicked()
-//                onTicketSheetVisible(false)
-//            },
-//            onDismissRequested = {
-//                onDismissRequested()
-//            })
+    if (state.isAlertSheetVisible) {
+        TicketingNotificationBottomSheet(
+            ticketingBoxSelectionState = state.ticketingBoxSelectionState,
+            onSelectionBoxClicked = {
+                onTicketingSelectionBoxClicked(it)
+            },
+            onMainButtonClicked = {
+                onRegisterAlertButtonClicked()
+                onChangeAlertSheetVisibility(false)
+            },
+            onDismissRequested = {
+                onChangeAlertSheetVisibility(false)
+            })
     }
 
     Scaffold(
@@ -192,60 +172,68 @@ fun MyAlertSettingScreenContent(
             MyAlarmSettingTopBar(onBackClicked = onBackClicked)
         },
         content = {
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
+            Box(
                 modifier = modifier
-                    .padding(top = 12.dp)
-                    .padding(it),
+                    .fillMaxSize()
+                    .padding(it)
+                    .padding(top = 12.dp),
+                contentAlignment = Alignment.Center
             ) {
-                val alarmReservedShow = state.alertReservedShowList
-                if (alarmReservedShow.isEmpty()) {
-                    item {
-                        MyAlarmEmpty(onEntireShowClicked = onEntireShowClicked)
-                    }
+                if (state.alertReservedShowList.isEmpty()) {
+                    MyAlarmEmpty(onEntireShowClicked = onEntireShowClicked)
                 } else {
-                    itemsIndexed(alarmReservedShow) { _, show ->
-                        ShowInfo(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .clickable {
-                                    onShowClicked(show.id)
-                                },
-                            imageUrl = show.imageURL,
-                            showTitle = show.title,
-                            dateInfo = show.startAt.replace("-", "."),
-                            locationInfo = show.location,
-                            icon = {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.Center,
-                                    modifier = Modifier
-                                        .background(ShowpotColor.Gray500)
-                                        .clickable {
-                                            onSelectedShowId(show.id)
-                                            onAlertOptionSheetVisible(true)
-                                        }
-                                ) {
-                                    Icon(
+                    InfinityLazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        loadMore = {
+                            loadMore()
+                        },
+                        loadMoreLimitCount = 7
+                    ) {
+                        items(state.alertReservedShowList) { show ->
+                            ShowInfo(
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp)
+                                    .clickable {
+                                        onShowClicked(show.id)
+                                    },
+                                imageUrl = show.imageURL,
+                                showTitle = show.title,
+                                dateInfo = show.startAt.replace("-", "."),
+                                locationInfo = show.location,
+                                icon = {
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.Center,
                                         modifier = Modifier
-                                            .padding(start = 5.dp)
-                                            .padding(vertical = 5.dp),
-                                        painter = painterResource(R.drawable.ic_alarm_24_default),
-                                        contentDescription = null,
-                                        tint = ShowpotColor.White
-                                    )
-                                    Icon(
-                                        modifier = Modifier
-                                            .padding(end = 5.dp)
-                                            .padding(vertical = 5.dp),
-                                        painter = painterResource(R.drawable.ic_arrow_24_down),
-                                        contentDescription = null,
-                                        tint = ShowpotColor.Gray300
-                                    )
+                                            .background(ShowpotColor.Gray500)
+                                            .clickable {
+                                                onSelectedShowId(show.id)
+                                                onAlertOptionSheetVisible(true)
+                                            }
+                                    ) {
+                                        Icon(
+                                            modifier = Modifier
+                                                .padding(start = 5.dp)
+                                                .padding(vertical = 5.dp),
+                                            painter = painterResource(R.drawable.ic_alarm_24_default),
+                                            contentDescription = null,
+                                            tint = ShowpotColor.White
+                                        )
+                                        Icon(
+                                            modifier = Modifier
+                                                .padding(end = 5.dp)
+                                                .padding(vertical = 5.dp),
+                                            painter = painterResource(R.drawable.ic_arrow_24_down),
+                                            contentDescription = null,
+                                            tint = ShowpotColor.Gray300
+                                        )
+                                    }
                                 }
-                            }
-                        )
+                            )
+                        }
                     }
                 }
             }
