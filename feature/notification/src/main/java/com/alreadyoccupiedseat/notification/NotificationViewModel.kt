@@ -2,6 +2,7 @@ package com.alreadyoccupiedseat.notification
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alreadyoccupiedseat.common.utiils.errorLog
 import com.alreadyoccupiedseat.data.show.ShowRepository
 import com.alreadyoccupiedseat.data.toApiErrorResult
 import com.alreadyoccupiedseat.datastore.AccountDataStore
@@ -40,7 +41,7 @@ class NotificationViewModel @Inject constructor(
             result.onSuccess {
                 _state.value = _state.value.copy(upcomingTicketingShows = it.data)
             }.onFailure {
-                error(it.toApiErrorResult())
+                errorLog(it.toApiErrorResult())
             }
         }
     }
