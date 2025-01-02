@@ -86,6 +86,7 @@ fun ShowDetailScreen(
     LaunchedEffect(showId) {
         viewModel.getShowDetail(showId)
         viewModel.registerShowId(showId)
+        viewModel.checkIsAvailableAlertReservation()
     }
 
     LaunchedEffect(state.isLoggedIn) {

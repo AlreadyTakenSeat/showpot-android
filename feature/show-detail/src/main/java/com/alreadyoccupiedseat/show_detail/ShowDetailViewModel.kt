@@ -1,9 +1,9 @@
 package com.alreadyoccupiedseat.show_detail
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.alreadyoccupiedseat.common.utiils.errorLog
 import com.alreadyoccupiedseat.common.utiils.getCurrentDateTime
+import com.alreadyoccupiedseat.common.utiils.isDate1GreaterOrEqual
 import com.alreadyoccupiedseat.common.utiils.subtractMinutesFromDateTime
 import com.alreadyoccupiedseat.data.show.ShowRepository
 import com.alreadyoccupiedseat.data.toApiErrorResult
@@ -12,6 +12,7 @@ import com.alreadyoccupiedseat.enum.TicketingAlertTime
 import com.alreadyoccupiedseat.model.TicketingBoxSelectionState
 import com.alreadyoccupiedseat.model.show.ShowDetail
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.viewmodel.container
@@ -66,9 +67,17 @@ class ShowDetailViewModel @Inject constructor(
     }
 
     fun getShowDetail(showId: String) = intent {
+        println("테스트 쇼 디테일 시작 전")
         val result = showRepository.getShowDetail(showId)
-        reduce {
-            state.copy(showDetail = result)
+
+        result.onSuccess {
+            println("테스트 쇼 디테일 성공 $it")
+            reduce {
+                state.copy(showDetail = it)
+            }
+        }.onFailure {
+            println("테스트 쇼 디테일 실패")
+            errorLog(it.toApiErrorResult().message)
         }
     }
 
@@ -161,6 +170,28 @@ class ShowDetailViewModel @Inject constructor(
                             ticketingBoxSelectionState
                         }
                     }
+            )
+        }
+    }
+
+    fun checkIsAvailableAlertReservation() = intent {
+
+        delay(500)
+        val showTicketingDate = state.showDetail?.ticketingTimes?.first()?.ticketingAt ?: return@intent
+
+        reduce {
+            state.copy(
+                ticketingBoxSelectionState = state.ticketingBoxSelectionState.map { ticketingBoxSelectionState ->
+
+                    val targetDate = subtractMinutesFromDateTime(showTicketingDate, ticketingBoxSelectionState.minute.toLong())
+
+                    if (isDate1GreaterOrEqual(getCurrentDateTime(), targetDate)) {
+                        ticketingBoxSelectionState.copy(isAvailable = false)
+                    } else {
+                        ticketingBoxSelectionState.copy(isAvailable = true)
+                    }
+
+                }
             )
         }
     }

@@ -63,11 +63,14 @@ class ShowDataSourceImpl @Inject constructor(
     }
 
     @SuppressLint("HardwareIds")
-    override suspend fun getShowDetail(showId: String): ShowDetail {
+    override suspend fun getShowDetail(showId: String): Result<ShowDetail> {
         val viewIdentifier =
             Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
-        return showService.getShowDetail(showId, viewIdentifier).body()?.data
-            ?: throw Exception("Show not found")
+        return runCatching {
+            showService.getShowDetail(showId, viewIdentifier).getResult {
+                it.data
+            }
+        }
     }
 
     /** 관심 공연 등록, 취소 ***/
