@@ -175,7 +175,7 @@ fun AppScreenContent(
                         navController.navigate(Screen.Login.route)
                     },
                     onGoToSeeClicked = {
-                        navController.navigate(Screen.SubscriptionArtist.route)
+                        navController.navigate(Screen.SubscribedArtist.route)
                     })
             }
 
