@@ -3,6 +3,7 @@ package com.alreadyoccupiedseat.login
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,13 +12,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,7 +33,7 @@ import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotButtonWithIcon
 import com.alreadyoccupiedseat.designsystem.component.ShowPotTopBar
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
-import kotlinx.coroutines.flow.collectLatest
+import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
@@ -43,6 +43,7 @@ fun LoginScreen(
 
     val context = LocalContext.current
     val viewModel = hiltViewModel<LoginViewModel>()
+    val state by viewModel.collectAsState()
 
     viewModel.collectSideEffect { event ->
         when (event) {
@@ -65,6 +66,7 @@ fun LoginScreen(
     }
 
     LoginContent(
+        state = state,
         onBackButtonClicked = {
             navController.popBackStack()
         },
@@ -78,6 +80,7 @@ fun LoginScreen(
 
 @Composable
 fun LoginContent(
+    state: LoginScreenState,
     onBackButtonClicked: () -> Unit = {},
     onKakaoLoginClicked: () -> Unit,
 ) {
@@ -101,61 +104,62 @@ fun LoginContent(
             )
         },
         content = {
-            Column(
-                modifier = Modifier
-                    .background(ShowpotColor.Gray700)
-                    .padding(it)
-                    .fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Spacer(modifier = Modifier.size(49.dp))
-                Image(
+            if (!state.isLoading) {
+                Column(
                     modifier = Modifier
-                        .padding(top = 49.dp)
-                        .size(width = 135.58.dp, height = 54.dp),
-                    painter = painterResource(R.drawable.img_logo),
-                    contentDescription = "Logo"
-                )
+                        .background(ShowpotColor.Gray700)
+                        .padding(it)
+                        .fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Spacer(modifier = Modifier.size(49.dp))
+                    Image(
+                        modifier = Modifier
+                            .padding(top = 49.dp)
+                            .size(width = 135.58.dp, height = 54.dp),
+                        painter = painterResource(R.drawable.img_logo),
+                        contentDescription = "Logo"
+                    )
 
-                Spacer(modifier = Modifier.size(8.dp))
+                    Spacer(modifier = Modifier.size(8.dp))
 
-                ShowPotKoreanText_H2(
-                    text = stringResource(R.string.login_screen_message),
-                    color = ShowpotColor.White
-                )
+                    ShowPotKoreanText_H2(
+                        text = stringResource(R.string.login_screen_message),
+                        color = ShowpotColor.White
+                    )
 
-                Spacer(modifier = Modifier.size(72.dp))
+                    Spacer(modifier = Modifier.size(72.dp))
 
-                Image(
-                    modifier = Modifier.size(width = 178.35.dp, height = 155.dp),
-                    painter = painterResource(R.drawable.img_login_logo),
-                    contentScale = ContentScale.Crop,
-                    contentDescription = "Login Logo",
-                )
+                    Image(
+                        modifier = Modifier.size(width = 178.35.dp, height = 155.dp),
+                        painter = painterResource(R.drawable.img_login_logo),
+                        contentScale = ContentScale.Crop,
+                        contentDescription = "Login Logo",
+                    )
 
-                Spacer(modifier = Modifier.height(166.dp))
+                    Spacer(modifier = Modifier.height(166.dp))
 
-                ShowPotButtonWithIcon(
-                    modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    text = stringResource(R.string.button_login_with_kakao),
-                    icon = painterResource(R.drawable.ic_kakao),
-                    colors = ButtonColors(
-                        containerColor = ShowpotColor.Kakao,
-                        contentColor = Color.Black,
-                        disabledContainerColor = ShowpotColor.Gray600,
-                        disabledContentColor = ShowpotColor.Gray400,
-                    ),
-                    onClick = {
-                        onKakaoLoginClicked()
-                    }
-                )
+                    ShowPotButtonWithIcon(
+                        modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        text = stringResource(R.string.button_login_with_kakao),
+                        icon = painterResource(R.drawable.ic_kakao),
+                        colors = ButtonColors(
+                            containerColor = ShowpotColor.Kakao,
+                            contentColor = Color.Black,
+                            disabledContainerColor = ShowpotColor.Gray600,
+                            disabledContentColor = ShowpotColor.Gray400,
+                        ),
+                        onClick = {
+                            onKakaoLoginClicked()
+                        }
+                    )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
 
-                // TODO MVP 제외 -> 이후 구현
+                    // TODO MVP 제외 -> 이후 구현
 //                ShowPotButtonWithIcon(
 //                    modifier = Modifier
 //                        .fillMaxWidth()
@@ -174,6 +178,19 @@ fun LoginContent(
 //                        /* 구글 로그인 */
 //                    }
 //                )
+                }
+            } else {
+                Box(
+                    modifier = Modifier
+                        .background(ShowpotColor.Gray700)
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(
+                        color = ShowpotColor.MainOrange,
+                        strokeWidth = 4.dp
+                    )
+                }
             }
         }
     )
