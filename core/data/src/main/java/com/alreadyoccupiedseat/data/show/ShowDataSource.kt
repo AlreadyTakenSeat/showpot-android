@@ -29,7 +29,7 @@ interface ShowDataSource {
         search: String
     ): List<SearchedShow>
 
-    suspend fun getShowDetail(showId: String): ShowDetail
+    suspend fun getShowDetail(showId: String): Result<ShowDetail>
 
     suspend fun registerShowInterest(showId: String): Result<Boolean>
 

@@ -46,7 +46,7 @@ class ShowRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun getShowDetail(showId: String): ShowDetail {
+    override suspend fun getShowDetail(showId: String): Result<ShowDetail> {
         return showDataSource.getShowDetail(showId)
     }
 
