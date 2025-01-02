@@ -67,16 +67,13 @@ class ShowDetailViewModel @Inject constructor(
     }
 
     fun getShowDetail(showId: String) = intent {
-        println("테스트 쇼 디테일 시작 전")
         val result = showRepository.getShowDetail(showId)
 
         result.onSuccess {
-            println("테스트 쇼 디테일 성공 $it")
             reduce {
                 state.copy(showDetail = it)
             }
         }.onFailure {
-            println("테스트 쇼 디테일 실패")
             errorLog(it.toApiErrorResult().message)
         }
     }
