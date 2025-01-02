@@ -22,7 +22,7 @@ sealed interface LoginScreenEvent {
 }
 
 data class LoginScreenState(
-    val unit: Unit = Unit
+    val isLoading: Boolean = false,
 )
 
 
@@ -36,13 +36,21 @@ class LoginViewModel @Inject constructor(
 
     fun tryKakaoLogin(activityContext: Context) = intent {
 
-        postSideEffect(LoginScreenEvent.LoginRequested)
+        reduce {
+            state.copy(isLoading = true)
+        }
 
         loginRepository.kakaoLogin(activityContext).onSuccess {
             postSideEffect(LoginScreenEvent.LoginCompleted)
+            reduce {
+                state.copy(isLoading = false)
+            }
         }.onFailure {
             postSideEffect(LoginScreenEvent.LoginError("카카오 로그인 실패"))
             this@LoginViewModel.errorLog(it)
+            reduce {
+                state.copy(isLoading = false)
+            }
         }
 
     }
