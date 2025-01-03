@@ -246,7 +246,7 @@ fun ShowDetailScreenContent(
                     HorizontalTitleAndInfoText(
                         Modifier.padding(horizontal = 16.dp),
                         "기간",
-                        state.showDetail?.startDate?.replace("-", ".") ?: String.EMPTY
+                        state.showDetail?.startDate?.replace("-", ".")?.split(" ")?.first() ?: String.EMPTY
                     )
                 }
 
