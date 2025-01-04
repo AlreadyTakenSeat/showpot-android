@@ -134,8 +134,8 @@ fun TicketSlidePagerForAlarmReservedShow(
                                 alarmedShows[page].startAt.replace(
                                     "-",
                                     "."
-                                )
-                            } - ${alarmedShows[page].endAt.replace("-", ".")}",
+                                ).split(" ").first()
+                            } - ${alarmedShows[page].endAt.replace("-", ".").split(" ").first()}",
                             color = ShowpotColor.Gray700,
                         )
 
