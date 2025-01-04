@@ -78,17 +78,39 @@ class ShowDetailViewModel @Inject constructor(
         }
     }
 
-    fun registerShowInterest(showId: String) = intent {
+    fun manipulateShowInterest(showId: String) = intent {
+
+        val curShowIsInterested = state.showDetail?.isInterested ?: false
+        if (curShowIsInterested) {
+            registerShowUnInterest(showId)
+        } else {
+            registerShowInterest(showId)
+        }
+    }
+
+    private fun registerShowInterest(showId: String) = intent {
         val result = showRepository.registerShowInterest(showId)
 
         result.onSuccess {
             reduce {
-                state.copy(showDetail = state.showDetail?.copy(isInterested = it))
+                state.copy(showDetail = state.showDetail?.copy(isInterested = true))
             }
         }.onFailure {
             errorLog(it.toApiErrorResult().message)
         }
 
+    }
+
+    private fun registerShowUnInterest(showId: String) = intent {
+        val result = showRepository.registerShowUnInterest(showId)
+
+        result.onSuccess {
+            reduce {
+                state.copy(showDetail = state.showDetail?.copy(isInterested = false))
+            }
+        }.onFailure {
+            errorLog(it.toApiErrorResult().message)
+        }
     }
 
     fun changeAlertSheetVisibility(isVisible: Boolean) = intent {
