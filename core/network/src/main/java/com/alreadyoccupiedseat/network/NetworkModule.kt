@@ -23,7 +23,7 @@ class NetworkModule {
         accessDataStore: AccountDataStore
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(API.BASE_URL)
+            .baseUrl(API.PRODUCTION_BASE_URL)
             .client(
                 OkHttpClient.Builder()
                     // TODO: decrease timeout
