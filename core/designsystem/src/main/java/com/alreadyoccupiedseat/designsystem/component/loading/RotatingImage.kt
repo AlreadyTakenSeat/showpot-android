@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.painter.Painter
 fun RotatingImage(
     modifier: Modifier,
     painter: Painter,
+    speed: Int = 3000
 ) {
     val rotation = remember { Animatable(0f) }
 
@@ -22,7 +23,7 @@ fun RotatingImage(
         while (true) {
             rotation.animateTo(
                 targetValue = -360f,
-                animationSpec = tween(durationMillis = 3000, easing = LinearEasing)
+                animationSpec = tween(durationMillis = speed, easing = LinearEasing)
             )
             rotation.snapTo(0f)
         }
