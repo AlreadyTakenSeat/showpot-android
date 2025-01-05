@@ -78,15 +78,13 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun getAlertsExist() {
-        intent {
+    fun getAlertsExist() = intent {
             if (!state.isLogin) return@intent
             val isExist = alertRepository.getAlertsExist()
             reduce {
                 state.copy(isExist = isExist)
             }
         }
-    }
 
     /** 전체 공연 목록 가져오기 ***/
     // 이름 변경
