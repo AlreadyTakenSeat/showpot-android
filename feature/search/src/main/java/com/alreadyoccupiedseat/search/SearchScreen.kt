@@ -2,6 +2,7 @@ package com.alreadyoccupiedseat.search
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -148,6 +149,7 @@ fun SearchScreenContent(
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
+    val interactionSource = remember { MutableInteractionSource() }
 
     LaunchedEffect(focusRequester) {
         if (state.isSearchedScreen.not()) {
@@ -162,7 +164,10 @@ fun SearchScreenContent(
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .clickable {
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null
+            ) {
                 focusManager.clearFocus()
             },
         snackbarHost = {
