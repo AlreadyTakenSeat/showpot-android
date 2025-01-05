@@ -11,8 +11,9 @@ import com.alreadyoccupiedseat.designsystem.R
 @Composable
 fun LoadingIndicator() {
     RotatingImage(
-        modifier = Modifier.size(40.dp)
+        modifier = Modifier.size(50.dp)
             .padding(1.dp),
-        painter = painterResource(R.drawable.img_loading_indicator)
+        painter = painterResource(R.drawable.img_loading_indicator),
+        speed = 2000,
     )
 }

@@ -33,7 +33,9 @@ data class SearchScreenState(
     val isArtistUnSubscriptionSheetVisible: Boolean = false,
     val isLoginSheetVisible: Boolean = false,
     val unSubscribeTargetArtist: SearchedArtist? = null,
-    val isLoggedIn: Boolean = false
+    val isLoggedIn: Boolean = false,
+    val isArtistLoading: Boolean = false,
+    val isShowLoading: Boolean = false,
 )
 
 
@@ -139,6 +141,10 @@ class SearchViewModel @Inject constructor(
     }
 
     fun searchArtistsAndShows() = intent {
+        reduce {
+            state.copy(isArtistLoading = true,
+                isShowLoading = true)
+        }
         searchArtists()
         searchShows()
         stateChangeToSearched()
@@ -204,7 +210,8 @@ class SearchViewModel @Inject constructor(
 
         searchedArtists.onSuccess { result ->
             reduce {
-                state.copy(searchedArtists = result)
+                state.copy(searchedArtists = result,
+                    isArtistLoading = false)
             }
         }.onFailure {
             errorLog(it.toApiErrorResult())
@@ -219,7 +226,8 @@ class SearchViewModel @Inject constructor(
             search = state.inputText,
         )
         reduce {
-            state.copy(searchedShows = searchedShows)
+            state.copy(searchedShows = searchedShows,
+                isShowLoading = false)
         }
     }
 }

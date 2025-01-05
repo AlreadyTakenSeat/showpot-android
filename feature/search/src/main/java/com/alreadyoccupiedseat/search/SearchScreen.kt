@@ -2,6 +2,8 @@ package com.alreadyoccupiedseat.search
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -32,6 +34,7 @@ import androidx.navigation.NavController
 import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotSearchBar
+import com.alreadyoccupiedseat.designsystem.component.loading.LoadingIndicator
 import com.alreadyoccupiedseat.designsystem.component.snackbar.CheckIconSnackbar
 import com.alreadyoccupiedseat.model.SearchedArtist
 import kotlinx.coroutines.launch
@@ -148,6 +151,7 @@ fun SearchScreenContent(
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
+    val interactionSource = remember { MutableInteractionSource() }
 
     LaunchedEffect(focusRequester) {
         if (state.isSearchedScreen.not()) {
@@ -162,7 +166,10 @@ fun SearchScreenContent(
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .clickable {
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null
+            ) {
                 focusManager.clearFocus()
             },
         snackbarHost = {
@@ -231,45 +238,55 @@ fun SearchScreenContent(
                 .padding(top = 12.dp)
         ) {
 
-            if (state.isSearchedScreen.not()) {
-                RecentSearchHistorySection(
-                    searchHistories = state.searchHistory,
-                    onDeleteAllClicked = onDeleteAllClicked,
-                    onChipClicked = {
-                        focusManager.clearFocus()
-                        onChipClicked(it)
-                    },
-                    onDeleteHistoryClicked = onDeleteHistoryClicked
-                )
+            if (state.isArtistLoading || state.isShowLoading) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    LoadingIndicator()
+                }
             } else {
-                SearchedSection(
-                    isLoggedIn = state.isLoggedIn,
-                    isLoginSheetVisible = state.isLoginSheetVisible,
-                    isArtistUnSubscriptionSheetVisible = state.isArtistUnSubscriptionSheetVisible,
-                    searchedArtists = state.searchedArtists,
-                    searchedShows = state.searchedShows,
-                    unSubscribeTargetArtist = state.unSubscribeTargetArtist,
-                    onUnSubscribeTargetArtistChanged = {
-                        onChangeUnSubscribeTargetArtist(it)
-                    },
-                    onLoginSheetVisibilityChanged = {
-                        onchangeLoginSheetVisibility(it)
-                    },
-                    onShowClicked = onShowClicked,
-                    onArtistUnSubscriptionSheetVisibilityChanged = {
-                        onchangeArtistUnSubscriptionSheetVisibility(it)
-                    },
-                    onSubscribeArtist = {
-                        onRequestSubscribeArtist(it)
-                    },
-                    onUnSubscribeArtist = {
-                        onRequestUnSubscribeArtist()
-                    },
-                    onLoginRequested = {
-                        onLoginRequested()
-                    }
-                )
+                if (state.isSearchedScreen.not()) {
+                    RecentSearchHistorySection(
+                        searchHistories = state.searchHistory,
+                        onDeleteAllClicked = onDeleteAllClicked,
+                        onChipClicked = {
+                            focusManager.clearFocus()
+                            onChipClicked(it)
+                        },
+                        onDeleteHistoryClicked = onDeleteHistoryClicked
+                    )
+                } else {
+                    SearchedSection(
+                        isLoggedIn = state.isLoggedIn,
+                        isLoginSheetVisible = state.isLoginSheetVisible,
+                        isArtistUnSubscriptionSheetVisible = state.isArtistUnSubscriptionSheetVisible,
+                        searchedArtists = state.searchedArtists,
+                        searchedShows = state.searchedShows,
+                        unSubscribeTargetArtist = state.unSubscribeTargetArtist,
+                        onUnSubscribeTargetArtistChanged = {
+                            onChangeUnSubscribeTargetArtist(it)
+                        },
+                        onLoginSheetVisibilityChanged = {
+                            onchangeLoginSheetVisibility(it)
+                        },
+                        onShowClicked = onShowClicked,
+                        onArtistUnSubscriptionSheetVisibilityChanged = {
+                            onchangeArtistUnSubscriptionSheetVisibility(it)
+                        },
+                        onSubscribeArtist = {
+                            onRequestSubscribeArtist(it)
+                        },
+                        onUnSubscribeArtist = {
+                            onRequestUnSubscribeArtist()
+                        },
+                        onLoginRequested = {
+                            onLoginRequested()
+                        }
+                    )
+                }
             }
+
         }
     }
 }
