@@ -60,27 +60,31 @@ private fun MyAlertsContentScreen(
                     .padding(horizontal = 16.dp),
                 contentAlignment = Alignment.Center
             ) {
-                if (state.isLoading) TestProgress()
-                if (state.alerts.isEmpty()) {
-                    EmptyAlert()
+                if (state.isLoading) {
+                    TestProgress()
                 } else {
-                    InfinityLazyColumn(
-                        verticalArrangement = Arrangement.spacedBy(12.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        loadMore = {
-                            loadMore()
-                        },
-                        loadMoreLimitCount = 7
-                    ) {
-                        items(state.alerts) { alert ->
-                            ShowPotAlert(
-                                imageUrl = alert.showImageURL,
-                                title = alert.title,
-                                content = alert.message,
-                                timeAt = alert.notifiedAt
-                            )
+                    if (state.alerts.isEmpty()) {
+                        EmptyAlert()
+                    } else {
+                        InfinityLazyColumn(
+                            verticalArrangement = Arrangement.spacedBy(12.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier
+                                .fillMaxSize()
+                            ,
+                            loadMore = {
+                                loadMore()
+                            },
+                            loadMoreLimitCount = 7
+                        ) {
+                            items(state.alerts) { alert ->
+                                ShowPotAlert(
+                                    imageUrl = alert.showImageURL,
+                                    title = alert.title,
+                                    content = alert.message,
+                                    timeAt = alert.notifiedAt
+                                )
+                            }
                         }
                     }
                 }

@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -31,10 +32,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import com.alreadyoccupiedseat.core.extension.isScrollingUp
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
@@ -66,6 +70,10 @@ fun HomeScreen(
     LaunchedEffect(true) {
         viewModel.getUbSubscribedArtists()
         viewModel.getNickName()
+    }
+
+    ObserveResumeLifecycle {
+        viewModel.getAlertsExist()
     }
 
     HomeScreenContent(
@@ -136,15 +144,17 @@ fun HomeScreenContent(
                     painter = painterResource(id = R.drawable.img_logo),
                     contentDescription = stringResource(com.alreadyoccupiedseat.home.R.string.showpot_logo_content_description)
                 )
+                val iconId = if (state.isExist) R.drawable.ic__alarm_badge_36 else R.drawable.ic_alarm_navigation_24
+                val colorFilter = if (state.isExist) null else ColorFilter.tint(color = ShowpotColor.White)
                 Image(
                     modifier = Modifier
                         .clickable { onAlarmLClicked() }
                         .padding(horizontal = 17.dp, vertical = 13.dp)
                         .align(Alignment.TopEnd)
                     ,
-                    painter = painterResource(id = R.drawable.ic_alarm_navigation_24),
+                    painter = painterResource(id = iconId),
                     contentDescription = stringResource(com.alreadyoccupiedseat.home.R.string.showpot_alarm_list_content_description),
-                    colorFilter = ColorFilter.tint(ShowpotColor.White)
+                    colorFilter = colorFilter
                 )
             }
         }
@@ -355,5 +365,20 @@ fun HomeScreenContent(
     }
 }
 
+@Composable
+fun ObserveResumeLifecycle(onResume: () -> Unit) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                onResume()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+}
 
 
