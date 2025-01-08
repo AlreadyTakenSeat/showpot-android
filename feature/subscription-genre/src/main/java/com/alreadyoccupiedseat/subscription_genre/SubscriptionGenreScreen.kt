@@ -41,6 +41,7 @@ import com.alreadyoccupiedseat.designsystem.component.snackbar.CheckIconSnackbar
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
 import com.alreadyoccupiedseat.model.Genre
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -305,7 +306,13 @@ fun SubscriptionGenreContent(
                         ) {
                             scope.launch {
                                 onSubscribeButtonClicked()
-                                snackBarHostState.showSnackbar("구독 설정이 완료되었습니다")
+                                val snackbarJob = scope.launch {
+                                    snackBarHostState.showSnackbar(
+                                        message = "구독이 완료되었습니다.",
+                                    )
+                                }
+                                delay(2500L)
+                                snackbarJob.cancel()
                             }
                         }
                     }
