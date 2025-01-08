@@ -20,12 +20,16 @@ class KakaoLoginDataSourceImpl @Inject constructor() : SocialLoginDataSource {
                 when {
                     error != null -> {
                         // 카카오톡 로그인은 가능하나, 카카오톡 계정 연결이 안되어있는 경우
-                        if (error.toString().contains("302")){
+                        if (error.toString().contains("302")) {
                             UserApiClient.instance.loginWithKakaoAccount(activityContext) { token, error ->
                                 if (error != null) {
                                     continuation.resumeWithException(Exception(error.message))
                                 } else {
-                                    continuation.resume(Result.success(token?.idToken ?: String.EMPTY)) {
+                                    continuation.resume(
+                                        Result.success(
+                                            token?.idToken?.split(".")?.first() ?: String.EMPTY
+                                        )
+                                    ) {
 
                                     }
                                 }
@@ -36,11 +40,17 @@ class KakaoLoginDataSourceImpl @Inject constructor() : SocialLoginDataSource {
                         }
 
                     }
+
                     token != null -> {
-                        continuation.resume(Result.success(token.idToken ?: String.EMPTY)) {
+                        continuation.resume(
+                            Result.success(
+                                token.idToken?.split(".")?.first() ?: String.EMPTY
+                            )
+                        ) {
 
                         }
                     }
+
                     else -> {
                         continuation.resumeWithException(Exception("카카오 소셜 로그인 실패"))
                     }
@@ -48,9 +58,15 @@ class KakaoLoginDataSourceImpl @Inject constructor() : SocialLoginDataSource {
             }
 
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(activityContext)) {
-                UserApiClient.instance.loginWithKakaoTalk(activityContext, callback = handleLoginResult)
+                UserApiClient.instance.loginWithKakaoTalk(
+                    activityContext,
+                    callback = handleLoginResult
+                )
             } else {
-                UserApiClient.instance.loginWithKakaoAccount(activityContext, callback = handleLoginResult)
+                UserApiClient.instance.loginWithKakaoAccount(
+                    activityContext,
+                    callback = handleLoginResult
+                )
             }
         }
     }
