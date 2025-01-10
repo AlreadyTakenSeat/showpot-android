@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -37,6 +38,7 @@ import com.alreadyoccupiedseat.designsystem.component.ShowPotSearchBar
 import com.alreadyoccupiedseat.designsystem.component.loading.LoadingIndicator
 import com.alreadyoccupiedseat.designsystem.component.snackbar.CheckIconSnackbar
 import com.alreadyoccupiedseat.model.SearchedArtist
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
@@ -52,6 +54,7 @@ fun SearchScreen(
     val viewModel = hiltViewModel<SearchViewModel>()
     val state by viewModel.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     viewModel.collectSideEffect {
         when (it) {
@@ -60,11 +63,19 @@ fun SearchScreen(
             }
 
             is SearchScreenEvent.SubscribeArtistSuccess -> {
-                snackbarHostState.showSnackbar("구독 설정이 완료되었습니다")
+                val job = scope.launch {
+                    snackbarHostState.showSnackbar("구독 설정이 완료되었습니다")
+                }
+                delay(2500L)
+                job.cancel()
             }
 
             is SearchScreenEvent.UnSubscribeArtistSuccess -> {
-                snackbarHostState.showSnackbar("구독 해제가 완료되었습니다")
+                val job = scope.launch {
+                    snackbarHostState.showSnackbar("구독 해제가 완료되었습니다")
+                }
+                delay(2500L)
+                job.cancel()
             }
         }
     }

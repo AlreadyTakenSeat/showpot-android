@@ -44,6 +44,7 @@ import com.alreadyoccupiedseat.designsystem.component.snackbar.CheckIconSnackbar
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
 import com.alreadyoccupiedseat.model.artist.UnSubscribedArtist
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
@@ -59,6 +60,7 @@ fun SubscriptionArtistScreen(
     val state = viewModel.collectAsState()
 
     val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     viewModel.collectSideEffect {
         when (it) {
@@ -67,7 +69,11 @@ fun SubscriptionArtistScreen(
             }
 
             SubscriptionArtistScreenEvent.SubscribeArtistsSuccess -> {
-                snackbarHostState.showSnackbar("구독 설정이 완료되었습니다")
+                val job = scope.launch {
+                    snackbarHostState.showSnackbar("구독 설정이 완료되었습니다")
+                }
+                delay(2500L)
+                job.cancel()
             }
         }
     }
