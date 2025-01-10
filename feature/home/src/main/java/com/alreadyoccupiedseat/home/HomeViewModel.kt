@@ -21,7 +21,7 @@ import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 sealed interface HomeScreenEvent {
-
+    data object TokenRefreshed : HomeScreenEvent
 }
 
 data class HomeScreenState(
@@ -62,8 +62,6 @@ class HomeViewModel @Inject constructor(
 
     init {
         intent {
-            getEntireShow()
-            getRecommendedShow()
             reduce {
                 state.copy(genreList = genreList)
             }
@@ -76,19 +74,26 @@ class HomeViewModel @Inject constructor(
                 }
             }
         }
+        intent {
+            accountDataStore.getAccessTokenFlow().collect {
+                if (it != null) {
+                    postSideEffect(HomeScreenEvent.TokenRefreshed)
+                }
+            }
+        }
     }
 
     fun getAlertsExist() = intent {
-            if (!state.isLogin) return@intent
-            val isExist = alertRepository.getAlertsExist()
-            reduce {
-                state.copy(isExist = isExist)
-            }
+        if (!state.isLogin) return@intent
+        val isExist = alertRepository.getAlertsExist()
+        reduce {
+            state.copy(isExist = isExist)
         }
+    }
 
     /** 전체 공연 목록 가져오기 ***/
     // 이름 변경
-    private fun getEntireShow() = intent {
+    fun getEntireShow() = intent {
         val tempRequestSize = 30
         val result = showRepository.getEntireShow(
             sort = ShowType.RECENT.name,
@@ -107,7 +112,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getRecommendedShow() = intent {
+    fun getRecommendedShow() = intent {
         val tempRequestSize = 30
         val result = showRepository.getEntireShow(
             sort = ShowType.POPULAR.name,
