@@ -37,7 +37,7 @@ class EntireShowViewModel @Inject constructor(
         val tempRequestSize = 30
 
         val result = showRepository.getEntireShow(
-            sort = ShowType.POPULAR.text,
+            sort = ShowType.RECENT.text,
             onlyOpenSchedule = false,
             size = tempRequestSize,
         )
@@ -62,7 +62,7 @@ class EntireShowViewModel @Inject constructor(
         val tempRequestSize = 30
 
         val result = showRepository.getEntireShow(
-            sort = ShowType.POPULAR.text,
+            sort = ShowType.RECENT.text,
             onlyOpenSchedule = false,
             size = tempRequestSize,
             cursorId  = state.pageId

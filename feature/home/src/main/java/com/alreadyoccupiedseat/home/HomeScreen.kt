@@ -53,6 +53,7 @@ import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun HomeScreen(
@@ -70,10 +71,25 @@ fun HomeScreen(
     LaunchedEffect(true) {
         viewModel.getUbSubscribedArtists()
         viewModel.getNickName()
+        viewModel.getEntireShow()
+        viewModel.getRecommendedShow()
     }
 
+    // remove
     ObserveResumeLifecycle {
         viewModel.getAlertsExist()
+    }
+
+    viewModel.collectSideEffect {
+        when (it) {
+            HomeScreenEvent.TokenRefreshed -> {
+                viewModel.getAlertsExist()
+                viewModel.getUbSubscribedArtists()
+                viewModel.getNickName()
+                viewModel.getEntireShow()
+                viewModel.getRecommendedShow()
+            }
+        }
     }
 
     HomeScreenContent(
