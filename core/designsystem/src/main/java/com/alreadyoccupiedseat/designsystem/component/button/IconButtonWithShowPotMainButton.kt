@@ -29,7 +29,7 @@ fun IconButtonWithShowPotMainButton(
         modifier = Modifier.run {
             fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .padding(top = 9.dp, bottom = 54.dp)
+                .padding(top = 9.dp, bottom = 20.dp)
         },
         horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceBetween,
     ) {
