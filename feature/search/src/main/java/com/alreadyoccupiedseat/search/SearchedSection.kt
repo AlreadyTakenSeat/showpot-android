@@ -143,31 +143,43 @@ fun SearchedSection(
             )
         }
 
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            item { Spacer(modifier = Modifier.width(4.dp)) }
-            searchedArtists.forEach { artist ->
-                item {
-                    ShowPotArtistAlarm(
-                        imageUrl = artist.imageURL,
-                        text = artist.name,
-                        isSubscribed = artist.isSubscribed,
-                    ) {
-                        if (isLoggedIn) {
-                            if (artist.isSubscribed) {
-                                onUnSubscribeTargetArtistChanged(artist)
-                                onArtistUnSubscriptionSheetVisibilityChanged(true)
+        if (searchedArtists.isNotEmpty()) {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                item { Spacer(modifier = Modifier.width(4.dp)) }
+                searchedArtists.forEach { artist ->
+                    item {
+                        ShowPotArtistAlarm(
+                            imageUrl = artist.imageURL,
+                            text = artist.name,
+                            isSubscribed = artist.isSubscribed,
+                        ) {
+                            if (isLoggedIn) {
+                                if (artist.isSubscribed) {
+                                    onUnSubscribeTargetArtistChanged(artist)
+                                    onArtistUnSubscriptionSheetVisibilityChanged(true)
+                                } else {
+                                    onSubscribeArtist(artist.spotifyId)
+                                }
                             } else {
-                                onSubscribeArtist(artist.spotifyId)
+                                onLoginSheetVisibilityChanged(true)
                             }
-                        } else {
-                            onLoginSheetVisibilityChanged(true)
                         }
                     }
                 }
             }
+        } else {
+            ShowPotKoreanText_H2(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(top = 40.dp),
+                text = "아직 아티스트 정보가 없어요",
+                color = ShowpotColor.Gray400,
+                textAlign = TextAlign.Center
+            )
         }
+
+
 
         Box(
             modifier = Modifier.padding(horizontal = 16.dp)
@@ -208,7 +220,7 @@ fun SearchedSection(
             ShowPotKoreanText_H2(
                 modifier = Modifier.fillMaxWidth()
                     .padding(top = 40.dp),
-                text = "아직 오픈된 공연이 없어요.",
+                text = "아직 오픈된 공연이 없어요",
                 color = ShowpotColor.Gray400,
                 textAlign = TextAlign.Center
             )
