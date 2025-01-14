@@ -14,6 +14,6 @@ fun LoadingIndicator() {
         modifier = Modifier.size(50.dp)
             .padding(1.dp),
         painter = painterResource(R.drawable.img_loading_indicator),
-        speed = 2000,
+        speed = 1000,
     )
 }
