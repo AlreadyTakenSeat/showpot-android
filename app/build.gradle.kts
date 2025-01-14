@@ -18,8 +18,8 @@ android {
     defaultConfig {
         applicationId = "com.alreadyoccupiedseat.showpot"
         targetSdk = 34
-        versionCode = 4
-        versionName = "1.0.1"
+        versionCode = 5
+        versionName = "1.0.2"
 
         // for using it on the .kt files
         buildConfigField(
