@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
@@ -142,44 +143,57 @@ fun SearchedSection(
             )
         }
 
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            item { Spacer(modifier = Modifier.width(4.dp)) }
-            searchedArtists.forEach { artist ->
-                item {
-                    ShowPotArtistAlarm(
-                        imageUrl = artist.imageURL,
-                        text = artist.name,
-                        isSubscribed = artist.isSubscribed,
-                    ) {
-                        if (isLoggedIn) {
-                            if (artist.isSubscribed) {
-                                onUnSubscribeTargetArtistChanged(artist)
-                                onArtistUnSubscriptionSheetVisibilityChanged(true)
+        if (searchedArtists.isNotEmpty()) {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                item { Spacer(modifier = Modifier.width(4.dp)) }
+                searchedArtists.forEach { artist ->
+                    item {
+                        ShowPotArtistAlarm(
+                            imageUrl = artist.imageURL,
+                            text = artist.name,
+                            isSubscribed = artist.isSubscribed,
+                        ) {
+                            if (isLoggedIn) {
+                                if (artist.isSubscribed) {
+                                    onUnSubscribeTargetArtistChanged(artist)
+                                    onArtistUnSubscriptionSheetVisibilityChanged(true)
+                                } else {
+                                    onSubscribeArtist(artist.spotifyId)
+                                }
                             } else {
-                                onSubscribeArtist(artist.spotifyId)
+                                onLoginSheetVisibilityChanged(true)
                             }
-                        } else {
-                            onLoginSheetVisibilityChanged(true)
                         }
                     }
                 }
             }
+        } else {
+            ShowPotKoreanText_H2(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(top = 40.dp),
+                text = "아직 아티스트 정보가 없어요",
+                color = ShowpotColor.Gray400,
+                textAlign = TextAlign.Center
+            )
+        }
+
+
+
+        Box(
+            modifier = Modifier.padding(horizontal = 16.dp)
+                .padding(top = 36.dp)
+                .fillMaxWidth(),
+            contentAlignment = Alignment.CenterStart,
+        ) {
+            ShowPotKoreanText_H2(
+                modifier = Modifier.padding(vertical = 8.dp),
+                text = stringResource(R.string.show_information), color = ShowpotColor.Gray100
+            )
         }
 
         if (searchedShows.isNotEmpty()) {
-            Box(
-                modifier = Modifier.padding(horizontal = 16.dp)
-                    .padding(top = 36.dp)
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.CenterStart,
-            ) {
-                ShowPotKoreanText_H2(
-                    modifier = Modifier.padding(vertical = 8.dp),
-                    text = stringResource(R.string.show_information), color = ShowpotColor.Gray100
-                )
-            }
 
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -202,6 +216,14 @@ fun SearchedSection(
 
                 }
             }
+        } else {
+            ShowPotKoreanText_H2(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(top = 40.dp),
+                text = "아직 오픈된 공연이 없어요",
+                color = ShowpotColor.Gray400,
+                textAlign = TextAlign.Center
+            )
         }
 
     }

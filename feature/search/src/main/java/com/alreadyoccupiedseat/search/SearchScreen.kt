@@ -1,6 +1,7 @@
 package com.alreadyoccupiedseat.search
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -9,7 +10,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Icon
@@ -37,6 +40,8 @@ import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.ShowPotSearchBar
 import com.alreadyoccupiedseat.designsystem.component.loading.LoadingIndicator
 import com.alreadyoccupiedseat.designsystem.component.snackbar.CheckIconSnackbar
+import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B1_Regular
+import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 import com.alreadyoccupiedseat.model.SearchedArtist
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -268,33 +273,67 @@ fun SearchScreenContent(
                         onDeleteHistoryClicked = onDeleteHistoryClicked
                     )
                 } else {
-                    SearchedSection(
-                        isLoggedIn = state.isLoggedIn,
-                        isLoginSheetVisible = state.isLoginSheetVisible,
-                        isArtistUnSubscriptionSheetVisible = state.isArtistUnSubscriptionSheetVisible,
-                        searchedArtists = state.searchedArtists,
-                        searchedShows = state.searchedShows,
-                        unSubscribeTargetArtist = state.unSubscribeTargetArtist,
-                        onUnSubscribeTargetArtistChanged = {
-                            onChangeUnSubscribeTargetArtist(it)
-                        },
-                        onLoginSheetVisibilityChanged = {
-                            onchangeLoginSheetVisibility(it)
-                        },
-                        onShowClicked = onShowClicked,
-                        onArtistUnSubscriptionSheetVisibilityChanged = {
-                            onchangeArtistUnSubscriptionSheetVisibility(it)
-                        },
-                        onSubscribeArtist = {
-                            onRequestSubscribeArtist(it)
-                        },
-                        onUnSubscribeArtist = {
-                            onRequestUnSubscribeArtist()
-                        },
-                        onLoginRequested = {
-                            onLoginRequested()
+
+                    if (state.searchedShows.isEmpty() && state.searchedArtists.isEmpty()) {
+
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+
+                            Spacer(modifier = Modifier.height(74.dp))
+
+                            Icon(
+                                modifier = Modifier.size(70.dp),
+                                painter = painterResource(id = com.alreadyoccupiedseat.designsystem.R.drawable.ic_magnifier_36),
+                                tint = ShowpotColor.Gray400,
+                                contentDescription = "magnifier icon",
+                            )
+
+                            Spacer(modifier = Modifier.height(20.dp))
+
+                            ShowPotKoreanText_H1(
+                                text = "\'${state.searchHistory.first()}\'검색 기록이 없어요",
+                                color = ShowpotColor.Gray100
+                            )
+
+                            Spacer(modifier = Modifier.height(8.dp))
+
+                            ShowPotKoreanText_B1_Regular(
+                                text = "맞춤법을 확인하거나, 새로운 검색을 시도하세요",
+                                color = ShowpotColor.Gray300
+                            )
+
                         }
-                    )
+                    } else {
+                        SearchedSection(
+                            isLoggedIn = state.isLoggedIn,
+                            isLoginSheetVisible = state.isLoginSheetVisible,
+                            isArtistUnSubscriptionSheetVisible = state.isArtistUnSubscriptionSheetVisible,
+                            searchedArtists = state.searchedArtists,
+                            searchedShows = state.searchedShows,
+                            unSubscribeTargetArtist = state.unSubscribeTargetArtist,
+                            onUnSubscribeTargetArtistChanged = {
+                                onChangeUnSubscribeTargetArtist(it)
+                            },
+                            onLoginSheetVisibilityChanged = {
+                                onchangeLoginSheetVisibility(it)
+                            },
+                            onShowClicked = onShowClicked,
+                            onArtistUnSubscriptionSheetVisibilityChanged = {
+                                onchangeArtistUnSubscriptionSheetVisibility(it)
+                            },
+                            onSubscribeArtist = {
+                                onRequestSubscribeArtist(it)
+                            },
+                            onUnSubscribeArtist = {
+                                onRequestUnSubscribeArtist()
+                            },
+                            onLoginRequested = {
+                                onLoginRequested()
+                            }
+                        )
+                    }
                 }
             }
 
