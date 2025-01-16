@@ -161,7 +161,7 @@ fun TicketSlidePagerForAlarmReservedShow(
                             modifier = Modifier
                                 .padding(horizontal = 14.dp)
                                 .fillMaxWidth(),
-                            text = formatDateTime(alarmedShows[page].startAt),
+                            text = formatDateTime(alarmedShows[page].ticketingAt),
                             textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                             color = ShowpotColor.Gray700,
                         )
@@ -209,5 +209,5 @@ internal fun daysUntil(inputDateTimeStr: String): Long {
     val duration = Duration.between(now, inputDateTime)
 
     // 남은 일수 반환
-    return duration.toDays()
+    return duration.toDays() + 1
 }
