@@ -26,7 +26,8 @@ data class MainActivityState(
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
     private val onboardingDataStore: OnboardingDataStore,
-    val reIssueTokenUseCase: ReIssueTokenUseCase
+    private val reIssueTokenUseCase: ReIssueTokenUseCase,
+    private val accountDataStore: AccountDataStore
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(MainActivityState())
@@ -57,6 +58,21 @@ class MainActivityViewModel @Inject constructor(
     fun onboardingCompleted() {
         _state.value =
             state.value.copy(isOnboardingCompleted = OnboardingCheckState.OnBoardingDone)
+    }
+
+    fun reIssueToken(onFailureCallback: () -> Unit = {}) {
+        viewModelScope.launch {
+            reIssueTokenUseCase().onFailure {
+
+                // when refresh token is expired
+                if (it.toString().contains("TKN-002")) {
+                    onFailureCallback()
+                }
+
+                accountDataStore.clearAccessAndRefreshToken()
+
+            }
+        }
     }
 
 }

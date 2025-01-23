@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
@@ -48,7 +49,9 @@ class MainActivity : ComponentActivity() {
                         Lifecycle.State.CREATED -> {}
                         Lifecycle.State.STARTED -> {}
                         Lifecycle.State.RESUMED -> {
-                            viewModel.reIssueTokenUseCase()
+                            viewModel.reIssueToken {
+                                Toast.makeText(this@MainActivity, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
+                            }
                         }
                     }
                 }
