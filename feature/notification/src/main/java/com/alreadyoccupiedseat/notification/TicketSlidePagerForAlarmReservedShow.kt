@@ -54,7 +54,7 @@ fun TicketSlidePagerForAlarmReservedShow(
     ) {
         HorizontalPager(
             contentPadding = PaddingValues(horizontal = 66.dp, vertical = 24.dp),
-            beyondBoundsPageCount = 0,
+            beyondViewportPageCount = 0,
             state = pagerState,
             modifier = Modifier
                 .background(ShowpotColor.Gray700)
