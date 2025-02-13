@@ -68,7 +68,15 @@ sealed class Screen(
 
     data object ShowDetail: Screen(
         route = "showDetail/{showId}",
-        title = "공연정보",
+        title = "공연 정보",
+        arguments = listOf(
+            navArgument("showId") { type = NavType.StringType },
+        ),
+    )
+
+    data object ShowComment: Screen(
+        route = "showComment/{showId}",
+        title = "공연 댓글",
         arguments = listOf(
             navArgument("showId") { type = NavType.StringType },
         ),
