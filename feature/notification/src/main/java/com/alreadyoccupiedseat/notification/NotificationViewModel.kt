@@ -2,7 +2,7 @@ package com.alreadyoccupiedseat.notification
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alreadyoccupiedseat.common.utiils.errorLog
+import com.alreadyoccupiedseat.common.utils.errorLog
 import com.alreadyoccupiedseat.data.show.ShowRepository
 import com.alreadyoccupiedseat.data.toApiErrorResult
 import com.alreadyoccupiedseat.datastore.AccountDataStore

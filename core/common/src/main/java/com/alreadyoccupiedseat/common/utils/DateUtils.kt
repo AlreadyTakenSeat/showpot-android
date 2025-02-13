@@ -1,4 +1,4 @@
-package com.alreadyoccupiedseat.common.utiils
+package com.alreadyoccupiedseat.common.utils
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

@@ -23,7 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.alreadyoccupiedseat.common.utiils.convertToKoreanTimeFormat
+import com.alreadyoccupiedseat.common.utils.convertToKoreanTimeFormat
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B2_Regular
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B3_Regular

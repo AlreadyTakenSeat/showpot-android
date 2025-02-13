@@ -18,7 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.alreadyoccupiedseat.common.utiils.convertToKoreanTimeFormat
+import com.alreadyoccupiedseat.common.utils.convertToKoreanTimeFormat
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B2_Regular
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B3_Regular
