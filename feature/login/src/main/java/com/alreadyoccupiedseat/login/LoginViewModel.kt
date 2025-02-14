@@ -1,14 +1,10 @@
 package com.alreadyoccupiedseat.login
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.alreadyoccupiedseat.common.utiils.errorLog
+import com.alreadyoccupiedseat.common.utils.errorLog
 import com.alreadyoccupiedseat.data.login.LoginRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.viewmodel.container

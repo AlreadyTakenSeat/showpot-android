@@ -1,4 +1,4 @@
-package com.alreadyoccupiedseat.common.utiils
+package com.alreadyoccupiedseat.common.utils
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

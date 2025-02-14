@@ -6,7 +6,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.alreadyoccupiedseat.designsystem.R
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
@@ -32,7 +31,7 @@ fun ShowCommentTopBar(
         },
         title = {
             ShowPotKoreanText_H1(
-                text = stringResource(id = R.string.alarm),
+                text = "기대 및 응원 메시지",
                 color = ShowpotColor.Gray100,
                 modifier = Modifier
                     .padding(start = 4.dp)

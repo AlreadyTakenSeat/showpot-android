@@ -1,4 +1,4 @@
-package com.alreadyoccupiedseat.common.utiils
+package com.alreadyoccupiedseat.common.utils
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -15,6 +15,20 @@ fun subtractMinutesFromDateTime(dateTime: String, minutes: Long): String {
     val parsedDateTime = LocalDateTime.parse(dateTime, alertTimeFormatter)
     val updatedDateTime = parsedDateTime.minusMinutes(minutes)
     return updatedDateTime.format(alertTimeFormatter)
+}
+
+fun convertToKoreanTimeFormat(dateTimeStr: String): String {
+    val inputFormatter = DateTimeFormatter.ofPattern("yyyy-M-d HH:mm")
+    val dateTime = LocalDateTime.parse(dateTimeStr, inputFormatter)
+
+    val hour = dateTime.hour
+    val minute = dateTime.minute
+
+    val period = if (hour < 12) "오전" else "오후"
+    val hour12 = if (hour % 12 == 0) 12 else hour % 12
+    val formattedMinute = String.format("%02d", minute)
+
+    return "$period ${hour12}:${formattedMinute}"
 }
 
 /**

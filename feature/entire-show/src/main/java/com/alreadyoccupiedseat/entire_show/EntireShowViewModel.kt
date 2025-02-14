@@ -1,7 +1,7 @@
 package com.alreadyoccupiedseat.entire_show
 
 import androidx.lifecycle.ViewModel
-import com.alreadyoccupiedseat.common.utiils.errorLog
+import com.alreadyoccupiedseat.common.utils.errorLog
 import com.alreadyoccupiedseat.data.show.ShowRepository
 import com.alreadyoccupiedseat.data.toApiErrorResult
 import com.alreadyoccupiedseat.model.show.ShowPreview

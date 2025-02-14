@@ -1,10 +1,9 @@
 package com.alreadyoccupiedseat.myalarm_setting
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.alreadyoccupiedseat.common.utiils.errorLog
-import com.alreadyoccupiedseat.common.utiils.getCurrentDateTime
-import com.alreadyoccupiedseat.common.utiils.subtractMinutesFromDateTime
+import com.alreadyoccupiedseat.common.utils.errorLog
+import com.alreadyoccupiedseat.common.utils.getCurrentDateTime
+import com.alreadyoccupiedseat.common.utils.subtractMinutesFromDateTime
 import com.alreadyoccupiedseat.data.show.ShowRepository
 import com.alreadyoccupiedseat.data.toApiErrorResult
 import com.alreadyoccupiedseat.datastore.AccountDataStore

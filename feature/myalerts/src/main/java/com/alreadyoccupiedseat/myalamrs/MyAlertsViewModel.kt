@@ -1,7 +1,7 @@
 package com.alreadyoccupiedseat.myalamrs
 
 import androidx.lifecycle.ViewModel
-import com.alreadyoccupiedseat.common.utiils.errorLog
+import com.alreadyoccupiedseat.common.utils.errorLog
 import com.alreadyoccupiedseat.data.alert.AlertRepository
 import com.alreadyoccupiedseat.data.toApiErrorResult
 import com.alreadyoccupiedseat.model.Alert

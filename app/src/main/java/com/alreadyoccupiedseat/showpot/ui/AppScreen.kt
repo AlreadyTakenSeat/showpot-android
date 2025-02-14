@@ -34,6 +34,7 @@ import com.alreadyoccupiedseat.subscription_artist.SubscriptionArtistScreen
 import com.alreadyoccupiedseat.subscription_genre.SubscriptionGenreScreen
 import com.alreadyoccupiedseat.withdraw.WithDrawScreen
 import com.alreadyoccupiedseat.myalamrs.MyAlertsScreen
+import com.alreadyoccupiedseat.show_comment.ShowCommentScreen
 
 @Composable
 fun AppScreen(
@@ -119,7 +120,8 @@ fun AppScreenContent(
                         navController.navigate(Screen.SubscriptionArtist.route)
                     },
                     onShowClicked = {
-                        navController.navigate(Screen.ShowDetail.route.replace("{showId}", it))
+                        // TODO: show detail
+                        navController.navigate(Screen.ShowComment.route.replace("{showId}", it))
 
                     },
                     onEntireShowClicked = {
@@ -282,6 +284,17 @@ fun AppScreenContent(
 
             composable(Screen.MyAlerts.route) {
                 MyAlertsScreen(navController = navController)
+            }
+
+            composable(
+                Screen.ShowComment.route,
+                Screen.ShowComment.arguments
+            ) { backStackEntry ->
+                ShowCommentScreen(
+                    navController = navController,
+                    showId = backStackEntry.arguments?.getString("showId") ?: String.EMPTY
+                )
+
             }
 
         }

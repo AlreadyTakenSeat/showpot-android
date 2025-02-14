@@ -1,7 +1,7 @@
 package com.alreadyoccupiedseat.home
 
 import androidx.lifecycle.ViewModel
-import com.alreadyoccupiedseat.common.utiils.errorLog
+import com.alreadyoccupiedseat.common.utils.errorLog
 import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.data.alert.AlertRepository
 import com.alreadyoccupiedseat.data.artist.ArtistRepository

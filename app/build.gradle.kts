@@ -90,6 +90,7 @@ dependencies {
     implementation(project(":feature:subscription-artist"))
     implementation(project(":feature:subscribed-artist"))
     implementation(project(":feature:show-detail"))
+    implementation(project(":feature:show-comment"))
     implementation(project(":feature:myalerts"))
     implementation(project(":feature:myalarm-setting"))
     implementation(project(":feature:settings"))

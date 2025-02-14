@@ -1,15 +1,12 @@
 package com.alreadyoccupiedseat.subscription_artist
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.alreadyoccupiedseat.common.utiils.errorLog
+import com.alreadyoccupiedseat.common.utils.errorLog
 import com.alreadyoccupiedseat.data.artist.ArtistRepository
 import com.alreadyoccupiedseat.data.toApiErrorResult
 import com.alreadyoccupiedseat.datastore.AccountDataStore
-import com.alreadyoccupiedseat.model.Artist
 import com.alreadyoccupiedseat.model.artist.UnSubscribedArtist
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.viewmodel.container
