@@ -40,4 +40,10 @@ class ServiceModule {
         return retrofit.create(GenreService::class.java)
     }
 
+    @Provides
+    @Singleton
+    fun provideCommentService(retrofit: Retrofit): CommentService {
+        return retrofit.create(CommentService::class.java)
+    }
+
 }
