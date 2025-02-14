@@ -2,12 +2,13 @@ package com.alreadyoccupiedseat.data.comment
 
 import com.alreadyoccupiedseat.model.PagingData
 import com.alreadyoccupiedseat.model.comment.CommentResponse
+import javax.inject.Inject
 
-class CommentRepositoryImpl(
+class CommentRepositoryImpl @Inject constructor(
     private val commentDataSource: CommentDataSource
 ): CommentRepository {
     override suspend fun postComment(
-        refId: String,
+        refId: String?,
         commentType: String,
         content: String,
         parentId: String

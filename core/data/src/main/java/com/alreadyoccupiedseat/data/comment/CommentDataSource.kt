@@ -6,7 +6,7 @@ import com.alreadyoccupiedseat.model.comment.CommentResponse
 interface CommentDataSource {
 
     suspend fun postComment(
-        refId: String,
+        refId: String?,
         commentType: String,
         content: String,
         parentId: String

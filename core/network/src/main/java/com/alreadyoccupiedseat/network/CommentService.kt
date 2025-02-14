@@ -16,23 +16,23 @@ import retrofit2.http.Query
 interface CommentService {
 
     @POST("api/v1/comments")
-    fun postComment(
+    suspend fun postComment(
         @Body postCommentRequest: PostCommentRequest
     ): Response<ApiResult<Unit>>
 
     @POST("api/v1/comments/{commentId}/report")
-    fun reportOrBlockComment(
+    suspend fun reportOrBlockComment(
         @Path("commentId") commentId: String,
         @Body reportOrBlockCommentRequest: ReportOrBlockCommentRequest
     ): Response<ApiResult<Unit>>
 
     @DELETE("api/v1/comments/{commentId}")
-    fun deleteComment(
+    suspend fun deleteComment(
         @Path("commentId") commentId: String
     ): Response<ApiResult<Unit>>
 
     @GET("api/v1/comments/{refId}")
-    fun getComments(
+    suspend fun getComments(
         @Path("refId") refId: String,
         @Query("type") type: String,
         @Query("isInverted") isInverted: Boolean,
