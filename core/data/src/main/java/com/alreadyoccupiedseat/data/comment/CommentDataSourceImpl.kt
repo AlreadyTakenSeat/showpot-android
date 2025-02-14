@@ -6,12 +6,13 @@ import com.alreadyoccupiedseat.model.comment.CommentResponse
 import com.alreadyoccupiedseat.model.comment.PostCommentRequest
 import com.alreadyoccupiedseat.model.comment.ReportOrBlockCommentRequest
 import com.alreadyoccupiedseat.network.CommentService
+import javax.inject.Inject
 
-class CommentDataSourceImpl(
+class CommentDataSourceImpl @Inject constructor(
     private val commentService: CommentService
 ) : CommentDataSource {
     override suspend fun postComment(
-        refId: String,
+        refId: String?,
         commentType: String,
         content: String,
         parentId: String
