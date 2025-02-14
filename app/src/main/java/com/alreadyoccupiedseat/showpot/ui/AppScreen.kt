@@ -121,7 +121,7 @@ fun AppScreenContent(
                     },
                     onShowClicked = {
                         // TODO: show detail
-                        navController.navigate(Screen.ShowComment.route.replace("{showId}", it))
+                        navController.navigate(Screen.ShowDetail.route.replace("{showId}", it))
 
                     },
                     onEntireShowClicked = {
