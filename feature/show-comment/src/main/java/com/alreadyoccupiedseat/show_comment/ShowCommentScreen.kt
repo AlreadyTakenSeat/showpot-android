@@ -11,10 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -34,8 +32,14 @@ fun ShowCommentScreen(
     navController: NavController,
     showId: String
 ) {
+
     val viewModel = hiltViewModel<ShowCommentViewModel>()
     val state by viewModel.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.setShowId(showId)
+    }
+
     ShowCommentContentScreen(
         state = state,
         onBackClicked = {
@@ -43,6 +47,12 @@ fun ShowCommentScreen(
         },
         loadMore = {
 
+        },
+        onInputTextFieldChanged = {
+            viewModel.changeInputtedComment(it)
+        },
+        onSendButtonClicked = {
+            viewModel.postComment()
         }
     )
 }
@@ -54,6 +64,8 @@ private fun ShowCommentContentScreen(
     onBackClicked: () -> Unit,
     loadBefore: () -> Unit = {},
     loadMore: () -> Unit = {},
+    onInputTextFieldChanged: (String) -> Unit = {},
+    onSendButtonClicked : () -> Unit,
 ) {
 
     val focusManager = LocalFocusManager.current
@@ -135,21 +147,19 @@ private fun ShowCommentContentScreen(
             }
         }
 
-        var inputText by remember { mutableStateOf(String.EMPTY) }
-
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.BottomCenter
         ) {
             ShowCommentInputBox(
-                inputText = inputText,
+                inputText = state.inputtedComment,
                 onValueChange = {
-                    inputText = it
+                    onInputTextFieldChanged(it)
                 },
                 hint = "티켓팅 성공을 기원해 보세요 | ex. A구역 1열 간다",
                 onSendButtonClicked = {
-                    // onSend
-                    inputText = String.EMPTY
+                    onSendButtonClicked()
+                    onInputTextFieldChanged(String.EMPTY)
                     focusManager.clearFocus()
                 }
             )
