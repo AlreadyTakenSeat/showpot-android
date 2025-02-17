@@ -22,7 +22,6 @@ import androidx.navigation.NavController
 import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.inputBox.ShowCommentInputBox
-import com.alreadyoccupiedseat.model.comment.CommentResponse
 import com.alreadyoccupiedseat.show_comment.components.MyCommentItem
 import com.alreadyoccupiedseat.show_comment.components.OtherCommentItem
 import org.orbitmvi.orbit.compose.collectAsState
@@ -38,6 +37,8 @@ fun ShowCommentScreen(
 
     LaunchedEffect(Unit) {
         viewModel.setShowId(showId)
+        viewModel.getComments()
+        viewModel.getNickName()
     }
 
     ShowCommentContentScreen(
@@ -70,31 +71,6 @@ private fun ShowCommentContentScreen(
 
     val focusManager = LocalFocusManager.current
 
-    val dummyComment = listOf(
-        CommentResponse.Dummy.copy(
-            createdAt = "2025-2-13 14:25"
-        ),
-        CommentResponse.Dummy.copy(
-                createdAt = "2025-2-13 14:35"
-                ),
-        CommentResponse.Dummy.copy(
-            userName = "myNickName",
-            createdAt = "2025-2-13 14:45"
-        ),
-        CommentResponse.Dummy.copy(
-            createdAt = "2025-2-13 15:25"
-        ),
-        CommentResponse.Dummy.copy(
-            createdAt = "2025-2-13 15:55"
-        ),
-        CommentResponse.Dummy.copy(
-            createdAt = "2025-2-13 16:12"
-        ),
-        CommentResponse.Dummy.copy(
-            createdAt = "2025-2-13 17:00"
-        ),
-    )
-
     Scaffold(
         containerColor = ShowpotColor.Gray700,
         topBar = {
@@ -114,18 +90,20 @@ private fun ShowCommentContentScreen(
             modifier = modifier
                 .fillMaxSize()
                 .imePadding()
-                .padding(paddingValues),
+                .padding(paddingValues)
+                .padding(bottom = 60.dp),
         ) {
             // Comment List
-            dummyComment.forEach { comment ->
+            state.comments.forEach { comment ->
                 item {
 
-                    // TODO: valid with my actual name
-                    if (comment.userName != "myNickName") {
+                    if (comment.userName != state.nickName) {
                         OtherCommentItem(
                             modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
                                 .padding(bottom = 16.dp),
-                            profileUrl = comment.profileURL,
+                            // TODO: replace with real data
+                            // profileUrl = comment.profileURL,
+                            profileUrl = "https://picsum.photos/200",
                             userName = comment.userName,
                             content = comment.content,
                             createdAt = comment.createdAt
