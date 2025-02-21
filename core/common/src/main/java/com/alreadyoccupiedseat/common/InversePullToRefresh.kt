@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScrollModifierNode
@@ -42,13 +43,17 @@ fun InversePullToRefreshBox(
     modifier: Modifier = Modifier,
     state: PullToRefreshState = rememberPullToRefreshState(),
     contentAlignment: Alignment = Alignment.TopStart,
+    indicatorContainerColor: Color = PullToRefreshDefaults.containerColor,
+    indicatorColor: Color = PullToRefreshDefaults.indicatorColor,
     indicator: @Composable BoxScope.() -> Unit = {
         Indicator(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .rotate(180f),
             isRefreshing = isRefreshing,
-            state = state
+            state = state,
+            containerColor = indicatorContainerColor,
+            color = indicatorColor
         )
     },
     content: @Composable BoxScope.() -> Unit
@@ -166,6 +171,7 @@ internal class PullToRefreshModifierNode(
             source == NestedScrollSource.UserInput && available.y > 0 -> {
                 consumeAvailableOffset(available)
             }
+
             else -> Offset.Zero
         }
 
@@ -184,6 +190,7 @@ internal class PullToRefreshModifierNode(
 
                 newOffset
             }
+
             else -> Offset.Zero
         }
 
