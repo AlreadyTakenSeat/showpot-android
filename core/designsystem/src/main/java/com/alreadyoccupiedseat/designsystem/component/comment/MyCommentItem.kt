@@ -1,4 +1,4 @@
-package com.alreadyoccupiedseat.show_comment.components
+package com.alreadyoccupiedseat.designsystem.component.comment
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
