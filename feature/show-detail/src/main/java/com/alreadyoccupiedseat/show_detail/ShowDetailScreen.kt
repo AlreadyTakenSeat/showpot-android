@@ -433,7 +433,6 @@ fun ShowDetailScreenContent(
                     }
                 }
 
-                // TODO 왜 안그려짐
                 item {
                     Spacer(
                         modifier = Modifier
