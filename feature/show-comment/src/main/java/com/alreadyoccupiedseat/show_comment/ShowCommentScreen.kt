@@ -25,9 +25,9 @@ import androidx.navigation.NavController
 import com.alreadyoccupiedseat.common.InversePullToRefreshBox
 import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
+import com.alreadyoccupiedseat.designsystem.component.comment.MyCommentItem
+import com.alreadyoccupiedseat.designsystem.component.comment.OtherCommentItem
 import com.alreadyoccupiedseat.designsystem.component.inputBox.ShowCommentInputBox
-import com.alreadyoccupiedseat.show_comment.components.MyCommentItem
-import com.alreadyoccupiedseat.show_comment.components.OtherCommentItem
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -148,10 +148,11 @@ private fun ShowCommentContentScreen(
             ) {
                 ShowCommentInputBox(
                     inputText = state.inputtedComment,
+                    hint = "티켓팅 성공을 기원해 보세요 | ex. A구역 1열 간다",
+                    isPreviewComment = false,
                     onValueChange = {
                         onInputTextFieldChanged(it)
                     },
-                    hint = "티켓팅 성공을 기원해 보세요 | ex. A구역 1열 간다",
                     onSendButtonClicked = {
                         onSendButtonClicked()
                         onInputTextFieldChanged(String.EMPTY)

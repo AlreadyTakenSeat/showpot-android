@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -42,10 +43,15 @@ import com.alreadyoccupiedseat.designsystem.component.artist.ShowPotArtist
 import com.alreadyoccupiedseat.designsystem.component.bottomSheet.SheetHandler
 import com.alreadyoccupiedseat.designsystem.component.bottomSheet.ShowPotBottomSheet
 import com.alreadyoccupiedseat.designsystem.component.bottomSheet.TicketingNotificationBottomSheet
-import com.alreadyoccupiedseat.designsystem.component.button.LabelButton
 import com.alreadyoccupiedseat.designsystem.component.button.IconButtonWithShowPotMainButton
+import com.alreadyoccupiedseat.designsystem.component.button.LabelButton
+import com.alreadyoccupiedseat.designsystem.component.comment.MyCommentItem
+import com.alreadyoccupiedseat.designsystem.component.comment.OtherCommentItem
+import com.alreadyoccupiedseat.designsystem.component.inputBox.ShowCommentInputBox
 import com.alreadyoccupiedseat.designsystem.getTicketSiteButtonColor
 import com.alreadyoccupiedseat.designsystem.typo.english.ShowPotEnglishText_H0
+import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B1_SemiBold
+import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B2_SemiBold
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H2
 import org.orbitmvi.orbit.compose.collectAsState
@@ -60,7 +66,8 @@ fun ShowDetailScreen(
     navController: NavController,
     showId: String,
     onTicketingButtonClicked: (String) -> Unit,
-    onLoginRequested: () -> Unit
+    onLoginRequested: () -> Unit,
+    onShowCommented: (String) -> Unit
 ) {
 
     val viewModel = hiltViewModel<ShowDetailViewModel>()
@@ -87,6 +94,8 @@ fun ShowDetailScreen(
         viewModel.getShowDetail(showId)
         viewModel.registerShowId(showId)
         viewModel.checkIsAvailableAlertReservation()
+        viewModel.getNickName()
+        viewModel.getPreviewComments(showId = showId)
     }
 
     LaunchedEffect(state.isLoggedIn) {
@@ -121,6 +130,9 @@ fun ShowDetailScreen(
         },
         onTicketingSelectionBoxClicked = {
             viewModel.changeTicketingSelectionBoxState(it)
+        },
+        onShowCommented = {
+            onShowCommented(showId)
         }
     )
 }
@@ -137,6 +149,7 @@ fun ShowDetailScreenContent(
     onLoginRequested: () -> Unit = {},
     onTicketingButtonClicked: (String) -> Unit,
     onTicketingSelectionBoxClicked: (Int) -> Unit = {},
+    onShowCommented: () -> Unit
 ) {
 
     val lazyColumnState = rememberLazyListState()
@@ -292,7 +305,7 @@ fun ShowDetailScreenContent(
                         modifier = Modifier.padding(horizontal = 16.dp)
                             .padding(bottom = 12.dp)
                             .fillMaxWidth(),
-                        horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(
+                        horizontalArrangement = Arrangement.spacedBy(
                             8.dp
                         )
                     ) {
@@ -334,11 +347,100 @@ fun ShowDetailScreenContent(
 
                 item {
                     Spacer(
-                        modifier = Modifier.padding(horizontal = 16.dp)
-                            .padding(top = 14.dp, bottom = 12.dp)
+                        modifier = Modifier
+                            .height(14.dp)
                             .fillMaxWidth()
-                            .height(1.dp)
-                            .background(ShowpotColor.Gray500)
+                    )
+                }
+
+                item {
+                    Spacer(
+                        modifier = Modifier
+                            .height(8.dp)
+                            .fillMaxWidth()
+                            .background(ShowpotColor.Gray600)
+                    )
+                }
+
+                item {
+                    Row(
+                        modifier = Modifier
+                            .padding(
+                                vertical = 16.dp,
+                                horizontal = 16.dp
+                            )
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        ShowPotKoreanText_B1_SemiBold(
+                            text = "기대 및 응원 메시지",
+                            color = ShowpotColor.White,
+                        )
+                        ShowPotKoreanText_B2_SemiBold(
+                            modifier = Modifier.clickable { onShowCommented() },
+                            text = "전체보기",
+                            color = ShowpotColor.Gray300,
+                        )
+                    }
+                }
+
+                state.comments.forEach { comment ->
+                    item {
+                        val commonModifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .padding(bottom = 16.dp)
+
+                        if (comment.userName == state.nickName) {
+                            MyCommentItem(
+                                modifier = commonModifier,
+                                content = comment.content,
+                                createdAt = comment.createdAt
+                            ) { }
+                        } else {
+                            OtherCommentItem(
+                                modifier = commonModifier,
+                                profileUrl = comment.profileURL,
+                                userName = comment.userName,
+                                content = comment.content,
+                                createdAt = comment.createdAt
+                            ) { }
+                        }
+                    }
+                }
+
+                item {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.BottomCenter
+                    ) {
+                        ShowCommentInputBox(
+                            inputText = String.EMPTY,
+                            onValueChange = {},
+                            hint = "티켓팅 성공을 기원해 보세요 | ex. A구역 1열 간다",
+                            isPreviewComment = true,
+                            onSendButtonClicked = {
+                                onShowCommented()
+                            }
+                        )
+                        Box(
+                            modifier = Modifier
+                                .matchParentSize()
+                                .clickable { onShowCommented() }
+                                .background(Color.Transparent)
+                        )
+                    }
+                }
+
+                // TODO 왜 안그려짐
+                item {
+                    Spacer(
+                        modifier = Modifier
+                            .padding(top = 10.dp, bottom = 16.dp)
+                            .fillMaxWidth()
+                            .height(8.dp)
+                            .background(ShowpotColor.Gray600)
                     )
                 }
 
@@ -356,7 +458,7 @@ fun ShowDetailScreenContent(
                         modifier = Modifier.padding(horizontal = 16.dp)
                             .padding(bottom = 12.dp)
                             .fillMaxWidth(),
-                        horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(
+                        horizontalArrangement = Arrangement.spacedBy(
                             18.dp
                         )
                     ) {
@@ -396,7 +498,7 @@ fun ShowDetailScreenContent(
                         modifier = Modifier.padding(horizontal = 16.dp)
                             .background(ShowpotColor.Gray600)
                             .padding(12.dp),
-                        verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(
+                        verticalArrangement = Arrangement.spacedBy(
                             4.dp
                         )
                     ) {
@@ -436,7 +538,7 @@ fun ShowDetailScreenContent(
                             .padding(horizontal = 16.dp)
                             .fillMaxWidth(),
                         horizontalArrangement =
-                        androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)
+                        Arrangement.spacedBy(8.dp)
                     ) {
                         state.showDetail?.genres?.forEach {
                             item {
