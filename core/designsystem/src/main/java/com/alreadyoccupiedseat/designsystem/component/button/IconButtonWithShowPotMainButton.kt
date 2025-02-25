@@ -21,7 +21,9 @@ import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
 @Composable
 fun IconButtonWithShowPotMainButton(
     icon: Painter,
-    text: String,
+    enableText: String,
+    disEnableText: String,
+    isEnabled: Boolean = true,
     onIconButtonClicked: () -> Unit,
     onMainButtonClicked: () -> Unit,
 ) {
@@ -51,7 +53,8 @@ fun IconButtonWithShowPotMainButton(
         Spacer(modifier = Modifier.width(15.dp))
 
         ShowPotMainButton(
-            text = text,
+            text = if (isEnabled) enableText else disEnableText,
+            enabled = isEnabled
         ) {
             onMainButtonClicked()
         }

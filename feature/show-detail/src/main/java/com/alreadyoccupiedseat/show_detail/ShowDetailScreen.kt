@@ -34,6 +34,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.alreadyoccupiedseat.common.utils.getCurrentDateTime
+import com.alreadyoccupiedseat.common.utils.isDate1GreaterOrEqual
 import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.core.extension.isScrollingUp
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
@@ -605,6 +607,8 @@ fun ShowDetailScreenContent(
                     if (state.showDetail?.isInterested == true) painterResource(com.alreadyoccupiedseat.designsystem.R.drawable.ic_heart_36_on)
                     else painterResource(com.alreadyoccupiedseat.designsystem.R.drawable.ic_heart_36_off),
                     stringResource(R.string.set_notification),
+                    "예매가 오픈된 공연이에요.",
+                    isEnabled = isDate1GreaterOrEqual(getCurrentDateTime(), state.showDetail?.ticketingTimes?.first()?.ticketingAt ?: "2999-12-08 00:00").not(),
                     onIconButtonClicked = {
                         if (state.isLoggedIn) onIconButtonClicked()
                         else onLoginSheetVisibilityChanged(true)
