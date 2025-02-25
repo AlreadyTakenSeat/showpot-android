@@ -37,6 +37,7 @@ import coil.compose.AsyncImage
 import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.core.extension.isScrollingUp
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
+import com.alreadyoccupiedseat.designsystem.component.DefaultScreenWhenEmpty
 import com.alreadyoccupiedseat.designsystem.component.GenreChip
 import com.alreadyoccupiedseat.designsystem.component.ShowPotMainButton
 import com.alreadyoccupiedseat.designsystem.component.artist.ShowPotArtist
@@ -67,7 +68,7 @@ fun ShowDetailScreen(
     showId: String,
     onTicketingButtonClicked: (String) -> Unit,
     onLoginRequested: () -> Unit,
-    onShowCommented: (String) -> Unit
+    onShowCommentsScreen: (String) -> Unit,
 ) {
 
     val viewModel = hiltViewModel<ShowDetailViewModel>()
@@ -131,8 +132,8 @@ fun ShowDetailScreen(
         onTicketingSelectionBoxClicked = {
             viewModel.changeTicketingSelectionBoxState(it)
         },
-        onShowCommented = {
-            onShowCommented(showId)
+        onShowCommentsScreen = {
+            onShowCommentsScreen(showId)
         }
     )
 }
@@ -149,11 +150,10 @@ fun ShowDetailScreenContent(
     onLoginRequested: () -> Unit = {},
     onTicketingButtonClicked: (String) -> Unit,
     onTicketingSelectionBoxClicked: (Int) -> Unit = {},
-    onShowCommented: () -> Unit
+    onShowCommentsScreen: () -> Unit,
 ) {
 
     val lazyColumnState = rememberLazyListState()
-
     val backgroundColor by animateColorAsState(
         targetValue = if (lazyColumnState.isScrollingUp()
                 .not()
@@ -378,65 +378,76 @@ fun ShowDetailScreenContent(
                             color = ShowpotColor.White,
                         )
                         ShowPotKoreanText_B2_SemiBold(
-                            modifier = Modifier.clickable { onShowCommented() },
+                            modifier = Modifier.clickable { onShowCommentsScreen() },
                             text = "전체보기",
                             color = ShowpotColor.Gray300,
                         )
                     }
                 }
+                state.comments
+                    .takeIf { it.isNotEmpty() }
+                    ?.forEach { comment ->
+                        item {
+                            val commonModifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
+                                .padding(bottom = 16.dp)
 
-                state.comments.forEach { comment ->
-                    item {
-                        val commonModifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                            .padding(bottom = 16.dp)
-
-                        if (comment.userName == state.nickName) {
-                            MyCommentItem(
-                                modifier = commonModifier,
-                                content = comment.content,
-                                createdAt = comment.createdAt
-                            ) { }
-                        } else {
-                            OtherCommentItem(
-                                modifier = commonModifier,
-                                profileUrl = comment.profileURL,
-                                userName = comment.userName,
-                                content = comment.content,
-                                createdAt = comment.createdAt
-                            ) { }
+                            if (comment.userName == state.nickName) {
+                                MyCommentItem(
+                                    modifier = commonModifier,
+                                    content = comment.content,
+                                    createdAt = comment.createdAt
+                                ) { }
+                            } else {
+                                OtherCommentItem(
+                                    modifier = commonModifier,
+                                    profileUrl = comment.profileURL,
+                                    userName = comment.userName,
+                                    content = comment.content,
+                                    createdAt = comment.createdAt
+                                ) { }
+                            }
                         }
-                    }
+                    } ?: item {
+                    EmptyComment(modifier = Modifier.fillMaxWidth())
                 }
 
                 item {
                     Box(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxSize(),
                         contentAlignment = Alignment.BottomCenter
                     ) {
                         ShowCommentInputBox(
                             inputText = String.EMPTY,
                             onValueChange = {},
                             hint = "티켓팅 성공을 기원해 보세요 | ex. A구역 1열 간다",
+                            backGroundColor = ShowpotColor.Gray800,
                             isPreviewComment = true,
                             onSendButtonClicked = {
-                                onShowCommented()
+                                onShowCommentsScreen()
                             }
                         )
                         Box(
                             modifier = Modifier
                                 .matchParentSize()
-                                .clickable { onShowCommented() }
+                                .clickable { onShowCommentsScreen() }
                                 .background(Color.Transparent)
                         )
                     }
                 }
-
                 item {
                     Spacer(
                         modifier = Modifier
-                            .padding(top = 10.dp, bottom = 16.dp)
+                            .background(ShowpotColor.Gray800)
+                            .height(10.dp)
+                    )
+                }
+                item {
+                    Spacer(
+                        modifier = Modifier
+                            .padding(bottom = 16.dp)
                             .fillMaxWidth()
                             .height(8.dp)
                             .background(ShowpotColor.Gray600)
@@ -633,4 +644,23 @@ internal fun String.formatToReservationDate(): String {
     val koreanDayOfWeek = dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREAN)
 
     return dateTime.format(outputFormatter).replace(dayOfWeek.name, koreanDayOfWeek)
+}
+
+@Composable
+fun EmptyComment(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .background(ShowpotColor.Gray800)
+            .fillMaxWidth()
+        ,
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier = Modifier.height(60.dp))
+        DefaultScreenWhenEmpty(
+            imageResId = com.alreadyoccupiedseat.designsystem.R.drawable.img_message,
+            text = stringResource(id = com.alreadyoccupiedseat.designsystem.R.string.first_message)
+        )
+        Spacer(modifier = Modifier.height(58.dp))
+    }
 }

@@ -222,7 +222,7 @@ fun AppScreenContent(
                     onLoginRequested = {
                         navController.navigate(Screen.Login.route)
                     },
-                    onShowCommented = {
+                    onShowCommentsScreen = {
                         navController.navigate(Screen.ShowComment.route.replace("{showId}", it))
                     }
                 )
