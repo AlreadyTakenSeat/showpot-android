@@ -31,6 +31,7 @@ fun ShowCommentInputBox(
     inputText: String,
     onValueChange: (String) -> Unit,
     hint: String,
+    backGroundColor: Color = ShowpotColor.Gray700,
     isPreviewComment: Boolean,
     onSendButtonClicked: () -> Unit,
 ) {
@@ -42,7 +43,7 @@ fun ShowCommentInputBox(
         },
         modifier = Modifier
             .fillMaxWidth()
-            .background(ShowpotColor.Gray700),
+            .background(backGroundColor),
         textStyle = ShowPotTypography.Korean.B2_regular.copy(Color.White),
         cursorBrush = SolidColor(ShowpotColor.Gray400),
         singleLine = true,
