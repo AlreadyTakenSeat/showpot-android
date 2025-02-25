@@ -25,10 +25,10 @@ data class ShowCommentState(
     val inputtedComment: String = String.EMPTY,
     val nickName: String = String.EMPTY,
     val isNewCommentLoading: Boolean = false,
-    // TODO: Consider direction
     val cursorId: String? = null,
-    // TODO: Consider direction
-    val hasNext: Boolean = false
+    val cursorIdTop: String? = null,
+    val hasNext: Boolean = false,
+    val hasNextTop: Boolean = false
 )
 
 @HiltViewModel
@@ -80,13 +80,13 @@ class ShowCommentViewModel @Inject constructor(
             isInverted = false,
             cursorId = null,
             cursorValue = null,
-            size = 30
+            size = 10
         )
 
         result.onSuccess {
             reduce {
                 state.copy(
-                    comments = it.data,
+                    comments = it.data.reversed(),
                     cursorId = it.cursor.id,
                     hasNext = it.hasNext
                 )
@@ -94,6 +94,28 @@ class ShowCommentViewModel @Inject constructor(
         }.onFailure {
             errorLog(it.toApiErrorResult().message)
         }
+
+        val resultTop = commentRepository.getComments(
+            refId = state.showId,
+            type = "SHOW",
+            isInverted = true,
+            cursorId = null,
+            cursorValue = null,
+            size = 10
+        )
+
+        resultTop.onSuccess {
+            reduce {
+
+                state.copy(
+                    cursorIdTop = it.cursor.id,
+                    hasNextTop = it.hasNext
+                )
+            }
+        }.onFailure {
+            errorLog(it.toApiErrorResult().message)
+        }
+
     }
 
     fun getNickName() = intent {
@@ -128,7 +150,7 @@ class ShowCommentViewModel @Inject constructor(
         result.onSuccess {
             reduce {
                 state.copy(
-                    comments = state.comments + it.data,
+                    comments = it.data.reversed() + state.comments,
                     cursorId = it.cursor.id,
                     hasNext = it.hasNext
                 )
@@ -142,6 +164,34 @@ class ShowCommentViewModel @Inject constructor(
                 isNewCommentLoading = false
             )
         }
+    }
+
+    fun loadMoreTop() = intent {
+
+        if (state.hasNextTop.not()) {
+            return@intent
+        }
+
+        val result = commentRepository.getComments(
+            refId = state.showId,
+            type = "SHOW",
+            isInverted = true,
+            cursorId = state.cursorIdTop,
+            size = 10
+        )
+
+        result.onSuccess {
+            reduce {
+                state.copy(
+                    comments = state.comments + it.data.reversed(),
+                    cursorIdTop = it.cursor.id,
+                    hasNextTop = it.hasNext
+                )
+            }
+        }.onFailure {
+            errorLog(it.toApiErrorResult().message)
+        }
+
     }
 
 }

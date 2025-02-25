@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.alreadyoccupiedseat.common.InversePullToRefreshBox
+import com.alreadyoccupiedseat.common.infinitescroll.InfinityLazyColumn
 import com.alreadyoccupiedseat.core.extension.EMPTY
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.inputBox.ShowCommentInputBox
@@ -50,6 +51,9 @@ fun ShowCommentScreen(
         onBackClicked = {
             navController.popBackStack()
         },
+        loadMoreTop = {
+            viewModel.loadMoreTop()
+        },
         loadMore = {
             viewModel.loadMore()
         },
@@ -68,13 +72,16 @@ private fun ShowCommentContentScreen(
     modifier: Modifier = Modifier,
     state: ShowCommentState,
     onBackClicked: () -> Unit,
-    loadBefore: () -> Unit = {},
+    loadMoreTop: () -> Unit,
     loadMore: () -> Unit = {},
     onInputTextFieldChanged: (String) -> Unit = {},
     onSendButtonClicked: () -> Unit,
 ) {
 
     val focusManager = LocalFocusManager.current
+
+    val pullToRefreshState = rememberPullToRefreshState()
+    val listState = rememberLazyListState()
 
     Scaffold(
         containerColor = ShowpotColor.Gray700,
@@ -91,8 +98,6 @@ private fun ShowCommentContentScreen(
         }
     ) { paddingValues ->
 
-        val pullToRefreshState = rememberPullToRefreshState()
-
         InversePullToRefreshBox(
             modifier = Modifier.fillMaxSize(),
             state = pullToRefreshState,
@@ -102,24 +107,26 @@ private fun ShowCommentContentScreen(
             indicatorContainerColor = Color.Transparent,
             indicatorColor = ShowpotColor.MainOrange,
         ) {
-            LazyColumn(
+            InfinityLazyColumn(
                 modifier = modifier
                     .fillMaxSize()
                     .imePadding()
                     .padding(paddingValues)
                     .padding(bottom = 60.dp),
-            ) {
-                // Comment List
-                state.comments.forEach { comment ->
+                state = listState,
+                loadMore = {
+                    loadMoreTop()
+                },
+                reverseLayout = true
+            )
+            { state.comments.forEach { comment ->
                     item {
 
                         if (comment.userName != state.nickName) {
                             OtherCommentItem(
                                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
                                     .padding(bottom = 16.dp),
-                                // TODO: replace with real data
-                                // profileUrl = comment.profileURL,
-                                profileUrl = "https://picsum.photos/200",
+                                profileUrl = comment.profileURL,
                                 userName = comment.userName,
                                 content = comment.content,
                                 createdAt = comment.createdAt
@@ -142,8 +149,7 @@ private fun ShowCommentContentScreen(
             }
 
             Box(
-                modifier = Modifier.fillMaxSize()
-                ,
+                modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.BottomCenter
             ) {
                 ShowCommentInputBox(
