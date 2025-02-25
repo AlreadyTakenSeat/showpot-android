@@ -32,7 +32,7 @@ fun ShowCommentInputBox(
     onValueChange: (String) -> Unit,
     hint: String,
     backGroundColor: Color = ShowpotColor.Gray700,
-    isPreviewComment: Boolean,
+    isPreviewComment: Boolean = false,
     onSendButtonClicked: () -> Unit,
 ) {
 

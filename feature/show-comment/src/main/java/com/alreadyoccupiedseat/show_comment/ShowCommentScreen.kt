@@ -149,7 +149,6 @@ private fun ShowCommentContentScreen(
                 ShowCommentInputBox(
                     inputText = state.inputtedComment,
                     hint = "티켓팅 성공을 기원해 보세요 | ex. A구역 1열 간다",
-                    isPreviewComment = false,
                     onValueChange = {
                         onInputTextFieldChanged(it)
                     },
