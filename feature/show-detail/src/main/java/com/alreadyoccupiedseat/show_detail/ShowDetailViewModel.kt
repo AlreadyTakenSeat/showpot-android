@@ -1,15 +1,20 @@
 package com.alreadyoccupiedseat.show_detail
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.alreadyoccupiedseat.common.utils.errorLog
 import com.alreadyoccupiedseat.common.utils.getCurrentDateTime
 import com.alreadyoccupiedseat.common.utils.isDate1GreaterOrEqual
 import com.alreadyoccupiedseat.common.utils.subtractMinutesFromDateTime
+import com.alreadyoccupiedseat.core.extension.EMPTY
+import com.alreadyoccupiedseat.data.comment.CommentRepository
+import com.alreadyoccupiedseat.data.login.LoginRepository
 import com.alreadyoccupiedseat.data.show.ShowRepository
 import com.alreadyoccupiedseat.data.toApiErrorResult
 import com.alreadyoccupiedseat.datastore.AccountDataStore
 import com.alreadyoccupiedseat.enum.TicketingAlertTime
 import com.alreadyoccupiedseat.model.TicketingBoxSelectionState
+import com.alreadyoccupiedseat.model.comment.CommentResponse
 import com.alreadyoccupiedseat.model.show.ShowDetail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -26,8 +31,10 @@ sealed interface ShowDetailEvent {
 
 data class ShowDetailState(
     val isLoggedIn: Boolean = false,
+    val nickName: String = String.EMPTY,
     val showId: String = "", // TODO: 아마 삭제
     val showDetail: ShowDetail? = null,
+    val comments: List<CommentResponse> = emptyList(),
     val isAlertSheetVisible: Boolean = false,
     val isLoginSheetVisible: Boolean = false,
     val ticketingBoxSelectionState: List<TicketingBoxSelectionState> =
@@ -44,7 +51,9 @@ data class ShowDetailState(
 @HiltViewModel
 class ShowDetailViewModel @Inject constructor(
     private val showRepository: ShowRepository,
-    private val accountDataStore: AccountDataStore
+    private val accountDataStore: AccountDataStore,
+    private val loginRepository: LoginRepository,
+    private val commentRepository: CommentRepository,
 ) : ViewModel(), ContainerHost<ShowDetailState, ShowDetailEvent> {
 
     override val container: Container<ShowDetailState, ShowDetailEvent> =
@@ -72,6 +81,35 @@ class ShowDetailViewModel @Inject constructor(
         result.onSuccess {
             reduce {
                 state.copy(showDetail = it)
+            }
+        }.onFailure {
+            errorLog(it.toApiErrorResult().message)
+        }
+    }
+
+    fun getNickName() = intent {
+        loginRepository.getProfile().onSuccess { profile ->
+            reduce {
+                state.copy(nickName = profile.nickname)
+            }
+        }
+    }
+
+    fun getPreviewComments(showId: String) = intent {
+        val result = commentRepository.getComments(
+            refId = showId,
+            type = "SHOW",
+            isInverted = false,
+            cursorId = null,
+            cursorValue = null,
+            size = 4
+        )
+        Log.d("getPreviewComments", " result: $result ")
+        result.onSuccess {
+            reduce {
+                state.copy(
+                    comments = it.data
+                )
             }
         }.onFailure {
             errorLog(it.toApiErrorResult().message)

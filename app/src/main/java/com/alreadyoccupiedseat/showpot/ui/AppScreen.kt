@@ -221,7 +221,11 @@ fun AppScreenContent(
                     },
                     onLoginRequested = {
                         navController.navigate(Screen.Login.route)
-                    })
+                    },
+                    onShowCommented = {
+                        navController.navigate(Screen.ShowComment.route.replace("{showId}", it))
+                    }
+                )
             }
 
             composable(Screen.MyAlarmSetting.route) {

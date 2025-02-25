@@ -31,6 +31,7 @@ fun ShowCommentInputBox(
     inputText: String,
     onValueChange: (String) -> Unit,
     hint: String,
+    isPreviewComment: Boolean,
     onSendButtonClicked: () -> Unit,
 ) {
 
@@ -84,7 +85,7 @@ fun ShowCommentInputBox(
                     },
                 painter = painterResource(id = R.drawable.ic_send_24),
                 contentDescription = "message send button",
-                tint = if (inputText.isEmpty()) ShowpotColor.Gray400 else Color.White
+                tint = if (inputText.isEmpty() && !isPreviewComment) ShowpotColor.Gray400 else Color.White
             )
         }
     }
