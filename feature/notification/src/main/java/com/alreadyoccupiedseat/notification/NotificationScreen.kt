@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.IconMenuWithCount
-import com.alreadyoccupiedseat.designsystem.typo.english.ShowPotEnglishText_H0
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H0
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 
@@ -114,7 +113,7 @@ fun NotificationScreenContent(
             if (state.isLoggedIn && state.upcomingTicketingShows.isNotEmpty()) {
                 val upcomingTicketShow = state.upcomingTicketingShows[pagerState.currentPage]
                 item {
-                    ShowPotEnglishText_H0(
+                    ShowPotKoreanText_H0(
                         text = upcomingTicketShow.title,
                         modifier = Modifier.padding(horizontal = 16.dp),
                         color = ShowpotColor.Gray100,
