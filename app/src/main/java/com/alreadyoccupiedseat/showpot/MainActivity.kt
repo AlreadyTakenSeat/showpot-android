@@ -19,15 +19,21 @@ import androidx.lifecycle.Lifecycle
 import com.alreadyoccupiedseat.designsystem.ShowPotTheme
 import com.alreadyoccupiedseat.onboarding.OnboardingScreen
 import com.alreadyoccupiedseat.showpot.ui.AppScreen
+import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         startService(Intent(this, ShowPotFcmService::class.java))
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
         setContent {
             // TODO: Improve the reactivity
