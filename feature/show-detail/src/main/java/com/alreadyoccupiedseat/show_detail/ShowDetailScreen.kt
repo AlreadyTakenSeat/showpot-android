@@ -386,36 +386,42 @@ fun ShowDetailScreenContent(
                 }
                 state.comments
                     .takeIf { it.isNotEmpty() }
-                    ?.forEach { comment ->
+                    ?.forEachIndexed { index, comment ->
                         item {
+                            val topPadding = if (index == 0) 16.dp else 0.dp
                             val commonModifier = Modifier
+                                .background(ShowpotColor.Gray800)
                                 .fillMaxWidth()
                                 .padding(horizontal = 16.dp)
-                                .padding(bottom = 16.dp)
+                                .padding(top = topPadding, bottom = 16.dp)
 
                             if (comment.userName == state.nickName) {
                                 MyCommentItem(
                                     modifier = commonModifier,
                                     content = comment.content,
-                                    createdAt = comment.createdAt
-                                ) { }
+                                    createdAt = comment.createdAt,
+                                    onIconClicked = { }
+                                )
                             } else {
                                 OtherCommentItem(
                                     modifier = commonModifier,
                                     profileUrl = comment.profileURL,
                                     userName = comment.userName,
                                     content = comment.content,
-                                    createdAt = comment.createdAt
-                                ) { }
+                                    createdAt = comment.createdAt,
+                                    onIconClicked = { }
+                                )
                             }
                         }
                     } ?: item {
-                    EmptyComment(modifier = Modifier.fillMaxWidth())
+                    EmptyComment()
                 }
 
                 item {
                     Box(
                         modifier = Modifier
+                            .background(ShowpotColor.Gray800)
+                            .padding(vertical = 10.dp)
                             .fillMaxSize(),
                         contentAlignment = Alignment.BottomCenter
                     ) {
@@ -437,27 +443,11 @@ fun ShowDetailScreenContent(
                         )
                     }
                 }
-                item {
-                    Spacer(
-                        modifier = Modifier
-                            .background(ShowpotColor.Gray800)
-                            .height(10.dp)
-                    )
-                }
-                item {
-                    Spacer(
-                        modifier = Modifier
-                            .padding(bottom = 16.dp)
-                            .fillMaxWidth()
-                            .height(8.dp)
-                            .background(ShowpotColor.Gray600)
-                    )
-                }
 
                 item {
                     ShowPotKoreanText_H2(
                         modifier = Modifier.padding(horizontal = 16.dp)
-                            .padding(bottom = 12.dp),
+                            .padding(top = 24.dp, bottom = 12.dp),
                         text = "아티스트 정보",
                         color = Color.White,
                     )
