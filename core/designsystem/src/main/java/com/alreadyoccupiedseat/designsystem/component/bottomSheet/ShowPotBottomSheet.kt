@@ -22,6 +22,7 @@ fun ShowPotBottomSheet(
         sheetState = sheetState,
         shape = RectangleShape,
         containerColor = ShowpotColor.Gray600,
+        scrimColor = ShowpotColor.Gray800.copy(alpha = 0.7f),
         dragHandle = null
     ) {
         content()
