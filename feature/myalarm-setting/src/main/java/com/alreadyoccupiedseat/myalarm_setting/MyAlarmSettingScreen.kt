@@ -213,19 +213,16 @@ fun MyAlertSettingScreenContent(
                                                 onSelectedShowId(show.id)
                                                 onAlertOptionSheetVisible(true)
                                             }
+                                            .padding(5.dp)
                                     ) {
                                         Icon(
-                                            modifier = Modifier
-                                                .padding(start = 5.dp)
-                                                .padding(vertical = 5.dp),
+                                            modifier = Modifier,
                                             painter = painterResource(R.drawable.ic_alarm_24_default),
                                             contentDescription = null,
                                             tint = ShowpotColor.White
                                         )
                                         Icon(
-                                            modifier = Modifier
-                                                .padding(end = 5.dp)
-                                                .padding(vertical = 5.dp),
+                                            modifier = Modifier,
                                             painter = painterResource(R.drawable.ic_arrow_24_down),
                                             contentDescription = null,
                                             tint = ShowpotColor.Gray300
