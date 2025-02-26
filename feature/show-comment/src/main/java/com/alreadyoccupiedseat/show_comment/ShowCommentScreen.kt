@@ -1,5 +1,6 @@
 package com.alreadyoccupiedseat.show_comment
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -29,6 +30,7 @@ import com.alreadyoccupiedseat.designsystem.ShowpotColor
 import com.alreadyoccupiedseat.designsystem.component.comment.MyCommentItem
 import com.alreadyoccupiedseat.designsystem.component.comment.OtherCommentItem
 import com.alreadyoccupiedseat.designsystem.component.inputBox.ShowCommentInputBox
+import com.alreadyoccupiedseat.designsystem.emptyviews.EmptyComment
 import org.orbitmvi.orbit.compose.collectAsState
 
 @Composable
@@ -107,45 +109,58 @@ private fun ShowCommentContentScreen(
             indicatorContainerColor = Color.Transparent,
             indicatorColor = ShowpotColor.MainOrange,
         ) {
-            InfinityLazyColumn(
-                modifier = modifier
-                    .fillMaxSize()
-                    .imePadding()
-                    .padding(paddingValues)
-                    .padding(bottom = 60.dp),
-                state = listState,
-                loadMore = {
-                    loadMoreTop()
-                },
-                reverseLayout = true
-            )
-            { state.comments.forEach { comment ->
-                    item {
+            if (state.comments.isEmpty()) {
+                Box(
+                    modifier = Modifier.fillMaxSize()
+                        .background(ShowpotColor.Gray800),
+                    contentAlignment = Alignment.Center
+                ) {
+                    EmptyComment()
+                }
+            } else {
+                InfinityLazyColumn(
+                    modifier = modifier
+                        .fillMaxSize()
+                        .imePadding()
+                        .padding(paddingValues)
+                        .padding(bottom = 60.dp),
+                    state = listState,
+                    loadMore = {
+                        loadMoreTop()
+                    },
+                    reverseLayout = true
+                )
+                {
+                    state.comments.forEach { comment ->
+                        item {
 
-                        if (comment.userName != state.nickName) {
-                            OtherCommentItem(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
-                                    .padding(bottom = 16.dp),
-                                profileUrl = comment.profileURL,
-                                userName = comment.userName,
-                                content = comment.content,
-                                createdAt = comment.createdAt
-                            ) {
-                                // onIconClicked
+                            if (comment.userName != state.nickName) {
+                                OtherCommentItem(
+                                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+                                        .padding(bottom = 16.dp),
+                                    profileUrl = comment.profileURL,
+                                    userName = comment.userName,
+                                    content = comment.content,
+                                    createdAt = comment.createdAt
+                                ) {
+                                    // onIconClicked
+                                }
+                            } else {
+                                MyCommentItem(
+                                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+                                        .padding(bottom = 16.dp),
+                                    content = comment.content,
+                                    createdAt = comment.createdAt
+                                ) {
+                                    // onIconClicked
+                                }
                             }
-                        } else {
-                            MyCommentItem(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
-                                    .padding(bottom = 16.dp),
-                                content = comment.content,
-                                createdAt = comment.createdAt
-                            ) {
-                                // onIconClicked
-                            }
+
                         }
-
                     }
                 }
+
+
             }
 
             Box(
@@ -165,8 +180,8 @@ private fun ShowCommentContentScreen(
                     }
                 )
             }
+
         }
 
     }
-
 }
