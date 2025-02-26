@@ -130,7 +130,11 @@ class ShowCommentViewModel @Inject constructor(
     fun loadMore() = intent {
 
         if (state.hasNext.not()) {
-            return@intent
+            reduce {
+                state.copy(
+                    isNewCommentLoading = false
+                )
+            }
         }
 
         reduce {
