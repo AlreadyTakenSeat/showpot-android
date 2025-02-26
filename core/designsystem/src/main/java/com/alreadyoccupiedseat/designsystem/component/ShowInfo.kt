@@ -16,8 +16,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.alreadyoccupiedseat.designsystem.ShowpotColor
-import com.alreadyoccupiedseat.designsystem.typo.english.ShowPotEnglishText_H2
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B3_Regular
+import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_H1
 
 @Preview
 @Composable
@@ -60,7 +60,7 @@ fun ShowInfo(
                     .fillMaxWidth()
                     .align(Alignment.CenterStart)) {
 
-                ShowPotEnglishText_H2(text = showTitle, color = Color.White, maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis)
+                ShowPotKoreanText_H1(text = showTitle, color = Color.White, maxLines = 1, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis)
 
                 Spacer(modifier = Modifier.height(5.dp))
 
