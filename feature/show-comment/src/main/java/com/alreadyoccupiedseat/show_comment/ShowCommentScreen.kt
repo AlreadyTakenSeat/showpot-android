@@ -112,7 +112,7 @@ private fun ShowCommentContentScreen(
             if (state.comments.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize()
-                        .background(ShowpotColor.Gray800),
+                        .background(ShowpotColor.Gray700),
                     contentAlignment = Alignment.Center
                 ) {
                     EmptyComment()

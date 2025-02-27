@@ -10,7 +10,7 @@ interface CommentDataSource {
         commentType: String,
         content: String,
         parentId: String
-    ): Result<Unit>
+    ): Result<PagingData<CommentResponse>>
 
     suspend fun reportOrBlockComment(
         commentId: String,
