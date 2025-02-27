@@ -8,6 +8,7 @@ import com.alreadyoccupiedseat.data.login.LoginRepository
 import com.alreadyoccupiedseat.data.toApiErrorResult
 import com.alreadyoccupiedseat.model.comment.CommentResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.viewmodel.container
@@ -32,7 +33,7 @@ data class ShowCommentState(
 )
 
 @HiltViewModel
-class  ShowCommentViewModel @Inject constructor(
+class ShowCommentViewModel @Inject constructor(
     private val commentRepository: CommentRepository,
     private val loginRepository: LoginRepository
 ) : ViewModel(), ContainerHost<ShowCommentState, ShowCommentEvent> {
@@ -135,18 +136,20 @@ class  ShowCommentViewModel @Inject constructor(
     // TODO: Consider direction
     fun loadMore() = intent {
 
+        reduce {
+            state.copy(
+                isNewCommentLoading = true
+            )
+        }
+
         if (state.hasNext.not()) {
+            delay(100)
             reduce {
                 state.copy(
                     isNewCommentLoading = false
                 )
             }
-        }
-
-        reduce {
-            state.copy(
-                isNewCommentLoading = true
-            )
+            return@intent
         }
 
         val result = commentRepository.getComments(
