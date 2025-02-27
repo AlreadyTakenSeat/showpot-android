@@ -23,7 +23,7 @@ class NetworkModule {
         accessDataStore: AccountDataStore
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(API.DEV_BASE_URL)
+            .baseUrl(API.PRODUCTION_BASE_URL)
             .client(
                 OkHttpClient.Builder()
                     // TODO: decrease timeout
@@ -32,7 +32,7 @@ class NetworkModule {
                     .writeTimeout(30, TimeUnit.SECONDS)
                     .addInterceptor(
                         HttpLoggingInterceptor().apply {
-                            level = HttpLoggingInterceptor.Level.BASIC
+                            level = HttpLoggingInterceptor.Level.BODY
                         }
                     )
                     .addInterceptor(AuthInterceptor(accessDataStore))
