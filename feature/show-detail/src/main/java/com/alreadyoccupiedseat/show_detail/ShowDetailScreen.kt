@@ -51,6 +51,7 @@ import com.alreadyoccupiedseat.designsystem.component.button.LabelButton
 import com.alreadyoccupiedseat.designsystem.component.comment.MyCommentItem
 import com.alreadyoccupiedseat.designsystem.component.comment.OtherCommentItem
 import com.alreadyoccupiedseat.designsystem.component.inputBox.ShowCommentInputBox
+import com.alreadyoccupiedseat.designsystem.emptyviews.EmptyComment
 import com.alreadyoccupiedseat.designsystem.getTicketSiteButtonColor
 import com.alreadyoccupiedseat.designsystem.typo.english.ShowPotEnglishText_H0
 import com.alreadyoccupiedseat.designsystem.typo.korean.ShowPotKoreanText_B1_SemiBold
@@ -416,7 +417,7 @@ fun ShowDetailScreenContent(
                             }
                         }
                     } ?: item {
-                    EmptyComment()
+                    EmptyComment(modifier = Modifier.background(ShowpotColor.Gray800))
                 }
 
                 item {
@@ -638,23 +639,4 @@ internal fun String.formatToReservationDate(): String {
     val koreanDayOfWeek = dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREAN)
 
     return dateTime.format(outputFormatter).replace(dayOfWeek.name, koreanDayOfWeek)
-}
-
-@Composable
-fun EmptyComment(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier
-            .background(ShowpotColor.Gray800)
-            .fillMaxWidth()
-        ,
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Spacer(modifier = Modifier.height(60.dp))
-        DefaultScreenWhenEmpty(
-            imageResId = com.alreadyoccupiedseat.designsystem.R.drawable.img_message,
-            text = stringResource(id = com.alreadyoccupiedseat.designsystem.R.string.first_message)
-        )
-        Spacer(modifier = Modifier.height(58.dp))
-    }
 }

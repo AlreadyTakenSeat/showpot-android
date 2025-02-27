@@ -12,7 +12,7 @@ class CommentRepositoryImpl @Inject constructor(
         commentType: String,
         content: String,
         parentId: String
-    ): Result<Unit> {
+    ): Result<PagingData<CommentResponse>> {
         return commentDataSource.postComment(refId, commentType, content, parentId)
     }
 

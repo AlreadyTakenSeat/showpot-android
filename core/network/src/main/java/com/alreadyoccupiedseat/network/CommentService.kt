@@ -1,6 +1,7 @@
 package com.alreadyoccupiedseat.network
 
 import com.alreadyoccupiedseat.model.ApiResult
+import com.alreadyoccupiedseat.model.Cursor
 import com.alreadyoccupiedseat.model.PagingData
 import com.alreadyoccupiedseat.model.comment.CommentResponse
 import com.alreadyoccupiedseat.model.comment.PostCommentRequest
@@ -18,7 +19,7 @@ interface CommentService {
     @POST("api/v1/comments")
     suspend fun postComment(
         @Body postCommentRequest: PostCommentRequest
-    ): Response<ApiResult<Unit>>
+    ): Response<ApiResult<PagingData<CommentResponse>>>
 
     @POST("api/v1/comments/{commentId}/report")
     suspend fun reportOrBlockComment(

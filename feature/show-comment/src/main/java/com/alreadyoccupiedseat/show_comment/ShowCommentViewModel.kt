@@ -32,7 +32,7 @@ data class ShowCommentState(
 )
 
 @HiltViewModel
-class ShowCommentViewModel @Inject constructor(
+class  ShowCommentViewModel @Inject constructor(
     private val commentRepository: CommentRepository,
     private val loginRepository: LoginRepository
 ) : ViewModel(), ContainerHost<ShowCommentState, ShowCommentEvent> {
@@ -60,6 +60,13 @@ class ShowCommentViewModel @Inject constructor(
 
         result.onSuccess {
             postSideEffect(ShowCommentEvent.PostCommentSuccess)
+            reduce {
+                state.copy(
+                    comments = it.data + state.comments,
+                    cursorId = it.cursor.id,
+                    hasNext = it.hasNext
+                )
+            }
         }.onFailure {
             this@ShowCommentViewModel.errorLog(it.toApiErrorResult().message)
         }
@@ -106,7 +113,6 @@ class ShowCommentViewModel @Inject constructor(
 
         resultTop.onSuccess {
             reduce {
-
                 state.copy(
                     cursorIdTop = it.cursor.id,
                     hasNextTop = it.hasNext
@@ -130,7 +136,11 @@ class ShowCommentViewModel @Inject constructor(
     fun loadMore() = intent {
 
         if (state.hasNext.not()) {
-            return@intent
+            reduce {
+                state.copy(
+                    isNewCommentLoading = false
+                )
+            }
         }
 
         reduce {

@@ -16,13 +16,16 @@ class CommentDataSourceImpl @Inject constructor(
         commentType: String,
         content: String,
         parentId: String
-    ): Result<Unit> {
+    ): Result<PagingData<CommentResponse>> {
         return runCatching {
             commentService.postComment(PostCommentRequest(
                 refId = refId,
                 commentType = commentType,
                 content = content,
                 parentId = parentId))
+                .getResult {
+                    it.data
+                }
         }
     }
 
