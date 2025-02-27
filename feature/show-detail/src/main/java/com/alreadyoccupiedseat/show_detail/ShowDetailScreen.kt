@@ -417,7 +417,7 @@ fun ShowDetailScreenContent(
                             }
                         }
                     } ?: item {
-                    EmptyComment()
+                    EmptyComment(modifier = Modifier.background(ShowpotColor.Gray800))
                 }
 
                 item {
