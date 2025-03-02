@@ -22,6 +22,8 @@ sealed interface SearchScreenEvent {
     data object SubscribeArtistSuccess : SearchScreenEvent
 
     data object UnSubscribeArtistSuccess : SearchScreenEvent
+
+    data object UnAvailableInputText : SearchScreenEvent
 }
 
 data class SearchScreenState(
@@ -141,6 +143,12 @@ class SearchViewModel @Inject constructor(
     }
 
     fun searchArtistsAndShows() = intent {
+
+        if (state.inputText.trim().isEmpty()) {
+            postSideEffect(SearchScreenEvent.UnAvailableInputText)
+            return@intent
+        }
+
         reduce {
             state.copy(isArtistLoading = true,
                 isShowLoading = true)

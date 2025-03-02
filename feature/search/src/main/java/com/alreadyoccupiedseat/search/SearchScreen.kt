@@ -1,7 +1,7 @@
 package com.alreadyoccupiedseat.search
 
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -29,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -60,6 +60,7 @@ fun SearchScreen(
     val state by viewModel.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     viewModel.collectSideEffect {
         when (it) {
@@ -81,6 +82,14 @@ fun SearchScreen(
                 }
                 delay(2500L)
                 job.cancel()
+            }
+
+            is SearchScreenEvent.UnAvailableInputText -> {
+                Toast.makeText(
+                    context,
+                    "검색어를 입력해주세요",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
