@@ -2,11 +2,9 @@ package com.alreadyoccupiedseat.showpot
 
 import android.os.Build
 import android.Manifest
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -34,7 +32,6 @@ fun EssentialPermissionDialog(
 
     // Show rationale Dialog For Notification Permission
     if (postNotificationPermissionState.status.isGranted.not() && postNotificationPermissionState.status.shouldShowRationale) {
-        Toast.makeText(LocalContext.current, "2차로 권한을 요청할 다이어로그 화면!", Toast.LENGTH_SHORT)
-            .show()
+        // Todo: Show custom permission dialog
     }
 }
