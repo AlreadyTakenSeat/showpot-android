@@ -67,5 +67,4 @@ dependencies {
     implementation(libs.orbit.viewmodel)
     implementation(libs.orbit.compose)
 
-    implementation(libs.androidx.core.splashscreen)
 }
