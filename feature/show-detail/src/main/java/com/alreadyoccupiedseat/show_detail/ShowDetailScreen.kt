@@ -80,10 +80,7 @@ fun ShowDetailScreen(
 
     viewModel.collectSideEffect {
         when (it) {
-            is ShowDetailEvent.Idle -> {
-
-            }
-
+            is ShowDetailEvent.Idle -> {}
             is ShowDetailEvent.AlertRegisterSuccess -> {
                 Toast.makeText(
                     context,
@@ -136,7 +133,11 @@ fun ShowDetailScreen(
             viewModel.changeTicketingSelectionBoxState(it)
         },
         onShowCommentsScreen = {
-            onShowCommentsScreen(showId)
+            state.isLoggedIn.takeIf { it }?.let {
+                onShowCommentsScreen(showId)
+            } ?: run {
+                viewModel.changeLoginSheetVisibility(true)
+            }
         }
     )
 }
