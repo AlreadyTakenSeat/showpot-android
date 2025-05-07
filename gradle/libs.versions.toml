@@ -22,6 +22,7 @@ firebaseBom = "32.3.1"
 ksp = "2.0.0-1.0.21"
 datastorePreferences = "1.1.1"
 accompanistPermission = "0.33.2-alpha"
+coreSplashscreen = "1.0.1"
 
 gmsPlugin = "4.4.0"
 firebaseCrashlyticsPlugin = "2.9.9"
@@ -44,6 +45,7 @@ androidx-annotation = "1.5.0"
 
 
 [libraries]
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen"}
 android-tools-build-gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 
